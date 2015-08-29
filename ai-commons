@@ -26,7 +26,6 @@ FR_LOCALE=fr_FR
 #}}}
 
 # VARIABLES {{{
-AI_DE_DEBUG=0
 CHOIX_PARTITIONS=""
 
 # NOM DU REPERTOIRE D'INSTALLATION DE LA 1ERE ARCH EN UEFI
@@ -49,8 +48,6 @@ IS_UEFI=0
 IS_HDD_OR_SSD=""
 TYPE_STORAGE_PARTITION=""
 IS_VAR_SEPARATE=0
-#
-AUTOMATIC_MODE=0
 #}}}
 
 # MAIN MENU {{{
@@ -182,6 +179,17 @@ check_is_hdd_or_ssd() { #{{{
         IS_HDD_OR_SSD="SSD"
     fi
 } #}}}
+#
+# AFFICHE UNE MESSAGE BOX WHIPTAIL
+# $1 = message
+print_whiptail_msgbox() { #{{{
+    whiptail --title "${TITRE_BOX_W}" --msgbox "${1}" --ok-button "Continuer" 16 72
+} #}}}
+
+
+
+
+
 #}}}
 # SUPPORT FUNCTIONS {{{
 arch_chroot() { #{{{
@@ -288,29 +296,29 @@ aur_package_install() { #{{{
     #install package from aur
     for PACKAGE in $1; do
         if ! is_package_installed "${PACKAGE}" ; then
-            su - $USERNAME -c "$AUR_HELPER --noconfirm -S ${PACKAGE}"
+            su - ${USERNAME} -c "${AUR_HELPER} --noconfirm -S ${PACKAGE}"
             #RECHECK #{{{
             #check if the package wasnt installed
             if ! is_package_installed "${PACKAGE}" ; then
-                read_input_text "Paquet $PACKAGE non installé, essayer de l'installer encore?"
-                [[ $OPTION == o ]] && su - $USERNAME -c "$AUR_HELPER -S $PACKAGE"
+                read_input_text "Paquet ${PACKAGE} non installé, essayer de l'installer encore?"
+                [[ $OPTION == o ]] && su - ${USERNAME} -c "${AUR_HELPER} -S ${PACKAGE}"
             fi
             #}}}
         else
-            echo -e "ATTENTION: $PACKAGE est à jour --passé"
+            echo -e "ATTENTION: ${PACKAGE} est à jour --passé"
         fi
     done
 } #}}}
 aui_download_packages() { #{{{
     for PACKAGE in $1; do
         #exec command as user instead of root
-        su - $USERNAME -c "
+        su - ${USERNAME} -c "
         [[ ! -d aui_packages ]] && mkdir aui_packages
         cd aui_packages
-        curl -o $PACKAGE.tar.gz https://aur.archlinux.org/packages/${PACKAGE:0:2}/$PACKAGE/$PACKAGE.tar.gz
-        tar zxvf $PACKAGE.tar.gz
-        rm $PACKAGE.tar.gz
-        cd $PACKAGE
+        curl -o ${PACKAGE}.tar.gz https://aur.archlinux.org/cgit/aur.git/snapshot/${PACKAGE}.tar.gz
+        tar zxvf ${PACKAGE}.tar.gz
+        rm ${PACKAGE}.tar.gz
+        cd ${PACKAGE}
         makepkg -si --noconfirm
         "
     done

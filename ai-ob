@@ -488,10 +488,13 @@
                     ;;
                 4)
                     package_install "lm_sensors rrdtool"
-		    print_info_cyan "LM_SENSORS - sensors-detect : détections des capteurs."
-		    pause_function
-		    sensors-detect
-		    systemctl enable lm_sensors.service
+                    # SI PAS DANS VIRTUALBOX
+                    if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
+                        print_info_cyan "LM_SENSORS - sensors-detect : détections des capteurs."
+                        pause_function
+                        sensors-detect
+                        systemctl enable lm_sensors.service
+                    fi
                     ;;
                 5)
                     package_install "hddtemp gnu-netcat"
@@ -539,12 +542,13 @@
     while true
     do
         print_title "APPLICATIONS DE DÉVELOPPEMENT"
-        echo " 1) $(menu_item "devtools")"
-        echo " 2) $(menu_item "gdb" "Debugger Tools")"
-        echo " 3) $(menu_item "git subversion")"
-        echo " 4) $(menu_item "cmake")"
-        echo " 5) $(menu_item "clang")"
-        echo " 6) $(menu_item "geany")"
+        echo " 1) $(menu_item "geany")"
+        echo " 2) $(menu_item "qtcreator" "QtCreator Qt(5)")"
+        echo " 3) $(menu_item "devtools")"
+        echo " 4) $(menu_item "gdb" "Debugger Tools")"
+        echo " 5) $(menu_item "git subversion")"
+        echo " 6) $(menu_item "cmake")"
+        echo " 7) $(menu_item "clang")"
         echo ""
         echo " F) FINI"
         echo ""
@@ -553,22 +557,25 @@
         for OPT in ${OPTIONS[@]}; do
             case "$OPT" in
                 1)
-                    package_install "devtools"
+                    package_install "geany"
                     ;;
                 2)
-                    package_install "valgrind gdb splint tidyhtml"
+                    package_install "qtcreator qt qt5-doc libxkbcommon-x11 qt5ct"
                     ;;
                 3)
-                    package_install "git subversion"
+                    package_install "devtools"
                     ;;
                 4)
-                    package_install "cmake"
+                    package_install "valgrind gdb splint tidyhtml"
                     ;;
                 5)
-                    package_install "clang"
+                    package_install "git subversion"
                     ;;
                 6)
-                    package_install "geany"
+                    package_install "cmake"
+                    ;;
+                7)
+                    package_install "clang"
                     ;;
                 "f")
                     break

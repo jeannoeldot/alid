@@ -308,10 +308,13 @@
                     ;;
                 4)
                     package_install "lm_sensors rrdtool"
-		    print_info_cyan "LM_SENSORS - sensors-detect : détections des capteurs."
-		    pause_function
-		    sensors-detect
-		    systemctl enable lm_sensors.service
+                    # SI PAS DANS VIRTUALBOX
+                    if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
+                        print_info_cyan "LM_SENSORS - sensors-detect : détections des capteurs."
+                        pause_function
+                        sensors-detect
+                        systemctl enable lm_sensors.service
+                    fi
                     ;;
                 5)
                     package_install "hddtemp gnu-netcat"

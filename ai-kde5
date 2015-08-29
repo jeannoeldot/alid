@@ -276,10 +276,13 @@
                     ;;
                 4)
                     package_install "lm_sensors rrdtool"
-		    print_info_cyan "LM_SENSORS - sensors-detect : détections des capteurs."
-		    pause_function
-		    sensors-detect
-		    systemctl enable lm_sensors.service
+                    # SI PAS DANS VIRTUALBOX
+                    if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
+                        print_info_cyan "LM_SENSORS - sensors-detect : détections des capteurs."
+                        pause_function
+                        sensors-detect
+                        systemctl enable lm_sensors.service
+                    fi
                     ;;
                 5)
                     package_install "hddtemp gnu-netcat"
@@ -331,7 +334,7 @@
     do
         print_title "APPLICATIONS DE DÉVELOPPEMENT"
         echo " 1) $(menu_item "kdevelop")"
-        echo " 2) $(menu_item "qtcreator")"
+        echo " 2) $(menu_item "qtcreator" "QtCreator Qt(5)")"
         echo " 3) $(menu_item "devtools")"
         echo " 4) $(menu_item "gdb" "Debugger Tools")"
         echo " 5) $(menu_item "git subversion")"
@@ -348,7 +351,7 @@
                     package_install "kdevelop"
                     ;;
                 2)
-                    package_install "qtcreator qt qt5-doc libxkbcommon-x11"
+                    package_install "qtcreator qt qt5-doc libxkbcommon-x11 qt5ct"
                     ;;
                 3)
                     package_install "devtools"
