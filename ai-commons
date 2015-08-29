@@ -1,0 +1,361 @@
+#!/usr/bin/env bash
+
+#-------------------------------------------------------------------------------
+# ai-commons
+# Fonctions communes aux différents scripts
+#
+# ne fonctionne qu'avec la langue FR (fr_FR)
+# Created by me for me
+#
+# Interface graphique avec whiptail
+
+# CONSTANTES {{{
+# TITRE BOITES DE DIALOG whiptail
+TITRE_BOX_W_DATE="29/08/2015"
+TITRE_BOX_W_VERSION="V 0.0.1"
+TITRE_BOX_W_TEXTE="INSTALLATION DE ARCH LINUX"
+TITRE_BOX_W="${TITRE_BOX_W_TEXTE} ${TITRE_BOX_W_VERSION} DU ${TITRE_BOX_W_DATE}"
+
+# FUSEAU HORAIRE
+FR_ZONE=Europe
+FR_SUBZONE=Paris
+# HEURE MATÉRIELLE
+FR_HEURE=utc
+# LOCALE
+FR_LOCALE=fr_FR
+#}}}
+
+# VARIABLES {{{
+AI_DE_DEBUG=0
+CHOIX_PARTITIONS=""
+
+# NOM DU REPERTOIRE D'INSTALLATION DE LA 1ERE ARCH EN UEFI
+NAME_ARCH_FIRST="arch_1"
+# NUMÉRO DE L'INSTALLATION DE ARCH EN UEFI
+NUMBER_OF_ARCH=0
+# NOM DU REPERTOIRE D'INSTALLATION EN UEFI
+NAME_DIR_ARCHLINUX=""
+# NOM DU MANAGER DE BOOT
+MGR_EFI=""
+# TYPE DE CLAVIER ( AZERTY ou BEPO )
+TYPE_KEYBOARD=""
+# sudo : timestamp_timeout = 20 minutes
+TIMESTAMP_TIMEOUT=20
+#
+IS_MULTI_BOOT_UEFI=0
+IS_Z87C=0
+IN_VIRTUAL_BOX=0
+IS_UEFI=0
+IS_HDD_OR_SSD=""
+TYPE_STORAGE_PARTITION=""
+IS_VAR_SEPARATE=0
+#
+AUTOMATIC_MODE=0
+#}}}
+
+# MAIN MENU {{{
+checklist=( 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 )
+#}}}
+# COLORS {{{
+# Regular Colors
+Black='\e[0;30m'        # Black
+Blue='\e[0;34m'         # Blue
+Cyan='\e[0;36m'         # Cyan
+Green='\e[0;32m'        # Green
+Purple='\e[0;35m'       # Purple
+Red='\e[0;31m'          # Red
+Yellow='\e[0;33m'       # Yellow
+White='\e[0m'           # White
+# Bold
+BBlack='\e[1;30m'       # Black
+BBlue='\e[1;34m'        # Blue
+BCyan='\e[1;36m'        # Cyan
+BGreen='\e[1;32m'       # Green
+BPurple='\e[1;35m'      # Purple
+BRed='\e[1;31m'         # Red
+BYellow='\e[1;33m'      # Yellow
+BWhite='\e[1m'          # White
+#}}}
+# PROMPT {{{
+prompt1="Entrer le n° de l'option choisie: "
+prompt2="Entrer le n° des options (ex: 1 2 3 ou 1-3): "
+prompt3="Entrer manuellement les commandes suivantes, ensuite presser ${BYellow}ctrl+d${White} ou entrer ${BYellow}exit${White}:"
+#}}}
+# DESKTOP ENVIRONMENT {{{
+E17=0
+GNOME=0
+KDE4=0
+KDE5=0
+LXDE=0
+OPENBOX=0
+XFCE=0
+#}}}
+# EDITOR {{{
+EDITOR=nano
+#}}}
+# ARCHITECTURE {{{
+ARCHI=$(uname -m)
+#}}}
+# AUR PACKAGE
+AUR=$(echo -e "(${BPurple}AUR${White})")
+# CURRENT DIRECTORY
+AUI_DIR=$(pwd)
+MOUNTPOINT="/mnt"
+#}}}
+# MES FONCTIONS EN PLUS {{{
+# LECTURE DU NOM DU REPERTOIRE D'INSTALLATION SI EN UEFI
+read_name_dir_archlinux() { #{{{
+    # Par défaut, nom du rep = arch_1. NAME_ARCH_FIRST="arch_1"
+    NAME_DIR_ARCHLINUX=${NAME_ARCH_FIRST}
+    if [[ -f "/root/name_dir_archlinux.uefi" ]]; then
+        eval $(grep '^name_dir_archlinux=' "/root/name_dir_archlinux.uefi")
+        if [[ -n "${name_dir_archlinux}" ]]; then
+            NAME_DIR_ARCHLINUX="${name_dir_archlinux}"
+        fi
+    fi
+    if [[ $NAME_DIR_ARCHLINUX == ${NAME_ARCH_FIRST} ]]; then
+        IS_MULTI_BOOT_UEFI=0
+    else
+        IS_MULTI_BOOT_UEFI=1
+    fi
+} #}}}
+# LECTURE DU NOM DU MANAGER DE BOOT SI EN UEFI
+read_name_mgr_efi() { #{{{
+    # Par défaut, nom du manager = vide
+    MGR_EFI=""
+    if [[ -f "/root/name_dir_archlinux.uefi" ]]; then
+        eval $(grep '^name_mgr_efi=' "/root/name_dir_archlinux.uefi")
+        if [[ -n "${name_mgr_efi}" ]]; then
+            MGR_EFI="${name_mgr_efi}"
+        fi
+    fi
+} #}}}
+# LECTURE DU TYPE DE CLAVIER
+read_name_type_keyboard() { #{{{
+    # Par défaut, type de clavier = AZERTY
+    TYPE_KEYBOARD="AZERTY"
+    if [[ -f "/root/variables_pour_ai_de.txt" ]]; then
+        eval $(grep '^type_choice_keyboard=' "/root/variables_pour_ai_de.txt")
+        if [[ -n "${type_choice_keyboard}" ]]; then
+            TYPE_KEYBOARD="${type_choice_keyboard}"
+        fi
+    fi
+} #}}}
+# # TEST SI CM = ASUS All Series/Z87-C
+# check_is_cm_asus_z87c() { #{{{
+#     local z87c=$(journalctl -b | grep -E "DMI:")
+#     echo ${z87c} | tr "[:upper:]" "[:lower:]" | grep -q z87-c
+#     if [[ $? -eq 0 ]]; then
+#         IS_Z87C=1
+#     else
+#         IS_Z87C=0
+#     fi
+# } #}}}
+# DANS VIRTUALBOX OU NON
+check_is_in_virtualbox() { #{{{
+    local vbox=$(journalctl -b | grep -E "DMI:")
+    echo ${vbox} | tr "[:upper:]" "[:lower:]" | grep -q virtualbox
+    if [[ $? -eq 0 ]]; then
+        IN_VIRTUAL_BOX=1
+    else
+        IN_VIRTUAL_BOX=0
+    fi
+} #}}}
+# IS UEFI OR BIOS
+check_is_uefi_or_bios() { #{{{
+    if [[ -d "/sys/firmware/efi" ]]; then
+        IS_UEFI=1
+    else
+        IS_UEFI=0
+    fi
+} #}}}
+# IS HDD OR SSD
+# $1 = HDD_DEVICE
+check_is_hdd_or_ssd() { #{{{
+    local name_device=$(echo $1 | sed 's/\/dev\///')
+    local type_device=$(cat /sys/block/$name_device/queue/rotational)
+    if [[ $type_device -eq 1 ]]; then
+        # rotational = 1 ==> HDD
+        IS_HDD_OR_SSD="HDD"
+    else
+        # rotational = 0 ==> SSD
+        IS_HDD_OR_SSD="SSD"
+    fi
+} #}}}
+#}}}
+# SUPPORT FUNCTIONS {{{
+arch_chroot() { #{{{
+    arch-chroot ${MOUNTPOINT} /bin/bash -c "${1}"
+}
+#}}}
+read_input() { #{{{
+    read -p "$prompt1" OPTION
+} #}}}
+read_input_text() { #{{{
+    # Par défaut : Oui
+    read -p "$1 [O/n]: " OPTION
+    echo ""
+    OPTION=$(echo "$OPTION" | tr '[:upper:]' '[:lower:]')
+    if [[ $OPTION != o && $OPTION != n ]]; then
+        OPTION=o
+    fi
+} #}}}
+read_input_options() { #{{{
+    local line
+    local packages
+    read -p "$prompt2" OPTION
+    array=("$OPTION")
+    for line in ${array[@]/,/ }; do
+        if [[ ${line/-/} != $line ]]; then
+            for ((i=${line%-*}; i<=${line#*-}; i++)); do
+                packages+=($i);
+            done
+        else
+            packages+=($line)
+        fi
+    done
+    OPTIONS=("${packages[@]}")
+} #}}}
+print_line() { #{{{
+    printf "%$(tput cols)s\n"|tr ' ' '-'
+} #}}}
+print_title() { #{{{
+    clear
+    print_line
+    echo -e "# ${BWhite}$1${White}"
+    print_line
+    echo ""
+} #}}}
+ncecho() { #{{{
+    echo -ne "$1"
+} #}}}
+print_info_cyan() { #{{{
+    echo -e "\n"
+    ncecho "${BCyan}==> INFO : ${White}"
+    echo -e "${BWhite}$1${White}\n"
+} #}}}
+print_info() { #{{{
+    #Console width number
+    T_COLS=$(tput cols)
+    echo -e "${BWhite}$1${White}\n" | fold -sw $(( $T_COLS - 18 )) | sed 's/^/\t/'
+} #}}}
+print_warning() { #{{{
+    #Console width number
+    T_COLS=$(tput cols)
+    echo -e "${BRed}$1${White}\n" | fold -sw $(( $T_COLS - 1 ))
+} #}}}
+print_help_setting() { #{{{
+    #Console width number
+    T_COLS=$(tput cols)
+    echo -e "${BWhite}$1${White}\n" | fold -sw $(( $T_COLS - 1 ))
+} #}}}
+print_info_finish() { #{{{
+    #Console width number
+    T_COLS=$(tput cols)
+    echo -e "${BGreen}$1${White}\n" | fold -sw $(( $T_COLS - 1 ))
+} #}}}
+print_run_command() { #{{{
+    #Console width number
+    T_COLS=$(tput cols)
+    echo -e "${BYellow}$1${White}\n" | fold -sw $(( $T_COLS - 1 ))
+} #}}}
+start_module() { #{{{
+    modprobe $1
+} #}}}
+add_module() { #{{{
+    for MODULE in $1; do
+      [[ $# -lt 2 ]] && MODULE_NAME="$MODULE" || MODULE_NAME="$2";
+      echo "$MODULE" >> /etc/modules-load.d/$MODULE_NAME.conf
+      start_module "$MODULE"
+    done
+} #}}}
+is_package_installed() { #{{{
+  #check if a package is already installed
+  for PKG in $1; do
+    pacman -Q $PKG &> /dev/null && return 0;
+  done
+  return 1
+} #}}}
+checkbox() { #{{{
+    #display [X] or [ ]
+    [[ "$1" -eq 1 ]] && echo -e "${BBlue}[${White}${BWhite}X${White}${BBlue}]${White}" || echo -e "${BBlue}[${White} ${BBlue}]${White}";
+} #}}}
+checkbox_package() { #{{{
+    #check if [X] or [ ]
+    is_package_installed "$1" && checkbox 1 || checkbox 0
+} #}}}
+aur_package_install() { #{{{
+    #install package from aur
+    for PACKAGE in $1; do
+        if ! is_package_installed "${PACKAGE}" ; then
+            su - $USERNAME -c "$AUR_HELPER --noconfirm -S ${PACKAGE}"
+            #RECHECK #{{{
+            #check if the package wasnt installed
+            if ! is_package_installed "${PACKAGE}" ; then
+                read_input_text "Paquet $PACKAGE non installé, essayer de l'installer encore?"
+                [[ $OPTION == o ]] && su - $USERNAME -c "$AUR_HELPER -S $PACKAGE"
+            fi
+            #}}}
+        else
+            echo -e "ATTENTION: $PACKAGE est à jour --passé"
+        fi
+    done
+} #}}}
+aui_download_packages() { #{{{
+    for PACKAGE in $1; do
+        #exec command as user instead of root
+        su - $USERNAME -c "
+        [[ ! -d aui_packages ]] && mkdir aui_packages
+        cd aui_packages
+        curl -o $PACKAGE.tar.gz https://aur.archlinux.org/packages/${PACKAGE:0:2}/$PACKAGE/$PACKAGE.tar.gz
+        tar zxvf $PACKAGE.tar.gz
+        rm $PACKAGE.tar.gz
+        cd $PACKAGE
+        makepkg -si --noconfirm
+        "
+    done
+} #}}}
+package_install() { #{{{
+    #install packages using pacman
+    pacman -Syu --needed ${1}
+    #check if the package wasnt installed
+    if ! is_package_installed "$1" ; then
+        read_input_text "Paquet $1 non installé. Continuer?"
+    fi
+} #}}}
+package_remove() { #{{{
+    #remove package
+    pacman -Rcsn ${1}
+} #}}}
+contains_element() { #{{{
+    #check if an element exist in a string
+    for e in "${@:2}"; do [[ $e == $1 ]] && break; done;
+} #}}}
+invalid_option() { #{{{
+    print_line
+    echo -e "${BRed}Option invalide. Essayez une autre option.${White}"
+    pause_function
+} #}}}
+pause_function() { #{{{
+    print_line
+        echo -e "${BGreen}"
+        read -e -sn 1 -p "Appuyer sur une touche pour continuer..."
+        echo -e "${White}"
+} #}}}
+menu_item() { #{{{
+    #check if the number of arguments is less then 2
+    [[ $# -lt 2 ]] && PACKAGE_NAME="$1" || PACKAGE_NAME="$2";
+    #list of chars to remove from the package name
+    CHARS_TO_REMOVE=("Ttf-" "-bzr" "-hg" "-svn" "-git" "-stable" "-icon-theme" "Gnome-shell-theme-" "Gnome-shell-extension-");
+    #remove chars from package name
+    for CHARS in ${CHARS_TO_REMOVE[@]}; do PACKAGE_NAME=$(echo ${PACKAGE_NAME^} | sed 's/'$CHARS'//'); done
+    #display checkbox and package name
+    echo -e "$(checkbox_package "$1") ${BWhite}$PACKAGE_NAME${White}"
+} #}}}
+mainmenu_item() { #{{{
+    echo -e "$(checkbox "$1") ${BWhite}$2${White}"
+} #}}}
+elihw() { #{{{
+    [[ $OPT == f || $OPT == b || $OPT == d || $OPT == r ]] && break;
+} #}}}
+#}}}

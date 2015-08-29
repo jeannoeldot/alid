@@ -1,0 +1,2 @@
+# make udev drm aware
+SUBSYSTEM=="drm", TAG+="systemd"

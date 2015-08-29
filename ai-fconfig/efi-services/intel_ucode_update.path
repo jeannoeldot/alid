@@ -1,0 +1,10 @@
+[Unit]
+Description=Check update Microde intel-ucode
+
+[Path]
+PathChanged=/boot/intel-ucode.img
+
+Unit=intel_ucode_update.service
+
+[Install]
+WantedBy=multi-user.target

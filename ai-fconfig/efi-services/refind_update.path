@@ -1,0 +1,10 @@
+[Unit]
+Description=Check update rEFInd
+
+[Path]
+PathChanged=/usr/share/refind/refind_x64.efi
+
+Unit=refind_update.service
+
+[Install]
+WantedBy=multi-user.target

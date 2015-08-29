@@ -1,0 +1,14 @@
+[global_config]
+[keybindings]
+[profiles]
+  [[default]]
+    scrollback_lines = 5000
+[layouts]
+  [[default]]
+    [[[child1]]]
+      type = Terminal
+      parent = window0
+    [[[window0]]]
+      type = Window
+      parent = ""
+[plugins]

@@ -1,0 +1,302 @@
+#!/usr/bin/env bash
+
+#-------------------------------------------------------------------------------
+# ai-b
+#
+# HORS CHROOT
+#
+# ne fonctionne qu'avec la langue FR (fr_FR)
+# Created by me for me
+#
+# Interface graphique avec whiptail
+#
+# Run this script after your first boot with archlinux-AAAA.MM.JJ-dual.iso (as root)
+
+source $(pwd)/ai-commons
+
+    #CONFIGURE KEYMAP {{{
+    configure_keymap() {
+        local messages=""
+        REPLY=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "Choisir le type de clavier ( AZERTY ou BÉPO )" --ok-button "Valider" 16 72 5 \
+                "AZERTY" "-" \
+                "BÉPO" "-" \
+                3>&1 1>&2 2>&3)
+        case "$REPLY" in
+            "AZERTY")
+                KEYMAP=fr-latin9
+                TYPE_KEYBOARD="AZERTY"
+                ;;
+            "BÉPO")
+                KEYMAP=fr-bepo-latin9
+                TYPE_KEYBOARD="BEPO"
+                ;;
+        esac
+
+        messages+="Type de clavier  : "${TYPE_KEYBOARD}"\n"
+        messages+="Valeur de KEYMAP : "${KEYMAP}"\n"
+        whiptail --title "${TITRE_BOX_W}" --msgbox "${messages}" --ok-button "Continuer" 16 72
+#         loadkeys $KEYMAP
+# #        setfont Lat2-Terminus16
+#         setfont lat9w-16
+    }
+    #}}}
+    #
+    # create_partition et format_device : ai-b-bios-hc ou ai-b-uefi-hc
+    #
+#     #}}}
+#     #CONFIGURE MIRRORLIST {{{
+#     configure_mirrorlist() {
+#         print_title "MIRRORS - https://wiki.archlinux.org/index.php/Mirrors"
+#         print_info "Configure le fichier /etc/pacman.d/mirrorlist avec les serveurs FR."
+#         local retour=9
+#         local date_du_jour=$(date +%Y-%m-%d)
+#         local url="https://www.archlinux.org/mirrorlist/?country=FR&use_mirror_status=on"
+#         local tmpfile=$(mktemp --suffix=-mirrorlist)
+#         # Get latest mirror list and save to tmpfile
+#         curl -so ${tmpfile} ${url}
+#         # Backup and replace current mirrorlist file (if new file is non-zero)
+#         if [[ -s ${tmpfile} ]]; then
+#             date_Generated=$(cat "${tmpfile}" | awk '/Generated/ {print $4}')
+#             if [[ ${date_Generated} == ${date_du_jour} ]]; then
+#                 print_info_cyan "Configuration du fichier /etc/pacman.d/mirrorlist..."
+#                 sed -i "s/^#Server/Server/g" ${tmpfile}
+#                 sed -i "/^## Score/d" ${tmpfile}
+#                 mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.original
+#                 mv ${tmpfile} /etc/pacman.d/mirrorlist
+#                 chmod +r /etc/pacman.d/mirrorlist
+#                 retour=0
+#             else
+#                 retour=1
+#             fi
+#         else
+#             retour=1
+#         fi
+#         # Fin ou Erreur
+#         if [[ $retour -eq 0 ]]; then
+#             print_info_cyan "Succès de la configuration du fichier /etc/pacman.d/mirrorlist."
+#             echo -e  "\nVisualisation et/ou édition du fichier mirrorlist avec $EDITOR"
+#             pause_function
+#             $EDITOR /etc/pacman.d/mirrorlist
+#         else
+#             print_warning "Échec de la configuration du fichier /etc/pacman.d/mirrorlist."
+#             mv /etc/pacman.d/mirrorlist.original /etc/pacman.d/mirrorlist
+#             chmod +r /etc/pacman.d/mirrorlist
+#             echo -e  "\nEdition manuelle du fichier mirrorlist avec $EDITOR"
+#             pause_function
+#             $EDITOR /etc/pacman.d/mirrorlist
+#         fi
+#     }
+#     #}}}
+#     #INSTALL BASE SYSTEM {{{
+#     install_base_system() {
+#         print_title "INSTALLATION DU SYSTÈME DE BASE"
+# #        pacstrap ${MOUNTPOINT} base reiserfsprogs links wget
+# #        pacstrap ${MOUNTPOINT} base lz4 elinks wget
+#         if [[ $IS_UEFI -eq 1 ]]; then
+#             print_info "En utilisant le script pacstrap le système de base, gptfdisk, wget et elinks seront installés."
+#             pacstrap ${MOUNTPOINT} base lz4 gptfdisk elinks wget
+#         else
+#             print_info "En utilisant le script pacstrap le système de base, wget et elinks seront installés."
+#             pacstrap ${MOUNTPOINT} base lz4 elinks wget
+#         fi
+#         # Si WiFi : installe les outils nécessaires
+#         local name_net_wireless=$(ip link | awk '/wlp/ {print $2}' | sed -e "s/://")
+#         if [[ -n ${name_net_wireless} ]]; then
+#             print_info "Installe les outils nécessaires pour le WiFi"
+#             pacstrap ${MOUNTPOINT} iw wireless_tools wpa_actiond wpa_supplicant dialog
+#         fi
+#     }
+#     #}}}
+#     #CONFIGURE FSTAB {{{
+#     genere_fstab() {
+#         print_title "FSTAB - https://wiki.archlinux.org/index.php/Fstab"
+#         print_info "Le fichier /etc/fstab contient les informations des systèmes de fichiers statiques. Il définit la façon dont les périphériques de stockage et les partitions doivent être montés et intégrés dans le système. Il est lu par la commande mount pour déterminer les options à utiliser lors du montage d'un dispositif spécifique ou d'une partition."
+#         print_info_cyan "UUID recommandé."
+#         fstab_list=("UUID" "LABEL" "DEV");
+#         PS3="$prompt1"
+#         echo -e "Configurer le fichier /etc/fstab en se basant sur :"
+#         select OPT in "${fstab_list[@]}"; do
+#             case "$REPLY" in
+#                 1)
+#                     genfstab -U -p ${MOUNTPOINT} >> ${MOUNTPOINT}/etc/fstab
+#                     break
+#                     ;;
+#                 2)
+#                     genfstab -L -p ${MOUNTPOINT} >> ${MOUNTPOINT}/etc/fstab
+#                     break
+#                     ;;
+#                 3)
+#                     genfstab -p ${MOUNTPOINT} >> ${MOUNTPOINT}/etc/fstab
+#                     break
+#                     ;;
+#                 *)
+#                     invalid_option
+#                     ;;
+#             esac
+#         done
+#         #
+#         echo -e "\nVérification du fichier /etc/fstab avec $EDITOR"
+#         pause_function
+#         $EDITOR ${MOUNTPOINT}/etc/fstab
+#     }
+#     #}}}
+#     #CONFIGURE RULES IF SSD AND HDD {{{
+#     configure_rules_if_ssd() {
+#         if [[ ${IS_HDD_OR_SSD} == "SSD" ]]; then
+#             # rotational = 0 ==> SSD
+#             print_title "SSD - https://wiki.archlinux.org/index.php/SSD"
+#             print_info "Utilisation de udev dans un environnement mixte HDD / SSD."
+#             cp -v ai-fconfig/etc-udev-rules.d-60-schedulers.rules ${MOUNTPOINT}/etc/udev/rules.d/60-schedulers.rules
+#             pause_function
+#         fi
+#     }
+#     #}}}
+#     # ECRITURE DES VARIABLES {{{
+#     write_variables_ali() {
+#         touch ${MOUNTPOINT}/root/variables.ali
+#         echo "TYPE_KEYBOARD=${TYPE_KEYBOARD}" >> ${MOUNTPOINT}/root/variables.ali
+#         local name_net_wired=$(ip link | awk '/enp/ {print $2}' | sed -e "s/://")
+#         echo "NAME_NET_WIRED=${name_net_wired}" >> ${MOUNTPOINT}/root/variables.ali
+#         echo "IS_UEFI=${IS_UEFI}" >> ${MOUNTPOINT}/root/variables.ali
+#         echo "IN_VIRTUAL_BOX=${IN_VIRTUAL_BOX}" >> ${MOUNTPOINT}/root/variables.ali
+#         echo "IS_HDD_OR_SSD=${IS_HDD_OR_SSD}" >> ${MOUNTPOINT}/root/variables.ali
+#         echo "TYPE_STORAGE_PARTITION=${TYPE_STORAGE_PARTITION}" >> ${MOUNTPOINT}/root/variables.ali
+#         echo "ROOT_DEVICE=${ROOT_DEVICE}" >> ${MOUNTPOINT}/root/variables.ali
+#         echo "ROOT=${ROOT}" >> ${MOUNTPOINT}/root/variables.ali
+#         echo "ROOT_FS_TYPE=${ROOT_FS_TYPE}" >> ${MOUNTPOINT}/root/variables.ali
+#         echo "IS_VAR_SEPARATE=${IS_VAR_SEPARATE}" >> ${MOUNTPOINT}/root/variables.ali
+#         echo "EFI_DEVICE=${EFI_DEVICE}" >> ${MOUNTPOINT}/root/variables.ali
+#         #
+# #        echo -e "\nVérification du fichier ${MOUNTPOINT}/root/variables.ali avec $EDITOR"
+# #        pause_function
+# #        $EDITOR ${MOUNTPOINT}/root/variables.ali
+#     }
+#     #}}}
+#     #UMOUNT PARTITIONS {{{
+#     umount_partitions(){
+#         mounted_partitions=($(lsblk | grep ${MOUNTPOINT} | awk '{print $7}' | sort -r))
+#         swapoff -a
+#         for i in ${mounted_partitions[@]}; do
+#             umount $i
+#         done
+#     }
+#     #}}}
+# 
+#     #FINISH {{{
+#     finish() {
+#         print_title "PARTIE 3 : INSTALLATION TERMINÉE"
+#         #COPY AUI TO ROOT FOLDER IN THE NEW SYSTEM
+#         print_info_finish "\n==> INFO : Une copie de l'AUI sera placé dans le répertoire /root du nouveau système."
+#         cp -R $(pwd) ${MOUNTPOINT}/root
+#         #COPY ROOT FILES TO ROOT FOLDER IN THE NEW SYSTEM
+#         print_info_finish "\n==> INFO : Copie des fichiers de configuration dans le répertoire /root du nouveau système."
+# #         if [[ -f "/root/name_dir_archlinux.uefi" ]]; then
+# #             cp -v /root/name_dir_archlinux.uefi ${MOUNTPOINT}/root/name_dir_archlinux.uefi
+# #         fi
+#         cp -v ai-fconfig/root-.bashrc ${MOUNTPOINT}/root/.bashrc
+#         cp -v ai-fconfig/root-.bash_profile ${MOUNTPOINT}/root/.bash_profile
+#         print_info_finish "\n==> INFO : Fermer tous les terminaux ouverts ( TTY 2, ... )."
+#         pause_function       
+#         #umount mounted partitions
+# #        umount -R ${MOUNTPOINT}
+#         umount_partitions
+#         # Si dans VirtualBox
+#         if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
+#             print_info_finish "\n==> INFO : Dans VirtualBox, éteindre le système, modifier ordre de démarrage dans Système,\n           enlever ISO dans Stokage et relancer la VM."
+#         else
+#             echo -e "\n"
+#         fi
+# 	type_fins=("Redémarrer" "Éteindre");
+# 	PS3="$prompt1"
+# 	echo -e "Sélectionner l'arrêt ( Redémarrer ou Éteindre ) :"
+# 	select OPT in "${type_fins[@]}"; do
+# 	    case "$REPLY" in
+# 		1)
+# 		    reboot
+# 		    break
+# 		    ;;
+# 		2)
+# 		    poweroff
+# 		    break
+# 		    ;;
+# 		*)
+# 		    invalid_option
+# 		    ;;
+# 	    esac
+# 	done
+#     }
+#     #}}}
+
+#ARCHLINUX INSTALL SCRIPTS - https://github.com/jeannoeldot/alid/ai-b
+# TEST SI AI-B DELA LANCE : NON => EXECUTE AI-B. OUI => EXECUTE AI-B3 (FIN)
+# if [[ -f /root/ai-b.launched ]]; then
+#     # PARTIE 3 HORS CHROOT
+#     #
+#     messages_p3=""
+#     # Installation dans VirtualBox ou réelle
+#     check_is_in_virtualbox
+#     # Sets the interval of inactivity et fonts
+#     setterm -blank 0
+#    setfont Lat2-Terminus16
+#     setfont lat9w-16
+#     #
+#     finish
+# else
+    # PARTIE 1 HORS CHROOT
+    #
+    messages_p1=""
+    # Sets the interval of inactivity
+#     setterm -blank 0
+    messages_p1+="INSTALLATION PARTIE 1 HORS CHROOT.\n"
+    messages_p1+="==================================\n\n"
+    # Editeur par défaut
+    messages_p1+="L'éditeur par défaut est : nano\n"
+    # UEFI ou BIOS
+    check_is_uefi_or_bios
+    if [[ $IS_UEFI -eq 1 ]]; then
+        messages_p1+="Installation en mode     : UEFI\n"
+#         source $(pwd)/ai-b-uefi-hc
+    else
+        messages_p1+="Installation en mode     : BIOS\n"
+#         source $(pwd)/ai-b-bios-hc
+    fi
+    # Installation dans VirtualBox ou réelle
+    check_is_in_virtualbox
+    if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
+        messages_p1+="Installation dans        : Oracle VM VirtualBox\n"
+    else
+        messages_p1+="Installation dans        : PC Réel\n"
+    fi    
+    whiptail --title "${TITRE_BOX_W}" --msgbox "${messages_p1}" --ok-button "Continuer" 16 72
+
+    # Sets the interval of inactivity
+#     setterm -blank 0
+    #
+    configure_keymap
+#     # ai-b-bios-hc ou ai-b-uefi-hc
+#     create_partition
+#     format_device
+#     #
+#     configure_mirrorlist
+#     install_base_system
+#     genere_fstab
+#     #
+    messages_p1=""
+    messages_p1+="FIN INSTALLATION PARTIE 1 HORS CHROOT.\n"
+    messages_p1+="======================================\n\n"
+
+    # COPIE AI TO ROOT FOLDER IN THE NEW SYSTEM
+#     cp -R $(pwd) ${MOUNTPOINT}/root
+#     cp -f ${MOUNTPOINT}/root/ai/ai-b-ic ${MOUNTPOINT}/root/ai/ai-b
+    #
+#     write_variables_ali
+    #
+    messages_p1+="Commandes à éxécuter dans l'ordre pour poursuivre l'installation :\n\n"
+    messages_p1+="cd && arch-chroot /mnt /bin/bash => Chroot dans le nouveau système\n"
+    messages_p1+="cd /root/ai && ./ai-b            => Partie 2 de l'installation\n"
+    whiptail --title "${TITRE_BOX_W}" --msgbox "${messages_p1}" --ok-button "Continuer" 16 72
+    #
+#     echo "ai-b_launched=1" > /root/ai-b.launched
+    exit 0
+# fi
+

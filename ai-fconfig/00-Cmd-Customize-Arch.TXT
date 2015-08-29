@@ -1,0 +1,1779 @@
+LISTE DES COMMANDES A AFFECTUER POUR PERSONNALISER KDE OU OPENBOX
+=================================================================
+
+!!! EN USER
+============
+
+1) VÉRIFIER MES SERVICES SYSTEMD SI EN UEFI
+===========================================
+$ systemctl list-units
+
+efistub_update.path  loaded active waiting   Check update EFISTUB  Linux-ARCH
+
+!!! SUPPRIMÉ
+refind_update.path  loaded active waiting   Check update rEFInd
+
+SI DANS ARCH_2 :
+================
+efistub_update.path  loaded active waiting   Check update EFISTUB  Linux-ARCH
+
+
+ A)) ROOT
+========================
+
+0) THEME GRUB SI BOOT EN MOSE BIOS
+==================================
+
+!!! ATTENTION AUX CHANGEMENTS SUITE A MAJ intel-ucode 20140913-1
+----------------------------------------------------------------
+https://wiki.archlinux.org/index.php/microcode
+
+
+$ cd && mkdir wget-tmp && cd wget-tmp
+
+# Si DropBox !!! Vérifier lien
+---------------------------------
+$ wget https://dl.dropbox.com/s/da8e528xzjfh9li/jnddarkgray.tar.gz
+
+$ tar -xzf jnddarkgray.tar.gz
+
+$ sudo cp -R jnddarkgray /boot/grub/themes/
+
+# Edition fichier /etc/default/grub
+------------------------------------
+$ sudo cp /etc/default/grub /etc/default/grub.backup.moi
+
+$ sudo sed -i "/^#GRUB_THEME=\"\/path\/to\/gfxtheme\"/a\GRUB_THEME=\"\/boot\/grub\/themes\/jnddarkgray\/theme.txt\"" /etc/default/grub
+
+$ cat /etc/default/grub
+
+
+# Copie fichier dans /etc/grub.d/40_custom !!! A VOIR
+-----------------------------------------------------
+$ kdesu kwrite /boot/grub/grub.cfg &
+
+$ kdesu kwrite /etc/grub.d/40_custom &
+
+$ sudo blkid
+
+!!! ATTENTION A UUID
+======================
+# 
+# Arch Linux TTY 1 ( ex init 3 )
+#
+menuentry 'Arch Linux, TTY 1 ( ex init 3 )' --class arch --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-core repo kernel-true-f32e8743-2f80-409a-907c-53edbd4b8aeb' {
+        load_video
+        set gfxpayload=keep
+        insmod gzio
+        insmod part_gpt
+        insmod ext2
+        set root='hd0,gpt3'
+        if [ x$feature_platform_search_hint = xy ]; then
+          search --no-floppy --fs-uuid --set=root --hint-bios=hd0,gpt3 --hint-efi=hd0,gpt3 --hint-baremetal=ahci0,gpt3  f32e8743-2f80-409a-907c-53edbd4b8aeb
+        else
+          search --no-floppy --fs-uuid --set=root f32e8743-2f80-409a-907c-53edbd4b8aeb
+        fi
+        echo    'Chargement de Linux core repo kernel…'
+        linux   /boot/vmlinuz-linux root=UUID=f32e8743-2f80-409a-907c-53edbd4b8aeb rw quiet systemd.unit=multi-user.target
+        echo    'Chargement du disque mémoire initial…'
+        initrd  /boot/initramfs-linux.img
+}
+#
+# Windows 7 sur HDD sdb1
+#
+menuentry 'Windows 7 (loader) (sur HDD sdb1)' --class windows {
+  insmod part_msdos
+  insmod ntfs
+  set root='hd0,msdos1'
+  if [ x$feature_platform_search_hint = xy ]; then
+    search --no-floppy --fs-uuid --set=root --hint-bios=hd0,msdos1 --hint-efi=hd0,msdos1 --hint-baremetal=ahci0,msdos1 --hint='hd0,msdos1'  D6F6DC34F6DC1719
+  else
+    search --no-floppy --fs-uuid --set=root D6F6DC34F6DC1719
+  fi
+  drivemap -s hd0 hd1
+  chainloader +1
+}
+#
+
+# Faire configuration de grub
+-----------------------------
+$ sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+# Vérifications
+-------------------
+$ kdesu kwrite /boot/grub/grub.cfg &
+
+
+1) SUDO : Edition fichier /etc/sudoers
+======================================
+!!! FAIT EN AUTOMATIQUE SI INSTALLATION PAR MON SCRIPT AI-B
+===========================================================
+
+$ sudo sh -c "echo -e '\n## My Defaults timestamp_timeout = 20 minutes' >> /etc/sudoers"
+$ sudo sh -c "echo -e 'Defaults:jnd timestamp_timeout=20' >> /etc/sudoers"
+
+OU :
+
+# EDITOR=nano visudo
+
+
+2) MAKEPKG.CONF : Edition fichier /etc/makepkg.conf
+===================================================
+
+$ sudo cp /etc/makepkg.conf /etc/makepkg.conf.backup.moi
+
+$ sudo sed -i "s/-march=x86-64 -mtune=generic/-march=native/g" /etc/makepkg.conf
+
+# Ajout de  -fdiagnostics-color=always
+$ https://bbs.archlinux.org/viewtopic.php?id=189606
+----------------------------------------------------
+CFLAGS="-march=native -O2 -pipe -fstack-protector-strong --param=ssp-buffer-size=4"
+$ sudo sed -i "s/-march=native -O2 -pipe/-march=native -O2 -pipe -fdiagnostics-color=always/g" /etc/makepkg.conf
+
+
+# lscpu  ==> nbre de processeurs
+# 5 = Nb Processeurs + 1
+-----------------------------
+$ sudo sed -i "/^#MAKEFLAGS/c\MAKEFLAGS=\"-j5\"" /etc/makepkg.conf
+
+$ sudo sed -i "/^#PACKAGER/c\PACKAGER=\"Jean-Noel Dot <jeannoeldot@club-internet.fr>\"" /etc/makepkg.conf
+OU
+$ sudo sed -i "/^#PACKAGER/c\PACKAGER=\"Jean-Noel Dot <jean.noel.dot@sfr.fr>\"" /etc/makepkg.conf
+
+
+3) PACMAN.CONF : Edition fichier /etc/pacman.conf
+=================================================
+  !!! VOIR SI A FAIRE ICI : VOIR 4) USER
+  --------------------------------------
+  !!! SI REPOLOCAL EXISTE DANS REP USER
+  --------------------------------------
+$ sudo cp /etc/pacman.conf /etc/pacman.conf.backup.moi
+
+$ sudo sed -i "/^#Server = file/a\\\n[repolocal]\nSigLevel = Optional TrustAll\nServer = file:///home/jnd/00-repolocal" /etc/pacman.conf
+
+$ mkdir /home/jnd/00-repolocal
+
+# Si DropBox !!! Vérifier lien
+---------------------------------
+$ cd /home/jnd/00-repolocal/
+$ wget https://dl.dropbox.com/s/u2jb3jbb7y6y07p/fapg-0.41-3-x86_64.pkg.tar.xz
+
+$ cd /home/jnd/bin/
+$ wget https://dl.dropbox.com/s/ngxv2da1y70thdn/maj-repolocal.sh
+$ chmod +x maj-repolocal.sh
+
+$ cd && maj-repolocal.sh
+
+$ sudo pacman -Syy
+
+
+4) FSTAB : Edition fichier /etc/fstab
+=====================================
+$ sudo cp /etc/fstab /etc/fstab.backup.moi
+
+ 4-0) FSTAB : COMMENTER LIGNE SWAP SI EN GPT
+ =============================================
+!!! FAIT EN AUTOMATIQUE SI INSTALLATION PAR MON SCRIPT AI-B
+===========================================================
+ 
+# systemd 207-3 : swap montage auto : ==> #
+# /dev/sda2
+#UUID=07e77477-5016-45ed-84e1-a64b3bb3579a      none            swap            defaults        0 0
+
+!!! VOIR :
+----------
+systemd /usr/lib/systemd/system/tmp.mount  section "Options"
+[Mount]
+What=tmpfs
+Where=/tmp
+Type=tmpfs
+Options=mode=1777,strictatime
+
+Example : Options=mode=1777,strictatime,size=768M
+Example : Options=mode=1777,strictatime,size=2G
+
+ 4-1-1) TMPFS : Créer ma conf ds /etc/systemd/system/tmp.mount.d/tmp_size.conf
+ =============================================================================
+voir : https://wiki.archlinux.org/index.php/User:Djgera#hddtemp
+voir 100)
+
+# cat /usr/lib/systemd/system/tmp.mount
+
+!!! SI 8 GiO RAM
+$ sudo mkdir /etc/systemd/system/tmp.mount.d
+$ sudo sh -c "echo '[Mount]' > /etc/systemd/system/tmp.mount.d/tmp_size.conf"
+$ sudo sh -c "echo 'Options=mode=1777,strictatime,size=2G' >> /etc/systemd/system/tmp.mount.d/tmp_size.conf"
+
+!!! SI 16 GiO RAM
+$ sudo mkdir /etc/systemd/system/tmp.mount.d
+$ sudo sh -c "echo '[Mount]' > /etc/systemd/system/tmp.mount.d/tmp_size.conf"
+$ sudo sh -c "echo 'Options=mode=1777,strictatime,size=4G' >> /etc/systemd/system/tmp.mount.d/tmp_size.conf"
+
+OU POUR BLENDER
+----------------
+!!! SI 16 GiO RAM
+$ sudo mkdir /etc/systemd/system/tmp.mount.d
+$ sudo sh -c "echo '[Mount]' > /etc/systemd/system/tmp.mount.d/tmp_size.conf"
+$ sudo sh -c "echo 'Options=mode=1777,strictatime,size=6G' >> /etc/systemd/system/tmp.mount.d/tmp_size.conf"
+
+FAIRE TEST SI OK ( PSD AVEC FIREFOX ... COMPILER BLENDER DANS /TMP )
+
+POUR MODIFIER SIZE
+==================
+
+$ sudo /etc/systemd/system/tmp.mount.d/tmp_size.conf
+
+ 4-2) FSTAB : 0-DataLinux SI EXISTE
+ ==================================
+
+$ sudo blkid | grep "DataLinux"
+
+/dev/sdb5: UUID="c9acc104-7509-4639-a16a-8e81d0253259" TYPE="ext4" LABEL="DataLinux"
+
+
+# !!! Vérifier sdXY
+--------------------
+$ sudo sh -c "echo -e '# Montage sdb5 DataLinux' >> /etc/fstab"
+
+# !!! Vérifier UUID
+--------------------
+$ sudo sh -c "echo -e 'UUID=c9acc104-7509-4639-a16a-8e81d0253259 /0-DataLinux ext4 rw,relatime,data=ordered 0 2' >> /etc/fstab"
+OU
+$ sudo sh -c "echo -e 'UUID=c9acc104-7509-4639-a16a-8e81d0253259 /0-DataLinux ext4 defaults,relatime 0 2' >> /etc/fstab"
+
+# Vérifications
+----------------
+$ sudo nano /etc/fstab
+
+# Création Rep ds /
+--------------------
+$ sudo mkdir /0-DataLinux
+
+$ sudo chown -R jnd:users /0-DataLinux
+
+$ sudo ls -la /
+
+$ sudo mount -a
+
+# Vérifications
+----------------
+$ findmnt
+
+ 4-3) PARTITION /BOOT/EFI : VFAT : RAJOUTER DISCARD
+ ===================================================
+!!! FAIT EN AUTOMATIQUE SI INSTALLATION PAR MON SCRIPT AI-B
+===========================================================
+ 
+$ sudo nano -w /etc/fstab
+
+# /dev/sda1
+UUID=6BF6-2DEA          /boot/efi       vfat            rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,errors=remount-ro    0 2
+  DEVIENT :
+UUID=6BF6-2DEA          /boot/efi       vfat            rw,relatime,discard,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,errors=remount-ro    0 2
+
+
+
+5-1) SI SWAP : SWAPPINESS : Création de /etc/sysctl.d/swappiness.conf
+=============================================================================================
+https://wiki.archlinux.org/index.php/Swap
+https://wiki.archlinux.org/index.php/Sysctl
+http://0pointer.de/public/systemd-man/sysctl.d.html
+
+$ sudo sh -c "echo '# Reduce swapping from RAM' > /etc/sysctl.d/swappiness.conf"
+$ sudo sh -c "echo 'vm.swappiness=1' >> /etc/sysctl.d/swappiness.conf"
+$ sudo sh -c "echo 'vm.vfs_cache_pressure=50' >> /etc/sysctl.d/swappiness.conf"
+
+5-2) BALOO : Création de /etc/sysctl.d/90-inotify.conf
+=============================================================================================
+https://wiki.archlinux.org/index.php/KDE#Inotify_folder_watch_limit
+
+$ sudo sh -c "echo '# Increase inotify watch limit' > /etc/sysctl.d/90-inotify.conf"
+$ sudo sh -c "echo 'fs.inotify.max_user_watches = 10000' >> /etc/sysctl.d/90-inotify.conf"
+
+OU SI
+-----
+$ journalctl -b | grep baloo
+févr. 18 17:08:22 arch1kde baloo_file[5918]: KDE Baloo Filewatch service reached the inotify folder watch limit. File changes may be ignored.
+
+$ sudo sh -c "echo 'fs.inotify.max_user_watches = 20000' >> /etc/sysctl.d/90-inotify.conf"
+
+
+5-3) Magic System Request Key : Création de /etc/sysctl.d/99-sysrq.conf
+=============================================================================================
+https://wiki.archlinux.fr/Sysrq
+
+$ sudo sh -c "echo '# Activation de Magic System Request Key' > /etc/sysctl.d/99-sysrq.conf"
+$ sudo sh -c "echo 'kernel.sysrq = 1' >> /etc/sysctl.d/99-sysrq.conf"
+
+$ cat /etc/sysctl.d/99-sysrq.conf
+
+
+!!! AVEC CORE 2 DUO
+!!! NE PAS FAIRE AVEC I7 HASWELL INTEL_PSTATE
+6) CPU FREQ : création de /etc/tmpfiles.d/ondemand_threshold.conf
+=================================================================
+https://wiki.archlinux.org/index.php/Cpufreq
+
+$ sudo sh -c "echo '# Improving on-demand performance' > /etc/tmpfiles.d/ondemand_threshold.conf"
+$ sudo sh -c "echo 'w /sys/devices/system/cpu/cpufreq/ondemand/up_threshold - - - - 15' >> /etc/tmpfiles.d/ondemand_threshold.conf"
+
+
+7) BLACKLIST
+=============
+# lsmod | grep pcspkr
+ 7-0) pcspkr : création de /etc/modprobe.d/pcspkr_blacklist.conf
+ ===============================================================
+$ sudo sh -c "echo '# Do not load the 'pcspkr' module on boot.' > /etc/modprobe.d/pcspkr_blacklist.conf"
+$ sudo sh -c "echo 'blacklist pcspkr' >> /etc/modprobe.d/pcspkr_blacklist.conf"
+
+
+$ lsmod | grep wmi
+eeepc_wmi               4616  0 
+asus_wmi               16306  1 eeepc_wmi
+sparse_keymap           3114  1 asus_wmi
+rfkill                 15698  1 asus_wmi
+mxm_wmi                 1467  0 
+wmi                     8347  2 mxm_wmi,asus_wmi
+video                  11380  1 asus_wmi
+
+ 7-1) eeepc_wmi , asus-wmi , rfkill , sparse-keymap , mxm_wmi , video , wmi : 
+ création de /etc/modprobe.d/asus_wmi_blacklist.conf
+ =============================================================================
+$ sudo sh -c "echo '# Do not load ACPI-WMI Mapping Driver on boot.' > /etc/modprobe.d/asus_wmi_blacklist.conf"
+$ sudo sh -c "echo 'blacklist eeepc_wmi' >> /etc/modprobe.d/asus_wmi_blacklist.conf"
+$ sudo sh -c "echo 'blacklist asus-wmi' >> /etc/modprobe.d/asus_wmi_blacklist.conf"
+$ sudo sh -c "echo 'blacklist rfkill' >> /etc/modprobe.d/asus_wmi_blacklist.conf"
+$ sudo sh -c "echo 'blacklist sparse-keymap' >> /etc/modprobe.d/asus_wmi_blacklist.conf"
+$ sudo sh -c "echo 'blacklist mxm_wmi' >> /etc/modprobe.d/asus_wmi_blacklist.conf"
+$ sudo sh -c "echo 'blacklist video' >> /etc/modprobe.d/asus_wmi_blacklist.conf"
+$ sudo sh -c "echo 'blacklist wmi' >> /etc/modprobe.d/asus_wmi_blacklist.conf"
+
+!!! ANCIENNE C-M P5Q-PRO
+# lsmod | grep intel
+ 7-2) intel_agp et intel_gtt : création de /etc/modprobe.d/intel_agp_blacklist.conf
+ ===================================================================================
+$ sudo sh -c "echo '# Do not load the intel_agp and intel_gtt module on boot.' > /etc/modprobe.d/intel_agp_blacklist.conf"
+$ sudo sh -c "echo 'blacklist intel_agp' >> /etc/modprobe.d/intel_agp_blacklist.conf"
+$ sudo sh -c "echo 'blacklist intel_gtt' >> /etc/modprobe.d/intel_agp_blacklist.conf"
+
+ 7-3) kvm et kvm_intel : création de /etc/modprobe.d/kvm_intel_blacklist.conf
+ =============================================================================
+$ sudo sh -c "echo '# Do not load the kvm_intel and kvm module on boot.' > /etc/modprobe.d/kvm_intel_blacklist.conf"
+$ sudo sh -c "echo 'blacklist kvm_intel' >> /etc/modprobe.d/kvm_intel_blacklist.conf"
+$ sudo sh -c "echo 'blacklist kvm' >> /etc/modprobe.d/kvm_intel_blacklist.conf"
+
+
+8) MKINITCPIO.TXT : Edition fichier /etc/mkinitcpio.conf
+=========================================================
+$ sudo cp /etc/mkinitcpio.conf /etc/mkinitcpio.conf.backup.moi
+
+# original
+-------------
+$ sed '/#/d' /etc/mkinitcpio.conf
+MODULES="reiserfs"
+
+BINARIES=""
+
+FILES=""
+
+HOOKS="base udev autodetect pata scsi sata filesystems usbinput fsck"
+NOUVEAU ORIGINAL 10/12/2012
+HOOKS="base udev autodetect modconf block filesystems usbinput fsck"
+NOUVEAU ORIGINAL 19/03/2013
+!!! FAIT EN AUTOMATIQUE SI INSTALLATION PAR MON SCRIPT AI-B
+===========================================================
+HOOKS="base systemd autodetect modconf block filesystems keyboard keymap fsck"
+
+--------------------------------------------------------------------
+
+ 8-1) INSTALLATION DS VIRTUAL BOX
+ ================================
+# !!! SI PAS reiserfs
+----------------------
+$ sudo sed -i "/^MODULES=/c\MODULES=\"ata_piix ahci sd_mod ext4\"" /etc/mkinitcpio.conf
+
+$ sudo sed -i "/^BINARIES=/c\BINARIES=\"fsck fsck.ext4\"" /etc/mkinitcpio.conf
+
+# !!! SI reiserfs
+--------------------
+$ sudo sed -i "/^MODULES=/c\MODULES=\"ata_piix ahci sd_mod ext4 reiserfs\"" /etc/mkinitcpio.conf
+
+$ sudo sed -i "/^BINARIES=/c\BINARIES=\"fsck fsck.ext4 fsck.reiserfs\"" /etc/mkinitcpio.conf
+
+ 8-2) INSTALLATION RÉELLE
+ ==========================
+ # !!! SI PAS reiserfs
+----------------------
+$ sudo sed -i "/^MODULES=/c\MODULES=\"ahci sd_mod ext4\"" /etc/mkinitcpio.conf
+
+$ sudo sed -i "/^BINARIES=/c\BINARIES=\"fsck fsck.ext4\"" /etc/mkinitcpio.conf
+
+# !!! SI reiserfs
+--------------------
+$ sudo sed -i "/^MODULES=/c\MODULES=\"ahci sd_mod ext4 reiserfs\"" /etc/mkinitcpio.conf
+
+$ sudo sed -i "/^BINARIES=/c\BINARIES=\"fsck fsck.ext4 fsck.reiserfs\"" /etc/mkinitcpio.conf
+
+ 8-2) COMMUNS AUX 2 INSTALLATIONS
+ ==================================
+$ sudo sed -i "/^HOOKS=/c\HOOKS=\"base udev modconf usbinput\"" /etc/mkinitcpio.conf
+
+# Après modifs
+---------------
+$ sed '/#/d' /etc/mkinitcpio.conf
+MODULES="ata_piix ahci sd_mod ext4 reiserfs" OU MODULES="ahci sd_mod ext4"
+
+BINARIES="fsck fsck.ext4 fsck.reiserfs" OU BINARIES="fsck fsck.ext4"
+
+FILES=""
+
+HOOKS="base udev modconf usbinput"
+---------------------------------
+
+$ sudo mkinitcpio -p linux
+
+
+9) ETHERNET-STATIC : Edition fichier /etc/network.d/ethernet-static
+====================================================================
+!!! FAIT EN AUTOMATIQUE SI INSTALLATION PAR MON SCRIPT AI-B
+===========================================================
+$ sudo systemctl stop net-auto-wired.service
+
+$ sudo cp /etc/network.d/ethernet-static /etc/network.d/ethernet-static.backup.moi
+
+$ sudo sed -i "/^GATEWAY=/a\## Par defaut" /etc/network.d/ethernet-static
+
+$ sudo sed -i "s/DNS=/#DNS=/" /etc/network.d/ethernet-static
+
+$ sudo sed -i "/^#DNS=/a\## http://www.fdn.fr/Les-machines.html" /etc/network.d/ethernet-static
+
+$ sudo sed -i "/^## http/a\DNS=('80.67.169.12' '80.67.169.40')" /etc/network.d/ethernet-static
+  OU
+$ sudo sed -i "/^## http/a\DNS=('80.67.169.12')" /etc/network.d/ethernet-static
+
+$ sudo systemctl start net-auto-wired.service
+
+$ sudo cp /etc/network.d/examples/ethernet-static /etc/network.d/ethernet-static
+$ sudo nano -w /etc/network.d/ethernet-static
+$ cat /etc/resolv.conf
+
+
+10) ETHERNET en DHCPCD
+======================================================
+
+!!! FAIT EN AUTOMATIQUE SI INSTALLATION PAR MON SCRIPT AI-B
+===========================================================
+!!! EN ROOT !!!
+---------------
+# cp -v ai/ai-fconfig/net-ip-statique/resolv.conf.head /etc/resolv.conf.head
+
+
+12) SYSTEMD : Masquer services
+==============================
+
+!!! SYSTEMD 216
+================
+!!! ATTENTION AUX SERVICES !!!
+--------------------------------
+systemctl --state=failed
+systemctl list-unit-files
+systemd-analyze blame
+
+=> Comparer avec Fichiers dans /home/jnd/09-Fichiers-Conf/0-Systemd/
+Liste-Services-Actifs.DERNIERE_DATE.TXT
+Liste-Units.DERNIERE_DATE.TXT
+
+
+!!! EN USER
+--------------
+$ systemctl -t service -a --full | grep error
+
+auditd.service              error  inactive dead    auditd.service
+plymouth-quit-wait.service  error  inactive dead    plymouth-quit-wait.service
+plymouth-start.service      error  inactive dead    plymouth-start.service
+syslog.service              error  inactive dead    syslog.service
+
+!!! FAIT EN AUTOMATIQUE SI INSTALLATION PAR MON SCRIPT AI-DE
+=============================================================
+!!! EN ROOT !!!
+---------------
+# systemctl mask auditd.service plymouth-start.service plymouth-quit-wait.service syslog.service
+ln -s '/dev/null' '/etc/systemd/system/auditd.service'
+ln -s '/dev/null' '/etc/systemd/system/plymouth-start.service'
+ln -s '/dev/null' '/etc/systemd/system/plymouth-quit-wait.service'
+ln -s '/dev/null' '/etc/systemd/system/syslog.service'
+
+!!! SI :
+=========
+$ systemctl --state=failed
+UNIT                                          LOAD   ACTIVE SUB    DESCRIPTION
+systemd-backlight@backlight:eeepc-wmi.service loaded failed failed Load/Save Screen Backlight Brightness of backlight:eeepc/wmi
+
+LOAD   = Reflects whether the unit definition was properly loaded.
+ACTIVE = The high-level unit activation state, i.e. generalization of SUB.
+SUB    = The low-level unit activation state, values depend on unit type.
+
+1 loaded units listed. Pass --all to see loaded but inactive units, too.
+To show all installed unit files use 'systemctl list-unit-files'.
+
+==> FAIRE :
+!!! EN ROOT !!!
+---------------
+# systemctl mask systemd-backlight@backlight:eeepc-wmi.service
+ln -s '/dev/null' '/etc/systemd/system/systemd-backlight@backlight:eeepc-wmi.service'
+
+
+13) HDDTEMP : Créer ma conf ds /etc/systemd/system/hddtemp.service.d/myhddtemp.conf
+===================================================================================
+voir : https://wiki.archlinux.org/index.php/User:Djgera#hddtemp
+voir 100)
+
+!!! A FAIRE SI 2 DISQUES ( SDA ET SDB )
+---------------------------------------
+$ sudo mkdir -p /etc/systemd/system/hddtemp.service.d
+$ sudo sh -c "echo '[Service]' > /etc/systemd/system/hddtemp.service.d/myhddtemp.conf"
+$ sudo sh -c "echo 'ExecStart=' >> /etc/systemd/system/hddtemp.service.d/myhddtemp.conf"
+$ sudo sh -c "echo 'ExecStart=/usr/bin/hddtemp -dF /dev/sda /dev/sdb' >> /etc/systemd/system/hddtemp.service.d/myhddtemp.conf"
+
+$ sudo systemctl --system daemon-reload
+
+$ sudo systemctl restart hddtemp.service
+Warning: Unit file of hddtemp.service changed on disk, 'systemctl --system daemon-reload' recommended.
+
+!!! AU REBOOT : TEST EN USER : doit donner les 2 temps
+$ nc localhost 7634
+|/dev/sda|M4-CT256M4SSD2|0|C||/dev/sdb|WDC WD5002AALX-00J37A0|35|C|
+
+$ sudo systemctl status hddtemp.service
+[sudo] password for jnd: 
+hddtemp.service - Hard drive temperature monitor daemon
+   Loaded: loaded (/usr/lib/systemd/system/hddtemp.service; enabled)
+  Drop-In: /etc/systemd/system/hddtemp.service.d
+           └─myhddtemp.conf
+   Active: active (running) since ven. 2013-05-24 17:16:28 CEST; 2h 22min ago
+ Main PID: 237 (hddtemp)
+   CGroup: name=systemd:/system/hddtemp.service
+           └─237 /usr/bin/hddtemp -dF /dev/sda /dev/sdb
+
+
+21) MICROCODE
+=============
+https://wiki.archlinux.org/index.php/microcode
+
+!!! FAIT EN AUTOMATIQUE SI PAR MON SCRIPT AI-B
+===============================================
+
+!!! ATTENTION AUX CHANGEMENTS SUITE A MAJ intel-ucode 20140913-1 + linux 3.17.1
+--------------------------------------------------------------------------------
+SERVICE INTEL_UCODE_UPDATE
+==========================
+
+Déja créés. Voir :
+/home/jnd/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.path
+/home/jnd/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.service
+
+$ sudo cp -v /home/jnd/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.path \
+/etc/systemd/system/intel_ucode_update.path
+
+$ sudo cp -v /home/jnd/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.service \
+/etc/systemd/system/intel_ucode_update.service
+
+INSTALLATION DANS ARCH_1 / ARCH_1_CK
+------------------------------------
+$ sudo sed -i "s/NAMEDIRARCHLINUX/arch_1/g" /etc/systemd/system/intel_ucode_update.service
+
+INSTALLATION DANS ARCH_2 / ARCH_2_CK
+------------------------------------
+$ sudo sed -i "s/NAMEDIRARCHLINUX/arch_2/g" /etc/systemd/system/intel_ucode_update.service
+
+VÉRIFICATIONS
+--------------
+$ cat /etc/systemd/system/intel_ucode_update.service
+
+$ sudo systemctl enable intel_ucode_update.path
+
+$ sudo systemctl start intel_ucode_update.path
+
+$ systemctl status intel_ucode_update.path
+
+!!! INUTILES SI intel_ucode_update.path ACTIF !!!
+=================================================
+COPIE DE /boot/intel-ucode.img
+==============================
+INSTALLATION DANS ARCH_1 / ARCH_1_CK
+------------------------------------
+$ sudo cp -vf /boot/intel-ucode.img /boot/efi/EFI/arch_1/intel-ucode.img
+$ sudo cp -vf /boot/intel-ucode.img /boot/efi/EFI/arch_1_ck/intel-ucode.img
+
+INSTALLATION DANS ARCH_2 / ARCH_2_CK
+------------------------------------
+$ sudo cp -vf /boot/intel-ucode.img /boot/efi/EFI/arch_2/intel-ucode.img
+$ sudo cp -vf /boot/intel-ucode.img /boot/efi/EFI/arch_2_ck/intel-ucode.img
+
+MODIFICATIONS refind_linux.conf
+===============================
+INSTALLATION DANS ARCH_1 / ARCH_1_CK
+AJOUT DE : initrd=EFI/arch_1/intel-ucode.img
+--------------------------------------------
+$ sudo nano /boot/efi/EFI/arch_1/refind_linux.conf
+
+AJOUT DE : initrd=EFI/arch_1_ck/intel-ucode.img
+-----------------------------------------------
+$ sudo nano /boot/efi/EFI/arch_1_ck/refind_linux.conf
+
+INSTALLATION DANS ARCH_2 / ARCH_2_CK
+AJOUT DE : initrd=EFI/arch_2/intel-ucode.img
+--------------------------------------------
+$ sudo nano /boot/efi/EFI/arch_2/refind_linux.conf
+
+AJOUT DE : initrd=EFI/arch_2_ck/intel-ucode.img
+-----------------------------------------------
+$ sudo nano /boot/efi/EFI/arch_2_ck/refind_linux.conf
+
+VÉRIFICATIONS AU REBOOT
+-----------------------
+$ journalctl -b | grep microcode
+oct. 23 17:42:14 localhost kernel: CPU0 microcode updated early to revision 0x1c, date = 2014-07-03
+oct. 23 17:42:14 localhost kernel: CPU1 microcode updated early to revision 0x1c, date = 2014-07-03
+oct. 23 17:42:14 localhost kernel: CPU2 microcode updated early to revision 0x1c, date = 2014-07-03
+oct. 23 17:42:14 localhost kernel: CPU3 microcode updated early to revision 0x1c, date = 2014-07-03
+oct. 23 17:42:14 localhost kernel: microcode: CPU0 sig=0x306c3, pf=0x2, revision=0x1c
+oct. 23 17:42:14 localhost kernel: microcode: CPU1 sig=0x306c3, pf=0x2, revision=0x1c
+oct. 23 17:42:14 localhost kernel: microcode: CPU2 sig=0x306c3, pf=0x2, revision=0x1c
+oct. 23 17:42:14 localhost kernel: microcode: CPU3 sig=0x306c3, pf=0x2, revision=0x1c
+oct. 23 17:42:14 localhost kernel: microcode: CPU4 sig=0x306c3, pf=0x2, revision=0x1c
+oct. 23 17:42:14 localhost kernel: microcode: CPU5 sig=0x306c3, pf=0x2, revision=0x1c
+oct. 23 17:42:14 localhost kernel: microcode: CPU6 sig=0x306c3, pf=0x2, revision=0x1c
+oct. 23 17:42:14 localhost kernel: microcode: CPU7 sig=0x306c3, pf=0x2, revision=0x1c
+oct. 23 17:42:14 localhost kernel: microcode: Microcode Update Driver: v2.00 <tigran@aivazian.fsnet.co.uk>, Peter Oruba
+
+$ cat /proc/cmdline
+DANS ARCH_1 / ARCH_1_CK
+-----------------------
+\EFI\arch_1\vmlinuz-arch_1.efi root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target quiet initrd=EFI/arch_1/intel-ucode.img initrd=EFI/arch_1/initramfs-arch_1.img
+
+\EFI\arch_1_ck\vmlinuz-arch_1_ck.efi root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq quiet initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img
+
+DANS ARCH_2 / ARCH_2_CK
+-----------------------
+\EFI\arch_2\vmlinuz-arch_2.efi root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target quiet initrd=EFI/arch_2/intel-ucode.img initrd=EFI/arch_2/initramfs-arch_2.img
+
+\EFI\arch_2_ck\vmlinuz-arch_2_ck.efi root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq quiet initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img
+
+
+25) MODIFICATION DE /etc/X11/xorg.conf.d/20-nvidia.conf
+========================================================
+!!! FAIT EN AUTOMATIQUE SI PAR MON SCRIPT AI-B
+===============================================
+
+!!! SI GeForce GTX 650 TI
+-------------------------
+
+Section "Device"
+   Identifier   "GeForce GTX 650 TI"
+   Driver       "nvidia"
+   Option       "NoLogo"        "True"
+   Option       "CoolBits"      "1"
+   Option       "TripleBuffer"  "True"
+EndSection
+
+!!! SI GeForce GTX 980
+-------------------------
+
+Section "Device"
+   Identifier   "GeForce GTX 980"
+   Driver       "nvidia"
+   Option       "NoLogo"        "True"
+#   Option       "CoolBits"      "8"
+   Option       "TripleBuffer"  "True"
+EndSection
+
+
+26) VERIFICATION DE /usr/lib/jvm
+================================
+$ ls -l /usr/lib/jvm
+total 4
+lrwxrwxrwx 1 root root   18  5 sept. 18:21 default -> java-7-openjdk/jre
+lrwxrwxrwx 1 root root   18  5 sept. 18:21 default-runtime -> java-7-openjdk/jre
+drwxr-xr-x 3 root root 4096 22 août  18:03 java-7-openjdk
+
+SI default -> default
+
+==> FAIRE :
+!!! EN ROOT !!!
+---------------
+# archlinux-java fix
+
+
+80) KDE 5 / Plasma 5 : ENTRÉES DANS JOURNAL
+============================================
+https://bbs.archlinux.org/viewtopic.php?id=193123
+https://git.reviewboard.kde.org/r/121903/diff/1/?file=338977#1
+
+VOIR : ARCH-KDE-DEBUG-DANS-JOURNAL.TXT dans ~/09-Documentation/
+
+$ sudo nano /usr/bin/startkde
+
+RAJOUTER LIGNES 12 À 14
+------------------------
+QT_LOGGING_RULES="*.debug=false"
+export QT_LOGGING_RULES
+
+--------------------
+
+90) INSTALLATION DE ABS
+========================
+
+https://wiki.archlinux.org/index.php/VCS_PKGBUILD_Guidelines#Subversion
+https://wiki.archlinux.org/index.php/Arch_Build_System
+
+# pacman -Syyu abs
+
+# abs
+==> /var/abs
+
+==> Downloading tarballs...
+    ==> core...
+    ==> extra...
+    ==> community...
+    ==> multilib...
+==> ERROR: Download failed
+
+
+98) REBOOT
+===================
+
+
+99) NETTOYAGE SI OK
+===================
+$ cd && rm -rf wget-tmp
+
+$ sudo rm -i /etc/default/grub.backup.moi
+
+$ sudo rm -i /etc/makepkg.conf.backup.moi
+
+$ sudo rm -i /etc/pacman.conf.backup.moi
+
+$ sudo rm -i /etc/fstab.backup.moi
+
+$ sudo rm -i /etc/mkinitcpio.conf.backup.moi
+
+$ sudo rm -i /etc/network.d/ethernet-static.backup.moi
+
+
+100) EXPLICATIONS conf ds /etc/systemd/system/hddtemp.service.d/myhddtemp.conf
+===============================================================================
+There is no need to add Type=, because Type is valid only one time in an unit.
+Instead for ExecStart=, since is valid to add more than one,
+If you need to clear all previous commands, then you need to specify ExecStart= in blank first.
+
+ex:
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --autologin root --noclear %I 38400 linux
+
+
+
+ B)) REPERTOIRE USER
+========================
+
+1) CRÉATION RÉPERTOIRES
+=======================
+$ cd && mkdir ~/99-temp && mkdir ~/99-temp/0-de-zipper
+
+ 1-1) DATALINUX EXISTE ET CONTIENT FICHIERS
+ ==========================================
+# !!! ATTENTION A LA DATE => PRENDRE LES PLUS RECENTS
+------------------------------------------------------
+# copier ces fichiers dans ~/99-temp :
+--------------------------------------
+
+00-3D-*.tar.xz
+05-Photos-*.tar.xz
+
+00-Conky-*.tar.xz
+01-dev-*.tar.xz
+02-git-*.tar.xz
+05-builds-*.tar.xz
+05-Icones-Progs-*.tar.xz
+05-Images-*.tar.xz
+05-Themes-*.tar.xz
+07-Docs-Office-*.tar.xz
+08-Dwl-OK-*.tar.xz
+09-Documentation-*.tar.xz
+09-Fichiers-Conf-*.tar.xz
+Documents-*.tar.xz
+
+01-scripts-*.tar.xz
+bin-*.tar.xz
+
+etc-*.tar.xz
+
+ 1-2) DATALINUX EXISTE MAIS EST VIERGE OU DATALINUX N'EXISTE PAS
+ ===============================================================
+# récupérer les fichiers depuis HubiC/9-Giga/DropBox ou HDD Externes dans ~/99-temp :
+-------------------------------------------------------------------------------------
+00-3D-*.tar.xz
+05-Photos-*.tar.xz
+
+00-Conky-*.tar.xz
+01-dev-*.tar.xz
+02-git-*.tar.xz
+05-builds-*.tar.xz
+05-Icones-Progs-*.tar.xz
+05-Images-*.tar.xz
+05-Themes-*.tar.xz
+07-Docs-Office-*.tar.xz
+08-Dwl-OK-*.tar.xz
+09-Documentation-*.tar.xz
+09-Fichiers-Conf-*.tar.xz
+Documents-*.tar.xz
+
+etc-*.tar.xz
+
+01-scripts-*.tar.xz
+bin-*.tar.xz
+
+ COMMUNS :
+ ==========
+$ cd ~/99-temp
+
+# pour chaque fichiers dans ~/99-temp :
+---------------------------------------
+$ tar -xJf 00-Conky-*.tar.xz -C ~/ && mv 00-Conky-*.tar.xz 0-de-zipper/
+$ tar -xJf 01-dev-*.tar.xz -C ~/ && mv 01-dev-*.tar.xz 0-de-zipper/
+$ tar -xJf 02-git-*.tar.xz -C ~/ && mv 02-git-*.tar.xz 0-de-zipper/
+$ tar -xJf 05-builds-*.tar.xz -C ~/ && mv 05-builds-*.tar.xz 0-de-zipper/
+$ tar -xJf 05-Icones-Progs-*.tar.xz -C ~/ && mv 05-Icones-Progs-*.tar.xz 0-de-zipper/
+$ tar -xJf 05-Images-*.tar.xz -C ~/ && mv 05-Images-*.tar.xz 0-de-zipper/
+$ tar -xJf 05-Themes-*.tar.xz -C ~/ && mv 05-Themes-*.tar.xz 0-de-zipper/
+$ tar -xJf 07-Docs-Office-*.tar.xz -C ~/ && mv 07-Docs-Office-*.tar.xz 0-de-zipper/
+$ tar -xJf 08-Dwl-OK-*.tar.xz -C ~/ && mv 08-Dwl-OK-*.tar.xz 0-de-zipper/
+$ tar -xJf 09-Documentation-*.tar.xz -C ~/ && mv 09-Documentation-*.tar.xz 0-de-zipper/
+$ tar -xJf 09-Fichiers-Conf-*.tar.xz -C ~/ && mv 09-Fichiers-Conf-*.tar.xz 0-de-zipper/
+$ tar -xJf Documents-*.tar.xz -C ~/ && mv Documents-*.tar.xz 0-de-zipper/
+
+$ tar -xJf 01-scripts-*.tar.xz -C ~/ && mv 01-scripts-*.tar.xz 0-de-zipper/
+$ tar -xJf bin-*.tar.xz -C ~/ && mv bin-*.tar.xz 0-de-zipper/
+
+
+$ cd && mkdir ~/90-BACKUP && mkdir ~/90-Partage && mkdir ~/99-A-IMPRIM && mkdir ~/99-dwl-temp
+
+
+ 1-3 LIENS SYMBOLIQUES
+ ======================
+
+00-3D -> /0-DataLinux/00-3D
+05-Photos -> /0-DataLinux/05-Photos
+10-Musiques -> /0-DataLinux/10-Musiques
+10-Videos -> /0-DataLinux/10-Videos
+99-Isos -> /0-DataLinux/99-Isos
+!!! A VOIR !!!
+VirtualBox-VMs -> /0-DataLinux/VirtualBox-VMs
+
+$ ln -sf /0-DataLinux/00-3D /home/jnd/00-3D
+
+
+2) FOND ECRAN
+=============
+
+3-1) DANS KDE : PERSONNALISER KDE
+=================================
+
+REVOIR :
+--------
+Rechercher sur le bureau : Indexation : Personnaliser des dossiers
+Détail du compte : Emplacements : Dossier ...
+
+
+
+3-2) CONFIGS KDEPLASMA : NOTES, CWP et YASP
+===========================================
+
+!!! INUTILE : PLUS UTILISE
+!!! ATTENTION DATE
+$ cd && cp -v /home/jnd/09-Fichiers-Conf/0-Save-Confs/home-jnd-.yasp.script.2013-09-28 .yasp.script
+
+ 3-2-1) NOTES
+ ============
+ !!! VOIR : /home/jnd/09-Fichiers-Conf/config-mes-kdeplasma/KDE-CONFIG-notes.TXT
+
+ 
+3-3) CONFIGS GIT
+================
+ !!! VOIR : /home/jnd/09-Documentation/00-Cmd-CREATION-GIT-INSTALLEUR.TXT
+ OU
+ !!! VOIR : /home/jnd/02-git/00-Cmd-CREATION-GIT-INSTALLEUR.TXT
+ 
+!!! ATTENTION DATE
+$ cd && cp -v /home/jnd/09-Fichiers-Conf/0-Save-Confs/home-jnd-.gitconfig.2013-12-01 .gitconfig
+
+
+3-4) CONFIGS TOP
+================
+Supprimer  ~/.toprc (si existe)
+Lancer "top"
+
+Presser z
+Presser V
+Presser 1
+Presser y
+Presser m m
+Presser t t t
+Presser W
+
+Cela va écrire un fichier ~/.toprc.
+
+OU
+!!! ATTENTION DATE
+$ cd && cp -v /home/jnd/09-Fichiers-Conf/0-Save-Confs/home-jnd-.toprc.2013-12-01 .toprc
+
+
+4) REPOLOCAL
+=============
+ 4-1) PACMAN.CONF : Edition fichier /etc/pacman.conf
+ =================================================
+  !!! SI REPOLOCAL EXISTE DANS REP USER
+  --------------------------------------
+$ mkdir /home/jnd/00-repolocal
+
+$ mkdir /home/jnd/00-repolocal/pkg-OLD
+
+$ sudo cp /etc/pacman.conf /etc/pacman.conf.backup.moi
+
+$ sudo sed -i "/^#Server = file/a\\\n[repolocal]\nSigLevel = Optional TrustAll\nServer = file:///home/jnd/00-repolocal" /etc/pacman.conf
+
+  !!! VOIR
+  ----------
+# Si DropBox !!! Vérifier lien
+---------------------------------
+$ cd /home/jnd/00-repolocal/
+$ wget https://dl.dropbox.com/s/u2jb3jbb7y6y07p/fapg-0.41-3-x86_64.pkg.tar.xz
+
+$ cd /home/jnd/bin/
+$ wget https://dl.dropbox.com/s/ngxv2da1y70thdn/maj-repolocal.sh
+$ mv maj-repolocal.sh maj-repolocal
+$ chmod +x maj-repolocal
+
+$ cd && maj-repolocal
+
+$ sudo pacman -Syyu
+
+
+
+!!! SEMBLE INUTILE
+------------------
+5) LIENS SCRIPTS --> BIN
+========================
+ 5-1) SI 01-scripts N'EXISTE PAS
+ ===============================
+$ cd && mkdir ~/01-scripts && cd ~/01-scripts
+
+  !!! VOIR
+  ----------
+ COMMUNS
+ =======
+$ wget https://dl.dropbox.com/s/ngxv2da1y70thdn/maj-repolocal.sh
+$ mv maj-repolocal.sh maj-repolocal
+$ chmod +x maj-repolocal
+$ cd
+$ ln -sfv ~/01-scripts/maj-repolocal ~/bin/maj-repolocal
+
+
+6) CRÉATION RÉPERTOIRE 0-chroot DANS 05-builds
+==============================================
+ 6-1) SI 05-builds EXISTE
+ ========================
+$ cd && mkdir ~/05-builds/0-chroot
+
+ 6-2) SI 05-builds N'EXISTE PAS
+ ==============================
+$ cd && mkdir ~/05-builds && mkdir ~/05-builds/0-chroot
+
+
+7-1) RÉGLAGES KONSOLE, DOLPHIN, KATE, KWRITE, FAVORI FireFox
+===========================================================
+!!! ATTENTION DATE
+$ cd && cp -v /home/jnd/09-Fichiers-Conf/kate-sessions/*.katesession /home/jnd/.local/share/kate/sessions/
+
+NOTE :
+VOIR !!! /home/jnd/09-Fichiers-Conf/config-mes-kdeplasma/KDE-CONFIG-notes.TXT
+
+7-2) VISIONNEUR PDF PAR DÉFAUT DANS LES APPLICATIONS GTK SOUS KDE
+=================================================================
+SI INSTALLATION DE inkscape, gimp ou firefox
+--------------------------------------------
+$ xdg-mime default kde4-okularApplication_pdf.desktop application/pdf
+
+7-3) VÉRIFICATIONS DE $HOME/.local/share/applications/mimetypes.list ( KDE 5 )
+==============================================================================
+Replace 'kde4-kwrite.desktop' with 'org.kde.kwrite.desktop'
+Replace 'kde4-kate.desktop' with 'org.kde.kate.desktop'
+Replace 'kde4-gwenview.desktop' with 'gwenview.desktop'
+
+
+
+8) RECOMPILATION DE MES PROGRAMMES
+==================================
+OU
+8) INSTALLATION DE MES PROGRAMMES
+=================================
+
+ 8-1) MODIF QT4 CONFIG
+ =====================
+ $ modif-qt4-conf
+
+ 8-1) MODIF QT5 CONFIG
+ =====================
+ $ modif-qt5-conf
+
+# pacman -Syu mkpkg-tmpfs
+
+# pacman -Syu firefox-https-everywhere
+
+INSTALLATION DE freshplayerplugin ET chromium-pepper-flash POUR FIREFOX
+-----------------------------------------------------------------------
+# pacman -R flashplugin
+
+$ rm -rf /home/jnd/.adobe
+$ rm -rf /home/jnd/.macromedia
+
+!!! Vérifier /home/jnd/.mozilla/firefox/profiles.ini
+$ cat ~/.mozilla/firefox/profiles.ini
+$ rm -i ~/.mozilla/firefox/mhnm9wic.default/pluginreg.dat
+
+# pacman -Syu freshplayerplugin chromium-pepper-flash
+
+VÉRIFICATION dans firefox : about:addons
+
+Shockwave Flash 17.0.0.169
+                17.0 r0
+
+
+
+!!! VOIR https://wiki.archlinux.org/index.php/Profile-sync-daemon
+# pacman -Syu profile-sync-daemon profile-cleaner
+# nano -w /etc/psd.conf
+USERS="jnd"
+BROWSERS="firefox"
+!!! SI VERSION Linux kernel >= 3.18.0
+USE_OVERLAYFS="yes"
+
+# systemctl start psd.service psd-resync.service
+# systemctl enable psd.service psd-resync.service
+# systemctl status psd.service
+# systemctl status psd-resync.service
+$ profile-sync-daemon preview
+$ cat ~/.mozilla/firefox/profiles.ini
+
+
+!!! opensubdiv
+!!! opencollada-git
+!!! openimageio-git
+!!! openshadinglanguage-git
+# pacman -Syu blender-git
+# pacman -Syu blender-addons-yafaray-git
+!!! TEST $ blender
+
+# pacman -Syu jndqaligne5-qt4 jndqrami-qt4
+OU Versions Qt5
+# pacman -Syu jndqaligne5-qt5 jndqrami-qt5
+
+# pacman -Syu jndqcbgrd-qt5
+
+# pacman -Syu konvertible
+# pacman -Syu pkgbrowser
+# pacman -Syu sysbench
+
+# pacman -Syu amaya
+
+
+!!! VOIR
+# pacman -Syu ttf-win7-fonts
+
+
+9) INSTALLATION DE VIRTUAL-BOX
+=================================
+
+# pacman -Syu virtualbox virtualbox-host-modules virtualbox-guest-iso
+# modprobe vboxdrv
+# modprobe vboxnetflt
+
+# echo '# Load Vbox modules at boot.' > /etc/modules-load.d/virtualbox.conf
+# echo 'vboxdrv' >> /etc/modules-load.d/virtualbox.conf
+# echo 'vboxnetflt' >> /etc/modules-load.d/virtualbox.conf
+
+# cat /etc/modules-load.d/virtualbox.conf
+
+# gpasswd -a jnd vboxusers
+
+# pacman -Syu virtualbox-extension
+
+!!! DANS VIRTUAL-BOX :
+!!! ATTENTION AU CHEMIN DE VirtualBox-VMs -> /0-DataLinux/VirtualBox-VMs
+
+Fichiers -> Paramètres 
+Onglet Général : Dossier par défaut des machines :
+  ==> /home/jnd/VirtualBox-VMs
+  
+10) INSTALLATION DE CONKY-LUA
+=================================
+!!! VOIR : /home/jnd/00-Conky/Install-Conky.TXT
+
+# systemctl stop lm_sensors.service
+# systemctl disable lm_sensors.service
+# pacman -Syu lm_sensors
+# sensors-detect
+# systemctl start lm_sensors.service
+# systemctl enable lm_sensors.service
+# systemctl status lm_sensors.service
+
+# pacman -Syu conky-lua
+
+!!! VOIR : /home/jnd/00-Conky/0-COMMANDES TEST CONKY.TXT
+
+!!! ATTENTION SI VERSION CONKY = 1.10 : FORMAT FICHIER RC A CHANGÉ !!!
+
+
+11) RÉGLAGES DANS FIREFOX
+==========================================================
+
+ 11-1) RÉGLAGES GÉNÉRAUX
+ =======================
+ 
+Sur Barre Ongets -> Clic Droit -> X Barre de Menus
+
+Menu
+----
+Affichage -> Panneau latéral -> X Marque-pages
+
+Edition -> Préférences -> Général
+ v Toujours demander où enregistrer les fichiers
+ 
+Edition -> Préférences -> Avancé -> Général -> Navigation
+ v Utiliser le défilement automatique
+ v Utiliser le défilement doux
+
+ about:config
+ ------------
+ network.http.pipelining  => true
+ network.http.pipelining.maxrequests => 8
+ network.http.proxy.pipelining => true
+ 
+ Libérer la mémoire après fermeture d'un onglet :
+ browser.sessionstore.max_tabs_undo => 0
+
+
+Marque-pages -> Importation et sauvegarde -> Importer HTML
+/home/jnd/09-Fichiers-Conf/bookmarks-2013-12-01.html
+OU
+--
+Se synchroniser pour récupérer les bookmarks
+Edition -> Préférences -> Sync -> Se connecter
+
+ 11-2) INSTALLATION DE "Dictionnaires français" DANS FIREFOX
+ ===========================================================
+
+Menu Outils -> Modules Complémentaires
+Onglet Catalogue
+En HAUT - A DROITE : Rechercher : dictionnaires français
+==> Dictionnaires français 5.3 -> Installer
+
+https://addons.mozilla.org/fr/firefox/addon/dictionnaires-fran%C3%A7ais/?src=ss
+
+https://addons.mozilla.org/firefox/downloads/latest/354872/addon-354872-latest.xpi?src=ss
+
+
+ 11-3) OBTENIR 1080p DANS LE LECTEUR HTML5 YOUTUBE DANS FIREFOX
+ ==============================================================
+VOIR : http://forum.pinguyos.com/Thread-Enable-Hardware-Acceleration-in-Firefox-Get-1080p-in-Youtube%E2%80%99s-HTML5-player
+
+  about:config
+ ------------
+ media.mediasource.enabled  => true
+ media.mediasource.webm.enabled  => true
+ media.mediasource.whitelist = TRUE
+
+ 
+ Activer MSE et H.264
+ --------------------
+ media.mediasource.mp4.enabled = TRUE
+ media.fragmented-mp4.enabled = TRUE
+ media.fragmented-mp4.exposed  => true
+ media.fragmented-mp4.ffmpeg.enabled  => true
+ media.fragmented-mp4.gmp.enable  => true
+ media.fragmented-mp4.use-blank-decoder = FALSE
+ 
+ !!! Hardware Acceleration ==> LAISSER A FALSE !!!
+ -------------------------------------------------
+ layers.acceleration.force-enabled = FALSE
+ layers.offmainthreadcomposition.enabled = FALSE
+ layers.acceleration.disabled = FALSE
+ layers.acceleration.draw-fps = FALSE
+
+
+A vérifier en allant sur : https://www.youtube.com/html5
+
+
+ 11-9) INSTALLATION DE "Bookmarks Checker - check for bad links" DANS FIREFOX
+ ============================================================================
+  Extensions Bookmarks Checker - check for bad links 
+https://addons.mozilla.org/fr/firefox/addon/bookmarks-checker/?src=dp-dl-othersby
+
+
+
+12) INSTALLATION DE WINE
+=================================
+!!! VOIR : /home/jnd/09-Documentation/20-Wine-Civ4/0-INSTALL/01-Installation-Wine-64.txt
+
+!!! VOIR : /home/jnd/09-Documentation/20-Wine-Civ4/0-INSTALL/02-Installation-Civ4-Complete.txt
+
+
+13) BALOO KDE5
+=================================
+https://wiki.archlinux.org/index.php/KDE#Desktop_search_and_semantic_desktop
+https://community.kde.org/Baloo/Configuration
+
+kwrite ~/.config/baloofilerc
+
+[Basic Settings]
+Indexing-Enabled=true
+
+...
+
+exclude folders[$e]=$HOME/02-git/,$HOME/90-BACKUP/,/0-DataLinux/,$HOME/05-builds/0-chroot/
+
+$ balooctl status
+
+
+14) DOLPHIN KDE5
+=================
+Emplacements :
+Voir : /home/jnd/09-Fichiers-Conf/KDE5-Dolphin/
+Voir : /home/jnd/.local/share/user-places.xbel.avec.mes.emplacements
+   ==> /home/jnd/.local/share/user-places.xbel
+
+
+15) KWALLET KDE5
+=================
+$ kcmshell4 kwalletconfig
+  Décocher : Activer le sous-système de portefeuilles de KDE
+
+  Appliquer ( Mot de passe de jnd )
+  
+OU :
+
+$ kwalletmanager
+
+Menu K -> Système -> Outils de gestion de portefeuilles (KwalletManager)
+                  -> Configuration -> Configurer un portefeuille
+
+
+16) PLASMA-WORKSPACE
+====================
+Trop d'informations de débuggage par défaut dans le journal
+-----------------------------------------------------------
+VOIR : 27) KDE 5 / Plasma 5 : ENTRÉES DANS JOURNAL (Ligne 708)
+
+VOIR : ARCH-KDE-DEBUG-DANS-JOURNAL.TXT dans ~/09-Documentation/
+
+
+40) INSTALLATION DE jre8-openjdk
+================================
+VOIR : 00-INSTALLATION-JAVA-JRE7-ET-JRE8.TXT dans ~/09-Documentation/
+
+# pacman -Syu jre8-openjdk
+# pacman -Syu java-openjfx
+# archlinux-java status
+# archlinux-java set java-8-openjdk/jre
+# archlinux-java status
+
+
+50) Qt Creator
+===============
+
+Menu Outils -> Options -> C++ -> Qt Class Generation
+  O
+  O
+  X Multiple inheritance ( Héritaqe multiple )
+
+Menu Outils -> Options -> TODO
+  !!! Voir
+
+Menu Aide -> A propos des plug-ins...
+  Utilitaires : X Todo
+
+
+
+=============================================================================
+=============================================================================
+DANS OPEN-BOX / CK
+=============================================================================
+=============================================================================
+
+SI CURSEUR SOURIS TROP GRAND
+============================
+
+Voir : https://wiki.archlinux.org/index.php/Cursor#Using_X_resources
+
+
+SI PROBLÈME AFFICHAGE DANS CIVILIZATION 4 ET BTS
+================================================
+
+https://wiki.archlinux.org/index.php/NVIDIA#Avoid_tearing_with_GeForce_500.2F600.2F700.2F900_series_cards
+
+Rajouter ligne dans 20-nvidia.conf
+Option  "metamodes" "nvidia-auto-select +0+0 { ForceFullCompositionPipeline = On }"
+
+
+LIENS SYMBOLIQUES
+=====================
+
+$ ln -sf /0-DataLinux/00-3D /home/jnd/00-3D
+...
+...
+
+
+SI 05-builds N'EXISTE PAS
+==============================
+$ cd && mkdir ~/05-builds && mkdir ~/05-builds/0-chroot
+
+$ yaourt -Syua turbostat
+!!! => ERREUR
+
+https://wiki.archlinux.org/index.php/Profile-sync-daemon
+$ yaourt -Syua profile-sync-daemon
+$ sudo nano -w /etc/psd.conf
+$ sudo systemctl start psd.service psd-resync.service
+$ sudo systemctl enable psd.service psd-resync.service
+$ sudo systemctl status psd.service psd-resync.service
+$ profile-sync-daemon parse
+$ cat ~/.mozilla/firefox/profiles.ini
+
+!!! SI VERSION Linux kernel >= 3.18.0
+$ yaourt -Syua profile-sync-daemon
+$ sudo nano -w /etc/psd.conf
+USERS="jnd"
+BROWSERS="firefox"
+USE_OVERLAYFS="yes"
+
+$ sudo systemctl start psd.service psd-resync.service
+$ sudo systemctl enable psd.service psd-resync.service
+$ sudo systemctl status psd.service psd-resync.service
+$ profile-sync-daemon preview
+$ cat ~/.mozilla/firefox/profiles.ini
+
+
+$ yaourt -Syua profile-cleaner
+$ profile-cleaner f
+
+$ yaourt -Syua sysbench
+
+
+REPOLOCAL
+=============
+$ mkdir /home/jnd/00-repolocal
+
+$ mkdir /home/jnd/00-repolocal/pkg-OLD
+
+ PACMAN.CONF : Edition fichier /etc/pacman.conf
+ ==============================================
+$ sudo cp /etc/pacman.conf /etc/pacman.conf.backup.moi
+
+$ sudo sed -i "/^#Server = file/a\\\n[repolocal]\nSigLevel = Optional TrustAll\nServer = file:///home/jnd/00-repolocal" /etc/pacman.conf
+
+ 00-repolocal
+ ============
+SUR HUBIC
+---------
+https://hubic.com/home/browser/#default/00-SAVE-ARCH-OB-CK/PAQUETS-AUR
+- ghnomix-icon-theme-1.3-1-any.pkg.tar.xz
+- awoken-icons-2.5.2-1-any.pkg.tar.xz
+
+
+$ cp -v /0-DataLinux/00-ARCH_2-OB-CK/0-Fichiers-importants/ghnomix-icon-theme-1.3-1-any.pkg.tar.xz /home/jnd/00-repolocal/
+
+$ cp -v /0-DataLinux/00-ARCH_2-OB-CK/0-Fichiers-importants/awoken-icons-2.5.2-1-any.pkg.tar.xz /home/jnd/00-repolocal/
+
+$ cd && maj-repolocal
+
+$ sudo pacman -Syyu
+
+$ sudo pacman -Syu ghnomix-icon-theme
+
+$ sudo pacman -Syu awoken-icons
+
+!!! VOIR Intallation de mes paquets
+-----------------------------------
+jndqaligne5-qt5 0.5.0-1
+jndqcbgrd-qt5 0.1.7-2
+jndqrami-qt5 0.2.1-1
+
+!!! VOIR Intallation de blender-git (+ dep osd, oc, oiio et osl)
+----------------------------------------------------------------
+blender-git
+opencollada-git
+openimageio-git
+openshadinglanguage-git
+opensubdiv
+
+blender-addons-yafaray-git
+
+
+LM_SENSORS
+===============
+
+# systemctl stop lm_sensors.service
+# systemctl disable lm_sensors.service
+# pacman -Syu lm_sensors
+# sensors-detect
+# systemctl start lm_sensors.service
+# systemctl enable lm_sensors.service
+# systemctl status lm_sensors.service
+!!! TEST EN USER : sensors
+
+
+INSTALLATION DE CONKY
+=================================
+
+$ cd
+$ cp -v /0-DataLinux/00-ARCH_2-OB-CK/00-Conky.tar.xz /home/jnd/
+$ tar -xJf 00-Conky.tar.xz
+$ rm -f 00-Conky.tar.xz
+
+!!! VOIR : /home/jnd/00-Conky/Install-Conky.TXT
+!!! VOIR : /home/jnd/00-Conky/0-COMMANDES TEST CONKY.TXT
+
+!!! ATTENTION SI VERSION CONKY = 1.10 : FORMAT FICHIER RC A CHANGÉ !!!
+
+
+INSTALLATION DE COMPTON-GIT
+============================
+
+https://wiki.archlinux.org/index.php/Compton
+
+https://aur.archlinux.org/packages/compton/
+
+https://github.com/chjj/compton/blob/master/compton.sample.conf
+https://github.com/chjj/compton/blob/master/man/compton.1.asciidoc
+
+$ yaourt -Syua compton-git
+
+https://github.com/chjj/compton/blob/master/compton.sample.conf
+	==> Raw
+	==> Clic Droit -> Enregistrer sous
+	==> /home/jnd/Téléchargements/compton.sample.conf
+	
+	
+$ cp -v /home/jnd/Téléchargements/compton.sample.conf ~/.config/compton.conf
+
+1) Modifier Opacity
+-------------------
+# Opacity
+menu-opacity = 0.8;		==>		menu-opacity = 1.0;
+inactive-opacity = 0.8;
+
+# Opacity
+menu-opacity = 1.0;
+inactive-opacity = 0.8;
+
+
+$ cd ~/.config
+
+==> Dans ~/.config : Clic Droit sur compton.conf -> Ouvrir -> Geany
+
+==> Dans ~/.config/openbox : Clic Droit sur autostart -> Ouvrir -> Geany
+==> Rajouter :
+
+## Compositing
+compton --config ~/.config/compton.conf -b &
+
+==> Clic Droit sur Bureau (menu OpenBox) -> Reconfigure OpenBox
+
+2) Tests
+-------------------
+
+LXTerminal : semble OK
+
+SpaceFM , Firefox , Geany : semble OK
+
+
+INSTALLATION DE FRESHPLAYERPLUGIN ET CHROMIUM-PEPPER-FLASH
+==========================================================
+SI FIREFOX INSTALLÉ
+--------------------
+
+https://aur.archlinux.org/packages/freshplayerplugin/
+
+https://aur.archlinux.org/packages/chromium-pepper-flash/
+
+1) SUPPRESSION flashplugin si installé
+---------------------------------------
+$ pacman -Ss flashplugin
+extra/flashplugin 11.2.202.457-1 [installé]
+    Adobe Flash Player
+
+$ sudo pacman -R flashplugin
+
+$ rm -rf /home/jnd/.adobe
+$ rm -rf /home/jnd/.macromedia
+!!! Vérifier /home/jnd/.mozilla/firefox/profiles.ini
+$ cat ~/.mozilla/firefox/profiles.ini
+$ rm -i ~/.mozilla/firefox/ljs58rbs.default/pluginreg.dat
+
+2) INSTALLATION freshplayerplugin et chromium-pepper-flash
+----------------------------------------------------------
+
+$ yaourt -Syua freshplayerplugin
+
+$ yaourt -Syua chromium-pepper-flash
+
+3) VÉRIFICATION
+----------------
+Dans firefox : about:addons
+
+Shockwave Flash 17.0.0.169
+                17.0 r0
+
+
+
+INSTALLATION CORBEILLE DANS SPACEFM
+===================================
+
+https://igurublog.wordpress.com/downloads/spacefm/
+
+https://github.com/IgnorantGuru/spacefm/wiki/plugins
+
+
+1) Téléchargement
+-----------------
+
+Download: French :
+http://www.jpfleury.net/site/fichiers/corbeille-spacefm/Corbeille-fr-source.spacefm-plugin.tar.gz
+
+https://github.com/jpfleury/corbeille-spacefm
+
+
+2) Installation
+---------------
+Menu Extensions -> Installer -> Fichier
+
+
+
+
+
+INSTALLATION DE LINUX-CK
+=================================
+
+!!! VOIR : /home/jnd/00-Cmd-INSTALLATION-LINUX-CK.TXT
+OU
+!!! VOIR : /home/jnd/09-Documentation/00-Cmd-INSTALLATION-LINUX-CK.TXT
+OU
+!!! VOIR : /0-DataLinux/ARCH-OB-CK-INSTALLATION DE LINUX-CK.TXT
+
+
+
+
+
+====================================================================================================
+ANCIEN
+==========================================================
+
+!!!! INUTILE DEPUIS VERSION PSD = 5.73-1
+# modprobe overlay
+# echo '# Load overlay modules at boot.' > /etc/modules-load.d/profile_sync_daemon.conf
+# echo 'overlay' >> /etc/modules-load.d/profile_sync_daemon.conf
+
+# cat /etc/modules-load.d/profile_sync_daemon.conf
+
+!!!! INUTILE DEPUIS VERSION PSD = 5.73-1
+# modprobe overlay
+# echo '# Load overlay modules at boot.' > /etc/modules-load.d/profile_sync_daemon.conf
+# echo 'overlay' >> /etc/modules-load.d/profile_sync_daemon.conf
+
+$ cat /etc/modules-load.d/profile_sync_daemon.conf
+
+
+11) ADOBE FLASHPLUGIN : Edition fichier /etc/adobe/mms.cfg
+================================================================
+SI NVDIA
+----------
+$ sudo sed -i "/^#EnableLinuxHWVideoDecode=1/c\EnableLinuxHWVideoDecode=1" /etc/adobe/mms.cfg
+
+SI FLASH PLANTE :
+-----------------
+$ sudo sed -i "/^#EnableLinuxHWVideoDecode=1/c\EnableLinuxHWVideoDecode=0" /etc/adobe/mms.cfg
+
+
+$ sudo pacman -U /home/jnd/00-repolocal/ghnomix-icon-theme-1.3-1-any.pkg.tar.xz
+
+!!! INUTILE : SUR community
+# pacman -Syu i7z-git
+!!! TEST # i7z
+
+$ yaourt -Syua i7z-git
+!!! TEST EN ROOT : i7z
+
+
+( A Droite ) En progression    Voir tous
+Rechercher : dictionnaires français
+
+
+12) KMIX KDE5
+=================================
+!!! FAIT EN AUTOMATIQUE SI PAR MON SCRIPT AI-DE
+===============================================
+$ yaourt -Syua kmix
+
+
+5-2) NEPOMUK : Création de /etc/sysctl.d/nepomuk.conf
+=============================================================================================
+https://wiki.archlinux.org/index.php/KDE#Desktop_search_and_semantic_desktop
+
+$ sudo sh -c "echo '# Increase the number of files that can be watched with inotify' > /etc/sysctl.d/nepomuk.conf"
+$ sudo sh -c "echo 'fs.inotify.max_user_watches = 524288' >> /etc/sysctl.d/nepomuk.conf"
+
+
+23/10/2014 : linux 3.17.1
+==> FAIRE :
+# pacman -Syu intel-ucode
+
+AU REBOOT
+----------
+!!! EN ROOT !!!
+---------------
+# lsmod | grep microcode
+microcode              15216  0 
+
+# journalctl -b  | grep microcode
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU0 sig=0x306c3, pf=0x2, revision=0x19
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU0 sig=0x306c3, pf=0x2, revision=0x19
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU0 updated to revision 0x1a, date = 2014-05-23
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU1 sig=0x306c3, pf=0x2, revision=0x19
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU1 sig=0x306c3, pf=0x2, revision=0x19
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU1 updated to revision 0x1a, date = 2014-05-23
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU2 sig=0x306c3, pf=0x2, revision=0x19
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU2 sig=0x306c3, pf=0x2, revision=0x19
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU2 updated to revision 0x1a, date = 2014-05-23
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU3 sig=0x306c3, pf=0x2, revision=0x19
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU3 sig=0x306c3, pf=0x2, revision=0x19
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU3 updated to revision 0x1a, date = 2014-05-23
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU4 sig=0x306c3, pf=0x2, revision=0x19
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU4 sig=0x306c3, pf=0x2, revision=0x19
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU4 updated to revision 0x1a, date = 2014-05-23
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU5 sig=0x306c3, pf=0x2, revision=0x19
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU5 sig=0x306c3, pf=0x2, revision=0x19
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU5 updated to revision 0x1a, date = 2014-05-23
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU6 sig=0x306c3, pf=0x2, revision=0x19
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU6 sig=0x306c3, pf=0x2, revision=0x19
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU6 updated to revision 0x1a, date = 2014-05-23
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU7 sig=0x306c3, pf=0x2, revision=0x19
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU7 sig=0x306c3, pf=0x2, revision=0x19
+oct. 19 08:50:44 arch1kde kernel: microcode: CPU7 updated to revision 0x1a, date = 2014-05-23
+oct. 19 08:50:44 arch1kde kernel: microcode: Microcode Update Driver: v2.00 <tigran@aivazian.fsnet.co.uk>, Peter Oruba
+
+
+ 4-1) FSTAB : TAILLE TMPFS 2 Go si 8 Go de RAM
+ =============================================
+!!! SI TMPFS EXISTE DANS /etc/fstab
+-----------------------------------
+$ sudo sed -i "s/nodev,nosuid/nodev,nosuid,size=2G/g" /etc/fstab
+
+!!!  SI TMPFS N'EXISTE PAS DANS /etc/fstab
+------------------------------------------
+$ sudo nano -w /etc/fstab
+# tmpfs = 2G
+tmpfs      /tmp    tmpfs   nodev,nosuid,size=2G    0       0
+
+5-3) !!! WATCHDOG : Création de /etc/sysctl.d/nmi-watchdog.conf
+=============================================================================================
+https://bbs.archlinux.org/viewtopic.php?id=163768
+Index » Kernel & Hardware » Anyone using watchdog daemons on a desktop/laptop? [SOLVED]
+
+$ sudo sh -c "echo '# Disable watchdog daemons on a desktop' > /etc/sysctl.d/nmi-watchdog.conf"
+$ sudo sh -c "echo 'kernel.watchdog=0' >> /etc/sysctl.d/nmi-watchdog.conf"
+
+
+20) Using udev for one device or HDD/SSD mixed environment
+==========================================================
+    # INUTILES :
+    # VOIR https://wiki.archlinux.org/index.php/SSD#I.2FO_Scheduler
+    #   et https://wiki.archlinux.org/index.php/Talk:Solid_State_Drives
+
+!!! FAIT EN AUTOMATIQUE SI PAR MON SCRIPT AI-B
+===============================================
+ create and edit a file in /etc/udev/rules.d named '60-schedulers.rules'.
+ In the file include the following:
+
+# set deadline scheduler for non-rotating disks
+ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="deadline"
+
+# set noop scheduler for non-rotating disks
+ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="noop"
+
+# set cfq scheduler for rotating disks
+ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="cfq"
+
+Of course, set noop/deadline/cfq to the desired schedulers.
+
+
+Changes should occur upon next boot. To check success of the new rule:
+
+$ cat /sys/block/sda/queue/scheduler   #where X is the device in question
+[noop] deadline cfq 
+
+
+!!!
+# pacman -S bluegriffon
+
+!!! INUTILE : PLUS UTILISE
+# pacman -S kdeplasma-yasp-scripted
+
+!!! INUTILE : SUR ARCHLINUXFR
+# pacman -S dfc
+
+!!! INUTILE DEPUIS LE 22/01/2014 # pacman -Syu lm_sensors-svn
+!!! INUTILE DEPUIS LE 22/01/2014
+1) COMPILER lm_sensors-svn
+$ cp -v /0-DataLinux/00-ARCH_2-OB-CK/lm_sensors-svn.tar.xz /home/jnd/05-builds/
+$ tar -xJf /home/jnd/05-builds/lm_sensors-svn.tar.xz -C /home/jnd/05-builds/
+$ rm -f /home/jnd/05-builds/lm_sensors-svn.tar.xz
+
+# systemctl stop lm_sensors.service
+# systemctl disable lm_sensors.service
+# pacman -U /home/jnd/00-repolocal/lm_sensors-svn-3.34.6207-1-x86_64.pkg.tar.xz
+
+!!! DEPUIS LE 22/01/2014
+
+!!! INUTILE : PLUS UTILISE
+$ yaourt -Syua libicns
+
+
+==========================================================
+TEST
+=====
+┌jnd ( ~ )
+└─> $ cd /home/jnd/test-wget-dropbox/
+
+┌jnd ( ~/test-wget-dropbox )
+└─> $ ls
+INSTALLATION-CIV5-STEAM.TXT  jnddarkgray.tar.gz
+
+┌jnd ( ~/test-wget-dropbox )
+└─> $ tar -xzf jnddarkgray.tar.gz
+
+┌jnd ( ~/test-wget-dropbox )
+└─> $ ls
+INSTALLATION-CIV5-STEAM.TXT  jnddarkgray  jnddarkgray.tar.gz
+
+sed -i "/^server 2.fr.pool.ntp.org/a\server 3.fr.pool.ntp.org" /etc/ntp.conf
+
+$ sed -i "s/^DNS=/#DNS=/" etc-network.d/ethernet-static
+
+$ sed -i "/^#DNS=('192.168.1.1')/a\DNS=('80.67.169.12')" etc-network.d/ethernet-static
+
+$ sed -i "s/#MAKEFLAGS=\"-j2\"/MAKEFLAGS=\"-j3\"/g" /etc/makepkg.conf
+
+sed -i "/^QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO/c\QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO += ${CXXFLAGS} -g" g++-base.conf
+
+sed -i "${multilib}s/^#//" /etc/pacman.conf

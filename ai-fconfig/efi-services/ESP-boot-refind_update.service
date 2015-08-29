@@ -1,0 +1,8 @@
+[Unit]
+Description=Copy rEFInd files to UEFISYS Partition
+# Requires=boot-efi.mount
+
+[Service]
+Type=oneshot
+
+ExecStart=/usr/bin/cp -f /usr/share/refind/refind_x64.efi /boot/efi/EFI/BOOT/bootx64.efi

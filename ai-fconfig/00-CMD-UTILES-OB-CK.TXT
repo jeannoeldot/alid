@@ -1,0 +1,168 @@
+COMMANDES UTILES
+=================
+
+$ checkupdates
+
+MAJ SYSTEM ARCHLINUX
+====================
+!!! ROOT
+$ su -
+# pacman -Syu   OU  # maj
+
+!!! USER
+$ yaourt -Syua
+
+$ yaourt -Syua --aur-url https://aur4.archlinux.org
+
+
+SI problème avec linux-ck-haswell
+==================================
+
+# pacman -Syyuu
+
+APRES MAJ LINUX
+================
+
+$ systemctl status efistub_update.service
+
+$ systemctl status efistub_ck_update.service
+
+
+APRES MAJ INTEL-UCODE
+=====================
+$ systemctl status intel_ucode_update.service
+
+
+* SI MAJ SYSTEMD ( ex 215 -> 216 )
+==================================
+# mkinitcpio -p linux
+
+# mkinitcpio -p linux-ck
+
+
+LANCER CIV4 COMPLETE
+========================
+
+VOIR /home/jnd/Bureau
+=======================
+Clic Droit -> Ouvrir -> Exécuter
+
+
+BACKUP
+===========
+$ cd && backup
+
+
+AUTRES COMMANDES UTILES
+=======================
+$ systemd-analyze && systemd-analyze blame
+
+$ profile-cleaner f
+
+$ maj-mirrorlist
+
+$ maj-repolocal
+
+
+MAJ PSD.SERVICE OU MAJ firefox-extension-https-everywhere
+OU MAJ freshplayerplugin / chromium-pepper-flash
+=========================================================
+
+!!! VIDER CACHE
+!!! ARRETER FIREFOX
+
+$ profile-cleaner f
+
+$ sudo systemctl stop psd.service psd-resync.service
+
+SI MAJ freshplayerplugin / chromium-pepper-flash
+------------------------------------------------
+$ yaourt -Syua chromium-pepper-flash
+$ yaourt -Syua freshplayerplugin
+
+!!! Vérifier /home/jnd/.mozilla/firefox/profiles.ini
+$ cat ~/.mozilla/firefox/profiles.ini
+$ rm -i ~/.mozilla/firefox/ljs58rbs.default/pluginreg.dat
+
+
+$ yaourt -Syua
+$ yaourt -Syua --aur-url https://aur4.archlinux.org
+
+
+$ sudo mv /etc/psd.conf.pacnew /etc/psd.conf
+$ sudo nano -w /etc/psd.conf
+:: USERS="jnd"		BROWSERS="firefox"
+!!! SI VERSION Linux kernel >= 3.18.0
+USE_OVERLAYFS="yes"
+$ sudo systemctl daemon-reload
+
+$ sudo systemctl start psd.service psd-resync.service
+$ sudo systemctl status psd.service psd-resync.service
+$ profile-sync-daemon preview
+
+
+MAJ SUDO ET /ETC/SUDOERS.PACNEW
+===============================
+!!! EN ROOT
+# mv -v /etc/sudoers.pacnew /etc/sudoers
+# sed -i '/%wheel ALL=(ALL) ALL/s/^# //' /etc/sudoers
+# echo -e '\n## My Defaults timestamp_timeout = 20 minutes' >> /etc/sudoers
+# echo -e 'Defaults:jnd timestamp_timeout=20' >> /etc/sudoers
+# sed '/#/d;/^$/d' /etc/sudoers
+
+
+MAJ GLIBC ET /etc/locale.gen.pacnew
+===================================
+!!! EN ROOT
+# mv -v /etc/locale.gen.pacnew /etc/locale.gen
+# nano /etc/locale.gen
+!!! Décommenter :
+fr_FR.UTF-8 UTF-8
+fr_FR ISO-8859-1
+fr_FR@euro ISO-8859-15
+# locale-gen
+
+
+MAJ GROUP/GSHADOW/PASSWD/SHADOW
+===============================
+
+# merge_pacnew_group -c
+# merge_pacnew_gshadow -c
+# merge_pacnew_passwd -c
+# merge_pacnew_shadow -c
+
+# pwck -r   ( répondre y )
+# grpck -r  ( répondre y )
+
+
+COREDUMP
+========
+https://wiki.archlinux.org/index.php/Core_dump
+
+Fichiers coredump dans /var/lib/systemd/coredump
+
+$ coredumpctl
+
+
+
+
+
+ANCIENS
+===========
+!!! AU 25/01/2014
+!!! MAJ lib32-jack
+# pacman -Syu --ignore jack
+
+sudo pkgfile --update
+
+sudo mandb --quiet
+
+$ journalctl -b | grep EFISTUB
+
+déc. 07 10:37:52 arch2obck systemd[1]: Starting Check update EFISTUB Linux-CK.
+déc. 07 10:37:52 arch2obck systemd[1]: Started Check update EFISTUB Linux-CK.
+déc. 07 10:37:52 arch2obck systemd[1]: Starting Check update EFISTUB Linux-ARCH.
+déc. 07 10:37:52 arch2obck systemd[1]: Started Check update EFISTUB Linux-ARCH.
+déc. 07 10:45:14 arch2obck systemd[1]: Starting Copy EFISTUB Linux-ARCH to UEFISYS Partition...
+déc. 07 10:45:14 arch2obck systemd[1]: Started Copy EFISTUB Linux-ARCH to UEFISYS Partition.
+

@@ -1,0 +1,12 @@
+# OpenDNS nameservers
+#nameserver 208.67.222.222
+#nameserver 208.67.220.220
+# google nameservers
+#nameserver 8.8.8.8
+#nameserver 8.8.4.4
+# OpenNIC : http://www.opennicproject.org/
+#nameserver 185.19.104.45
+#nameserver 185.19.105.6
+# http://www.fdn.fr/Les-machines.html
+nameserver 80.67.169.12
+nameserver 80.67.169.40

@@ -1,0 +1,297 @@
+#!/usr/bin/env bash
+
+#-------------------------------------------------------------------------------
+# ai-b-bios-hc
+# Appelé par ai-b
+#
+# Script d'installation en mode BIOS
+# et ne fonctionne qu'avec la langue FR (fr_FR)
+#
+#-------------------------------------------------------------------------------
+
+    #CREATE PARTITION {{{
+    create_partition() {
+        print_title "https://wiki.archlinux.org/index.php/Partitioning"
+        print_info "Le partitionnement d'un disque dur permet de diviser logiquement l'espace disponible en sections qui peuvent être accessibles indépendamment les unes des autres. Les informations des partitions sont stockées sur le disque dur."
+        zero_the_drive() {
+#             # Voir : https://gist.github.com/jasonwryan/4618490
+#             echo -e "\n${BWhite}Mise à zéro du disque ${HDD_DEVICE}...${White}"
+#             echo -e "\n${BWhite}Si Multi Boot, NE PAS METTRE À ZÉRO le disque ${HDD_DEVICE}.${White}"
+#             print_warning "\tToutes les données sur le disque sélectionné seront perdues."
+#             read_input_text "Confirmer la mise à zéro du disque ${HDD_DEVICE}"
+#             if [[ $OPTION == o ]]; then
+#                 read_input_text "Confirmer une 2ème fois la mise à zéro du disque ${HDD_DEVICE}"
+#                 if [[ $OPTION == o ]]; then
+#                     dd bs=4M if=/dev/zero of=${HDD_DEVICE}
+#                     sync
+#                 fi
+#             fi
+            #
+#             # Voir : https://wiki.archlinux.org/index.php/USB_Flash_Installation_Media
+#             echo -e "\n${BWhite}Mise à zéro du MBR et de la table des partitions du disque ${HDD_DEVICE}...${White}"
+#             echo -e "\n${BWhite}Si Multi Boot, NE PAS METTRE À ZÉRO le disque ${HDD_DEVICE}.${White}"
+#             print_warning "\tToutes les données sur le disque sélectionné seront perdues."
+#             read_input_text "Confirmer la mise à zéro du MBR et de la table des partitions du disque ${HDD_DEVICE}"
+#             if [[ $OPTION == o ]]; then
+#                 read_input_text "Confirmer une 2ème fois la mise à zéro du MBR et de la table des partitions du disque ${HDD_DEVICE}"
+#                 if [[ $OPTION == o ]]; then
+#                     dd count=1 bs=512 if=/dev/zero of=${HDD_DEVICE} && sync
+#                 fi
+#             fi
+            #
+            # Voir : https://wiki.archlinux.org/index.php/Beginners%27_guide#Erase_partition_table
+            # sgdisk --zap-all /dev/sda
+            echo -e "\n${BWhite}Mise à zéro du MBR et de la table des partitions du disque ${HDD_DEVICE}...${White}"
+            echo -e "\n${BWhite}Si Multi Boot, NE PAS METTRE À ZÉRO le disque ${HDD_DEVICE}.${White}"
+            print_warning "\tToutes les données sur le disque sélectionné seront perdues."
+            read_input_text "Confirmer la mise à zéro du MBR et de la table des partitions du disque ${HDD_DEVICE}"
+            if [[ $OPTION == o ]]; then
+                read_input_text "Confirmer une 2ème fois la mise à zéro du MBR et de la table des partitions du disque ${HDD_DEVICE}"
+                if [[ $OPTION == o ]]; then
+                    sgdisk --zap-all ${HDD_DEVICE}
+                    sync
+                fi
+            fi
+         }
+        select_storage_partitions() {
+            type_storage_partitions=("MSDOS" "GPT");
+            PS3="$prompt1"
+            print_warning "\nEn mode BIOS (PAS UEFI), si dual boot avec Windows : NE PAS CHOISIR GPT."
+            echo -e "\n${BWhite}Sélectionner le type de stockage des informations des partitions ( MSDOS ou GPT ) :${White}"
+            select OPT in "${type_storage_partitions[@]}"; do
+                case "$REPLY" in
+                    1)
+                        TYPE_STORAGE_PARTITION="MSDOS"
+                        break
+                        ;;
+                    2)
+                        TYPE_STORAGE_PARTITION="GPT"
+                        break
+                        ;;
+                    *)
+                        invalid_option
+                        ;;
+                esac
+            done
+        }
+        select_hdd_devices() {
+            liste_hdd_devices=($(parted -sl 2> /dev/null | awk '{print $2}' | grep "/dev/sd[a-z]" | sed -e "s/://"))
+            echo -e "${BWhite}Liste des Disques présents dans le PC :${White}"
+#            parted -sl 2> /dev/null | grep -E 'Mod|/dev/sd[a-z]' | sed -e "s/\(^Disk.*\)/\1\n/" | sed -e "s/Model/Modèle/" | sed -e "s/Disk/Disque/"
+            parted -sl 2> /dev/null | grep -E 'Mod|/dev/sd[a-z]' | sed -e "s/\(^Disk.*\)/\1\n/;s/Model/Modèle/;s/Disk/Disque/"
+            PS3="$prompt1"
+            echo -e "\n${BWhite}Sélectionner le Disque à partitionner :${White}"
+            select HDD_DEVICE in "${liste_hdd_devices[@]}"; do
+                if contains_element "$HDD_DEVICE" "${liste_hdd_devices[@]}"; then
+                    break
+                else
+                    invalid_option
+                fi
+            done
+        }
+        select_hdd_devices
+        #
+        zero_the_drive
+        #
+        check_is_hdd_or_ssd "$HDD_DEVICE"
+        if [[ ${IS_HDD_OR_SSD} == "HDD" ]]; then
+            print_info_cyan "Le Disque sélectionné est un HDD."
+        else
+            print_info_cyan "Le Disque sélectionné est un SSD."
+        fi
+        #
+        select_storage_partitions
+        if [[ $TYPE_STORAGE_PARTITION == "MSDOS" ]]; then
+            print_info_cyan "Le programme cfdisk va être lancé afin de créer les partitions sur $HDD_DEVICE"
+        else
+            print_info_cyan "Le programme cgdisk va être lancé afin de créer les partitions sur $HDD_DEVICE"
+            print_info_cyan "Si GRUB est prévu, une partition de 2 Mio de type EF02 doit être créée en 1er sur $HDD_DEVICE."
+        fi
+        pause_function
+        if [[ $TYPE_STORAGE_PARTITION == "MSDOS" ]]; then
+            cfdisk $HDD_DEVICE
+        else
+            cgdisk $HDD_DEVICE
+        fi
+    }
+    #}}}
+    #FORMAT DEVICE {{{
+    format_device() {
+        print_title "https://wiki.archlinux.org/index.php/Format_a_device"
+        print_info "Cette étape permet de sélectionner et formater les partitions sélectionnées où Archlinux sera installé."
+        print_warning "\tToutes les données sur les partitions sélectionnées seront perdues."
+        i=0
+        partitions=($(fdisk -l $HDD_DEVICE | awk '{print $1}' | grep /dev/))
+# SI EN GPT : 1ère partition  = EF02 BIOS_BOOT_PARTITION ou BOOT_PAR_NUM
+        if [[ $TYPE_STORAGE_PARTITION == "GPT" ]]; then
+            print_info_cyan "En GPT : la 1ère partition est réservée ( BIOS_BOOT_PARTITION ou BOOT_PAR_NUM )"
+            unset partitions[0]
+            partitions=(${partitions[@]})
+        fi
+        device_name=("root" "swap" "home" "boot" "var" "autre")
+        select_filesystem() {
+            MY_DIR=${device_name[i]}
+            [[ -n $1 ]] && MY_DIR=$1
+            filesystem=("ext4" "reiserfs" "ntfs" "vfat" "ext2" "ext3" "jfs" "xfs");
+            PS3="$prompt1"
+            echo -e "Sélectionner le système de fichiers pour ${BYellow}${MY_DIR}${White} :\n"
+            select TYPE in "${filesystem[@]}"; do
+                if contains_element "$TYPE" "${filesystem[@]}"; then
+                    break
+                else
+                    invalid_option
+                fi
+            done
+        }
+        umount_partition() {
+            #check if swap is on and umount
+            swapon -s | grep $1 && swapoff $1
+            #check if partition is mounted and umount
+            mount | grep $1 && umount $1
+        }
+        remove_partition() {
+            #remove the selected partition from list
+            unset partitions[$DEVICE_NUMBER]
+            partitions=(${partitions[@]})
+            #increase i
+            [[ ${device_name[i]} != autre ]] && i=$(( i + 1 ))
+        }
+        format_partition() {
+            echo -e "\n${BWhite}Formatage de la partition $1...${White}"
+#            echo -e "\n"
+#            read_input_text "Confirmer le formatage de la partition $1"
+#            if [[ $OPTION == o ]]; then
+                umount_partition "$1"
+                [[ -z $3 ]] && select_filesystem
+                if [[ $1 == $ROOT ]]; then
+                    ROOT_FS_TYPE=$TYPE
+                fi
+                mkfs.$TYPE $1
+                fsck $1
+                tune2fs -c 30 $1
+                mkdir -p $2
+                mount -t $TYPE $1 $2
+                remove_partition "$1"
+#            fi
+        }
+        format_swap_partition() {
+            echo -e "\n${BWhite}Formatage de la partition $1...${White}"
+            echo -e "\n${BWhite}Si Multi Boot, NE PAS FORMATER la partition SWAP.${White}"
+            read_input_text "Confirmer le formatage de la partition $1"
+            if [[ $OPTION == o ]]; then
+                umount_partition "$1"
+                mkswap $1
+                swapon $1
+                remove_partition "$1"
+            else
+                umount_partition "$1"
+                swapon $1
+                remove_partition "$1"
+            fi
+        }
+        check_mountpoint() {
+            if mount | grep $2; then
+                echo -e "${BWhite}Partition montée avec succès${White}"
+                remove_partition "$1"
+            else
+                echo -e "${BRed}ATTENTION: Partition NON montée${White}"
+            fi
+        }
+        while true; do
+            print_warning "\tToutes les données sur la partition sélectionnée seront perdues."
+            if [[ ${device_name[i]} != root ]]; then
+                echo -e "${BWhite}Sélection optionnelle d'une partition pour : ${White}${BYellow}${device_name[i]}${White}"
+                read_input_text "Sélectionner une partition pour ${device_name[i]}"
+                if [[ $OPTION == n ]]; then
+                    if [[ ${device_name[i]} == autre ]]; then
+                        break
+                    else
+                        i=$(( i + 1 ))
+                        continue
+                    fi
+                fi
+            fi
+            [[ -n ${CHOIX_PARTITIONS} ]] && echo -e "${BWhite}==> ${CHOIX_PARTITIONS}${White}\n"
+            PS3="$prompt1"
+            echo -e "Sélectionner une partition pour ${BYellow}${device_name[i]}${White} :\n"
+            select DEVICE in "${partitions[@]}" "Fini"; do
+                if [[ "$DEVICE" == "Fini" ]]; then
+                    QUIT_FORMAT=$DEVICE
+                    break
+                else
+                  #get the selected number - 1
+                  DEVICE_NUMBER=$(( $REPLY - 1 ))
+                  if contains_element "$DEVICE" "${partitions[@]}"; then
+                      case ${device_name[i]} in
+                          root)
+                              ROOT=$DEVICE
+                              ROOT_DEVICE=$(echo $ROOT | sed 's/[0-9]//')
+                              format_partition "$DEVICE" "${MOUNTPOINT}"
+                              CHOIX_PARTITIONS+=$(echo $DEVICE)" = /root  "
+                              echo
+                              ;;
+                          swap)
+                              format_swap_partition "$DEVICE"
+                              CHOIX_PARTITIONS+=$(echo $DEVICE)" = /swap\n==> "
+                              echo
+                              ;;
+                          home)
+                              DIR="/home"
+                              select_filesystem "${DIR}"
+                              format_partition "$DEVICE" "${MOUNTPOINT}${DIR}" "$TYPE"
+                              CHOIX_PARTITIONS+=$(echo $DEVICE)" = /home  "
+                              echo
+                              ;;
+                          boot)
+                              DIR="/boot"
+                              select_filesystem "${DIR}"
+                              format_partition "$DEVICE" "${MOUNTPOINT}${DIR}" "$TYPE"
+                              CHOIX_PARTITIONS+=$(echo $DEVICE)" = /boot  "
+                              echo
+                              ;;
+                          var)
+                              DIR="/var"
+                              select_filesystem "${DIR}"
+                              format_partition "$DEVICE" "${MOUNTPOINT}${DIR}" "$TYPE"
+                              IS_VAR_SEPARATE=1
+                              CHOIX_PARTITIONS+=$(echo $DEVICE)" = /var  "
+                              echo
+                              ;;
+                          autre)
+                              read -p "Point de montage pour $DEVICE ( ex: /Datas, ... ) : " DIR
+                              select_filesystem "${DIR}"
+                              echo ""
+                              read_input_text "Formater la partition $DEVICE"
+                              if [[ $OPTION != n ]]; then
+                                  format_partition "$DEVICE" "${MOUNTPOINT}${DIR}" "$TYPE"
+                              else
+                                  read_input_text "Confirmer : type="$TYPE" device="$DEVICE" dir="${DIR}""
+                                  if [[ $OPTION != n ]]; then
+                                      mkdir -p ${MOUNTPOINT}${DIR}
+                                      mount -t $TYPE $DEVICE ${MOUNTPOINT}${DIR}
+                                      check_mountpoint "$DEVICE" "${MOUNTPOINT}${DIR}"
+                                  fi
+                              fi
+                              CHOIX_PARTITIONS+=$(echo $DEVICE)" = "$(echo $DIR)"  "
+                              echo
+                              ;;
+                      esac
+                      break
+                  else
+                      invalid_option
+                  fi
+                fi
+            done
+            #check if there is no partitions left
+            if [[ ${QUIT_FORMAT} == "Fini" ]]; then
+                break
+            elif [[ ${#partitions[@]} -eq 0 ]]; then
+                break
+            elif [[ ${device_name[i]} == autre ]]; then
+                echo
+                read_input_text "Configurer une autre partition"
+                [[ $OPTION != o ]] && break
+            fi
+        done
+    }
+    #}}}

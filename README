@@ -1,0 +1,39 @@
+Scripts personnels d'installation de ArchLinux
+==============================================
+
+Interface graphique avec whiptail
+---------------------------------
+
+
+LICENSE         : GPL2 (Voir COPYING pour les détails).
+
+VERSION         : 0.0.1
+
+LANGUE          : uniquement FR (AZERTY ou BÉPO)
+
+
+NOMS DES SCRIPTS
+
+# BASE
+ai-b            : script d'installation de la base hors chroot.
+  ai-b-bios-hc  : script d'installation en mode BIOS.
+  ai-b-uefi-hc  : script d'installation en mode UEFI.
+
+ai-b-ic         : script d'installation de la base dans chroot.
+  ai-b-bios-ic  : script d'installation en mode BIOS.
+  ai-b-uefi-ic  : script d'installation en mode UEFI.
+
+# KDE4, KDE5 ou OPENBOX
+ai-de           : script d'installation de KDE4, KDE5 ou OPENBOX.
+
+  ai-kde4       : script contenant les fonctions d'installation de KDE4.
+
+  ai-kde5       : script contenant les fonctions d'installation de KDE5.
+
+  ai-ob         : script contenant les fonctions d'installation de OpenBox.
+
+# FONCTIONS COMMUNES
+ai-commons      : script contenant les fonctions communes aux scripts.
+
+# RÉPERTOIRE DES FICHIERS DE CONFIGURATIONS
+ai-fconfig      : répertoire contenant mes fichiers de configurations.

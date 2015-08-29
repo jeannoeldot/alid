@@ -1,0 +1,382 @@
+#!/usr/bin/env bash
+
+#-------------------------------------------------------------------------------
+# ai-b-ic
+#
+# DANS CHROOT
+#
+# ne fonctionne qu'avec la langue FR (fr_FR)
+# Created by me for me
+#
+# Thanks helmuthdu mailto: helmuthdu[at]gmail[dot]com
+# https://github.com/helmuthdu/aui
+# Created by helmuthdu mailto: helmuthdu[at]gmail[dot]com
+
+source $(pwd)/ai-commons
+
+    # LECTURE DES VARIABLES {{{
+    read_variables_ali_b1() {
+        #/root/variables.ali
+        if [[ -f "/root/variables.ali" ]]; then
+            eval $(grep '^TYPE_KEYBOARD=' "/root/variables.ali")
+            TYPE_KEYBOARD="${TYPE_KEYBOARD}"
+            eval $(grep '^NAME_NET_WIRED=' "/root/variables.ali")
+            NAME_NET_WIRED="${NAME_NET_WIRED}"
+            eval $(grep '^IS_UEFI=' "/root/variables.ali")
+            IS_UEFI="${IS_UEFI}"
+            eval $(grep '^IN_VIRTUAL_BOX=' "/root/variables.ali")
+            IN_VIRTUAL_BOX="${IN_VIRTUAL_BOX}"
+            eval $(grep '^IS_HDD_OR_SSD=' "/root/variables.ali")
+            IS_HDD_OR_SSD="${IS_HDD_OR_SSD}"
+            eval $(grep '^TYPE_STORAGE_PARTITION=' "/root/variables.ali")
+            TYPE_STORAGE_PARTITION="${TYPE_STORAGE_PARTITION}"
+            eval $(grep '^ROOT_DEVICE=' "/root/variables.ali")
+            ROOT_DEVICE="${ROOT_DEVICE}"
+            eval $(grep '^ROOT=' "/root/variables.ali")
+            ROOT="${ROOT}"
+            eval $(grep '^ROOT_FS_TYPE=' "/root/variables.ali")
+            ROOT_FS_TYPE="${ROOT_FS_TYPE}"
+            eval $(grep '^IS_VAR_SEPARATE=' "/root/variables.ali")
+            IS_VAR_SEPARATE="${IS_VAR_SEPARATE}"
+            eval $(grep '^EFI_DEVICE=' "/root/variables.ali")
+            EFI_DEVICE="${EFI_DEVICE}"
+        else
+            echo -e "${BRed}ERREUR :${White} Le fichier variables.ali n'existe pas. ARRET immédiat."
+            pause_function
+            exit 1
+        fi
+    }
+    #}}}
+    #CONFIGURE FSTAB {{{
+    configure_fstab() {
+        print_title "FSTAB - https://wiki.archlinux.org/index.php/Fstab"
+        print_info "Configuration du fichier /etc/fstab : si HDD ou SSD, si GPT, si UEFI, TRIM, ..."
+        #
+        if [[ ${TYPE_STORAGE_PARTITION} == "GPT" ]]; then
+            local num_ligne_swap=$(grep -n "swap" "/etc/fstab" | cut -f1 -d:)
+            if [[ "${num_ligne_swap}" != "" ]]; then
+                print_info_cyan "TYPE DE PARTITION GPT : Ligne swap commentée."
+                sed -i "${num_ligne_swap}s/^UUID/#UUID/" /etc/fstab
+            else
+                print_info_cyan "Aucune partion de swap."
+            fi
+        fi
+        #
+        if [[ ${IS_UEFI} -eq 1 ]]; then
+            if [[ ${IS_HDD_OR_SSD} == "SSD" ]]; then
+                local num_ligne_vfat=$(grep -n "vfat" "/etc/fstab" | cut -f1 -d:)
+                if [[ "${num_ligne_vfat}" != "" ]]; then
+                    print_info_cyan "UEFI et SSD : Options pour vfat : rw,relatime,discard."
+                    sed -i "${num_ligne_vfat}s/rw,relatime/rw,relatime,discard/" /etc/fstab
+                fi
+            fi
+        fi
+        #
+        if [[ ${IS_HDD_OR_SSD} == "SSD" ]]; then
+            # rotational = 0 ==> SSD
+            # https://wiki.archlinux.org/index.php/Solid_State_Drives#TRIM
+            print_info "SSD + TRIM - https://wiki.archlinux.org/index.php/Solid_State_Drives#TRIM"
+            print_info_cyan "DISCARD : Activer TRIM par option de montage. FSTRIM : Appliquer TRIM via «fstrim» périodique."
+            trim_list=("DISCARD" "FSTRIM");
+            PS3="$prompt1"
+            echo -e "Configurer le TRIM en se basant sur :"
+            select OPT in "${trim_list[@]}"; do
+                case "$REPLY" in
+                    1)
+                        print_info_cyan "SSD + TRIM : Options pour ext4 : defaults,relatime,discard."
+                        sed -i "s/rw,relatime,data=ordered/defaults,relatime,discard/g" /etc/fstab
+                        break
+                        ;;
+                    2)
+                        print_info_cyan "SSD : Options pour ext4 : defaults,relatime."
+                        sed -i "s/rw,relatime,data=ordered/defaults,relatime/g" /etc/fstab
+                        print_info_cyan "SSD + TRIM : Activation de fstrim.timer."
+                        systemctl enable fstrim.timer
+                        break
+                        ;;
+                    *)
+                        invalid_option
+                        ;;
+                esac
+            done
+        else
+            # rotational = 1 ==> HDD
+            print_info_cyan "HDD : Options pour ext4 : defaults,relatime."
+            sed -i "s/rw,relatime,data=ordered/defaults,relatime/g" /etc/fstab
+        fi
+        #
+        echo -e "\nVérification du fichier /etc/fstab avec $EDITOR"
+        pause_function
+        $EDITOR /etc/fstab
+
+    }
+    #}}}
+    #CONFIGURE VCONSOLE.CONF {{{
+    configure_vconsole_conf() {
+        print_title "KEYMAP - https://wiki.archlinux.org/index.php/KEYMAP"
+        print_info "La variable KEYMAP est spécifiée dans le fichier /etc/vconsole.conf. Elle définit le type de clavier dans les consoles virtuelles. Les fichiers de type de clavier sont fournis par le paquet kbd."
+        echo "KEYMAP=$KEYMAP" > /etc/vconsole.conf
+#        echo "FONT=Lat2-Terminus16" >> /etc/vconsole.conf
+        echo "FONT=lat9w-16" >> /etc/vconsole.conf
+#        echo "FONT_MAP=8859-15_to_uni" >> /etc/vconsole.conf
+        echo "Vérification et/ou modification du fichier /etc/vconsole.conf avec $EDITOR"
+        pause_function
+        $EDITOR /etc/vconsole.conf
+    }
+    #}}}
+    #CONFIGURE PACMAN.CONF {{{
+    configure_pacman_conf() {
+        #ADD COLOR TO PACMAN.CONF
+        sed -i "/^#Color/c\Color" /etc/pacman.conf
+    }
+    #}}}
+    #CONFIGURE HOSTNAME {{{
+    configure_hostname() {
+        print_title "NOM D'HÔTE - https://wiki.archlinux.org/index.php/HOSTNAME"
+        print_info "Un nom d'hôte est un nom unique créé pour identifier une machine sur un réseau. Les noms d'hôtes sont limités aux caractères alphanumériques.\nLe trait d'union (-) peut être utilisé, mais un nom d'hôte ne peut pas commencer ou se terminer par lui. La longueur est limitée à 63 caractères."
+        MON_HN=myarch
+        print_info "Par défaut le nom d'hôte est : "$MON_HN
+        HN=$MON_HN
+        echo "$HN" > /etc/hostname
+        echo "Vérification et/ou modification du fichier /etc/hostname avec $EDITOR"
+        pause_function
+        $EDITOR /etc/hostname
+        # Lire valeur hostname ds HN
+        HN=$(cat /etc/hostname | awk '{print $1}')
+        # Ecrire la valeur hostname dans /etc/hosts
+        sed -i "/127.0.0.1/s/$/ ${HN}/" /etc/hosts
+        sed -i "/::1/s/$/ ${HN}/" /etc/hosts
+        print_info_cyan "Contenu du fichier /etc/hosts :"
+        cat /etc/hosts
+        pause_function
+    }
+    #}}}
+    #CONFIGURE TIMEZONE {{{
+    configure_timezone() {
+        print_title "FUSEAU HORAIRE - https://wiki.archlinux.org/index.php/Timezone"
+        print_info "Dans un système d'exploitation, la date et l'heure sont détérminées en fonction de l'horloge matérielle, de l'échelle de temps (UTC ou locale), du fuseau horaire et enfin de l'heure d'été / hiver."
+        print_info "Le fuseau horaire sélectionné est : "$FR_ZONE"/"$FR_SUBZONE
+        ZONE=$FR_ZONE
+        SUBZONE=$FR_SUBZONE
+        ln -sf /usr/share/zoneinfo/${ZONE}/${SUBZONE} /etc/localtime
+        pause_function
+    }
+    #}}}
+    #CONFIGURE HARDWARECLOCK {{{
+    configure_hardwareclock() {
+        print_title "HEURE MATÉRIELLE - https://wiki.archlinux.org/index.php/Internationalization"
+        print_info "Cela se règle dans /etc/adjtime. Régler le mode horloge matérielle uniformément entre vos systèmes d'exploitation sur la même machine. Sinon, ils vont écraser le temps et entraîner un décalage de horloge (ce qui peut provoquer une dérive du temps)."
+        print_info "Le mode horloge matérielle sélectionné est : UTC"
+        hwclock --systohc --utc
+        pause_function
+    }
+    #}}}
+    #CONFIGURE LOCALE {{{
+    configure_locale() {
+        print_title "LOCALE - https://wiki.archlinux.org/index.php/Locale"
+        print_info "Les paramètres régionaux sont utilisés sous Linux pour définir quelle langue l'utilisateur utilise. Régler des paramètres régionaux corrects est particulièrement important si la langue contient des caractères non-ASCII."
+        print_info "La Locale sélectionnée est : "$FR_LOCALE
+        LOCALE=$FR_LOCALE
+        LOCALE_8859="$LOCALE ISO-8859"
+        LOCALE_UTF8="$LOCALE.UTF-8"
+        echo "LANG=$LOCALE_UTF8" > /etc/locale.conf
+        echo "LC_COLLATE=C" >> /etc/locale.conf
+        sed -i "/${LOCALE}/s/^#//" /etc/locale.gen
+        locale-gen
+        pause_function
+    }
+    #}}}
+    #CONFIGURE INTEL-UCODE {{{
+    configure_intel_ucode() {
+        print_title "MICROCODE - https://wiki.archlinux.org/index.php/microcode"
+        print_info "intel-ucode permet de mettre à jour le microcode des processeurs Intel."
+        if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
+            pacman -Syu intel-ucode
+        else
+            print_info_cyan "Installation dans VirtualBox : PAS d'activion des mises à jour du microcode."
+        fi
+        pause_function
+    }
+    #}}}
+    #CONFIGURE MKINITCPIO {{{
+    configure_mkinitcpio() {
+        print_title "MKINITCPIO - https://wiki.archlinux.org/index.php/Mkinitcpio"
+        print_info "mkinitcpio est un script Bash utilisé pour créer un environnement virtuel initial."
+        # Remplace udev par systemd. Rajoute keymap
+        print_info_cyan "HOOKS : Remplacement de udev par systemd. Ajout de keymap"
+        # Inscrit : # Suite MAJ systemd 207-3
+        sed -i "/^HOOKS=/i\# Suite MAJ systemd 207-3" /etc/mkinitcpio.conf
+        # lecture ligne HOOKS=
+        local contenu_hooks=$(sed -n "/^HOOKS=/p" /etc/mkinitcpio.conf)
+        # Commente la ligne HOOKS= originale
+        sed -i "/^HOOKS=/i\#${contenu_hooks}" /etc/mkinitcpio.conf
+        # Inscrit modifs
+        if [[ $IS_VAR_SEPARATE -eq 1 ]]; then
+            print_info_cyan "HOOKS : Ajout de shutdown car partition /var séparée."
+            sed -i "/^HOOKS=/s/base udev/base systemd/g;/^HOOKS=/s/keyboard fsck/keyboard keymap fsck shutdown/g" /etc/mkinitcpio.conf
+            echo -e "Exemple: MODULES=\"... reiserfs\", HOOKS=\"base systemd ... keymap fsck shutdown\""
+        else
+            sed -i "/^HOOKS=/s/base udev/base systemd/g;/^HOOKS=/s/keyboard fsck/keyboard keymap fsck/g" /etc/mkinitcpio.conf
+            echo -e "Exemple: HOOKS=\"base systemd ... keymap fsck\""
+        fi
+        # COMPRESSION="cat" ( PAS DE COMPRESSION )
+        print_info_cyan "COMPRESSION : Ajout de COMPRESSION=\"cat\""
+        sed -i "/^#COMPRESSION=\"gzip\"/i\COMPRESSION=\"cat\"" /etc/mkinitcpio.conf
+        echo -e "Exemple: COMPRESSION=\"cat\""
+        #
+        echo -e "\nVérification du fichier mkinitcpio.conf avec $EDITOR"
+        pause_function
+        $EDITOR /etc/mkinitcpio.conf
+        mkinitcpio -p linux
+        pause_function
+    }
+    #}}}
+    # ai-b-bios-ic ou ai-b-uefi-ic
+    #}}}
+#     #NETWORK {{{
+#     configure_network() {
+#         print_title "CONFIGURATION DU RÉSEAU - http://wiki.archlinux.fr/Connexions_reseau"
+#         print_info "Configuration du réseau avec Dhcpcd ou en IP statique ($NAME_NET_WIRED : filaire par défaut)."
+#         print_info_cyan "Le nom de l'interface réseau est : "$NAME_NET_WIRED
+#         type_ip_networks=("Dhcpcd" "IP-statique");
+#         PS3="$prompt1"
+#         echo -e "Sélectionner la configuration du réseau ( Dhcpcd ou IP Statique ) :"
+#         select OPT in "${type_ip_networks[@]}"; do
+#             case "$REPLY" in
+#                 1)
+#                     print_info_cyan "noarp ajouté à etc/dhcpcd.conf"
+#                     echo "noarp" >> /etc/dhcpcd.conf
+#                     cp -v ai-fconfig/net-ip-statique/resolv.conf.head /etc/resolv.conf.head
+# #                    echo -e "\n"
+# #                    systemctl enable dhcpcd@${NAME_NET_WIRED}.service
+#                     # Enable toutes les interfaces réseaux par défaut
+#                     echo -e "\n"
+#                     systemctl enable dhcpcd.service
+#                     break
+#                     ;;
+#                 2)
+#                     cp -v ai-fconfig/net-ip-statique/network-ip-statique /etc/conf.d/network_ip_statique
+#                     sed -i "/^interface=/c\interface=${NAME_NET_WIRED}" /etc/conf.d/network_ip_statique
+#                     # Si Installation réelle : address=192.168.1.57. Si dans VirtualBox : address=192.168.1.58
+#                     if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
+#                         print_info_cyan "Installation dans VirtualBox : addresse ip = 192.168.1.58"
+#                         sed -i "/^address=/c\address=192.168.1.58" /etc/conf.d/network_ip_statique
+#                     else
+#                         print_info_cyan "Installation réelle : addresse ip = 192.168.1.57"
+#                         sed -i "/^address=/c\address=192.168.1.57" /etc/conf.d/network_ip_statique
+#                     fi
+#                     cp -v ai-fconfig/net-ip-statique/network-ip-statique.service /etc/systemd/system/network_ip_statique.service
+#                     cp -v ai-fconfig/net-ip-statique/resolv.conf /etc/resolv.conf
+#                     cp -v ai-fconfig/net-ip-statique/resolv.conf.head /etc/resolv.conf.head
+#                     echo -e "\n"
+#                     systemctl enable network_ip_statique.service
+#                     break
+#                     ;;
+#                 *)
+#                     invalid_option
+#                     ;;
+#             esac
+#         done
+#         pause_function
+#     }
+#     #}}}
+    #NETWORK {{{
+    configure_network() {
+        print_title "CONFIGURATION DU RÉSEAU - http://wiki.archlinux.fr/Connexions_reseau"
+        print_info "Configuration du réseau avec Dhcpcd - IP Dynamique ($NAME_NET_WIRED : filaire par défaut)."
+        print_info_cyan "Le nom de l'interface réseau est : "$NAME_NET_WIRED
+        print_info_cyan "noarp ajouté à etc/dhcpcd.conf"
+        echo "noarp" >> /etc/dhcpcd.conf
+        cp -v ai-fconfig/net-ip-statique/resolv.conf.head /etc/resolv.conf.head
+#       echo -e "\n"
+#       systemctl enable dhcpcd@${NAME_NET_WIRED}.service
+        # Enable toutes les interfaces réseaux par défaut
+        echo -e "\n"
+        systemctl enable dhcpcd.service
+        pause_function
+    }
+    #}}}
+    #ROOT PASSWORD {{{
+    set_root_password() {
+        print_title "MOT DE PASSE ROOT"
+        print_info "Entrer le mot de passe «root»"
+        local ret_passwd=9
+        until [[ $ret_passwd -eq 0 ]];
+            do
+                passwd
+                if [[ $? -ne 0 ]]; then
+                    print_warning "Mot de passe «root» erroné : Entrer de nouveau le mot de passe «root»"
+                    ret_passwd=9
+                else
+                    ret_passwd=0
+                fi
+            done
+        pause_function
+    }
+    #}}}
+
+#ARCHLINUX INSTALL SCRIPTS - https://github.com/jeannoeldot/arch_install/ai-b2
+    print_title "https://wiki.archlinux.org/index.php/Arch_Install_Scripts"
+    print_info "Les «Arch Install Scripts» sont un ensemble de scripts Bash qui simplifient l'installation de Archlinux."
+    print_info_cyan "INSTALLATION PARTIE 2 DANS CHROOT."
+    #
+    print_info_cyan "Mise à jour de la base de pacman"
+    pacman-db-upgrade
+    #
+    read_variables_ali_b1
+    # Sets the interval of inactivity
+    setterm -blank 0
+    # Sets keymap et font
+    if [[ $TYPE_KEYBOARD == "AZERTY" ]]; then
+        KEYMAP=fr-latin9
+    else
+        KEYMAP=fr-bepo-latin9
+    fi
+    print_info_cyan "Type de clavier : "$TYPE_KEYBOARD" et valeur de KEYMAP : "$KEYMAP
+    loadkeys $KEYMAP
+#    setfont Lat2-Terminus16
+    setfont lat9w-16
+    # Editeur par défaut
+    print_info_cyan "L'éditeur par défaut est nano"
+    # UEFI ou BIOS
+    if [[ $IS_UEFI -eq 1 ]]; then
+        print_info_cyan "Installation en mode UEFI."
+        source $(pwd)/ai-b-uefi-ic
+    else
+        print_info_cyan "Installation en mode BIOS."
+        source $(pwd)/ai-b-bios-ic
+    fi
+    # Installation dans VirtualBox ou réelle
+    if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
+        print_info_cyan "Installation dans Oracle VM VirtualBox."
+    else
+        print_info_cyan "Installation réelle."
+    fi
+    pause_function
+    #
+    configure_fstab
+    configure_vconsole_conf
+    configure_pacman_conf
+    configure_hostname
+    configure_timezone
+    configure_hardwareclock
+    configure_locale
+    configure_intel_ucode
+    configure_mkinitcpio
+    # ai-b-bios-ic ou ai-b-uefi-ic
+    install_bootloader
+    configure_bootloader
+    #
+    configure_network
+    set_root_password
+    # INSCRIT CHOIX CLAVIER DANS variables_pour_ai_de.txt pour ai-de
+    echo "type_choice_keyboard=${TYPE_KEYBOARD}" > /root/variables_pour_ai_de.txt
+    #
+    print_title "FIN INSTALLATION PARTIE 2 DANS CHROOT."
+    #
+    print_info_cyan "Commandes à éxécuter dans l'ordre pour poursuivre l'installation :"
+    print_info_cyan "exit                               ( Quitte l'environnement Chroot )"
+    print_info_cyan "cd ai && ./ai-b                    ( Lance la partie 3 de l'installation )"
+    pause_function
+    #
+    exit 0

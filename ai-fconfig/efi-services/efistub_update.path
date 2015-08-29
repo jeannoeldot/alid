@@ -1,0 +1,12 @@
+[Unit]
+Description=Check update EFISTUB Linux-ARCH
+
+[Path]
+##PathChanged=/boot/vmlinuz-linux
+##PathChanged=/boot/initramfs-linux.img
+PathChanged=/boot/initramfs-linux-fallback.img
+
+Unit=efistub_update.service
+
+[Install]
+WantedBy=multi-user.target

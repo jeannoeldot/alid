@@ -1,0 +1,10 @@
+[Unit]
+Description=Check update logo fbpanel
+
+[Path]
+PathChanged=/usr/share/fbpanel/images/logo.png
+
+Unit=fbpanel_update.service
+
+[Install]
+WantedBy=multi-user.target

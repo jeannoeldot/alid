@@ -1,0 +1,449 @@
+INSTALLATION DE LINUX-CK
+==============================
+
+https://wiki.archlinux.org/index.php/Linux-ck
+
+https://wiki.archlinux.org/index.php/Repo-ck
+
+https://aur.archlinux.org/packages/linux-ck/
+
+
+https://wiki.archlinux.org/index.php/Unofficial_user_repositories#repo-ck
+
+repo-ck
+
+    Maintainer: graysky
+    Description: Kernel and modules with Brain Fuck Scheduler and all the goodies in the ck1 patch set.
+    Upstream page: repo-ck.com
+    Wiki: repo-ck
+    Key-ID: 5EE46C4C
+
+[repo-ck]
+Server = http://repo-ck.com/$arch
+
+$ sudo nano /etc/pacman.conf
+
+Ajouter au-début AVANT [core] :
+================================
+
+[repo-ck]
+Server = http://repo-ck.com/$arch
+
+# pacman-key -r 5EE46C4C
+# pacman-key -f 5EE46C4C
+# pacman-key --lsign-key 5EE46C4C
+
+SI PROBLÈME AVEC pacman-key -r 5EE46C4C :
+-----------------------------------------
+VOIR : /home/jnd/09-Documentation/00-PROBLEME-AVEC-PACMAN-KEY-R-keyid.TXT
+
+# pacman -Syy
+
+# pacman -Sl repo-ck
+
+repo-ck linux-ck-haswell 3.16.1-1
+repo-ck linux-ck-haswell-headers 3.16.1-1
+
+repo-ck nvidia-ck-haswell 340.32-3
+
+repo-ck virtualbox-ck-guest-modules-haswell 4.3.14-4
+repo-ck virtualbox-ck-host-modules-haswell 4.3.14-4
+
+# pacman -Syu
+
+# pacman -Sg ck-haswell
+ck-haswell broadcom-wl-ck-haswell
+ck-haswell linux-ck-haswell
+ck-haswell linux-ck-haswell-headers
+ck-haswell nvidia-304xx-ck-haswell
+ck-haswell nvidia-ck-haswell
+ck-haswell virtualbox-ck-guest-modules-haswell
+ck-haswell virtualbox-ck-host-modules-haswell
+
+
+# pacman -S linux-ck-haswell nvidia-ck-haswell
+
+Downloads interrupt regularly
+===============================
+See : https://wiki.archlinux.org/index.php/Improve_pacman_performance#Using_wget
+Change the pacman downloader to wget, which automatically resumes downloads. 
+
+OU
+
+[repo-ck]
+Server = http://repo-ck.com/$arch
+Server = http://repo-ck.com/$arch
+Server = http://repo-ck.com/$arch
+Server = http://repo-ck.com/$arch
+Server = http://repo-ck.com/$arch
+
+# nano -w /etc/pacman.conf
+
+
+
+INSTALLATION DE EFISTUB
+=========================
+
+# ls /boot
+efi  initramfs-linux-fallback.img  initramfs-linux.img  vmlinuz-linux
+
+initramfs-linux-ck.img
+initramfs-linux-ck-fallback.img
+vmlinuz-linux-ck
+
+INSTALLATION DANS ARCH / ARCH_1_CK
+====================================
+# ls /boot/efi/EFI/arch
+initramfs-arch-fallback.img  initramfs-arch.img  refind_linux.conf  vmlinuz-arch.efi
+
+# mkdir -p /boot/efi/EFI/arch_1_ck
+# cp -v /boot/efi/EFI/arch/refind_linux.conf /boot/efi/EFI/arch_1_ck/
+# cp -v /boot/vmlinuz-linux-ck /boot/efi/EFI/arch_1_ck/vmlinuz-arch_1_ck.efi
+# cp -v /boot/initramfs-linux-ck.img /boot/efi/EFI/arch_1_ck/initramfs-arch_1_ck.img
+# cp -v /boot/initramfs-linux-ck-fallback.img /boot/efi/EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img
+
+# ls /boot/efi/EFI/arch_1_ck
+initramfs-arch_1_ck-fallback.img  initramfs-arch_1_ck.img  refind_linux.conf  vmlinuz-arch_1_ck.efi
+
+MODIFICATIONS DE refind_linux.conf : AJOUT DE elevator=bfq
+==========================================================
+# nano -w /boot/efi/EFI/arch_1_ck/refind_linux.conf
+
+## This file should be present in the same directory as the EFISTUB kernel and initramfs files
+## More info at http://www.rodsbooks.com/refind/linux.html , http://www.rodsbooks.com/efi-bootloaders/efistub.html
+"Boot en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target quiet"
+"Boot en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target quiet"
+"Boot en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target"
+
+==> DEVIENT :
+## This file should be present in the same directory as the EFISTUB kernel and initramfs files
+## More info at http://www.rodsbooks.com/refind/linux.html , http://www.rodsbooks.com/efi-bootloaders/efistub.html
+"Boot en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq quiet"
+"Boot en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target elevator=bfq quiet"
+"Boot en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target"
+
+16/10/2014
+==========
+MODIFICATIONS DE refind_linux.conf : AJOUT DE initrd + FALLBACK
+===============================================================
+# nano -w /boot/efi/EFI/arch_1_ck/refind_linux.conf
+
+==> DEVIENT :
+## This file should be present in the same directory as the EFISTUB kernel and initramfs files
+## More info at http://www.rodsbooks.com/refind/linux.html , http://www.rodsbooks.com/efi-bootloaders/efistub.html
+"Boot en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq quiet initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
+"Boot en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target elevator=bfq quiet initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
+"Boot en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
+"Fallback en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
+"Fallback en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target elevator=bfq initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
+"Fallback en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
+
+19/10/2014
+==========
+MODIFICATIONS DE refind_linux.conf : AJOUT DE initrd=EFI/arch_1_ck/intel-ucode.img
+==================================================================================
+# nano -w /boot/efi/EFI/arch_1_ck/refind_linux.conf
+
+==> DEVIENT :
+## This file should be present in the same directory as the EFISTUB kernel and initramfs files
+## More info at http://www.rodsbooks.com/refind/linux.html , http://www.rodsbooks.com/efi-bootloaders/efistub.html
+"Boot en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq quiet initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
+"Boot en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target elevator=bfq quiet initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
+"Boot en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
+"Fallback en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
+"Fallback en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target elevator=bfq initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
+"Fallback en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
+
+
+
+INSTALLATION DANS ARCH_2 / ARCH_2_CK
+====================================
+# ls /boot/efi/EFI/arch_2
+initramfs-arch_2-fallback.img  initramfs-arch_2.img  refind_linux.conf  vmlinuz-arch_2.efi
+
+# mkdir -p /boot/efi/EFI/arch_2_ck
+# cp -v /boot/efi/EFI/arch_2/refind_linux.conf /boot/efi/EFI/arch_2_ck/
+# cp -v /boot/vmlinuz-linux-ck /boot/efi/EFI/arch_2_ck/vmlinuz-arch_2_ck.efi
+# cp -v /boot/initramfs-linux-ck.img /boot/efi/EFI/arch_2_ck/initramfs-arch_2_ck.img
+# cp -v /boot/initramfs-linux-ck-fallback.img /boot/efi/EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img
+
+# ls /boot/efi/EFI/arch_2_ck
+initramfs-arch_2_ck-fallback.img  initramfs-arch_2_ck.img  refind_linux.conf  vmlinuz-arch_2_ck.efi
+
+MODIFICATIONS DE refind_linux.conf : AJOUT DE elevator=bfq
+==========================================================
+# nano -w /boot/efi/EFI/arch_2_ck/refind_linux.conf
+
+## This file should be present in the same directory as the EFISTUB kernel and initramfs files
+## More info at http://www.rodsbooks.com/refind/linux.html , http://www.rodsbooks.com/efi-bootloaders/efistub.html
+"Boot en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target quiet"
+"Boot en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target quiet"
+"Boot en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target"
+
+==> DEVIENT :
+## This file should be present in the same directory as the EFISTUB kernel and initramfs files
+## More info at http://www.rodsbooks.com/refind/linux.html , http://www.rodsbooks.com/efi-bootloaders/efistub.html
+"Boot en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq quiet"
+"Boot en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target elevator=bfq quiet"
+"Boot en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target"
+
+16/10/2014
+==========
+MODIFICATIONS DE refind_linux.conf : AJOUT DE initrd + FALLBACK
+===============================================================
+# nano -w /boot/efi/EFI/arch_2_ck/refind_linux.conf
+
+==> DEVIENT :
+## This file should be present in the same directory as the EFISTUB kernel and initramfs files
+## More info at http://www.rodsbooks.com/refind/linux.html , http://www.rodsbooks.com/efi-bootloaders/efistub.html
+"Boot en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq quiet initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
+"Boot en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target elevator=bfq quiet initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
+"Boot en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
+"Fallback en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
+"Fallback en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target elevator=bfq initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
+"Fallback en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
+
+19/10/2014
+==========
+MODIFICATIONS DE refind_linux.conf : AJOUT DE initrd=EFI/arch_2_ck/intel-ucode.img
+==================================================================================
+# nano -w /boot/efi/EFI/arch_2_ck/refind_linux.conf
+
+==> DEVIENT :
+## This file should be present in the same directory as the EFISTUB kernel and initramfs files
+## More info at http://www.rodsbooks.com/refind/linux.html , http://www.rodsbooks.com/efi-bootloaders/efistub.html
+"Boot en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq quiet initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
+"Boot en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target elevator=bfq quiet initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
+"Boot en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
+"Fallback en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
+"Fallback en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target elevator=bfq initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
+"Fallback en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
+
+
+
+ICONES
+========
+!!! Installées par mon script ai-b
+
+
+SERVICE EFISTUB_UPDATE
+=========================
+
+# ls /etc/systemd/system | grep efistub
+efistub_update.path
+efistub_update.service
+
+# cp -v /etc/systemd/system/efistub_update.path /etc/systemd/system/efistub_ck_update.path
+# cp -v /etc/systemd/system/efistub_update.service /etc/systemd/system/efistub_ck_update.service
+
+# ls /etc/systemd/system | grep efistub
+efistub_ck_update.path
+efistub_ck_update.service
+efistub_update.path
+efistub_update.service
+
+Modfifications de efistub_ck_update.path et de efistub_ck_update.service
+=========================================================================
+# nano -w /etc/systemd/system/efistub_ck_update.path
+
+[Unit]
+Description=Check update EFISTUB Linux-CK
+
+[Path]
+##PathChanged=/boot/vmlinuz-linux-ck
+##PathChanged=/boot/initramfs-linux-ck.img
+PathChanged=/boot/initramfs-linux-ck-fallback.img
+
+Unit=efistub_ck_update.service
+
+[Install]
+WantedBy=multi-user.target
+
+
+INSTALLATION DANS ARCH / ARCH_1_CK
+==================================
+# nano -w /etc/systemd/system/efistub_ck_update.service
+
+[Unit]
+Description=Copy EFISTUB Linux-CK to UEFISYS Partition
+# Requires=boot-efi.mount
+
+[Service]
+Type=oneshot
+
+ExecStart=/usr/bin/cp -f /boot/vmlinuz-linux-ck /boot/efi/EFI/arch_1_ck/vmlinuz-arch_1_ck.efi
+ExecStart=/usr/bin/cp -f /boot/initramfs-linux-ck.img /boot/efi/EFI/arch_1_ck/initramfs-arch_1_ck.img
+ExecStart=/usr/bin/cp -f /boot/initramfs-linux-ck-fallback.img /boot/efi/EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img
+
+
+INSTALLATION DANS ARCH_2 / ARCH_2_CK
+====================================
+# nano -w /etc/systemd/system/efistub_ck_update.service
+
+[Unit]
+Description=Copy EFISTUB Linux-CK to UEFISYS Partition
+# Requires=boot-efi.mount
+
+[Service]
+Type=oneshot
+
+ExecStart=/usr/bin/cp -f /boot/vmlinuz-linux-ck /boot/efi/EFI/arch_2_ck/vmlinuz-arch_2_ck.efi
+ExecStart=/usr/bin/cp -f /boot/initramfs-linux-ck.img /boot/efi/EFI/arch_2_ck/initramfs-arch_2_ck.img
+ExecStart=/usr/bin/cp -f /boot/initramfs-linux-ck-fallback.img /boot/efi/EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img
+
+
+# systemctl enable efistub_ck_update.path
+
+# systemctl status efistub_ck_update.path
+
+
+SERVICE INTEL_UCODE_UPDATE
+==========================
+
+Déja créés. Voir :
+/home/jnd/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.path
+/home/jnd/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.service
+
+Voir : 00-Cmd-Customize-Arch.TXT -> 21) MICROCODE
+
+
+REBOOTER
+=========
+
+VÉRIFICATIONS
+=============
+# systemctl list-units | grep efistub
+efistub_ck_update.path   loaded active waiting
+   Check update EFISTUB Linux-CK
+efistub_update.path      loaded active waiting
+   Check update EFISTUB Linux-ARCH
+
+# systemctl list-units | grep intel_ucode
+
+
+BFQ I/O Scheduler
+------------------
+# cat /sys/block/sda/queue/scheduler
+noop deadline [cfq] bfq
+OU SI BFQ ACTIF
+noop deadline cfq [bfq]
+
+
+PKGFILE
+========
+# pkgfile --update
+
+
+INSTALLATION DE VIRTUALBOX CK DANS ARCH_2_CK
+============================================
+# pacman -Sg ck-haswell
+ck-haswell broadcom-wl-ck-haswell
+ck-haswell linux-ck-haswell
+ck-haswell linux-ck-haswell-headers
+ck-haswell nvidia-304xx-ck-haswell
+ck-haswell nvidia-ck-haswell
+ck-haswell virtualbox-ck-guest-modules-haswell
+ck-haswell virtualbox-ck-host-modules-haswell
+
+# pacman -Syu virtualbox virtualbox-ck-host-modules-haswell virtualbox-guest-iso
+# modprobe vboxdrv
+# modprobe vboxnetflt
+
+# echo '# Load Vbox modules at boot.' > /etc/modules-load.d/virtualbox.conf
+# echo 'vboxdrv' >> /etc/modules-load.d/virtualbox.conf
+# echo 'vboxnetflt' >> /etc/modules-load.d/virtualbox.conf
+
+# cat /etc/modules-load.d/virtualbox.conf
+
+# gpasswd -a jnd vboxusers
+
+$ yaourt -Syua virtualbox-ext-oracle
+
+!!! DANS VIRTUAL-BOX :
+!!! ATTENTION AU CHEMIN DE VirtualBox-VMs -> /0-DataLinux/VirtualBox-VMs
+
+Fichiers -> Paramètres 
+Onglet Général : Dossier par défaut des machines :
+
+
+INSTALLATION DE VIRTUALBOX CK DANS ARCH / ARCH_1_CK
+===================================================
+# pacman -Sg ck-haswell
+ck-haswell virtualbox-ck-guest-modules-haswell
+ck-haswell virtualbox-ck-host-modules-haswell
+
+SI VIRTUALBOX PAS DÉJÀ INSTALLÉ
+--------------------------------
+# pacman -Syu virtualbox virtualbox-ck-host-modules-haswell virtualbox-guest-iso
+# modprobe vboxdrv
+# modprobe vboxnetflt
+
+# echo '# Load Vbox modules at boot.' > /etc/modules-load.d/virtualbox.conf
+# echo 'vboxdrv' >> /etc/modules-load.d/virtualbox.conf
+# echo 'vboxnetflt' >> /etc/modules-load.d/virtualbox.conf
+
+# cat /etc/modules-load.d/virtualbox.conf
+
+# gpasswd -a jnd vboxusers
+
+
+SI VIRTUALBOX DÉJÀ INSTALLÉ
+--------------------------------
+# pacman -Syu virtualbox-ck-host-modules-haswell
+
+# modprobe vboxdrv
+# modprobe vboxnetflt
+
+!!! voir : 00-Cmd-Customize-Arch.TXT   9) INSTALLATION DE VIRTUAL-BOX
+
+# pacman -Syu virtualbox-extension
+
+!!! DANS VIRTUAL-BOX :
+!!! ATTENTION AU CHEMIN DE VirtualBox-VMs -> /0-DataLinux/VirtualBox-VMs
+
+Fichiers -> Paramètres 
+Onglet Général : Dossier par défaut des machines :
+  ==> /home/jnd/VirtualBox-VMs
+  
+
+VÉRIFICATIONS
+=============
+
+# pacman -Sl repo-ck | grep install
+repo-ck linux-ck-haswell 4.0-1 [installé]
+repo-ck nvidia-ck-haswell 349.16-2 [installé]
+repo-ck virtualbox-ck-host-modules-haswell 4.3.26-4 [installé]
+
+
+
+
+======================================================================================
+ANCIEN
+=======
+# pacman -S ck-haswell
+:: Il y a 7 membres dans le groupe ck-haswell :
+:: Dépôt repo-ck
+   1) broadcom-wl-ck-haswell  2) linux-ck-haswell  3) linux-ck-haswell-headers  4) nvidia-304xx-ck-haswell
+   5) nvidia-ck-haswell  6) virtualbox-ck-guest-modules-haswell  7) virtualbox-ck-host-modules-haswell
+
+Entrez une sélection (par défaut, tout est sélectionné): 
+
+
+Monter partition Boot de Arch Principale
+-----------------------------------------
+==> /media/d089443d-0458-4ce1-9288-b6a0f9b85b61/grub/
+
+[jnd@arch64 ~]$ cd /media/d089443d-0458-4ce1-9288-b6a0f9b85b61/grub/
+
+[jnd@arch64 grub]$ ls
+
+[jnd@arch64 grub]$ kdesu kwrite menu.lst
+
+Ajouter :
+
+# (2) Arch Linux Test (Linux-ck Wine)
+title Arch Linux Test Linux-ck Wine
+root   (hd0,12)
+kernel /vmlinuz-linux-ck root=/dev/disk/by-uuid/9634ad70-986c-40cb-a007-f9c694b635e6 ro vga=773 elevator=bfq quiet
+initrd /initramfs-linux-ck.img
+
