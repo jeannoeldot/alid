@@ -34,7 +34,7 @@ source $(pwd)/ai-commons
 
         messages+="Type de clavier  : "${TYPE_KEYBOARD}"\n"
         messages+="Valeur de KEYMAP : "${KEYMAP}"\n"
-        print_whiptail_msgbox "${messages}"
+        print_whiptail_msgbox "${messages}" "Continuer"
         loadkeys $KEYMAP
 #        setfont Lat2-Terminus16
         setfont lat9w-16
@@ -46,19 +46,18 @@ source $(pwd)/ai-commons
     #}}}
     #CONFIGURE MIRRORLIST {{{
     configure_mirrorlist() {
-        print_title "MIRRORS - https://wiki.archlinux.org/index.php/Mirrors"
-        print_info "Configure le fichier /etc/pacman.d/mirrorlist avec les serveurs FR."
+        local messages=""
         local retour=9
         local date_du_jour=$(date +%Y-%m-%d)
         local url="https://www.archlinux.org/mirrorlist/?country=FR&use_mirror_status=on"
         local tmpfile=$(mktemp --suffix=-mirrorlist)
         # Get latest mirror list and save to tmpfile
-        curl -so ${tmpfile} ${url}
+        curl -so ${tmpfile} ${url} &
+        print_whiptail_gauge "$!" "0.5" "Récupération des serveurs FR..."
         # Backup and replace current mirrorlist file (if new file is non-zero)
         if [[ -s ${tmpfile} ]]; then
             date_Generated=$(cat "${tmpfile}" | awk '/Generated/ {print $4}')
             if [[ ${date_Generated} == ${date_du_jour} ]]; then
-                print_info_cyan "Configuration du fichier /etc/pacman.d/mirrorlist..."
                 sed -i "s/^#Server/Server/g" ${tmpfile}
                 sed -i "/^## Score/d" ${tmpfile}
                 mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.original
@@ -72,26 +71,27 @@ source $(pwd)/ai-commons
             retour=1
         fi
         # Fin ou Erreur
-        if [[ $retour -eq 0 ]]; then
-            print_info_cyan "Succès de la configuration du fichier /etc/pacman.d/mirrorlist."
-            echo -e  "\nVisualisation et/ou édition du fichier mirrorlist avec $EDITOR"
-            pause_function
-            $EDITOR /etc/pacman.d/mirrorlist
+        if [[ $retour = 0 ]]; then
+            messages+="Succès de la configuration du fichier /etc/pacman.d/mirrorlist.\n\n"
+            messages+="Visualiser et/ou éditer le fichier mirrorlist avec "${EDITOR}"\n"
+            whiptail --title "${TITRE_BOX_W}" --yesno "${messages}" --yes-button "Éditer" --no-button "Continuer" 16 72
+            retour=$?
+            if [[ $retour = 0 ]]; then
+              ${EDITOR} /etc/pacman.d/mirrorlist
+            fi           
         else
-            print_warning "Échec de la configuration du fichier /etc/pacman.d/mirrorlist."
+            messages+="Échec de la configuration du fichier /etc/pacman.d/mirrorlist.\n\n"
+            messages+="Edition manuelle du fichier mirrorlist avec "${EDITOR}"\n"
+            print_whiptail_msgbox "${messages_p1}" "Éditer"
             mv /etc/pacman.d/mirrorlist.original /etc/pacman.d/mirrorlist
             chmod +r /etc/pacman.d/mirrorlist
-            echo -e  "\nEdition manuelle du fichier mirrorlist avec $EDITOR"
-            pause_function
-            $EDITOR /etc/pacman.d/mirrorlist
+            ${EDITOR} /etc/pacman.d/mirrorlist
         fi
     }
     #}}}
     #INSTALL BASE SYSTEM {{{
     install_base_system() {
         print_title "INSTALLATION DU SYSTÈME DE BASE"
-#        pacstrap ${MOUNTPOINT} base reiserfsprogs links wget
-#        pacstrap ${MOUNTPOINT} base lz4 elinks wget
         if [[ $IS_UEFI -eq 1 ]]; then
             print_info "En utilisant le script pacstrap le système de base, gptfdisk, wget et elinks seront installés."
             pacstrap ${MOUNTPOINT} base libnewt lz4 gptfdisk elinks wget
@@ -253,7 +253,7 @@ else
     else
         messages_p1+="Installation dans        : PC Réel\n"
     fi    
-    print_whiptail_msgbox "${messages_p1}"
+    print_whiptail_msgbox "${messages_p1}" "Continuer"
     #
     configure_keymap
     # ai-b-bios-hc ou ai-b-uefi-hc
@@ -277,7 +277,7 @@ else
     messages_p1+="Commandes à éxécuter dans l'ordre pour poursuivre l'installation :\n\n"
     messages_p1+="cd && arch-chroot /mnt /bin/bash => Chroot dans le nouveau système\n"
     messages_p1+="cd /root/ai && ./ai-b            => Partie 2 de l'installation\n"
-    print_whiptail_msgbox "${messages_p1}"
+    print_whiptail_msgbox "${messages_p1}" "Continuer"
     #
     echo "ai-b_launched=1" > /root/ai-b.launched
     exit 0
