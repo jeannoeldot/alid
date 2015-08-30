@@ -17,7 +17,11 @@ source $(pwd)/ai-commons
     #CONFIGURE KEYMAP {{{
     configure_keymap() {
         local messages=""
-        REPLY=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "Choisir le type de clavier ( AZERTY ou BÉPO )" --ok-button "Valider" 16 72 5 \
+        local fonction="CHOIX DU TYPE DE CLAVIER.\n"
+        fonction+="=========================\n\n"
+        messages="${fonction}"
+        messages+="Choisir le type de clavier ( AZERTY ou BÉPO )"
+        REPLY=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Valider" 16 72 5 \
                 "AZERTY" "-" \
                 "BÉPO" "-" \
                 3>&1 1>&2 2>&3)
@@ -32,6 +36,7 @@ source $(pwd)/ai-commons
                 ;;
         esac
 
+        messages="${fonction}"
         messages+="Type de clavier  : "${TYPE_KEYBOARD}"\n"
         messages+="Valeur de KEYMAP : "${KEYMAP}"\n"
         print_whiptail_msgbox "${messages}" "Continuer"
@@ -47,13 +52,17 @@ source $(pwd)/ai-commons
     #CONFIGURE MIRRORLIST {{{
     configure_mirrorlist() {
         local messages=""
+        local fonction="CONFIGURATION DU FICHIER /etc/pacman.d/mirrorlist.\n"
+        fonction+="==================================================\n\n"
         local retour=9
         local date_du_jour=$(date +%Y-%m-%d)
         local url="https://www.archlinux.org/mirrorlist/?country=FR&use_mirror_status=on"
         local tmpfile=$(mktemp --suffix=-mirrorlist)
         # Get latest mirror list and save to tmpfile
         curl -so ${tmpfile} ${url} &
-        print_whiptail_gauge "$!" "0.5" "Récupération des serveurs FR..."
+        messages="${fonction}"
+        messages+="Récupération des serveurs FR..."
+        print_whiptail_gauge "$!" "0.5" "${messages}"
         # Backup and replace current mirrorlist file (if new file is non-zero)
         if [[ -s ${tmpfile} ]]; then
             date_Generated=$(cat "${tmpfile}" | awk '/Generated/ {print $4}')
@@ -72,17 +81,19 @@ source $(pwd)/ai-commons
         fi
         # Fin ou Erreur
         if [[ $retour = 0 ]]; then
+            messages="${fonction}"
             messages+="Succès de la configuration du fichier /etc/pacman.d/mirrorlist.\n\n"
             messages+="Visualiser et/ou éditer le fichier mirrorlist avec "${EDITOR}"\n"
-            whiptail --title "${TITRE_BOX_W}" --yesno "${messages}" --yes-button "Éditer" --no-button "Continuer" 16 72
+            print_whiptail_yesno "${messages}" "Éditer" "Continuer"
             retour=$?
             if [[ $retour = 0 ]]; then
               ${EDITOR} /etc/pacman.d/mirrorlist
             fi           
         else
+            messages="${fonction}"
             messages+="Échec de la configuration du fichier /etc/pacman.d/mirrorlist.\n\n"
             messages+="Edition manuelle du fichier mirrorlist avec "${EDITOR}"\n"
-            print_whiptail_msgbox "${messages_p1}" "Éditer"
+            print_whiptail_msgbox "${messages}" "Éditer"
             mv /etc/pacman.d/mirrorlist.original /etc/pacman.d/mirrorlist
             chmod +r /etc/pacman.d/mirrorlist
             ${EDITOR} /etc/pacman.d/mirrorlist
