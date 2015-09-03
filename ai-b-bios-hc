@@ -79,12 +79,12 @@
             local fonction="PARTITIONNEMENT : SÉLECTION DU DISQUE À PARTITIONNER.\n"
             fonction+="=====================================================\n\n"
             messages="${fonction}"
-            local liste_disque_present=$(parted -sl 2> /dev/null | grep -E 'Mod|/dev/sd[a-z]' | sed -e "s/\(^Disk.*\)/\1\n/;s/Model/Modèle/;s/Disk/Disque/")
+            local liste_disque_present=$(LC_ALL=C parted -sl 2> /dev/null | grep -E 'Mod|/dev/sd[a-z]' | sed -e "s/\(^Disk.*\)/\1\n/;s/Model/Modèle/;s/Disk/Disque/")
             messages+="Liste des Disques présents dans le PC :\n"
             messages+="---------------------------------------\n"
             messages+=${liste_disque_present}"\n\n"
             messages+="Sélectionner le Disque à partitionner :"
-            local liste_hdd_devices=$(parted -sl 2> /dev/null | grep "/dev/sd[a-z]" | awk '{print $2   " "   $4}')
+            local liste_hdd_devices=$(LC_ALL=C parted -sl 2> /dev/null | grep "/dev/sd[a-z]" | sed -e "s/://" | awk '{print $2   " "   $3$4}')
             HDD_DEVICE=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Valider" 24 72 5 ${liste_hdd_devices} 3>&1 1>&2 2>&3)
         }
         #
