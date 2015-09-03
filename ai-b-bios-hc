@@ -36,7 +36,21 @@
                     sync
                 fi
             fi
-         }
+        }
+        appel_check_is_hdd_or_ssd() {
+            local retour=9
+            local messages=""
+            local fonction="PARTITIONNEMENT : TYPE DE DISQUE.\n"
+            fonction+="=================================\n\n"
+            messages="${fonction}"
+            check_is_hdd_or_ssd "${HDD_DEVICE}"
+            if [[ ${IS_HDD_OR_SSD} == "HDD" ]]; then
+                messages+="!!! Le Disque «"${HDD_DEVICE}"» est un HDD.\n"
+            else
+                messages+="!!! Le Disque «"${HDD_DEVICE}"» est un SSD.\n"
+            fi
+            print_whiptail_msgbox "${messages}" "Continuer"
+        }
         select_storage_partitions() {
             local messages=""
             local fonction="PARTITIONNEMENT : SÉLECTION DU TYPE DE TABLE DE PARTITIONS.\n"
@@ -60,20 +74,6 @@
             fi
             print_whiptail_msgbox "${messages}" "Continuer"
         }
-        appel_check_is_hdd_or_ssd() {
-            local retour=9
-            local messages=""
-            local fonction="PARTITIONNEMENT : TYPE DE DISQUE.\n"
-            fonction+="=================================\n\n"
-            messages="${fonction}"
-            check_is_hdd_or_ssd "${HDD_DEVICE}"
-            if [[ ${IS_HDD_OR_SSD} == "HDD" ]]; then
-                messages+="!!! Le Disque «"${HDD_DEVICE}"» est un HDD.\n"
-            else
-                messages+="!!! Le Disque «"${HDD_DEVICE}"» est un SSD.\n"
-            fi
-            print_whiptail_msgbox "${messages}" "Continuer"
-         }
         select_hdd_devices() {
             local messages=""
             local fonction="PARTITIONNEMENT : SÉLECTION DU DISQUE À PARTITIONNER.\n"
