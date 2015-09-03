@@ -17,10 +17,10 @@ source $(pwd)/ai-commons
     #CONFIGURE KEYMAP {{{
     configure_keymap() {
         local messages=""
-        local fonction="CHOIX DU TYPE DE CLAVIER.\n"
-        fonction+="=========================\n\n"
+        local fonction="SÉLECTION DU TYPE DE CLAVIER.\n"
+        fonction+="=============================\n\n"
         messages="${fonction}"
-        messages+="Choisir le type de clavier ( AZERTY ou BÉPO )"
+        messages+="Choisir le type de clavier ( AZERTY ou BÉPO ) :"
         REPLY=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Valider" 16 72 5 \
                 "AZERTY" "-" \
                 "BÉPO" "-" \

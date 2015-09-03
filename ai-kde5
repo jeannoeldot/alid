@@ -41,7 +41,8 @@
         # KDE5 GRAPHICS
         print_info_cyan "Installation de KDE5 Graphiques"
 	package_install "gwenview kdegraphics-kcolorchooser kdegraphics-kolourpaint kdegraphics-ksnapshot kdegraphics-okular kdegraphics-svgpart kdegraphics-thumbnailers kdegraphics-mobipocket"
-	package_install "kipi-plugins"
+        package_install "kipi-plugins"
+        package_install "ffmpegthumbs"
 #         # KDE5 NETWORK
 #         print_info_cyan "Installation de KDE5 Réseau"
 # 	package_install "kdenetwork-kget kwebkitpart"
