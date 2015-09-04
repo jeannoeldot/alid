@@ -23,13 +23,13 @@
             messages+="/!\ Si Multi Boot, NE PAS METTRE À ZÉRO le disque.\n"
             messages+="/!\ TOUTES les données sur le disque sélectionné seront perdues.\n\n"
             messages+="Confirmer la mise à zéro du disque «"${HDD_DEVICE}"»\n"
-            print_whiptail_yesno "${messages}" "Mettre à zéro" "Annuler"
+            print_whiptail_yesno_no "${messages}" "Mettre à zéro" "Annuler"
             retour=$?
             if [[ $retour = 0 ]]; then
                 retour=9
                 messages="${fonction}"
                 messages+="Confirmer une 2ème fois la mise à zéro du disque «"${HDD_DEVICE}"»\n"
-                print_whiptail_yesno "${messages}" "Mettre à zéro" "Annuler"
+                print_whiptail_yesno_no "${messages}" "Mettre à zéro" "Annuler"
                 retour=$?
                 if [[ $retour = 0 ]]; then
                     sgdisk --zap-all ${HDD_DEVICE}
