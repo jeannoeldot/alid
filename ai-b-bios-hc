@@ -84,8 +84,17 @@
             messages+="---------------------------------------\n"
             messages+=${liste_disque_present}"\n\n"
             messages+="Sélectionner le Disque à partitionner :"
+            local hauteur=0
+            local nb_hdd=$(LC_ALL=C parted -sl 2> /dev/null | grep "/dev/sd[a-z]" | wc -l)
+            if [[ $nb_hdd = 1 || $nb_hdd = 2 ]]; then
+                hauteur=25
+            elif [[ $nb_hdd = 3 || $nb_hdd = 4 ]]; then
+                hauteur=35
+            else
+                hauteur=40
+            fi
             local liste_hdd_devices=$(LC_ALL=C parted -sl 2> /dev/null | grep "/dev/sd[a-z]" | sed -e "s/://" | awk '{print $2   " "   $3$4}')
-            HDD_DEVICE=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Valider" 24 72 5 ${liste_hdd_devices} 3>&1 1>&2 2>&3)
+            HDD_DEVICE=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Valider" $hauteur 72 5 ${liste_hdd_devices} 3>&1 1>&2 2>&3)
         }
         #
         select_hdd_devices
