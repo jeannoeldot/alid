@@ -87,7 +87,7 @@ source $(pwd)/ai-commons
             print_whiptail_yesno "${messages}" "Éditer" "Continuer"
             retour=$?
             if [[ $retour = 0 ]]; then
-              ${EDITOR} /etc/pacman.d/mirrorlist
+                ${EDITOR} /etc/pacman.d/mirrorlist
             fi           
         else
             messages="${fonction}"
@@ -102,53 +102,50 @@ source $(pwd)/ai-commons
     #}}}
     #INSTALL BASE SYSTEM {{{
     install_base_system() {
-        print_title "INSTALLATION DU SYSTÈME DE BASE"
+        local liste_paquets=""
+        local messages=""
+        local fonction="INSTALLATION DU SYSTÈME DE BASE.\n"
+        fonction+="================================\n\n"
+        messages="${fonction}"
+        messages+="En utilisant le script pacstrap,\n"
         if [[ $IS_UEFI -eq 1 ]]; then
-            print_info "En utilisant le script pacstrap le système de base, gptfdisk, wget et elinks seront installés."
-            pacstrap ${MOUNTPOINT} base libnewt lz4 gptfdisk elinks wget
+            messages+="le système de base, gptfdisk, wget et elinks seront installés.\n"
+            liste_paquets="base libnewt lz4 gptfdisk elinks wget"
         else
-            print_info "En utilisant le script pacstrap le système de base, wget et elinks seront installés."
-            pacstrap ${MOUNTPOINT} base libnewt lz4 elinks wget
+            messages+="le système de base, wget et elinks seront installés.\n"
+            liste_paquets="base libnewt lz4 elinks wget"
         fi
+        print_whiptail_msgbox "${messages}" "Continuer"
+        clear
+        echo -e "\n${BGreen}Installation du système de base...${White}"
+        pacstrap ${MOUNTPOINT} ${liste_paquets}
         # Si WiFi : installe les outils nécessaires
         local name_net_wireless=$(ip link | awk '/wlp/ {print $2}' | sed -e "s/://")
         if [[ -n ${name_net_wireless} ]]; then
-            print_info "Installe les outils nécessaires pour le WiFi"
+            messages="${fonction}"
+            messages+="En utilisant le script pacstrap,\n"
+            messages+="Installe les outils nécessaires pour le WiFi\n"
+            print_whiptail_msgbox "${messages}" "Continuer"
+            clear
+            echo -e "\n${BGreen}Installation des outils pour le WiFi...${White}"
             pacstrap ${MOUNTPOINT} iw wireless_tools wpa_actiond wpa_supplicant dialog
         fi
     }
     #}}}
     #CONFIGURE FSTAB {{{
     genere_fstab() {
-        print_title "FSTAB - https://wiki.archlinux.org/index.php/Fstab"
-        print_info "Le fichier /etc/fstab contient les informations des systèmes de fichiers statiques. Il définit la façon dont les périphériques de stockage et les partitions doivent être montés et intégrés dans le système. Il est lu par la commande mount pour déterminer les options à utiliser lors du montage d'un dispositif spécifique ou d'une partition."
-        print_info_cyan "UUID recommandé."
-        fstab_list=("UUID" "LABEL" "DEV");
-        PS3="$prompt1"
-        echo -e "Configurer le fichier /etc/fstab en se basant sur :"
-        select OPT in "${fstab_list[@]}"; do
-            case "$REPLY" in
-                1)
-                    genfstab -U -p ${MOUNTPOINT} >> ${MOUNTPOINT}/etc/fstab
-                    break
-                    ;;
-                2)
-                    genfstab -L -p ${MOUNTPOINT} >> ${MOUNTPOINT}/etc/fstab
-                    break
-                    ;;
-                3)
-                    genfstab -p ${MOUNTPOINT} >> ${MOUNTPOINT}/etc/fstab
-                    break
-                    ;;
-                *)
-                    invalid_option
-                    ;;
-            esac
-        done
-        #
-        echo -e "\nVérification du fichier /etc/fstab avec $EDITOR"
-        pause_function
-        $EDITOR ${MOUNTPOINT}/etc/fstab
+        local retour=9
+        local messages=""
+        local fonction="GÉNÉRATION DU FICHIER /etc/fstab AVEC UUID.\n"
+        fonction+="===========================================\n\n"
+        messages="${fonction}"
+        genfstab -U -p ${MOUNTPOINT} >> ${MOUNTPOINT}/etc/fstab
+        messages+="Visualiser et/ou éditer le fichier /etc/fstab avec "${EDITOR}"\n"
+        print_whiptail_yesno "${messages}" "Éditer" "Continuer"
+        retour=$?
+        if [[ $retour = 0 ]]; then
+           ${EDITOR} ${MOUNTPOINT}/etc/fstab
+        fi           
     }
     #}}}
     # ECRITURE DES VARIABLES {{{
@@ -184,43 +181,56 @@ source $(pwd)/ai-commons
 
     #FINISH {{{
     finish() {
-        print_title "PARTIE 3 : INSTALLATION TERMINÉE"
-        #COPY AUI TO ROOT FOLDER IN THE NEW SYSTEM
-        print_info_finish "\n==> INFO : Une copie de l'AUI sera placé dans le répertoire /root du nouveau système."
+        local messages=""        
+        local fonction="PARTIE 3 : INSTALLATION TERMINÉE.\n"
+        fonction+="=================================\n\n"
+        messages="${fonction}"
+        # COPY AI TO ROOT FOLDER IN THE NEW SYSTEM
+        # COPY ROOT FILES TO ROOT FOLDER IN THE NEW SYSTEM
+        messages+="Une copie de «AI» sera placé\n"
+        messages+="dans le répertoire /root du nouveau système.\n\n"
+        messages+="Copie des fichiers de configuration\n"
+        messages+="dans le répertoire /root du nouveau système.\n\n"
+        print_whiptail_msgbox "${messages}" "Copier"
+        clear
+        echo -e "\n${BGreen}Copie de «AI» dans le répertoire /root du nouveau système...${White}"
         cp -R $(pwd) ${MOUNTPOINT}/root
-        #COPY ROOT FILES TO ROOT FOLDER IN THE NEW SYSTEM
-        print_info_finish "\n==> INFO : Copie des fichiers de configuration dans le répertoire /root du nouveau système."
+        echo -e "\n${BGreen}Copie des fichiers de configuration dans le répertoire /root du nouveau système...${White}"
         cp -v ai-fconfig/root-.bashrc ${MOUNTPOINT}/root/.bashrc
         cp -v ai-fconfig/root-.bash_profile ${MOUNTPOINT}/root/.bash_profile
-        print_info_finish "\n==> INFO : Fermer tous les terminaux ouverts ( TTY 2, ... )."
-        pause_function       
-        #umount mounted partitions
-#        umount -R ${MOUNTPOINT}
+        #
+        messages="${fonction}"
+        messages+="Fermer tous les terminaux ouverts ( TTY 2, ... ).\n"
+        print_whiptail_msgbox "${messages}" "Continuer"
+        # umount mounted partitions
         umount_partitions
+        # Redémarrer ou Éteindre
+        messages="${fonction}"
         # Si dans VirtualBox
         if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
-            print_info_finish "\n==> INFO : Dans VirtualBox, éteindre le système, modifier ordre de démarrage dans Système,\n           enlever ISO dans Stokage et relancer la VM."
-        else
-            echo -e "\n"
+            messages+="Dans VirtualBox, éteindre le système,\n"
+            messages+="modifier ordre de démarrage dans Système,\n"
+            messages+="enlever ISO dans Stokage et relancer la VM.\n"
         fi
-	type_fins=("Redémarrer" "Éteindre");
-	PS3="$prompt1"
-	echo -e "Sélectionner l'arrêt ( Redémarrer ou Éteindre ) :"
-	select OPT in "${type_fins[@]}"; do
-	    case "$REPLY" in
-		1)
-		    reboot
-		    break
-		    ;;
-		2)
-		    poweroff
-		    break
-		    ;;
-		*)
-		    invalid_option
-		    ;;
-	    esac
-	done
+        messages+="Sélectionner l'arrêt ( Redémarrer ou Éteindre ) :"
+        REPLY=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Valider" 16 72 5 \
+                "REDÉMARRER" "-" \
+                "ÉTEINDRE" "-" \
+                3>&1 1>&2 2>&3)
+        case "$REPLY" in
+            "REDÉMARRER")
+#                 reboot
+## POUR TEST
+echo -e "\n${BGreen}POUR TEST : REDÉMARRER...${White}"
+pause_function
+                ;;
+            "ÉTEINDRE")
+#                 poweroff
+## POUR TEST
+echo -e "\n${BGreen}POUR TEST : ÉTEINDRE...${White}"
+pause_function
+                ;;
+        esac
     }
     #}}}
 
@@ -234,7 +244,7 @@ if [[ -f /root/ai-b.launched ]]; then
     check_is_in_virtualbox
     # Sets the interval of inactivity et fonts
     setterm -blank 0
-    #setfont Lat2-Terminus16
+#     setfont Lat2-Terminus16
     setfont lat9w-16
     #
     finish
