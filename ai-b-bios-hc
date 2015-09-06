@@ -111,181 +111,113 @@
     #}}}
     #FORMAT DEVICE {{{
     format_device() {
-        print_title "https://wiki.archlinux.org/index.php/Format_a_device"
-        print_info "Cette étape permet de sélectionner et formater les partitions sélectionnées où Archlinux sera installé."
-        print_warning "\tToutes les données sur les partitions sélectionnées seront perdues."
-        i=0
-        partitions=($(fdisk -l $HDD_DEVICE | awk '{print $1}' | grep /dev/))
-# SI EN GPT : 1ère partition  = EF02 BIOS_BOOT_PARTITION ou BOOT_PAR_NUM
-        if [[ $TYPE_STORAGE_PARTITION == "GPT" ]]; then
-            print_info_cyan "En GPT : la 1ère partition est réservée ( BIOS_BOOT_PARTITION ou BOOT_PAR_NUM )"
-            unset partitions[0]
-            partitions=(${partitions[@]})
-        fi
-        device_name=("root" "swap" "home" "boot" "var" "autre")
+        local messages=""
+        local fonction=""
+        local retour=9
         select_filesystem() {
-            MY_DIR=${device_name[i]}
-            [[ -n $1 ]] && MY_DIR=$1
-            filesystem=("ext4" "reiserfs" "ntfs" "vfat" "ext2" "ext3" "jfs" "xfs");
-            PS3="$prompt1"
-            echo -e "Sélectionner le système de fichiers pour ${BYellow}${MY_DIR}${White} :\n"
-            select TYPE in "${filesystem[@]}"; do
-                if contains_element "$TYPE" "${filesystem[@]}"; then
-                    break
-                else
-                    invalid_option
-                fi
-            done
+        # "ext4" "btrfs" "reiserfs" "ntfs" "vfat" "ext2" "ext3" "jfs" "xfs"
+            TYPE="ext4"
         }
-        umount_partition() {
-            #check if swap is on and umount
-            swapon -s | grep $1 && swapoff $1
-            #check if partition is mounted and umount
-            mount | grep $1 && umount $1
-        }
-        remove_partition() {
-            #remove the selected partition from list
-            unset partitions[$DEVICE_NUMBER]
-            partitions=(${partitions[@]})
-            #increase i
-            [[ ${device_name[i]} != autre ]] && i=$(( i + 1 ))
-        }
+#         umount_partition() {
+#             #check if swap is on and umount
+#             swapon -s | grep $1 && swapoff $1
+#             #check if partition is mounted and umount
+#             mount | grep $1 && umount $1
+#         }
         format_partition() {
-            echo -e "\n${BWhite}Formatage de la partition $1...${White}"
-#            echo -e "\n"
-#            read_input_text "Confirmer le formatage de la partition $1"
-#            if [[ $OPTION == o ]]; then
-                umount_partition "$1"
-                [[ -z $3 ]] && select_filesystem
-                if [[ $1 == $ROOT ]]; then
-                    ROOT_FS_TYPE=$TYPE
-                fi
-                mkfs.$TYPE $1
-                fsck $1
-                tune2fs -c 30 $1
-                mkdir -p $2
-                mount -t $TYPE $1 $2
-                remove_partition "$1"
-#            fi
+            clear
+            echo -e "\n${BGreen}Formatage de la partition ${BYellow}$1${BGreen}...${White}"
+#            umount_partition "$1"
+            [[ -z $3 ]] && select_filesystem
+            if [[ $1 == $ROOT ]]; then
+                ROOT_FS_TYPE=$TYPE
+            fi
+            mkfs.$TYPE $1
+            fsck $1
+            tune2fs -c 30 $1
+            mkdir -p $2
+            mount -t $TYPE $1 $2
         }
         format_swap_partition() {
-            echo -e "\n${BWhite}Formatage de la partition $1...${White}"
-            echo -e "\n${BWhite}Si Multi Boot, NE PAS FORMATER la partition SWAP.${White}"
-            read_input_text "Confirmer le formatage de la partition $1"
-            if [[ $OPTION == o ]]; then
-                umount_partition "$1"
+            fonction="PARTITIONNEMENT : FORMATAGE DE LA PARTITION «SWAP».\n"
+            fonction+="===================================================\n\n"
+            messages="${fonction}"
+            messages+="!!! Si Multi Boot, NE PAS FORMATER la partition «SWAP».\n"
+            messages+="Confirmer le formatage de la partition SWAP «"$1"»\n"
+            print_whiptail_yesno_no "${messages}" "Formater" "Annuler"
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                clear
+                echo -e "\n${BGreen}Formatage de la partition SWAP ${BYellow}$1${BGreen}...${White}"
+#                umount_partition "$1"
                 mkswap $1
                 swapon $1
-                remove_partition "$1"
             else
-                umount_partition "$1"
+#                umount_partition "$1"
                 swapon $1
-                remove_partition "$1"
             fi
         }
-        check_mountpoint() {
-            if mount | grep $2; then
-                echo -e "${BWhite}Partition montée avec succès${White}"
-                remove_partition "$1"
-            else
-                echo -e "${BRed}ATTENTION: Partition NON montée${White}"
-            fi
-        }
-        while true; do
-            print_warning "\tToutes les données sur la partition sélectionnée seront perdues."
-            if [[ ${device_name[i]} != root ]]; then
-                echo -e "${BWhite}Sélection optionnelle d'une partition pour : ${White}${BYellow}${device_name[i]}${White}"
-                read_input_text "Sélectionner une partition pour ${device_name[i]}"
-                if [[ $OPTION == n ]]; then
-                    if [[ ${device_name[i]} == autre ]]; then
-                        break
-                    else
-                        i=$(( i + 1 ))
-                        continue
-                    fi
-                fi
-            fi
-            [[ -n ${CHOIX_PARTITIONS} ]] && echo -e "${BWhite}==> ${CHOIX_PARTITIONS}${White}\n"
-            PS3="$prompt1"
-            echo -e "Sélectionner une partition pour ${BYellow}${device_name[i]}${White} :\n"
-            select DEVICE in "${partitions[@]}" "Fini"; do
-                if [[ "$DEVICE" == "Fini" ]]; then
-                    QUIT_FORMAT=$DEVICE
-                    break
-                else
-                  #get the selected number - 1
-                  DEVICE_NUMBER=$(( $REPLY - 1 ))
-                  if contains_element "$DEVICE" "${partitions[@]}"; then
-                      case ${device_name[i]} in
-                          root)
-                              ROOT=$DEVICE
-                              ROOT_DEVICE=$(echo $ROOT | sed 's/[0-9]//')
-                              format_partition "$DEVICE" "${MOUNTPOINT}"
-                              CHOIX_PARTITIONS+=$(echo $DEVICE)" = /root  "
-                              echo
-                              ;;
-                          swap)
-                              format_swap_partition "$DEVICE"
-                              CHOIX_PARTITIONS+=$(echo $DEVICE)" = /swap\n==> "
-                              echo
-                              ;;
-                          home)
-                              DIR="/home"
-                              select_filesystem "${DIR}"
-                              format_partition "$DEVICE" "${MOUNTPOINT}${DIR}" "$TYPE"
-                              CHOIX_PARTITIONS+=$(echo $DEVICE)" = /home  "
-                              echo
-                              ;;
-                          boot)
-                              DIR="/boot"
-                              select_filesystem "${DIR}"
-                              format_partition "$DEVICE" "${MOUNTPOINT}${DIR}" "$TYPE"
-                              CHOIX_PARTITIONS+=$(echo $DEVICE)" = /boot  "
-                              echo
-                              ;;
-                          var)
-                              DIR="/var"
-                              select_filesystem "${DIR}"
-                              format_partition "$DEVICE" "${MOUNTPOINT}${DIR}" "$TYPE"
-                              IS_VAR_SEPARATE=1
-                              CHOIX_PARTITIONS+=$(echo $DEVICE)" = /var  "
-                              echo
-                              ;;
-                          autre)
-                              read -p "Point de montage pour $DEVICE ( ex: /Datas, ... ) : " DIR
-                              select_filesystem "${DIR}"
-                              echo ""
-                              read_input_text "Formater la partition $DEVICE"
-                              if [[ $OPTION != n ]]; then
-                                  format_partition "$DEVICE" "${MOUNTPOINT}${DIR}" "$TYPE"
-                              else
-                                  read_input_text "Confirmer : type="$TYPE" device="$DEVICE" dir="${DIR}""
-                                  if [[ $OPTION != n ]]; then
-                                      mkdir -p ${MOUNTPOINT}${DIR}
-                                      mount -t $TYPE $DEVICE ${MOUNTPOINT}${DIR}
-                                      check_mountpoint "$DEVICE" "${MOUNTPOINT}${DIR}"
-                                  fi
-                              fi
-                              CHOIX_PARTITIONS+=$(echo $DEVICE)" = "$(echo $DIR)"  "
-                              echo
-                              ;;
-                      esac
-                      break
-                  else
-                      invalid_option
-                  fi
-                fi
-            done
-            #check if there is no partitions left
-            if [[ ${QUIT_FORMAT} == "Fini" ]]; then
-                break
-            elif [[ ${#partitions[@]} -eq 0 ]]; then
-                break
-            elif [[ ${device_name[i]} == autre ]]; then
-                echo
-                read_input_text "Configurer une autre partition"
-                [[ $OPTION != o ]] && break
-            fi
-        done
+
+# SI EN GPT : 1ère partition  = EF02 BIOS_BOOT_PARTITION ou BOOT_PAR_NUM
+        if [[ $TYPE_STORAGE_PARTITION == "GPT" ]]; then
+            fonction="PARTITIONNEMENT : SÉLECTION DES PARTITIONS.\n"
+            fonction+="===========================================\n\n"
+            messages="${fonction}"
+            messages+="!!! En GPT : la 1ère partition est réservée :\n"
+            messages+="    ( BIOS_BOOT_PARTITION ou BOOT_PAR_NUM )\n"
+            print_whiptail_msgbox "${messages}" "Continuer"
+            
+            partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "1d")
+        else
+            partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
+        fi
+# CHOIX PARTITION ROOT OBLIGATOIRE
+        fonction="PARTITIONNEMENT : SÉLECTION PARTITION «ROOT».\n"
+        fonction+="=============================================\n\n"
+        messages="${fonction}"
+        messages+="/!\ Toutes les données sur la partition choisie seront perdues.\n"
+        ROOT=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Choisir" 25 72 5 ${partitions} 3>&1 1>&2 2>&3)
+        ROOT_DEVICE=$(echo $ROOT | sed 's/[0-9]//')
+        format_partition "$ROOT" "${MOUNTPOINT}"
+        CHOIX_PARTITIONS+=$(echo $ROOT)" = /root.  "
+# CHOIX PARTITION SWAP FACULTATIF
+        fonction="PARTITIONNEMENT : SÉLECTION PARTITION «SWAP».\n"
+        fonction+="=============================================\n\n"
+        messages="${fonction}"
+        messages+="!!! LA PARTITION «SWAP» EST FACULTATIVE.\n\n"
+        messages+=${CHOIX_PARTITIONS}"\n\n"
+        if [[ $TYPE_STORAGE_PARTITION == "GPT" ]]; then
+            partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "1d")
+        else
+            partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
+        fi
+        SWAP=$(whiptail --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Choisir" --cancel-button "Annuler" 25 72 5 ${partitions} 3>&1 1>&2 2>&3)
+        retour=$?
+        if [[ $retour = 0 ]]; then
+            format_swap_partition "$SWAP"
+            CHOIX_PARTITIONS+=$(echo $SWAP)" = /swap.\n"
+        else
+            SWAP="/dev/sda98"
+        fi
+# CHOIX PARTITION HOME FACULTATIF
+        fonction="PARTITIONNEMENT : SÉLECTION PARTITION «HOME».\n"
+        fonction+="=============================================\n\n"
+        messages="${fonction}"
+        messages+="!!! LA PARTITION «HOME» EST FACULTATIVE.\n\n"
+        messages+="/!\ Toutes les données sur la partition choisie seront perdues.\n\n"
+        messages+=${CHOIX_PARTITIONS}"\n\n"
+        if [[ $TYPE_STORAGE_PARTITION == "GPT" ]]; then
+            partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v $SWAP | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "1d")
+        else
+            partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v $SWAP | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
+        fi
+        HOME=$(whiptail --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Choisir" --cancel-button "Annuler" 25 72 5 ${partitions} 3>&1 1>&2 2>&3)
+        retour=$?
+        if [[ $retour = 0 ]]; then
+            format_partition "$HOME" "${MOUNTPOINT}/home"
+            CHOIX_PARTITIONS+=$(echo $HOME)" = /home."
+        else
+            HOME="/dev/sda99"
+        fi
     }
     #}}}
