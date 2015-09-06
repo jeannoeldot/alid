@@ -208,12 +208,16 @@ source $(pwd)/ai-commons
         messages="${fonction}"
         # Si dans VirtualBox
         if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
-            messages+="Dans VirtualBox, éteindre le système,\n"
-            messages+="modifier ordre de démarrage dans Système,\n"
-            messages+="enlever ISO dans Stokage et relancer la VM.\n"
+            messages+="Dans VirtualBox : choisir ÉTEINDRE,\n"
+            messages+="Modifier l'ordre de démarrage dans Système,\n"
+            messages+="Enlever ISO dans Stokage et relancer la VM.\n\n"
+        else
+            messages+="Sur PC Réel : choisir REDÉMARRER,\n"
+            messages+="Modifier l'ordre de démarrage dans UEFI/BIOS,\n"
+            messages+="Enlever la clé USB ou le CD et redémarrer.\n\n"        
         fi
         messages+="Sélectionner l'arrêt ( Redémarrer ou Éteindre ) :"
-        REPLY=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Valider" 16 72 5 \
+        REPLY=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Valider" 20 72 5 \
                 "REDÉMARRER" "-" \
                 "ÉTEINDRE" "-" \
                 3>&1 1>&2 2>&3)
