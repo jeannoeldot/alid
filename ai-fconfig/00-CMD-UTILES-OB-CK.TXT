@@ -64,7 +64,11 @@ $ maj-mirrorlist
 $ maj-repolocal
 
 
-MAJ PSD.SERVICE OU MAJ firefox-extension-https-everywhere
+MAJ PSD.SERVICE
+===============
+$ yaourt -Syua
+
+MAJ firefox-extension-https-everywhere
 OU MAJ freshplayerplugin / chromium-pepper-flash
 =========================================================
 
@@ -73,7 +77,7 @@ OU MAJ freshplayerplugin / chromium-pepper-flash
 
 $ profile-cleaner f
 
-$ sudo systemctl stop psd.service psd-resync.service
+$ sudo systemctl --user stop psd.service psd-resync.service
 
 SI MAJ freshplayerplugin / chromium-pepper-flash
 ------------------------------------------------
@@ -88,17 +92,36 @@ $ rm -i ~/.mozilla/firefox/ljs58rbs.default/pluginreg.dat
 $ yaourt -Syua
 $ yaourt -Syua --aur-url https://aur4.archlinux.org
 
+1 ERE MAJ PSD.SERVICE 5.75-1 -> 6.03-1
+======================================
+CREEER FICHIER $HOME/.config/psd/psd.conf
+==========================================
+$ sudo systemctl stop psd.service psd-resync.service
+$ sudo systemctl disable psd.service psd-resync.service
 
-$ sudo mv /etc/psd.conf.pacnew /etc/psd.conf
-$ sudo nano -w /etc/psd.conf
-:: USERS="jnd"		BROWSERS="firefox"
-!!! SI VERSION Linux kernel >= 3.18.0
-USE_OVERLAYFS="yes"
-$ sudo systemctl daemon-reload
+$ systemctl --user start psd.service
+$ systemctl --user stop psd.service
 
-$ sudo systemctl start psd.service psd-resync.service
-$ sudo systemctl status psd.service psd-resync.service
-$ profile-sync-daemon preview
+$ geany $HOME/.config/psd/psd.conf &
+19  #USE_OVERLAYFS="no"   ==>  A LAISSER
+52  #BROWSERS=""          ==>  BROWSERS="firefox"
+63  #VOLATILE="/tmp"      ==>  A LAISSER
+71  #USE_BACKUPS="yes"    ==>  A LAISSER
+
+$ rm -i $HOME/.config/psd/psd.conf~
+
+$ profile-cleaner f
+
+$ systemctl --user start psd.service
+$ systemctl --user enable psd.service
+
+$ systemctl --user status psd.service
+$ systemctl --user status psd-resync.service
+
+$ psd preview ou	 $ psd parse
+$ cat ~/.mozilla/firefox/profiles.ini
+
+$ sudo rm -i /etc/psd.conf.pacsave
 
 
 MAJ SUDO ET /ETC/SUDOERS.PACNEW

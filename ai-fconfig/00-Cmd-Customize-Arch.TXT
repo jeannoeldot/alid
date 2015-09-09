@@ -1053,17 +1053,30 @@ Shockwave Flash 17.0.0.169
 
 !!! VOIR https://wiki.archlinux.org/index.php/Profile-sync-daemon
 # pacman -Syu profile-sync-daemon profile-cleaner
-# nano -w /etc/psd.conf
-USERS="jnd"
-BROWSERS="firefox"
-!!! SI VERSION Linux kernel >= 3.18.0
-USE_OVERLAYFS="yes"
+!!! EN USER
+============
+CREEER FICHIER $HOME/.config/psd/psd.conf
+==========================================
+$ systemctl --user start psd.service
+$ systemctl --user stop psd.service
 
-# systemctl start psd.service psd-resync.service
-# systemctl enable psd.service psd-resync.service
-# systemctl status psd.service
-# systemctl status psd-resync.service
-$ profile-sync-daemon preview
+$ kwrite $HOME/.config/psd/psd.conf &
+19  #USE_OVERLAYFS="no"   ==>  A LAISSER
+52  #BROWSERS=""          ==>  BROWSERS="firefox"
+63  #VOLATILE="/tmp"      ==>  A LAISSER
+71  #USE_BACKUPS="yes"    ==>  A LAISSER
+
+$ rm -i $HOME/.config/psd/psd.conf~
+
+$ profile-cleaner f
+
+$ systemctl --user start psd.service
+$ systemctl --user enable psd.service
+
+$ systemctl --user status psd.service
+$ systemctl --user status psd-resync.service
+
+$ psd preview  ou  psd parse
 $ cat ~/.mozilla/firefox/profiles.ini
 
 
@@ -1343,24 +1356,29 @@ $ yaourt -Syua turbostat
 
 https://wiki.archlinux.org/index.php/Profile-sync-daemon
 $ yaourt -Syua profile-sync-daemon
-$ sudo nano -w /etc/psd.conf
-$ sudo systemctl start psd.service psd-resync.service
-$ sudo systemctl enable psd.service psd-resync.service
-$ sudo systemctl status psd.service psd-resync.service
-$ profile-sync-daemon parse
-$ cat ~/.mozilla/firefox/profiles.ini
 
-!!! SI VERSION Linux kernel >= 3.18.0
-$ yaourt -Syua profile-sync-daemon
-$ sudo nano -w /etc/psd.conf
-USERS="jnd"
-BROWSERS="firefox"
-USE_OVERLAYFS="yes"
+CREEER FICHIER $HOME/.config/psd/psd.conf
+==========================================
+$ systemctl --user start psd.service
+$ systemctl --user stop psd.service
 
-$ sudo systemctl start psd.service psd-resync.service
-$ sudo systemctl enable psd.service psd-resync.service
-$ sudo systemctl status psd.service psd-resync.service
-$ profile-sync-daemon preview
+$ kwrite $HOME/.config/psd/psd.conf &
+19  #USE_OVERLAYFS="no"   ==>  A LAISSER
+52  #BROWSERS=""          ==>  BROWSERS="firefox"
+63  #VOLATILE="/tmp"      ==>  A LAISSER
+71  #USE_BACKUPS="yes"    ==>  A LAISSER
+
+$ rm -i $HOME/.config/psd/psd.conf~
+
+$ profile-cleaner f
+
+$ systemctl --user start psd.service
+$ systemctl --user enable psd.service
+
+$ systemctl --user status psd.service
+$ systemctl --user status psd-resync.service
+
+$ psd preview ou psd parse
 $ cat ~/.mozilla/firefox/profiles.ini
 
 
