@@ -5,7 +5,9 @@
 # Appelé par ai-b
 #
 # Script d'installation en mode BIOS
-# et ne fonctionne qu'avec la langue FR (fr_FR)
+# Ne fonctionne qu'avec la langue FR (fr_FR)
+#
+# Interface graphique avec whiptail
 #
 #-------------------------------------------------------------------------------
 
@@ -56,7 +58,7 @@
             fonction+="===========================================================\n\n"
             messages="\n${fonction}"
             messages+="/!\ En mode BIOS (PAS UEFI), si dual boot avec Windows :\n"
-            messages+="/!\ NE PAS CHOISIR GPT.\n\n"
+            messages+="    NE PAS CHOISIR GPT.\n\n"
             messages+="Sélectionner le type de table de partitions ( MSDOS ou GPT ) :"
             TYPE_STORAGE_PARTITION=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Valider" 20 72 5 \
                                     "MSDOS" "-" \
@@ -69,7 +71,7 @@
             else
                 messages+="«cgdisk» sera lancé afin de créer les partitions sur «"${HDD_DEVICE}"»\n\n"
                 messages+="/!\ Si GRUB est prévu, une partition de 2 Mio de type EF02\n"
-                messages+="/!\ doit être créée en 1er sur «"${HDD_DEVICE}"».\n"
+                messages+="    doit être créée en 1er sur «"${HDD_DEVICE}"».\n"
             fi
             print_whiptail_msgbox "${messages}" "Continuer"
         }
@@ -102,6 +104,7 @@
         zero_the_drive
         #
         select_storage_partitions
+        #
         if [[ $TYPE_STORAGE_PARTITION == "MSDOS" ]]; then
             cfdisk $HDD_DEVICE
         else
@@ -126,7 +129,7 @@
 #         }
         format_partition() {
             clear
-            echo -e "\n${BGreen}Formatage de la partition ${BYellow}$1${BGreen}...${White}"
+            echo -e "\n${BGreen}Formatage de la partition ${BYellow}$1${BGreen} ...${White}"
 #            umount_partition "$1"
             [[ -z $3 ]] && select_filesystem
             if [[ $1 == $ROOT ]]; then
@@ -142,13 +145,13 @@
             fonction="PARTITIONNEMENT : FORMATAGE DE LA PARTITION «SWAP».\n"
             fonction+="===================================================\n\n"
             messages="${fonction}"
-            messages+="!!! Si Multi Boot, NE PAS FORMATER la partition «SWAP».\n"
+            messages+="!!! Si Multi Boot, NE PAS FORMATER la partition «SWAP».\n\n"
             messages+="Confirmer le formatage de la partition SWAP «"$1"»\n"
             print_whiptail_yesno_no "${messages}" "Formater" "Annuler"
             retour=$?
             if [[ $retour = 0 ]]; then
                 clear
-                echo -e "\n${BGreen}Formatage de la partition SWAP ${BYellow}$1${BGreen}...${White}"
+                echo -e "\n${BGreen}Formatage de la partition SWAP ${BYellow}$1${BGreen} ...${White}"
 #                umount_partition "$1"
                 mkswap $1
                 swapon $1
@@ -167,7 +170,7 @@
             messages+="    ( BIOS_BOOT_PARTITION ou BOOT_PAR_NUM )\n"
             print_whiptail_msgbox "${messages}" "Continuer"
             
-            partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "1d")
+            partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "1d")
         else
             partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
         fi
@@ -187,17 +190,17 @@
         messages+="!!! LA PARTITION «SWAP» EST FACULTATIVE.\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
         if [[ $TYPE_STORAGE_PARTITION == "GPT" ]]; then
-            partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "1d")
+            partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "1d")
         else
             partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
         fi
-        SWAP=$(whiptail --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Choisir" --cancel-button "Annuler" 25 72 5 ${partitions} 3>&1 1>&2 2>&3)
+        L_SWAP=$(whiptail --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Choisir" --cancel-button "Annuler" 25 72 5 ${partitions} 3>&1 1>&2 2>&3)
         retour=$?
         if [[ $retour = 0 ]]; then
-            format_swap_partition "$SWAP"
-            CHOIX_PARTITIONS+=$(echo $SWAP)" = /swap.\n"
+            format_swap_partition "$L_SWAP"
+            CHOIX_PARTITIONS+=$(echo $L_SWAP)" = /swap.\n"
         else
-            SWAP="/dev/sda98"
+            L_SWAP="/dev/sda98"
         fi
 # CHOIX PARTITION HOME FACULTATIF
         fonction="PARTITIONNEMENT : SÉLECTION PARTITION «HOME».\n"
@@ -207,17 +210,17 @@
         messages+="/!\ Toutes les données sur la partition choisie seront perdues.\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
         if [[ $TYPE_STORAGE_PARTITION == "GPT" ]]; then
-            partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v $SWAP | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "1d")
+            partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v $L_SWAP | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "1d")
         else
-            partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v $SWAP | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
+            partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v $L_SWAP | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
         fi
-        HOME=$(whiptail --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Choisir" --cancel-button "Annuler" 25 72 5 ${partitions} 3>&1 1>&2 2>&3)
+        L_HOME=$(whiptail --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Choisir" --cancel-button "Annuler" 25 72 5 ${partitions} 3>&1 1>&2 2>&3)
         retour=$?
         if [[ $retour = 0 ]]; then
-            format_partition "$HOME" "${MOUNTPOINT}/home"
-            CHOIX_PARTITIONS+=$(echo $HOME)" = /home."
+            format_partition "$L_HOME" "${MOUNTPOINT}/home"
+            CHOIX_PARTITIONS+=$(echo $L_HOME)" = /home."
         else
-            HOME="/dev/sda99"
+            L_HOME="/dev/sda99"
         fi
     }
     #}}}
