@@ -189,7 +189,7 @@
         messages+=${CHOIX_PARTITIONS}"\n\n"
         partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
         EFI_DEVICE=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Choisir" 25 72 5 ${partitions} 3>&1 1>&2 2>&3)
-        format_partition "$EFI_DEVICE" "${MOUNTPOINT}/boot/efi"
+        format_efi_partition "$EFI_DEVICE" "${MOUNTPOINT}/boot/efi"
         CHOIX_PARTITIONS+=$(echo $EFI_DEVICE)" = /boot/efi.  "
 # CHOIX PARTITION SWAP FACULTATIF
         fonction="PARTITIONNEMENT : SÉLECTION PARTITION «SWAP».\n"
