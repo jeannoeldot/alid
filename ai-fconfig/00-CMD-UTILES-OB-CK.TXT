@@ -53,7 +53,7 @@ BACKUP
 $ cd && backup
 
 
-AUTRES COMMANDES UTILES
+AUTRES COMMANDES UTILES
 =======================
 $ systemd-analyze && systemd-analyze blame
 
@@ -64,22 +64,57 @@ $ maj-mirrorlist
 $ maj-repolocal
 
 
-MAJ PSD.SERVICE
+MAJ PAQUETS AUR
 ===============
 $ yaourt -Syua
 
+
+MAJ PSD.SERVICE
+===============
+!!! VIDER CACHE
+!!! ARRETER FIREFOX
+
+$ profile-cleaner f
+
+SI DIFF ENTRE /usr/share/psd/psd.conf ET ~/.config/psd/psd.conf
+---------------------------------------------------------------
+$ systemctl --user stop psd.service
+$ rm -i ~/.config/psd/psd.conf
+
+$ systemctl --user daemon-reload
+
+$ systemctl --user start psd.service
+$ systemctl --user stop psd.service
+
+$ geany $HOME/.config/psd/psd.conf &
+19  #USE_OVERLAYFS="no"   ==>  A LAISSER
+52  #BROWSERS=""          ==>  BROWSERS="firefox"
+63  #VOLATILE="/tmp"      ==>  A LAISSER
+71  #USE_BACKUPS="yes"    ==>  A LAISSER
+
+$ rm -i $HOME/.config/psd/psd.conf~
+
+$ systemctl --user start psd.service
+
+$ systemctl --user status psd.service
+$ systemctl --user status psd-resync.service
+
+$ psd preview ou	 $ psd parse
+$ cat ~/.mozilla/firefox/profiles.ini
+
+
 MAJ firefox-extension-https-everywhere
-OU MAJ freshplayerplugin / chromium-pepper-flash
+OU MAJ freshplayerplugin / chromium-pepper-flash
 =========================================================
 
-!!! VIDER CACHE
+!!! VIDER CACHE
 !!! ARRETER FIREFOX
 
 $ profile-cleaner f
 
 $ sudo systemctl --user stop psd.service psd-resync.service
 
-SI MAJ freshplayerplugin / chromium-pepper-flash
+SI MAJ freshplayerplugin / chromium-pepper-flash
 ------------------------------------------------
 $ yaourt -Syua chromium-pepper-flash
 $ yaourt -Syua freshplayerplugin
@@ -88,9 +123,6 @@ $ yaourt -Syua freshplayerplugin
 $ cat ~/.mozilla/firefox/profiles.ini
 $ rm -i ~/.mozilla/firefox/ljs58rbs.default/pluginreg.dat
 
-
-$ yaourt -Syua
-$ yaourt -Syua --aur-url https://aur4.archlinux.org
 
 1 ERE MAJ PSD.SERVICE 5.75-1 -> 6.03-1
 ======================================
@@ -124,9 +156,9 @@ $ cat ~/.mozilla/firefox/profiles.ini
 $ sudo rm -i /etc/psd.conf.pacsave
 
 
-MAJ SUDO ET /ETC/SUDOERS.PACNEW
+MAJ SUDO ET /ETC/SUDOERS.PACNEW
 ===============================
-!!! EN ROOT
+!!! EN ROOT
 # mv -v /etc/sudoers.pacnew /etc/sudoers
 # sed -i '/%wheel ALL=(ALL) ALL/s/^# //' /etc/sudoers
 # echo -e '\n## My Defaults timestamp_timeout = 20 minutes' >> /etc/sudoers
@@ -134,9 +166,9 @@ MAJ SUDO ET /ETC/SUDOERS.PACNEW
 # sed '/#/d;/^$/d' /etc/sudoers
 
 
-MAJ GLIBC ET /etc/locale.gen.pacnew
+MAJ GLIBC ET /etc/locale.gen.pacnew
 ===================================
-!!! EN ROOT
+!!! EN ROOT
 # mv -v /etc/locale.gen.pacnew /etc/locale.gen
 # nano /etc/locale.gen
 !!! Décommenter :
@@ -172,6 +204,8 @@ $ coredumpctl
 
 ANCIENS
 ===========
+$ yaourt -Syua --aur-url https://aur4.archlinux.org
+
 !!! AU 25/01/2014
 !!! MAJ lib32-jack
 # pacman -Syu --ignore jack

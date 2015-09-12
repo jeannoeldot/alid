@@ -54,7 +54,7 @@
             local messages=""
             local fonction="PARTITIONNEMENT : SÉLECTION DU TYPE DE TABLE DE PARTITIONS.\n"
             fonction+="===========================================================\n\n"
-            messages="${fonction}"
+            messages="\n${fonction}"
             messages+="/!\ En mode BIOS (PAS UEFI), si dual boot avec Windows :\n"
             messages+="/!\ NE PAS CHOISIR GPT.\n\n"
             messages+="Sélectionner le type de table de partitions ( MSDOS ou GPT ) :"
@@ -77,7 +77,7 @@
             local messages=""
             local fonction="PARTITIONNEMENT : SÉLECTION DU DISQUE À PARTITIONNER.\n"
             fonction+="=====================================================\n\n"
-            messages="${fonction}"
+            messages="\n${fonction}"
             local liste_disque_present=$(LC_ALL=C parted -sl 2> /dev/null | grep -E 'Mod|/dev/sd[a-z]' | sed -e "s/\(^Disk.*\)/\1\n/;s/Model/Modèle/;s/Disk/Disque/")
             messages+="Liste des Disques présents dans le PC :\n"
             messages+="---------------------------------------\n"
@@ -174,7 +174,7 @@
 # CHOIX PARTITION ROOT OBLIGATOIRE
         fonction="PARTITIONNEMENT : SÉLECTION PARTITION «ROOT».\n"
         fonction+="=============================================\n\n"
-        messages="${fonction}"
+        messages="\n${fonction}"
         messages+="/!\ Toutes les données sur la partition choisie seront perdues.\n"
         ROOT=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Choisir" 25 72 5 ${partitions} 3>&1 1>&2 2>&3)
         ROOT_DEVICE=$(echo $ROOT | sed 's/[0-9]//')
@@ -183,7 +183,7 @@
 # CHOIX PARTITION SWAP FACULTATIF
         fonction="PARTITIONNEMENT : SÉLECTION PARTITION «SWAP».\n"
         fonction+="=============================================\n\n"
-        messages="${fonction}"
+        messages="\n${fonction}"
         messages+="!!! LA PARTITION «SWAP» EST FACULTATIVE.\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
         if [[ $TYPE_STORAGE_PARTITION == "GPT" ]]; then
@@ -202,7 +202,7 @@
 # CHOIX PARTITION HOME FACULTATIF
         fonction="PARTITIONNEMENT : SÉLECTION PARTITION «HOME».\n"
         fonction+="=============================================\n\n"
-        messages="${fonction}"
+        messages="\n${fonction}"
         messages+="!!! LA PARTITION «HOME» EST FACULTATIVE.\n\n"
         messages+="/!\ Toutes les données sur la partition choisie seront perdues.\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"

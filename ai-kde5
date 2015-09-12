@@ -71,7 +71,7 @@
             if [[ $OPTION == o ]]; then
                 liste_des_pc_hotes=("PC-John" "PC-Jnd")
                 PS3="$prompt1"
-                echo -e "Choisir le PC Hôte ( PC-John Windows 7 ou PC-Jnd Arch )"
+                echo -e "${BGreen}Choisir le PC Hôte ( PC-John Windows 7 ou PC-Jnd Arch ) :${White}${BWhite}"
                 select OPT in "${liste_des_pc_hotes[@]}"; do
                     case "$REPLY" in
                         1)
@@ -84,6 +84,7 @@
                             ;;
                         *)
                             invalid_option
+                            echo -e "${BGreen}Choisir le PC Hôte ( PC-John Windows 7 ou PC-Jnd Arch ) :${White}${BWhite}"
                             ;;
                     esac
                 done
@@ -438,7 +439,8 @@
                     fi
                     ;;
                 2)
-                    package_install "gimp"
+                    package_install "gimp libopenraw"
+                    pacman -D --asdeps libopenraw
                     package_install "webkitgtk2 potrace gimp-ufraw gimp-plugin-fblur gimp-plugin-gmic gimp-plugin-lqr gimp-plugin-mathmap gimp-plugin-wavelet-decompose gimp-plugin-wavelet-denoise gimp-refocus"
                     ;;
                 3)

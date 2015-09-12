@@ -1406,20 +1406,15 @@ SUR HUBIC
 ---------
 https://hubic.com/home/browser/#default/00-SAVE-ARCH-OB-CK/PAQUETS-AUR
 - ghnomix-icon-theme-1.3-1-any.pkg.tar.xz
-- awoken-icons-2.5.2-1-any.pkg.tar.xz
 
 
 $ cp -v /0-DataLinux/00-ARCH_2-OB-CK/0-Fichiers-importants/ghnomix-icon-theme-1.3-1-any.pkg.tar.xz /home/jnd/00-repolocal/
-
-$ cp -v /0-DataLinux/00-ARCH_2-OB-CK/0-Fichiers-importants/awoken-icons-2.5.2-1-any.pkg.tar.xz /home/jnd/00-repolocal/
 
 $ cd && maj-repolocal
 
 $ sudo pacman -Syyu
 
 $ sudo pacman -Syu ghnomix-icon-theme
-
-$ sudo pacman -Syu awoken-icons
 
 !!! VOIR Intallation de mes paquets
 -----------------------------------
@@ -1596,6 +1591,11 @@ OU
 ====================================================================================================
 ANCIEN
 ==========================================================
+
+- awoken-icons-2.5.2-1-any.pkg.tar.xz
+$ cp -v /0-DataLinux/00-ARCH_2-OB-CK/0-Fichiers-importants/awoken-icons-2.5.2-1-any.pkg.tar.xz /home/jnd/00-repolocal/
+
+$ sudo pacman -Syu awoken-icons
 
 !!!! INUTILE DEPUIS VERSION PSD = 5.73-1
 # modprobe overlay

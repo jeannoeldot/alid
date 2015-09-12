@@ -68,24 +68,25 @@ source $(pwd)/ai-commons
         check_ping_ok
         if [[ $? -ne 0 ]]; then
             print_title "RÉSEAU - Mise en fonction du réseau."
-            type_ip_networks=("IP-Dynamique" "IP-Statique");
-            PS3="$prompt1"
-            echo -e "Indiquer la configuration du réseau ( IP Dynamique ou IP Statique ):"
-            select OPT in "${type_ip_networks[@]}"; do
-                case "$REPLY" in
-                    1)
-                        CURRENT_TYPE_IP="dhcpcd"
-                        break
-                        ;;
-                    2)
-                        CURRENT_TYPE_IP="network_ip_statique"
-                        break
-                        ;;
-                    *)
-                        invalid_option
-                        ;;
-                esac
-            done
+#             type_ip_networks=("IP-Dynamique" "IP-Statique");
+#             PS3="$prompt1"
+#             echo -e "Indiquer la configuration du réseau ( IP Dynamique ou IP Statique ):"
+#             select OPT in "${type_ip_networks[@]}"; do
+#                 case "$REPLY" in
+#                     1)
+#                         CURRENT_TYPE_IP="dhcpcd"
+#                         break
+#                         ;;
+#                     2)
+#                         CURRENT_TYPE_IP="network_ip_statique"
+#                         break
+#                         ;;
+#                     *)
+#                         invalid_option
+#                         ;;
+#                 esac
+#             done
+            CURRENT_TYPE_IP="dhcpcd"
             ret_ping=9
             until [[ $ret_ping -eq 0 ]];
                 do
@@ -93,7 +94,7 @@ source $(pwd)/ai-commons
                     check_ping_ok
                     ret_ping=$?
             done
-            echo -e "\n${BGreen}Connexion à Internet réalisée avec succès${White}"
+            echo -e "\n${BGreen}Connexion à Internet réalisée avec succès.${White}"
             pause_function
         else
             print_info_cyan "Connexion à Internet réalisée avec succès"
