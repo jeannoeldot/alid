@@ -256,6 +256,7 @@
         echo " 9) $(menu_item "pacnew_scripts")"
         echo "10) $(menu_item "mesa-demos")"
         echo "11) $(menu_item "syslog-ng")"
+        echo "12) $(menu_item "qt5ct")"
         echo ""
         echo " F) FINI"
         echo ""
@@ -318,6 +319,9 @@
                     systemctl enable syslog-ng.service
                     gpasswd -a ${USERNAME} log
                     ;;
+                12)
+                    package_install "qt5ct"
+                    ;;
                 "f")
                     break
                     ;;
@@ -353,7 +357,7 @@
                     package_install "kdevelop"
                     ;;
                 2)
-                    package_install "qtcreator qt qt5-doc libxkbcommon-x11 qt5ct"
+                    package_install "qtcreator qt qt5-doc libxkbcommon-x11"
                     ;;
                 3)
                     package_install "devtools"

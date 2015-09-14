@@ -5,12 +5,9 @@
 #
 # DANS CHROOT
 #
-# ne fonctionne qu'avec la langue FR (fr_FR)
-# Created by me for me
+# Ne fonctionne qu'avec la langue FR (fr_FR)
 #
-# Thanks helmuthdu mailto: helmuthdu[at]gmail[dot]com
-# https://github.com/helmuthdu/aui
-# Created by helmuthdu mailto: helmuthdu[at]gmail[dot]com
+# Interface graphique avec whiptail
 
 source $(pwd)/ai-commons
 
@@ -41,8 +38,14 @@ source $(pwd)/ai-commons
             eval $(grep '^EFI_DEVICE=' "/root/variables.ali")
             EFI_DEVICE="${EFI_DEVICE}"
         else
-            echo -e "${BRed}ERREUR :${White} Le fichier variables.ali n'existe pas. ARRET immédiat."
-            pause_function
+            local messages=""
+            local fonction="LECTURE FICHIER «variables.ali».\n"
+            fonction+="================================\n\n"
+            messages="${fonction}"
+            messages+="/!\ ERREUR :\n"
+            messages+="    Le fichier «variables.ali» n'existe pas.\n"
+            messages+="    ARRÊT immédiat.\n"
+            print_whiptail_msgbox "${messages}" "OK"
             exit 1
         fi
     }

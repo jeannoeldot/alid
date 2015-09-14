@@ -307,6 +307,12 @@
       <startupnotify><enabled>yes</enabled></startupnotify>
     </action>
   </item>
+  <item label="Paramètres Qt5" icon="/usr/share/pixmaps/obconf.png">
+    <action name="Execute">
+      <command>qt5ct</command>
+      <startupnotify><enabled>yes</enabled></startupnotify>
+    </action>
+  </item>
 </menu>
 
 <menu id="apps-games-menu" label="Jeux">
