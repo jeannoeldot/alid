@@ -81,7 +81,7 @@ source $(pwd)/ai-commons
         # Fin ou Erreur
         if [[ $retour = 0 ]]; then
             messages="${fonction}"
-            messages+="Succès de la configuration du fichier «/etc/pacman.d/mirrorlist.»\n\n"
+            messages+="Succès de la configuration du fichier «/etc/pacman.d/mirrorlist».\n\n"
             messages+="Visualiser et/ou éditer le fichier mirrorlist avec "${EDITOR}"\n"
             print_whiptail_yesno "${messages}" "Éditer" "Continuer"
             retour=$?
@@ -90,7 +90,7 @@ source $(pwd)/ai-commons
             fi           
         else
             messages="${fonction}"
-            messages+="Échec de la configuration du fichier «/etc/pacman.d/mirrorlist.»\n\n"
+            messages+="Échec de la configuration du fichier «/etc/pacman.d/mirrorlist».\n\n"
             messages+="Edition manuelle du fichier mirrorlist avec "${EDITOR}"\n"
             print_whiptail_msgbox "${messages}" "Éditer"
             mv /etc/pacman.d/mirrorlist.original /etc/pacman.d/mirrorlist

@@ -52,16 +52,19 @@ source $(pwd)/ai-commons
     #}}}
     #CONFIGURE FSTAB {{{
     configure_fstab() {
-        print_title "FSTAB - https://wiki.archlinux.org/index.php/Fstab"
-        print_info "Configuration du fichier /etc/fstab : si HDD ou SSD, si GPT, si UEFI, TRIM, ..."
+        local retour=9
+        local messages=""
+        local messages_if=""
+        local fonction="CONFIGURATION DU FICHIER «/etc/fstab».\n"
+        fonction+="======================================\n\n"
         #
         if [[ ${TYPE_STORAGE_PARTITION} == "GPT" ]]; then
             local num_ligne_swap=$(grep -n "swap" "/etc/fstab" | cut -f1 -d:)
             if [[ "${num_ligne_swap}" != "" ]]; then
-                print_info_cyan "TYPE DE PARTITION GPT : Ligne swap commentée."
+                messages_if+="Type de partition GPT : Ligne swap commentée.\n"
                 sed -i "${num_ligne_swap}s/^UUID/#UUID/" /etc/fstab
             else
-                print_info_cyan "Aucune partion de swap."
+                messages_if+="Aucune partition de swap.\n"
             fi
         fi
         #
@@ -69,7 +72,7 @@ source $(pwd)/ai-commons
             if [[ ${IS_HDD_OR_SSD} == "SSD" ]]; then
                 local num_ligne_vfat=$(grep -n "vfat" "/etc/fstab" | cut -f1 -d:)
                 if [[ "${num_ligne_vfat}" != "" ]]; then
-                    print_info_cyan "UEFI et SSD : Options pour vfat : rw,relatime,discard."
+                    messages_if+="UEFI et SSD : Options pour vfat : rw,relatime,discard.\n"
                     sed -i "${num_ligne_vfat}s/rw,relatime/rw,relatime,discard/" /etc/fstab
                 fi
             fi
@@ -78,40 +81,43 @@ source $(pwd)/ai-commons
         if [[ ${IS_HDD_OR_SSD} == "SSD" ]]; then
             # rotational = 0 ==> SSD
             # https://wiki.archlinux.org/index.php/Solid_State_Drives#TRIM
-            print_info "SSD + TRIM - https://wiki.archlinux.org/index.php/Solid_State_Drives#TRIM"
-            print_info_cyan "DISCARD : Activer TRIM par option de montage. FSTRIM : Appliquer TRIM via «fstrim» périodique."
-            trim_list=("DISCARD" "FSTRIM");
-            PS3="$prompt1"
-            echo -e "Configurer le TRIM en se basant sur :"
-            select OPT in "${trim_list[@]}"; do
-                case "$REPLY" in
-                    1)
-                        print_info_cyan "SSD + TRIM : Options pour ext4 : defaults,relatime,discard."
-                        sed -i "s/rw,relatime,data=ordered/defaults,relatime,discard/g" /etc/fstab
-                        break
-                        ;;
-                    2)
-                        print_info_cyan "SSD : Options pour ext4 : defaults,relatime."
-                        sed -i "s/rw,relatime,data=ordered/defaults,relatime/g" /etc/fstab
-                        print_info_cyan "SSD + TRIM : Activation de fstrim.timer."
-                        systemctl enable fstrim.timer
-                        break
-                        ;;
-                    *)
-                        invalid_option
-                        ;;
-                esac
-            done
+            messages="\n${fonction}"
+            messages+="Activation du Trim ( option discard ou service fstrim ).\n"
+            messages+="--------------------------------------------------------\n\n"
+            messages+="Configurer le TRIM en se basant sur :\n"
+            REPLY=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Valider" 20 72 5 \
+                    "DISCARD" "TRIM par option de montage." \
+                    "FSTRIM" "TRIM par service «fstrim»." \
+                    3>&1 1>&2 2>&3)
+            case "$REPLY" in
+                "DISCARD")
+                    messages_if+="SSD + TRIM : Options pour ext4 : defaults,relatime,discard.\n"
+                    sed -i "s/rw,relatime,data=ordered/defaults,relatime,discard/g" /etc/fstab
+                    ;;
+                "FSTRIM")
+                    messages_if+="SSD : Options pour ext4 : defaults,relatime.\n"
+                    messages_if+="SSD + TRIM : Activation de fstrim.timer.\n"
+                    sed -i "s/rw,relatime,data=ordered/defaults,relatime/g" /etc/fstab
+                    systemctl enable fstrim.timer
+                    ;;
+            esac
         else
             # rotational = 1 ==> HDD
-            print_info_cyan "HDD : Options pour ext4 : defaults,relatime."
+            messages_if+="HDD : Options pour ext4 : defaults,relatime.\n"
             sed -i "s/rw,relatime,data=ordered/defaults,relatime/g" /etc/fstab
         fi
         #
-        echo -e "\nVérification du fichier /etc/fstab avec $EDITOR"
-        pause_function
-        $EDITOR /etc/fstab
-
+        messages="${fonction}"
+        messages+="${messages_if}"
+        print_whiptail_msgbox "${messages}" "Continuer"
+        #
+        messages="${fonction}"
+        messages+="Visualiser et/ou éditer le fichier «/etc/fstab» avec "${EDITOR}"\n"
+        print_whiptail_yesno "${messages}" "Éditer" "Continuer"
+        retour=$?
+        if [[ $retour = 0 ]]; then
+            ${EDITOR} /etc/fstab
+        fi
     }
     #}}}
     #CONFIGURE VCONSOLE.CONF {{{
