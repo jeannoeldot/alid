@@ -112,7 +112,7 @@ source $(pwd)/ai-commons
         print_whiptail_msgbox "${messages}" "Continuer"
         #
         messages="${fonction}"
-        messages+="Visualiser et/ou éditer le fichier «/etc/fstab» avec "${EDITOR}"\n"
+        messages+="Visualiser/Éditer le fichier «/etc/fstab» avec «"${EDITOR}"» ?\n"
         print_whiptail_yesno "${messages}" "Éditer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
@@ -122,15 +122,28 @@ source $(pwd)/ai-commons
     #}}}
     #CONFIGURE VCONSOLE.CONF {{{
     configure_vconsole_conf() {
-        print_title "KEYMAP - https://wiki.archlinux.org/index.php/KEYMAP"
-        print_info "La variable KEYMAP est spécifiée dans le fichier /etc/vconsole.conf. Elle définit le type de clavier dans les consoles virtuelles. Les fichiers de type de clavier sont fournis par le paquet kbd."
+        local retour=9
+        local messages=""
+        local messages_if=""
+        local fonction="CONFIGURATION DU FICHIER «/etc/vconsole.conf».\n"
+        fonction+="==============================================\n\n"
         echo "KEYMAP=$KEYMAP" > /etc/vconsole.conf
 #        echo "FONT=Lat2-Terminus16" >> /etc/vconsole.conf
         echo "FONT=lat9w-16" >> /etc/vconsole.conf
 #        echo "FONT_MAP=8859-15_to_uni" >> /etc/vconsole.conf
-        echo "Vérification et/ou modification du fichier /etc/vconsole.conf avec $EDITOR"
-        pause_function
-        $EDITOR /etc/vconsole.conf
+        messages="${fonction}"
+        messages+="Définition du type de clavier dans les consoles virtuelles.\n\n"
+        messages+="Clavier : variable KEYMAP = "$KEYMAP"\n"
+        messages+="Police  : variable FONT   = lat9w-16\n"
+        print_whiptail_msgbox "${messages}" "Continuer"
+        #
+        messages="${fonction}"
+        messages+="Visualiser/Éditer le fichier «/etc/vconsole.conf» avec «"${EDITOR}"» ?\n"
+        print_whiptail_yesno "${messages}" "Éditer" "Continuer"
+        retour=$?
+        if [[ $retour = 0 ]]; then
+            ${EDITOR} /etc/vconsole.conf
+        fi           
     }
     #}}}
     #CONFIGURE PACMAN.CONF {{{

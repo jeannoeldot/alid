@@ -82,7 +82,7 @@ source $(pwd)/ai-commons
         if [[ $retour = 0 ]]; then
             messages="${fonction}"
             messages+="Succès de la configuration du fichier «/etc/pacman.d/mirrorlist».\n\n"
-            messages+="Visualiser et/ou éditer le fichier mirrorlist avec "${EDITOR}"\n"
+            messages+="Visualiser/Éditer le fichier «mirrorlist» avec «"${EDITOR}"» ?\n"
             print_whiptail_yesno "${messages}" "Éditer" "Continuer"
             retour=$?
             if [[ $retour = 0 ]]; then
@@ -139,7 +139,7 @@ source $(pwd)/ai-commons
         fonction+="=============================================\n\n"
         messages="${fonction}"
         genfstab -U -p ${MOUNTPOINT} >> ${MOUNTPOINT}/etc/fstab
-        messages+="Visualiser et/ou éditer le fichier «/etc/fstab» avec "${EDITOR}"\n"
+        messages+="Visualiser/Éditer le fichier «/etc/fstab» avec «"${EDITOR}"» ?\n"
         print_whiptail_yesno "${messages}" "Éditer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
