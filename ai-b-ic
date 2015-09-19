@@ -188,22 +188,30 @@ source $(pwd)/ai-commons
     #}}}
     #CONFIGURE TIMEZONE {{{
     configure_timezone() {
-        print_title "FUSEAU HORAIRE - https://wiki.archlinux.org/index.php/Timezone"
-        print_info "Dans un système d'exploitation, la date et l'heure sont détérminées en fonction de l'horloge matérielle, de l'échelle de temps (UTC ou locale), du fuseau horaire et enfin de l'heure d'été / hiver."
-        print_info "Le fuseau horaire sélectionné est : "$FR_ZONE"/"$FR_SUBZONE
-        ZONE=$FR_ZONE
-        SUBZONE=$FR_SUBZONE
+        local messages=""
+        local fonction="CONFIGURATION DU FICHIER «/etc/localtime».\n"
+        fonction+="==========================================\n\n"
+        messages="${fonction}"
+        messages+="Le fuseau horaire sélectionné est : "${FR_ZONE}"/"${FR_SUBZONE}".\n\n"
+        print_whiptail_msgbox "${messages}" "Continuer"
+        ZONE=${FR_ZONE}
+        SUBZONE=${FR_SUBZONE}
+        clear
+        echo -e "\n${BGreen}Création lien symbolique ${BYellow}${ZONE}/${SUBZONE}${BGreen} ...${White}"
         ln -sf /usr/share/zoneinfo/${ZONE}/${SUBZONE} /etc/localtime
-        pause_function
     }
     #}}}
     #CONFIGURE HARDWARECLOCK {{{
     configure_hardwareclock() {
-        print_title "HEURE MATÉRIELLE - https://wiki.archlinux.org/index.php/Internationalization"
-        print_info "Cela se règle dans /etc/adjtime. Régler le mode horloge matérielle uniformément entre vos systèmes d'exploitation sur la même machine. Sinon, ils vont écraser le temps et entraîner un décalage de horloge (ce qui peut provoquer une dérive du temps)."
-        print_info "Le mode horloge matérielle sélectionné est : UTC"
+        local messages=""
+        local fonction="CONFIGURATION DE L'HEURE MATÉRIELLE.\n"
+        fonction+="====================================\n\n"
+        messages="${fonction}"
+        messages+="Le mode horloge matérielle sélectionné est : UTC.\n\n"
+        print_whiptail_msgbox "${messages}" "Continuer"
+        clear
+        echo -e "\n${BGreen}Configuration de l'horloge matérielle en ${BYellow}UTC${BGreen} ...${White}"
         hwclock --systohc --utc
-        pause_function
     }
     #}}}
     #CONFIGURE LOCALE {{{
