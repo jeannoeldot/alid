@@ -148,6 +148,12 @@ source $(pwd)/ai-commons
     #CONFIGURE PACMAN.CONF {{{
     configure_pacman_conf() {
         #ADD COLOR TO PACMAN.CONF
+        local messages=""
+        local fonction="CONFIGURATION DU FICHIER «/etc/pacman.conf».\n"
+        fonction+="===========================================\n\n"
+        messages="${fonction}"
+        messages+="Activation de l'option «color».\n\n"
+        print_whiptail_msgbox "${messages}" "Continuer"
         sed -i "/^#Color/c\Color" /etc/pacman.conf
     }
     #}}}
@@ -216,17 +222,31 @@ source $(pwd)/ai-commons
     #}}}
     #CONFIGURE LOCALE {{{
     configure_locale() {
-        print_title "LOCALE - https://wiki.archlinux.org/index.php/Locale"
-        print_info "Les paramètres régionaux sont utilisés sous Linux pour définir quelle langue l'utilisateur utilise. Régler des paramètres régionaux corrects est particulièrement important si la langue contient des caractères non-ASCII."
-        print_info "La Locale sélectionnée est : "$FR_LOCALE
-        LOCALE=$FR_LOCALE
+        local retour=9
+        local messages=""
+        local fonction="CONFIGURATION DU FICHIER «/etc/locale.conf».\n"
+        fonction+="============================================\n\n"
+        messages="${fonction}"
+        messages+="Définition de la langue utilisée dans le système.\n\n"
+        messages+="La langue locale sélectionnée est : "${FR_LOCALE}".\n"
+        print_whiptail_msgbox "${messages}" "Continuer"
+        LOCALE=${FR_LOCALE}
         LOCALE_8859="$LOCALE ISO-8859"
         LOCALE_UTF8="$LOCALE.UTF-8"
-        echo "LANG=$LOCALE_UTF8" > /etc/locale.conf
+        echo "LANG=${LOCALE_UTF8}" > /etc/locale.conf
         echo "LC_COLLATE=C" >> /etc/locale.conf
+        messages="${fonction}"
+        messages+="Visualiser/Éditer le fichier «/etc/locale.conf» avec «"${EDITOR}"» ?\n"
+        print_whiptail_yesno "${messages}" "Éditer" "Continuer"
+        retour=$?
+        if [[ $retour = 0 ]]; then
+            ${EDITOR} /etc/locale.conf
+        fi
+        #
+        clear
+        echo -e "\n${BGreen}Génération de la langue locale utilisée ${BYellow}${LOCALE}${BGreen} ...${White}"
         sed -i "/${LOCALE}/s/^#//" /etc/locale.gen
         locale-gen
-        pause_function
     }
     #}}}
     #CONFIGURE INTEL-UCODE {{{
