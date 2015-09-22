@@ -165,8 +165,17 @@ source $(pwd)/ai-commons
         fonction+="=========================================\n\n"
         messages="\n${fonction}"
         messages+="Entrer un nom d'hôte pour identifier la machine :\n"
-        L_HN=$(whiptail --nocancel --title "${TITRE_BOX_W}" --inputbox "${messages}" --ok-button "Valider" 16 72 myarch 3>&1 1>&2 2>&3)
+        until [[ $retour = 0 ]];
+            do
+                L_HN=$(whiptail --nocancel --title "${TITRE_BOX_W}" --inputbox "${messages}" --ok-button "Valider" 16 72 myarch 3>&1 1>&2 2>&3)
+                if [[ ${L_HN} == "" ]]; then
+                    retour=9
+                else
+                    retour=0
+                fi
+            done
         echo "$L_HN" > /etc/hostname
+        retour=9
         messages="${fonction}"
         messages+="Visualiser/Éditer le fichier «/etc/hostname» avec «"${EDITOR}"» ?\n"
         print_whiptail_yesno "${messages}" "Éditer" "Continuer"
@@ -180,15 +189,18 @@ source $(pwd)/ai-commons
         # Ecrire la valeur hostname dans /etc/hosts
         sed -i "/127.0.0.1/s/$/ ${L_HN}/" /etc/hosts
         sed -i "/::1/s/$/ ${L_HN}/" /etc/hosts
+        retour=9
         fonction="MODIFICATION DU FICHIER «/etc/hosts».\n"
         fonction+="=====================================\n\n"
         messages="${fonction}"
-        messages+="Nom d'hôte choisi : "${L_HN}"\n\n"        
-        messages+="Visualiser/Éditer le fichier «/etc/hosts» avec «"${EDITOR}"» ?\n"
-        print_whiptail_yesno "${messages}" "Éditer" "Continuer"
+        messages+="Nom d'hôte choisi : "${L_HN}"\n\n"
+        messages+="Visualiser le fichier «/etc/hosts» ?\n"
+        print_whiptail_yesno "${messages}" "Visualiser" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
-            ${EDITOR} /etc/hosts
+            clear
+            echo -e "\n${BGreen}Visualisation du fichier ${BYellow}/etc/hosts${BGreen} :${White}"
+            cat /etc/hosts
         fi
     }
     #}}}
