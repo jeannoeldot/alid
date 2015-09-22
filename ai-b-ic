@@ -261,18 +261,6 @@ source $(pwd)/ai-commons
         locale-gen
     }
     #}}}
-    #CONFIGURE INTEL-UCODE {{{
-    configure_intel_ucode() {
-        print_title "MICROCODE - https://wiki.archlinux.org/index.php/microcode"
-        print_info "intel-ucode permet de mettre à jour le microcode des processeurs Intel."
-        if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
-            pacman -Syu intel-ucode
-        else
-            print_info_cyan "Installation dans VirtualBox : PAS d'activion des mises à jour du microcode."
-        fi
-        pause_function
-    }
-    #}}}
     #CONFIGURE MKINITCPIO {{{
     configure_mkinitcpio() {
         print_title "MKINITCPIO - https://wiki.archlinux.org/index.php/Mkinitcpio"
@@ -436,7 +424,6 @@ source $(pwd)/ai-commons
     configure_timezone
     configure_hardwareclock
     configure_locale
-    configure_intel_ucode
     configure_mkinitcpio
     # ai-b-bios-ic ou ai-b-uefi-ic
     install_bootloader
