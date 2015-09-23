@@ -215,7 +215,7 @@ source $(pwd)/ai-commons
         ZONE=${FR_ZONE}
         SUBZONE=${FR_SUBZONE}
         clear
-        echo -e "\n${BGreen}Création lien symbolique ${BYellow}${ZONE}/${SUBZONE}${BGreen} ...${White}"
+        echo -e "\n${BGreen}Création lien symbolique ${BYellow}${ZONE}/${SUBZONE}${BGreen}...${White}"
         ln -sf /usr/share/zoneinfo/${ZONE}/${SUBZONE} /etc/localtime
     }
     #}}}
@@ -228,7 +228,7 @@ source $(pwd)/ai-commons
         messages+="Le mode horloge matérielle sélectionné est : UTC.\n\n"
         print_whiptail_msgbox "${messages}" "Continuer"
         clear
-        echo -e "\n${BGreen}Configuration de l'horloge matérielle en ${BYellow}UTC${BGreen} ...${White}"
+        echo -e "\n${BGreen}Configuration de l'horloge matérielle en ${BYellow}UTC${BGreen}...${White}"
         hwclock --systohc --utc
     }
     #}}}
@@ -255,43 +255,47 @@ source $(pwd)/ai-commons
             ${EDITOR} /etc/locale.conf
         fi
         #
-        clear
-        echo -e "\n${BGreen}Génération de la langue locale utilisée ${BYellow}${LOCALE}${BGreen} ...${White}"
+        echo -e "\n${BGreen}Génération de la langue locale utilisée ${BYellow}${LOCALE}${BGreen}...${White}"
         sed -i "/${LOCALE}/s/^#//" /etc/locale.gen
         locale-gen
     }
     #}}}
     #CONFIGURE MKINITCPIO {{{
     configure_mkinitcpio() {
-        print_title "MKINITCPIO - https://wiki.archlinux.org/index.php/Mkinitcpio"
-        print_info "mkinitcpio est un script Bash utilisé pour créer un environnement virtuel initial."
+        local retour=9
+        local messages=""
+        local fonction="CONFIGURATION DU FICHIER «/etc/mkinitcpio.conf».\n"
+        fonction+="================================================\n\n"
+        messages="${fonction}"
         # Remplace udev par systemd. Rajoute keymap
-        print_info_cyan "HOOKS : Remplacement de udev par systemd. Ajout de keymap"
-        # Inscrit : # Suite MAJ systemd 207-3
-        sed -i "/^HOOKS=/i\# Suite MAJ systemd 207-3" /etc/mkinitcpio.conf
+        messages+="HOOKS : Remplacement de udev par systemd. Ajout de keymap.\n"
         # lecture ligne HOOKS=
         local contenu_hooks=$(sed -n "/^HOOKS=/p" /etc/mkinitcpio.conf)
         # Commente la ligne HOOKS= originale
         sed -i "/^HOOKS=/i\#${contenu_hooks}" /etc/mkinitcpio.conf
         # Inscrit modifs
         if [[ $IS_VAR_SEPARATE -eq 1 ]]; then
-            print_info_cyan "HOOKS : Ajout de shutdown car partition /var séparée."
+            messages+="HOOKS : Ajout de shutdown car partition /var séparée.\n\n"
             sed -i "/^HOOKS=/s/base udev/base systemd/g;/^HOOKS=/s/keyboard fsck/keyboard keymap fsck shutdown/g" /etc/mkinitcpio.conf
-            echo -e "Exemple: MODULES=\"... reiserfs\", HOOKS=\"base systemd ... keymap fsck shutdown\""
         else
+            messages+="\n"
             sed -i "/^HOOKS=/s/base udev/base systemd/g;/^HOOKS=/s/keyboard fsck/keyboard keymap fsck/g" /etc/mkinitcpio.conf
-            echo -e "Exemple: HOOKS=\"base systemd ... keymap fsck\""
         fi
         # COMPRESSION="cat" ( PAS DE COMPRESSION )
-        print_info_cyan "COMPRESSION : Ajout de COMPRESSION=\"cat\""
+        messages+="COMPRESSION : Ajout de COMPRESSION=\"cat\" (PAS DE COMPRESSION)\n"
         sed -i "/^#COMPRESSION=\"gzip\"/i\COMPRESSION=\"cat\"" /etc/mkinitcpio.conf
-        echo -e "Exemple: COMPRESSION=\"cat\""
+        print_whiptail_msgbox "${messages}" "Continuer"
         #
-        echo -e "\nVérification du fichier mkinitcpio.conf avec $EDITOR"
-        pause_function
-        $EDITOR /etc/mkinitcpio.conf
+        messages="${fonction}"
+        messages+="Visualiser/Éditer le fichier «/etc/mkinitcpio.conf» avec «"${EDITOR}"» ?\n"
+        print_whiptail_yesno "${messages}" "Éditer" "Continuer"
+        retour=$?
+        if [[ $retour = 0 ]]; then
+            ${EDITOR} /etc/mkinitcpio.conf
+        fi
+        clear
+        echo -e "\n${BGreen}Génération de ${BYellow}vmlinuz-linux initramfs-linux.img initramfs-linux-fallback.img${BGreen}...${White}"
         mkinitcpio -p linux
-        pause_function
     }
     #}}}
     # ai-b-bios-ic ou ai-b-uefi-ic

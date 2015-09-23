@@ -129,7 +129,7 @@
 #         }
         format_partition() {
             clear
-            echo -e "\n${BGreen}Formatage de la partition ${BYellow}$1${BGreen} ...${White}"
+            echo -e "\n${BGreen}Formatage de la partition ${BYellow}$1${BGreen}...${White}"
 #            umount_partition "$1"
             [[ -z $3 ]] && select_filesystem
             if [[ $1 == $ROOT ]]; then
@@ -151,7 +151,7 @@
             retour=$?
             if [[ $retour = 0 ]]; then
                 clear
-                echo -e "\n${BGreen}Formatage de la partition SWAP ${BYellow}$1${BGreen} ...${White}"
+                echo -e "\n${BGreen}Formatage de la partition SWAP ${BYellow}$1${BGreen}...${White}"
 #                umount_partition "$1"
                 mkswap $1
                 swapon $1
