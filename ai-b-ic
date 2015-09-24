@@ -300,67 +300,25 @@ source $(pwd)/ai-commons
     #}}}
     # ai-b-bios-ic ou ai-b-uefi-ic
     #}}}
-#     #NETWORK {{{
-#     configure_network() {
-#         print_title "CONFIGURATION DU RÉSEAU - http://wiki.archlinux.fr/Connexions_reseau"
-#         print_info "Configuration du réseau avec Dhcpcd ou en IP statique ($NAME_NET_WIRED : filaire par défaut)."
-#         print_info_cyan "Le nom de l'interface réseau est : "$NAME_NET_WIRED
-#         type_ip_networks=("Dhcpcd" "IP-statique");
-#         PS3="$prompt1"
-#         echo -e "Sélectionner la configuration du réseau ( Dhcpcd ou IP Statique ) :"
-#         select OPT in "${type_ip_networks[@]}"; do
-#             case "$REPLY" in
-#                 1)
-#                     print_info_cyan "noarp ajouté à etc/dhcpcd.conf"
-#                     echo "noarp" >> /etc/dhcpcd.conf
-#                     cp -v ai-fconfig/net-ip-statique/resolv.conf.head /etc/resolv.conf.head
-# #                    echo -e "\n"
-# #                    systemctl enable dhcpcd@${NAME_NET_WIRED}.service
-#                     # Enable toutes les interfaces réseaux par défaut
-#                     echo -e "\n"
-#                     systemctl enable dhcpcd.service
-#                     break
-#                     ;;
-#                 2)
-#                     cp -v ai-fconfig/net-ip-statique/network-ip-statique /etc/conf.d/network_ip_statique
-#                     sed -i "/^interface=/c\interface=${NAME_NET_WIRED}" /etc/conf.d/network_ip_statique
-#                     # Si Installation réelle : address=192.168.1.57. Si dans VirtualBox : address=192.168.1.58
-#                     if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
-#                         print_info_cyan "Installation dans VirtualBox : addresse ip = 192.168.1.58"
-#                         sed -i "/^address=/c\address=192.168.1.58" /etc/conf.d/network_ip_statique
-#                     else
-#                         print_info_cyan "Installation réelle : addresse ip = 192.168.1.57"
-#                         sed -i "/^address=/c\address=192.168.1.57" /etc/conf.d/network_ip_statique
-#                     fi
-#                     cp -v ai-fconfig/net-ip-statique/network-ip-statique.service /etc/systemd/system/network_ip_statique.service
-#                     cp -v ai-fconfig/net-ip-statique/resolv.conf /etc/resolv.conf
-#                     cp -v ai-fconfig/net-ip-statique/resolv.conf.head /etc/resolv.conf.head
-#                     echo -e "\n"
-#                     systemctl enable network_ip_statique.service
-#                     break
-#                     ;;
-#                 *)
-#                     invalid_option
-#                     ;;
-#             esac
-#         done
-#         pause_function
-#     }
-#     #}}}
     #NETWORK {{{
     configure_network() {
-        print_title "CONFIGURATION DU RÉSEAU - http://wiki.archlinux.fr/Connexions_reseau"
-        print_info "Configuration du réseau avec Dhcpcd - IP Dynamique ($NAME_NET_WIRED : filaire par défaut)."
-        print_info_cyan "Le nom de l'interface réseau est : "$NAME_NET_WIRED
-        print_info_cyan "noarp ajouté à etc/dhcpcd.conf"
+        local retour=9
+        local messages=""
+        local fonction="CONFIGURATION DU RÉSEAU ETHERNET AVEC DHCPCD.\n"
+        fonction+="============================================\n\n"
+        messages="${fonction}"
+        messages+="Le nom de l'interface réseau est : "${NAME_NET_WIRED}"\n\n"
+        messages+="Ajout de l'option «noarp» à etc/dhcpcd.conf.\n"
+        print_whiptail_msgbox "${messages}" "Continuer"
+        #
+        clear
         echo "noarp" >> /etc/dhcpcd.conf
+        echo -e "\n${BGreen}Création du fichier ${BYellow}/etc/resolv.conf.head${BGreen}...${White}"
         cp -v ai-fconfig/net-ip-statique/resolv.conf.head /etc/resolv.conf.head
-#       echo -e "\n"
-#       systemctl enable dhcpcd@${NAME_NET_WIRED}.service
         # Enable toutes les interfaces réseaux par défaut
-        echo -e "\n"
+        echo -e "\n${BGreen}Activation du service ${BYellow}dhcpcd.service${BGreen}...${White}"
+#       systemctl enable dhcpcd@${NAME_NET_WIRED}.service
         systemctl enable dhcpcd.service
-        pause_function
     }
     #}}}
     #ROOT PASSWORD {{{
