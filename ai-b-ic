@@ -302,7 +302,6 @@ source $(pwd)/ai-commons
     #}}}
     #NETWORK {{{
     configure_network() {
-        local retour=9
         local messages=""
         local fonction="CONFIGURATION DU RÉSEAU ETHERNET AVEC DHCPCD.\n"
         fonction+="============================================\n\n"
@@ -323,20 +322,37 @@ source $(pwd)/ai-commons
     #}}}
     #ROOT PASSWORD {{{
     set_root_password() {
-        print_title "MOT DE PASSE ROOT"
-        print_info "Entrer le mot de passe «root»"
-        local ret_passwd=9
-        until [[ $ret_passwd -eq 0 ]];
+        local retour=9
+        local messages=""
+        local messages_chk=""
+        local fonction="MOT DE PASSE ROOT.\n"
+        fonction+="=================\n\n"
+        until [[ $retour = 0 ]];
             do
-                passwd
-                if [[ $? -ne 0 ]]; then
-                    print_warning "Mot de passe «root» erroné : Entrer de nouveau le mot de passe «root»"
-                    ret_passwd=9
+                messages="\n${fonction}"
+                messages+="Entrer le mot de passe «root» :\n"
+                messages_chk="\n${fonction}"
+                messages_chk+="Confirmer le mot de passe «root» :\n"
+                L_MDP=$(whiptail --nocancel --title "${TITRE_BOX_W}" --passwordbox "${messages}" --ok-button "Valider" 16 72 3>&1 1>&2 2>&3)
+                L_MDP_CHK=$(whiptail --nocancel --title "${TITRE_BOX_W}" --passwordbox "${messages_chk}" --ok-button "Valider" 16 72 3>&1 1>&2 2>&3)
+                if [[ ${L_MDP} == ${L_MDP_CHK} ]]; then
+                    retour=0
                 else
-                    ret_passwd=0
+                    messages="\n${fonction}"
+                    messages+="/!\ Mot de passe «root» erroné :\n"
+                    messages+="/!\ Entrer de nouveau le mot de passe «root»."
+                    print_whiptail_msgbox "${messages}" "Recommencer"
+                    retour=9
                 fi
             done
-        pause_function
+        #
+        clear
+        echo -e "\n${BGreen}Configure le mot de passe «${BYellow}root${BGreen}» :${White}"
+        echo -e "${L_MDP}\n${L_MDP}" > /tmp/.passwd
+        passwd root < /tmp/.passwd
+        rm -f /tmp/.passwd
+#         # OU
+#         echo -e "${L_MDP}\n${L_MDP}\n" | passwd root
     }
     #}}}
 
