@@ -245,7 +245,7 @@ pause_function
     }
     #}}}
 
-#ARCHLINUX INSTALL SCRIPTS - https://github.com/jeannoeldot/alid/ai-b
+# ARCHLINUX INSTALL SCRIPTS - https://github.com/jeannoeldot/alid/ai-b
 # TEST SI AI-B DELA LANCE : NON => EXECUTE AI-B. OUI => EXECUTE AI-B3 (FIN)
 if [[ -f /root/ai-b.launched ]]; then
     # PARTIE 3 HORS CHROOT

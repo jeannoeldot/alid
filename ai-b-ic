@@ -356,12 +356,15 @@ source $(pwd)/ai-commons
     }
     #}}}
 
-#ARCHLINUX INSTALL SCRIPTS - https://github.com/jeannoeldot/arch_install/ai-b2
-    print_title "https://wiki.archlinux.org/index.php/Arch_Install_Scripts"
-    print_info "Les «Arch Install Scripts» sont un ensemble de scripts Bash qui simplifient l'installation de Archlinux."
-    print_info_cyan "INSTALLATION PARTIE 2 DANS CHROOT."
-    #
-    print_info_cyan "Mise à jour de la base de pacman"
+# ARCHLINUX INSTALL SCRIPTS - https://github.com/jeannoeldot/arch_install/ai-b-ic
+    messages_p2=""
+    fonction="INSTALLATION PARTIE 2 DANS CHROOT.\n"
+    fonction+="==================================\n\n"
+    messages_p2="${fonction}"
+    messages_p2+="Mise à jour de la base de pacman.\n"
+    print_whiptail_msgbox "${messages_p2}" "Continuer"
+    clear
+    echo -e "\n${BGreen}Mise à jour de la base de pacman...${White}"
     pacman-db-upgrade
     #
     read_variables_ali_b1
@@ -373,27 +376,35 @@ source $(pwd)/ai-commons
     else
         KEYMAP=fr-bepo-latin9
     fi
-    print_info_cyan "Type de clavier : "$TYPE_KEYBOARD" et valeur de KEYMAP : "$KEYMAP
+    messages_p2="${fonction}"
+    messages_p2+="Configure le clavier et la police :\n\n"
+    messages_p2+="Type de clavier  : "${TYPE_KEYBOARD}"\n"
+    messages_p2+="Valeur de KEYMAP : "${KEYMAP}"\n"
+#     messages_p2+="Police           : Lat2-Terminus16\n"
+    messages_p2+="Police           : lat9w-16\n"
+    print_whiptail_msgbox "${messages_p2}" "Continuer"
     loadkeys $KEYMAP
 #    setfont Lat2-Terminus16
     setfont lat9w-16
+    #
+    messages_p2="${fonction}"
     # Editeur par défaut
-    print_info_cyan "L'éditeur par défaut est nano"
+    messages_p2+="L'éditeur par défaut est : nano\n"
     # UEFI ou BIOS
     if [[ $IS_UEFI -eq 1 ]]; then
-        print_info_cyan "Installation en mode UEFI."
+        messages_p2+="Installation en mode     : UEFI\n"
         source $(pwd)/ai-b-uefi-ic
     else
-        print_info_cyan "Installation en mode BIOS."
+        messages_p2+="Installation en mode     : BIOS\n"
         source $(pwd)/ai-b-bios-ic
     fi
     # Installation dans VirtualBox ou réelle
     if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
-        print_info_cyan "Installation dans Oracle VM VirtualBox."
+        messages_p2+="Installation dans        : Oracle VM VirtualBox\n"
     else
-        print_info_cyan "Installation réelle."
+        messages_p2+="Installation dans        : PC Réel\n"
     fi
-    pause_function
+    print_whiptail_msgbox "${messages_p2}" "Continuer"
     #
     configure_fstab
     configure_vconsole_conf
@@ -412,11 +423,11 @@ source $(pwd)/ai-commons
     # INSCRIT CHOIX CLAVIER DANS variables_pour_ai_de.txt pour ai-de
     echo "type_choice_keyboard=${TYPE_KEYBOARD}" > /root/variables_pour_ai_de.txt
     #
-    print_title "FIN INSTALLATION PARTIE 2 DANS CHROOT."
-    #
-    print_info_cyan "Commandes à éxécuter dans l'ordre pour poursuivre l'installation :"
-    print_info_cyan "exit                               ( Quitte l'environnement Chroot )"
-    print_info_cyan "cd ai && ./ai-b                    ( Lance la partie 3 de l'installation )"
-    pause_function
+    messages_p2="FIN INSTALLATION PARTIE 2 DANS CHROOT.\n"
+    messages_p2+="======================================\n\n"
+    messages_p2+="Commandes à éxécuter dans l'ordre pour poursuivre l'installation :\n\n"
+    messages_p2+="exit                             => Quitte l'environnement Chroot\n"
+    messages_p2+="cd ai && ./ai-b                  => Partie 3 de l'installation\n"
+    print_whiptail_msgbox "${messages_p2}" "Continuer"
     #
     exit 0
