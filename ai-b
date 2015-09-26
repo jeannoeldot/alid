@@ -230,16 +230,10 @@ source $(pwd)/ai-commons
                 3>&1 1>&2 2>&3)
         case "$REPLY" in
             "REDÉMARRER")
-#                 reboot
-## POUR TEST
-echo -e "\n${BGreen}POUR TEST : REDÉMARRER...${White}"
-pause_function
+                reboot
                 ;;
             "ÉTEINDRE")
-#                 poweroff
-## POUR TEST
-echo -e "\n${BGreen}POUR TEST : ÉTEINDRE...${White}"
-pause_function
+                poweroff
                 ;;
         esac
     }

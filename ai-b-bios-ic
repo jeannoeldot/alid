@@ -14,7 +14,7 @@
     #INSTALL BOOTLOADER {{{
     install_bootloader() {
         local messages=""
-        local fonction="PROCESSUS DE BOOT : CHOIX DU CHARGEUR DE DÉMARRAGE.\n"
+        local fonction="PROCESSUS DE BOOT : CHOIX DU CHARGEUR DE DEMARRAGE.\n"
         fonction+="===================================================\n\n"
         messages="\n${fonction}"
         messages+="Sélectionner le Chargeur de Démarrage :"
@@ -47,7 +47,7 @@
     #CONFIGURE BOOTLOADER {{{
     configure_bootloader() {
         local messages=""
-        local fonction="CONFIGURATION DU CHARGEUR DE DÉMARRAGE : "${BOOTLOADER}"\n"
+        local fonction="CONFIGURATION DU CHARGEUR DE DEMARRAGE : "${BOOTLOADER}"\n"
         fonction+="=================================================\n\n"
         case $BOOTLOADER in
             "GRUB")
@@ -67,8 +67,8 @@
                 grub-mkconfig -o /boot/grub/grub.cfg
                 #
                 messages="${fonction}"
-                messages+="Visualiser/Éditer le fichier «grub.cfg» avec «"${EDITOR}"» ?\n"
-                print_whiptail_yesno "${messages}" "Éditer" "Continuer"
+                messages+="Visualiser/Editer le fichier «grub.cfg» avec «"${EDITOR}"» ?\n"
+                print_whiptail_yesno "${messages}" "Editer" "Continuer"
                 retour=$?
                 if [[ $retour = 0 ]]; then
                     ${EDITOR} /boot/grub/grub.cfg
@@ -94,8 +94,8 @@
                 sed -i "s/root=PART_ROOT/root=UUID=$partuuid/g" /boot/syslinux/syslinux.cfg
                 #
                 messages="${fonction}"
-                messages+="Visualiser/Éditer le fichier «syslinux.cfg» avec «"${EDITOR}"» ?\n"
-                print_whiptail_yesno "${messages}" "Éditer" "Continuer"
+                messages+="Visualiser/Editer le fichier «syslinux.cfg» avec «"${EDITOR}"» ?\n"
+                print_whiptail_yesno "${messages}" "Editer" "Continuer"
                 retour=$?
                 if [[ $retour = 0 ]]; then
                     ${EDITOR} /boot/syslinux/syslinux.cfg

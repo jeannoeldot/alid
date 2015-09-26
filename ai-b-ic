@@ -112,8 +112,8 @@ source $(pwd)/ai-commons
         print_whiptail_msgbox "${messages}" "Continuer"
         #
         messages="${fonction}"
-        messages+="Visualiser/Éditer le fichier «/etc/fstab» avec «"${EDITOR}"» ?\n"
-        print_whiptail_yesno "${messages}" "Éditer" "Continuer"
+        messages+="Visualiser/Editer le fichier «/etc/fstab» avec «"${EDITOR}"» ?\n"
+        print_whiptail_yesno "${messages}" "Editer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
             ${EDITOR} /etc/fstab
@@ -137,8 +137,8 @@ source $(pwd)/ai-commons
         print_whiptail_msgbox "${messages}" "Continuer"
         #
         messages="${fonction}"
-        messages+="Visualiser/Éditer le fichier «/etc/vconsole.conf» avec «"${EDITOR}"» ?\n"
-        print_whiptail_yesno "${messages}" "Éditer" "Continuer"
+        messages+="Visualiser/Editer le fichier «/etc/vconsole.conf» avec «"${EDITOR}"» ?\n"
+        print_whiptail_yesno "${messages}" "Editer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
             ${EDITOR} /etc/vconsole.conf
@@ -177,8 +177,8 @@ source $(pwd)/ai-commons
         echo "$L_HN" > /etc/hostname
         retour=9
         messages="${fonction}"
-        messages+="Visualiser/Éditer le fichier «/etc/hostname» avec «"${EDITOR}"» ?\n"
-        print_whiptail_yesno "${messages}" "Éditer" "Continuer"
+        messages+="Visualiser/Editer le fichier «/etc/hostname» avec «"${EDITOR}"» ?\n"
+        print_whiptail_yesno "${messages}" "Editer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
             ${EDITOR} /etc/hostname
@@ -222,7 +222,7 @@ source $(pwd)/ai-commons
     #CONFIGURE HARDWARECLOCK {{{
     configure_hardwareclock() {
         local messages=""
-        local fonction="CONFIGURATION DE L'HEURE MATÉRIELLE.\n"
+        local fonction="CONFIGURATION DE L'HEURE MATERIELLE.\n"
         fonction+="====================================\n\n"
         messages="${fonction}"
         messages+="Le mode horloge matérielle sélectionné est : UTC.\n\n"
@@ -248,8 +248,8 @@ source $(pwd)/ai-commons
         echo "LANG=${LOCALE_UTF8}" > /etc/locale.conf
         echo "LC_COLLATE=C" >> /etc/locale.conf
         messages="${fonction}"
-        messages+="Visualiser/Éditer le fichier «/etc/locale.conf» avec «"${EDITOR}"» ?\n"
-        print_whiptail_yesno "${messages}" "Éditer" "Continuer"
+        messages+="Visualiser/Editer le fichier «/etc/locale.conf» avec «"${EDITOR}"» ?\n"
+        print_whiptail_yesno "${messages}" "Editer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
             ${EDITOR} /etc/locale.conf
@@ -287,8 +287,8 @@ source $(pwd)/ai-commons
         print_whiptail_msgbox "${messages}" "Continuer"
         #
         messages="${fonction}"
-        messages+="Visualiser/Éditer le fichier «/etc/mkinitcpio.conf» avec «"${EDITOR}"» ?\n"
-        print_whiptail_yesno "${messages}" "Éditer" "Continuer"
+        messages+="Visualiser/Editer le fichier «/etc/mkinitcpio.conf» avec «"${EDITOR}"» ?\n"
+        print_whiptail_yesno "${messages}" "Editer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
             ${EDITOR} /etc/mkinitcpio.conf
@@ -303,7 +303,7 @@ source $(pwd)/ai-commons
     #NETWORK {{{
     configure_network() {
         local messages=""
-        local fonction="CONFIGURATION DU RÉSEAU ETHERNET AVEC DHCPCD.\n"
+        local fonction="CONFIGURATION DU RESEAU ETHERNET AVEC DHCPCD.\n"
         fonction+="============================================\n\n"
         messages="${fonction}"
         messages+="Le nom de l'interface réseau est : "${NAME_NET_WIRED}"\n\n"
