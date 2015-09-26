@@ -5,80 +5,83 @@
 # Appelé par ai-b-ic
 #
 # Script d'installation en mode BIOS
-# et ne fonctionne qu'avec la langue FR (fr_FR)
+# Ne fonctionne qu'avec la langue FR (fr_FR)
+#
+# Interface graphique avec whiptail
 #
 #-------------------------------------------------------------------------------
 
     #INSTALL BOOTLOADER {{{
     install_bootloader() {
-        print_title "PROCESSUS DE BOOT - https://wiki.archlinux.org/index.php/Bootloader"
-        print_info "Le chargeur de démarrage est responsable du chargement du noyau et du disque virtuel initial avant de lancer le processus de démarrage."
-        bootloader=("Grub" "Syslinux" "Passer")
-        PS3="$prompt1"
-        echo -e "Installation du Chargeur de démarrage :\n"
-        select BOOTLOADER in "${bootloader[@]}"; do
-            case "$REPLY" in
-                1)
-                    pacman -Syu grub
-#                    #make grub automatically detect others OS
-#                    pacman -Syu os-prober
-                    break
-                    ;;
-                2)
+        local messages=""
+        local fonction="PROCESSUS DE BOOT : CHOIX DU CHARGEUR DE DÉMARRAGE.\n"
+        fonction+="===================================================\n\n"
+        messages="\n${fonction}"
+        messages+="Sélectionner le Chargeur de Démarrage :"
+        BOOTLOADER=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Valider" 20 72 5 \
+                     "GRUB" "-" \
+                     "SYSLINUX" "-" \
+                     "AUCUN" "-" \
+                     3>&1 1>&2 2>&3)
+        case "$BOOTLOADER" in
+            "GRUB")
+                clear
+                echo -e "\n${BGreen}Installation de ${BYellow}grub${BGreen}...${White}"
+                pacman -Syu grub
+#               # make grub automatically detect others OS
+#               pacman -Syu os-prober
+                ;;
+            "SYSLINUX")
+                clear
+                if [[ $TYPE_STORAGE_PARTITION == "GPT" ]]; then
+                    echo -e "\n${BGreen}Installation de ${BYellow}syslinux${BGreen} et ${BYellow}gptfdisk${BGreen}...${White}"
+                    pacman -Syu syslinux gptfdisk
+                else
+                    echo -e "\n${BGreen}Installation de ${BYellow}syslinux${BGreen}...${White}"
                     pacman -Syu syslinux
-                    if [[ $TYPE_STORAGE_PARTITION == "GPT" ]]; then
-                        pacman -Syu gptfdisk
-                    fi
-                    break
-                    ;;
-                3)
-                    break
-                    ;;
-                *)
-                    invalid_option
-                    ;;
-            esac
-        done
-        pause_function
+                fi
+                ;;
+        esac
     }
     #}}}
     #CONFIGURE BOOTLOADER {{{
     configure_bootloader() {
+        local messages=""
+        local fonction="CONFIGURATION DU CHARGEUR DE DÉMARRAGE : "${BOOTLOADER}"\n"
+        fonction+="=================================================\n\n"
         case $BOOTLOADER in
-            Grub)
-                print_title "GRUB - https://wiki.archlinux.org/index.php/GRUB"
-                print_info "GRUB, (GRand Unified Bootloader).\nBrièvement, le bootloader est le premier logiciel qui s'exécute lorsque l'ordinateur démarre. Il est responsable du chargement et du transfert de contrôle au noyau. Ce dernier initialise le reste du système d'exploitation."
-                # Ne semble plus nécessaire
-                # modprobe dm-mod
+            "GRUB")
+                clear
+                echo -e "\n${BGreen}Installation de ${BYellow}grub${BGreen}...${White}"
                 grub-install --target=i386-pc --recheck ${ROOT_DEVICE}
                 #
-                print_info_cyan "GRUB_TIMEOUT=3 et GRUB_GFXMODE=1024x768"
+                messages="${fonction}"
+                messages+="GRUB_TIMEOUT=3\n"
+                messages+="GRUB_GFXMODE=1024x768\n"
+                messages+="GRUB_DISABLE_SUBMENU=y\n"
+                print_whiptail_msgbox "${messages}" "Continuer"
                 sed -i "/^GRUB_TIMEOUT=/c\GRUB_TIMEOUT=3" /etc/default/grub
                 sed -i "/^GRUB_GFXMODE=/c\GRUB_GFXMODE=1024x768" /etc/default/grub
                 # BUGS FS#38041 FS#37904
                 echo -e "\nGRUB_DISABLE_SUBMENU=y" >> /etc/default/grub
-#                Supprimé suite à maj de grub 2.02beta2-3
-#                # Enlève entrées 10_linux car présence de 10_archlinux
-#                chmod -x /etc/grub.d/10_linux
-                #
                 grub-mkconfig -o /boot/grub/grub.cfg
                 #
-#                Supprimé suite à maj de grub 2.02beta2-5
-#                 if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
-#                     print_info_cyan "Pour activer les mises à jour du microcode avant le démarrage du kernel :"
-#                     print_info_cyan "Modifier les lignes << initrd >>"
-#                     print_info_cyan "initrd /boot/intel-ucode.img /boot/initramfs-linux.img"
-#                 fi
-                echo -e "\nVérification du fichier grub.cfg avec $EDITOR"
-                pause_function
-                $EDITOR /boot/grub/grub.cfg
+                messages="${fonction}"
+                messages+="Visualiser/Éditer le fichier «grub.cfg» avec «"${EDITOR}"» ?\n"
+                print_whiptail_yesno "${messages}" "Éditer" "Continuer"
+                retour=$?
+                if [[ $retour = 0 ]]; then
+                    ${EDITOR} /boot/grub/grub.cfg
+                fi           
                 ;;
-            Syslinux)
-                print_title "SYSLINUX - https://wiki.archlinux.org/index.php/Syslinux"
-                print_info "Syslinux est une collection de chargeurs d'amorce capables de démarrer depuis un disque dur, CD, et à travers le réseau via PXE. Il supporte les systèmes de fichiers fat, ext2, ext3, ext4 et btrfs."
+            "SYSLINUX")
+                clear
+                echo -e "\n${BGreen}Installation de ${BYellow}syslinux${BGreen}...${White}"
                 syslinux-install_update -i -a -m
                 #
-                print_info_cyan "Menu Graphique au Démarrage"
+                messages="${fonction}"
+                messages+="Menu Graphique au Démarrage\n"
+                print_whiptail_msgbox "${messages}" "Continuer"
                 cp -v /usr/lib/syslinux/bios/vesamenu.c32 /boot/syslinux/
                 if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
                     cp -v ai-fconfig/boot-syslinux-syslinux-intel-ucode.cfg /boot/syslinux/syslinux.cfg
@@ -90,11 +93,14 @@
                 partuuid=$(ls -l /dev/disk/by-uuid | awk '/'$partroot'/ {print $9}')
                 sed -i "s/root=PART_ROOT/root=UUID=$partuuid/g" /boot/syslinux/syslinux.cfg
                 #
-                echo -e "\nVérification du fichier syslinux.cfg avec $EDITOR"
-                pause_function
-                $EDITOR /boot/syslinux/syslinux.cfg
+                messages="${fonction}"
+                messages+="Visualiser/Éditer le fichier «syslinux.cfg» avec «"${EDITOR}"» ?\n"
+                print_whiptail_yesno "${messages}" "Éditer" "Continuer"
+                retour=$?
+                if [[ $retour = 0 ]]; then
+                    ${EDITOR} /boot/syslinux/syslinux.cfg
+                fi           
                 ;;
         esac
-        pause_function
     }
     #}}}

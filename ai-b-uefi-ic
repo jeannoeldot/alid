@@ -5,7 +5,9 @@
 # Appelé par ai-b-ic
 #
 # Script d'installation en mode UEFI
-# et ne fonctionne qu'avec la langue FR (fr_FR)
+# Ne fonctionne qu'avec la langue FR (fr_FR)
+#
+# Interface graphique avec whiptail
 #
 #-------------------------------------------------------------------------------
 
