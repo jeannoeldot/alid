@@ -107,7 +107,7 @@ source $(pwd)/ai-commons
         fonction+="================================\n\n"
         messages="${fonction}"
         messages+="En utilisant le script pacstrap, seront installés :\n"
-        if [[ $IS_UEFI -eq 1 ]]; then
+        if [[ $IS_UEFI = 1 ]]; then
             messages+="le système de base, gptfdisk, wget"
             liste_paquets="base libnewt lz4 gptfdisk elinks wget"
         else
@@ -115,7 +115,7 @@ source $(pwd)/ai-commons
             liste_paquets="base libnewt lz4 elinks wget"
         fi
         # Intel Microcode
-        if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
+        if [[ $IN_VIRTUAL_BOX = 0 ]]; then
             messages+=", elinks et intel-ucode.\n"
             liste_paquets+=" intel-ucode"
         else
@@ -214,7 +214,7 @@ source $(pwd)/ai-commons
         # Redémarrer ou Éteindre
         messages="\n${fonction}"
         # Si dans VirtualBox
-        if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
+        if [[ $IN_VIRTUAL_BOX = 1 ]]; then
             messages+="Dans VirtualBox : choisir ÉTEINDRE,\n"
             messages+="Modifier l'ordre de démarrage dans Système,\n"
             messages+="Enlever ISO dans Stokage et relancer la VM.\n\n"
@@ -265,7 +265,7 @@ else
     messages_p1+="L'éditeur par défaut est : nano\n"
     # UEFI ou BIOS
     check_is_uefi_or_bios
-    if [[ $IS_UEFI -eq 1 ]]; then
+    if [[ $IS_UEFI = 1 ]]; then
         messages_p1+="Installation en mode     : UEFI\n"
         source $(pwd)/ai-b-uefi-hc
     else
@@ -274,7 +274,7 @@ else
     fi
     # Installation dans VirtualBox ou réelle
     check_is_in_virtualbox
-    if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
+    if [[ $IN_VIRTUAL_BOX = 1 ]]; then
         messages_p1+="Installation dans        : Oracle VM VirtualBox\n"
     else
         messages_p1+="Installation dans        : PC Réel\n"

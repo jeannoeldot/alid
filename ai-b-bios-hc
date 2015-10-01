@@ -160,20 +160,34 @@
                 swapon $1
             fi
         }
-
-# SI EN GPT : 1ère partition  = EF02 BIOS_BOOT_PARTITION ou BOOT_PAR_NUM
+        calcul_num_line_bios_boot_part() {
+            local disquelabel_type=$(LC_ALL=C fdisk -l $HDD_DEVICE | awk '/Disklabel/ {print $3}')
+            if [[ $disquelabel_type == "gpt" ]]; then
+                # SI EN GPT et GRUB : 1ère partition  = EF02 BIOS_BOOT_PARTITION ou BOOT_PAR_NUM
+                local partition_type=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep "${HDD_DEVICE}1" | awk '{print $6}')
+                if [[ $partition_type == "BIOS" ]]; then
+                    NUM_LINE_BIOS_BOOT_PART=1
+                else
+                    NUM_LINE_BIOS_BOOT_PART=255
+                fi
+            else
+                # SI EN DOS
+                NUM_LINE_BIOS_BOOT_PART=255
+            fi
+        }
+        calcul_num_line_bios_boot_part
+# SI EN GPT et GRUB : 1ère partition  = EF02 BIOS_BOOT_PARTITION ou BOOT_PAR_NUM
         if [[ $TYPE_STORAGE_PARTITION == "GPT" ]]; then
-            fonction="PARTITIONNEMENT : SÉLECTION DES PARTITIONS.\n"
-            fonction+="===========================================\n\n"
-            messages="${fonction}"
-            messages+="!!! En GPT : la 1ère partition est réservée :\n"
-            messages+="    ( BIOS_BOOT_PARTITION ou BOOT_PAR_NUM )\n"
-            print_whiptail_msgbox "${messages}" "Continuer"
-            
-            partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "1d")
-        else
-            partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
+            if [[ ${NUM_LINE_BIOS_BOOT_PART} = 1 ]]; then
+                fonction="PARTITIONNEMENT : SÉLECTION DES PARTITIONS.\n"
+                fonction+="===========================================\n\n"
+                messages="${fonction}"
+                messages+="!!! En GPT : si GRUB est prévu, la 1ère partition est réservée :\n"
+                messages+="    ( BIOS_BOOT_PARTITION ou BOOT_PAR_NUM )\n"
+                print_whiptail_msgbox "${messages}" "Continuer"
+            fi
         fi
+        partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "${NUM_LINE_BIOS_BOOT_PART}d")
 # CHOIX PARTITION ROOT OBLIGATOIRE
         fonction="PARTITIONNEMENT : SÉLECTION PARTITION «ROOT».\n"
         fonction+="=============================================\n\n"
@@ -189,11 +203,7 @@
         messages="\n${fonction}"
         messages+="!!! LA PARTITION «SWAP» EST FACULTATIVE.\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
-        if [[ $TYPE_STORAGE_PARTITION == "GPT" ]]; then
-            partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "1d")
-        else
-            partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
-        fi
+        partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "${NUM_LINE_BIOS_BOOT_PART}d")
         L_SWAP=$(whiptail --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Choisir" --cancel-button "Annuler" 25 72 5 ${partitions} 3>&1 1>&2 2>&3)
         retour=$?
         if [[ $retour = 0 ]]; then
@@ -209,11 +219,7 @@
         messages+="!!! LA PARTITION «HOME» EST FACULTATIVE.\n\n"
         messages+="/!\ Toutes les données sur la partition choisie seront perdues.\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
-        if [[ $TYPE_STORAGE_PARTITION == "GPT" ]]; then
-            partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v $L_SWAP | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "1d")
-        else
-            partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v $L_SWAP | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
-        fi
+        partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v $L_SWAP | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "${NUM_LINE_BIOS_BOOT_PART}d")
         L_HOME=$(whiptail --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Choisir" --cancel-button "Annuler" 25 72 5 ${partitions} 3>&1 1>&2 2>&3)
         retour=$?
         if [[ $retour = 0 ]]; then

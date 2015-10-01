@@ -25,7 +25,7 @@
         # Détermine le nom du rep d'installation de arch
         if [[ -d /boot/efi/EFI ]]; then
             number_of_arch_first=$(ls "/boot/efi/EFI/" | grep -E "arch" | awk 'length($0)<7' | wc -l)
-            if [[ $number_of_arch_first -eq 0 ]]; then
+            if [[ $number_of_arch_first = 0 ]]; then
                 NAME_DIR_ARCHLINUX=${NAME_ARCH_FIRST}
                 NUMBER_OF_ARCH=1
                 IS_MULTI_BOOT_UEFI=0
@@ -46,7 +46,7 @@
         echo "name_dir_archlinux=${NAME_DIR_ARCHLINUX}" > /root/name_dir_archlinux.uefi
         #
         # Choix du Manager de Boot
-        if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
+        if [[ $IN_VIRTUAL_BOX = 1 ]]; then
             print_info_cyan "Installation dans VirtualBox : le nom du Manager de Boot sera : bootx64.efi."
             MGR_EFI="boot"
             NAME_DIR_EFI="/boot/efi/EFI/BOOT"
@@ -71,7 +71,7 @@
         cp -v /boot/vmlinuz-linux ${DIR_EFI_ARCHLINUX}/vmlinuz-${NAME_DIR_ARCHLINUX}.efi
         cp -v /boot/initramfs-linux.img ${DIR_EFI_ARCHLINUX}/initramfs-${NAME_DIR_ARCHLINUX}.img
         cp -v /boot/initramfs-linux-fallback.img ${DIR_EFI_ARCHLINUX}/initramfs-${NAME_DIR_ARCHLINUX}-fallback.img
-        if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
+        if [[ $IN_VIRTUAL_BOX = 0 ]]; then
             print_info_cyan "Copie du fichier de intel-ucode."
             cp -v /boot/intel-ucode.img ${DIR_EFI_ARCHLINUX}/intel-ucode.img
         fi
@@ -79,7 +79,7 @@
         cp -v /usr/share/refind/refind_linux.conf-sample ${DIR_EFI_ARCHLINUX}/refind_linux.conf
 #        echo -e "\n"        
         # rEFInd : si 1ere installation
-        if [[ $IS_MULTI_BOOT_UEFI -eq 0 ]]; then
+        if [[ $IS_MULTI_BOOT_UEFI = 0 ]]; then
             print_info_cyan "Copie des fichiers de rEFInd."
             mkdir -p ${NAME_DIR_EFI}
             cp -v /usr/share/refind/refind_${ARCHI_REFIND}.efi /boot/efi${NAME_DIR_MGR_EFI}
@@ -111,12 +111,12 @@
         # ==> Si problème CSM compatibility => à enlever
         # #uefi_deep_legacy_scan => uefi_deep_legacy_scan true
         # ==> NE PAS METTRE DANS VBOX
-        if [[ $IS_MULTI_BOOT_UEFI -eq 0 ]]; then
+        if [[ $IS_MULTI_BOOT_UEFI = 0 ]]; then
             print_info_cyan "Configuration de refind.conf."
             sed -i "/^timeout/c\timeout 2" ${NAME_DIR_EFI}/refind.conf
             sed -i "/^#scan_all_linux_kernels/c\scan_all_linux_kernels false" ${NAME_DIR_EFI}/refind.conf
             sed -i "/^#fold_linux_kernels/c\fold_linux_kernels false" ${NAME_DIR_EFI}/refind.conf
-            if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
+            if [[ $IN_VIRTUAL_BOX = 1 ]]; then
                 sed -i "/^#showtools/c\showtools shell,about,shutdown,reboot" ${NAME_DIR_EFI}/refind.conf
                 sed -i "/^#dont_scan_files/c\dont_scan_files fallback.efi,shim.efi,shim-fedora.efi,gcdx64.efi,MokManager.efi" ${NAME_DIR_EFI}/refind.conf
             else
@@ -137,7 +137,7 @@
         partuuid=$(ls -l /dev/disk/by-partuuid | awk '/'$partroot'/ {print $9}')
         sed -i "/^\"Boot/d;/^$/d" ${DIR_EFI_ARCHLINUX}/refind_linux.conf
         # ROOT_FS_TYPE=ext4
-        if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
+        if [[ $IN_VIRTUAL_BOX = 1 ]]; then
             echo -e '"Boot en mode Graphique"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw add_efi_memmap force_addr=0xaddr systemd.unit=graphical.target quiet initrd=EFI/'$NAME_DIR_ARCHLINUX'/initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
             echo -e '"Boot en mode Terminal"    "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw add_efi_memmap force_addr=0xaddr systemd.unit=multi-user.target quiet initrd=EFI/'$NAME_DIR_ARCHLINUX'/initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
             echo -e '"Boot en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw add_efi_memmap force_addr=0xaddr systemd.unit=rescue.target initrd=EFI/'$NAME_DIR_ARCHLINUX'/initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
@@ -153,7 +153,7 @@
             echo -e '"Fallback en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw add_efi_memmap force_addr=0xaddr systemd.unit=rescue.target initrd=EFI/'$NAME_DIR_ARCHLINUX'/intel-ucode.img initrd=EFI/'$NAME_DIR_ARCHLINUX'/initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
        fi
         #
-        if [[ $IS_MULTI_BOOT_UEFI -eq 0 ]]; then
+        if [[ $IS_MULTI_BOOT_UEFI = 0 ]]; then
             print_info_cyan "Configuration du manager de Boot."
             # https://wiki.archlinux.org/index.php/Beginners%27_Guide#For_UEFI_motherboards 12/10/2013
             # Si /sys/firmware/efi/efivars n'est pas déjà monté.
@@ -184,7 +184,7 @@
         systemctl enable efistub_update.path
         # SUPPRIMÉ : Voir script /home/jnd/01-scripts/Maj-refind/maj-refind
 #         # Installe refind_update.path et refind_update.service
-#         if [[ $IS_MULTI_BOOT_UEFI -eq 0 ]]; then
+#         if [[ $IS_MULTI_BOOT_UEFI = 0 ]]; then
 #             if [[ $MGR_EFI != "" ]]; then
 #                 print_info_cyan "Installation de refind_update.service."
 #                 cp -v ai-fconfig/efi-services/refind_update.path /etc/systemd/system/refind_update.path
@@ -201,7 +201,7 @@
 #             print_info_cyan "MULTI BOOT UEFI : Pas d'installation de refind_update.service."
 #         fi
         # Installation de intel_ucode_update.path et intel_ucode_update.service
-        if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
+        if [[ $IN_VIRTUAL_BOX = 0 ]]; then
             print_info_cyan "Installation de intel_ucode_update.path et intel_ucode_update.service."
             cp -v ai-fconfig/efi-services/intel_ucode_update.path /etc/systemd/system/intel_ucode_update.path
             cp -v ai-fconfig/efi-services/intel_ucode_update.service /etc/systemd/system/intel_ucode_update.service
@@ -212,14 +212,14 @@
             print_info_cyan "Installation dans VirtualBox : PAS d'activion des mises à jour du microcode."
         fi
         #
-        if [[ $IS_MULTI_BOOT_UEFI -eq 0 ]]; then
+        if [[ $IS_MULTI_BOOT_UEFI = 0 ]]; then
             print_info_cyan "Installation d'un Shell UEFI et création du script utilisé par le Shell UEFI."
             wget https://edk2.svn.sourceforge.net/svnroot/edk2/trunk/edk2/ShellBinPkg/UefiShell/X64/Shell.efi
             # OU
             # cp -v /run/archiso/bootmnt/EFI/shellx64_v2.efi /boot/efi/shellx64.efi
             cp -v Shell.efi /boot/efi/shellx64.efi
             echo "echo -on" > /boot/efi/archlinux.nsh
-            if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
+            if [[ $IN_VIRTUAL_BOX = 0 ]]; then
                 echo "\EFI\arch_1\vmlinuz-arch_1.efi root=PARTUUID=$partuuid rw rootfstype=$ROOT_FS_TYPE add_efi_memmap initrd=EFI/arch_1/intel-ucode.img initrd=EFI/arch_1/initramfs-arch_1.img" >> /boot/efi/archlinux.nsh
             else
                 echo "\EFI\arch_1\vmlinuz-arch_1.efi root=PARTUUID=$partuuid rw rootfstype=$ROOT_FS_TYPE add_efi_memmap initrd=EFI/arch_1/initramfs-arch_1.img" >> /boot/efi/archlinux.nsh

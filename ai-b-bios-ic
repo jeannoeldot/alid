@@ -83,7 +83,7 @@
                 messages+="Menu Graphique au Démarrage\n"
                 print_whiptail_msgbox "${messages}" "Continuer"
                 cp -v /usr/lib/syslinux/bios/vesamenu.c32 /boot/syslinux/
-                if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
+                if [[ $IN_VIRTUAL_BOX = 0 ]]; then
                     cp -v ai-fconfig/boot-syslinux-syslinux-intel-ucode.cfg /boot/syslinux/syslinux.cfg
                 else
                     cp -v ai-fconfig/boot-syslinux-syslinux.cfg /boot/syslinux/syslinux.cfg
