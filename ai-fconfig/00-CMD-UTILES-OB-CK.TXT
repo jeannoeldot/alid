@@ -161,9 +161,29 @@ MAJ SUDO ET /ETC/SUDOERS.PACNEW
 !!! EN ROOT
 # mv -v /etc/sudoers.pacnew /etc/sudoers
 # sed -i '/%wheel ALL=(ALL) ALL/s/^# //' /etc/sudoers
+# system sudoers
+# echo -e '\n## My Cmnd alias' >> /etc/sudoers
+# echo -e 'Cmnd_Alias SHUTDOWN_CMDS = /sbin/shutdown, /sbin/halt, /sbin/reboot, /sbin/poweroff' >> /etc/sudoers
+# echo -e 'Cmnd_Alias PACMAN_CMDS = /usr/bin/pacman' >> /etc/sudoers
+# echo -e 'Cmnd_Alias HDDTEMP_CMDS = /usr/bin/hddtemp' >> /etc/sudoers
+# echo -e '\n## My User alias' >> /etc/sudoers
+# echo -e 'User_Alias ADMINS = jnd' >> /etc/sudoers
+# echo -e '\n## User specification' >> /etc/sudoers
+# echo -e 'ADMINS ALL=(ALL) NOPASSWD: SHUTDOWN_CMDS' >> /etc/sudoers
+# echo -e 'ADMINS ALL=(ALL) NOPASSWD: PACMAN_CMDS' >> /etc/sudoers
+# echo -e 'ADMINS ALL=(ALL) NOPASSWD: HDDTEMP_CMDS' >> /etc/sudoers
+
 # echo -e '\n## My Defaults timestamp_timeout = 20 minutes' >> /etc/sudoers
 # echo -e 'Defaults:jnd timestamp_timeout=20' >> /etc/sudoers
+
 # sed '/#/d;/^$/d' /etc/sudoers
+
+
+MAJ DHCPCD ET /etc/dhcpcd.conf.pacnew
+=====================================
+!!! EN ROOT
+# mv -v /etc/dhcpcd.conf.pacnew /etc/dhcpcd.conf
+# echo "noarp" >> /etc/dhcpcd.conf
 
 
 MAJ GLIBC ET /etc/locale.gen.pacnew
