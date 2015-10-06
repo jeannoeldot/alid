@@ -106,7 +106,7 @@ source $(pwd)/ai-commons
         local fonction="INSTALLATION DU SYSTÈME DE BASE.\n"
         fonction+="================================\n\n"
         messages="${fonction}"
-        messages+="En utilisant le script pacstrap, seront installés :\n"
+        messages+="En utilisant le script «pacstrap», seront installés :\n"
         if [[ $IS_UEFI = 1 ]]; then
             messages+="le système de base, gptfdisk, wget"
             liste_paquets="base libnewt lz4 gptfdisk elinks wget"
@@ -126,11 +126,19 @@ source $(pwd)/ai-commons
         clear
         echo -e "\n${BGreen}Installation du système de base...${White}"
         pacstrap ${MOUNTPOINT} ${liste_paquets}
+		if [[ "$?" -eq "1" ]]; then
+            messages="${fonction}"
+            messages+="/!\ ERREUR :\n"
+            messages+="    Erreur durant l'éxécution du script «pacstrap».\n"
+            messages+="    ARRÊT immédiat.\n"
+            print_whiptail_msgbox "${messages}" "OK"
+			exit 1
+		fi
         # Si WiFi : installe les outils nécessaires
         local name_net_wireless=$(ip link | awk '/wlp/ {print $2}' | sed -e "s/://")
         if [[ -n ${name_net_wireless} ]]; then
             messages="${fonction}"
-            messages+="En utilisant le script pacstrap,\n"
+            messages+="En utilisant le script «pacstrap»,\n"
             messages+="Installe les outils nécessaires pour le WiFi\n"
             print_whiptail_msgbox "${messages}" "Continuer"
             clear
