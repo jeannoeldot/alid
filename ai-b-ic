@@ -194,13 +194,11 @@ source $(pwd)/ai-commons
         fonction+="=====================================\n\n"
         messages="${fonction}"
         messages+="Nom d'hôte choisi : "${L_HN}"\n\n"
-        messages+="Visualiser le fichier «/etc/hosts» ?\n"
+        messages+="Visualiser le fichier «/etc/hosts» avec «"${EDITOR}"» ?\n"
         print_whiptail_yesno "${messages}" "Visualiser" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
-            clear
-            echo -e "\n${BGreen}Visualisation du fichier ${BYellow}/etc/hosts${BGreen} :${White}"
-            cat /etc/hosts
+            ${EDITOR} /etc/hosts
         fi
     }
     #}}}
