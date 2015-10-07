@@ -19,7 +19,7 @@ source $(pwd)/ai-commons
         local fonction="SÉLECTION DU TYPE DE CLAVIER.\n"
         fonction+="=============================\n\n"
         messages="\n${fonction}"
-        messages+="Choisir le type de clavier ( AZERTY ou BÉPO ) :"
+        messages+="Choisir le type de clavier (AZERTY ou BÉPO) :"
         REPLY=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Valider" 16 72 5 \
                 "AZERTY" "-" \
                 "BÉPO" "-" \
@@ -226,7 +226,7 @@ source $(pwd)/ai-commons
         cp -v ai-fconfig/root-.bash_profile ${MOUNTPOINT}/root/.bash_profile
         #
         messages="${fonction}"
-        messages+="Fermer tous les terminaux ouverts ( TTY 2, ... ).\n"
+        messages+="Fermer tous les terminaux ouverts (TTY 2, ...).\n"
         print_whiptail_msgbox "${messages}" "Continuer"
         # umount mounted partitions
         umount_partitions
@@ -242,7 +242,7 @@ source $(pwd)/ai-commons
             messages+="Modifier l'ordre de démarrage dans UEFI/BIOS,\n"
             messages+="Enlever la clé USB ou le CD et redémarrer.\n\n"        
         fi
-        messages+="Sélectionner l'arrêt ( Redémarrer ou Éteindre ) :"
+        messages+="Sélectionner l'arrêt (Redémarrer ou Éteindre) :"
         REPLY=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Valider" 20 72 5 \
                 "REDÉMARRER" "-" \
                 "ÉTEINDRE" "-" \

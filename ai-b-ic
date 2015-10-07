@@ -82,8 +82,8 @@ source $(pwd)/ai-commons
             # rotational = 0 ==> SSD
             # https://wiki.archlinux.org/index.php/Solid_State_Drives#TRIM
             messages="\n${fonction}"
-            messages+="Activation du Trim ( option discard ou service fstrim ).\n"
-            messages+="--------------------------------------------------------\n\n"
+            messages+="Activation du Trim (option discard ou service fstrim).\n"
+            messages+="------------------------------------------------------\n\n"
             messages+="Configurer le TRIM en se basant sur :\n"
             REPLY=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Valider" 20 72 5 \
                     "DISCARD" "TRIM par option de montage." \
@@ -266,7 +266,8 @@ source $(pwd)/ai-commons
         fonction+="================================================\n\n"
         messages="${fonction}"
         # Remplace udev par systemd. Rajoute keymap
-        messages+="HOOKS : Remplacement de udev par systemd. Ajout de keymap.\n"
+        messages+="HOOKS : Remplacement de udev par systemd.\n"
+        messages+="        Ajout de keymap.\n"
         # lecture ligne HOOKS=
         local contenu_hooks=$(sed -n "/^HOOKS=/p" /etc/mkinitcpio.conf)
         # Commente la ligne HOOKS= originale
@@ -279,8 +280,8 @@ source $(pwd)/ai-commons
             messages+="\n"
             sed -i "/^HOOKS=/s/base udev/base systemd/g;/^HOOKS=/s/keyboard fsck/keyboard keymap fsck/g" /etc/mkinitcpio.conf
         fi
-        # COMPRESSION="cat" ( PAS DE COMPRESSION )
-        messages+="COMPRESSION : Ajout de COMPRESSION=\"cat\" (PAS DE COMPRESSION)\n"
+        # COMPRESSION="cat" (PAS DE COMPRESSION)
+        messages+="COMPRESSION : Ajout de COMPRESSION=\"cat\" (PAS de Compression)\n"
         sed -i "/^#COMPRESSION=\"gzip\"/i\COMPRESSION=\"cat\"" /etc/mkinitcpio.conf
         print_whiptail_msgbox "${messages}" "Continuer"
         #
