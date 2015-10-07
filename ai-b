@@ -101,6 +101,7 @@ source $(pwd)/ai-commons
     #}}}
     #INSTALL BASE SYSTEM {{{
     install_base_system() {
+        local retour=9
         local liste_paquets=""
         local messages=""
         local fonction="INSTALLATION DU SYSTÈME DE BASE.\n"
@@ -126,7 +127,8 @@ source $(pwd)/ai-commons
         clear
         echo -e "\n${BGreen}Installation du système de base...${White}"
         pacstrap ${MOUNTPOINT} ${liste_paquets}
-		if [[ "$?" -eq "1" ]]; then
+        retour=$?
+		if [[ $retour = 1 ]]; then
             messages="${fonction}"
             messages+="/!\ ERREUR :\n"
             messages+="    Erreur durant l'éxécution du script «pacstrap».\n"
@@ -144,6 +146,15 @@ source $(pwd)/ai-commons
             clear
             echo -e "\n${BGreen}Installation des outils pour le WiFi...${White}"
             pacstrap ${MOUNTPOINT} iw wireless_tools wpa_actiond wpa_supplicant dialog
+			retour=$?
+			if [[ $retour = 1 ]]; then
+				messages="${fonction}"
+				messages+="/!\ ERREUR :\n"
+				messages+="    Erreur durant l'éxécution du script «pacstrap».\n"
+				messages+="    ARRÊT immédiat.\n"
+				print_whiptail_msgbox "${messages}" "OK"
+				exit 1
+			fi
         fi
     }
     #}}}
