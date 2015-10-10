@@ -127,7 +127,7 @@ $ sudo sed -i "s/-march=x86-64 -mtune=generic/-march=native/g" /etc/makepkg.conf
 # Ajout de  -fdiagnostics-color=always
 $ https://bbs.archlinux.org/viewtopic.php?id=189606
 ----------------------------------------------------
-CFLAGS="-march=native -O2 -pipe -fstack-protector-strong --param=ssp-buffer-size=4"
+CFLAGS="-march=native -O2 -pipe -fstack-protector-strong"
 $ sudo sed -i "s/-march=native -O2 -pipe/-march=native -O2 -pipe -fdiagnostics-color=always/g" /etc/makepkg.conf
 
 

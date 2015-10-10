@@ -112,7 +112,7 @@ OU MAJ freshplayerplugin / chromium-pepper-flash
 
 $ profile-cleaner f
 
-$ sudo systemctl --user stop psd.service psd-resync.service
+$ systemctl --user stop psd.service psd-resync.service
 
 SI MAJ freshplayerplugin / chromium-pepper-flash
 ------------------------------------------------
@@ -122,6 +122,13 @@ $ yaourt -Syua freshplayerplugin
 !!! Vérifier /home/jnd/.mozilla/firefox/profiles.ini
 $ cat ~/.mozilla/firefox/profiles.ini
 $ rm -i ~/.mozilla/firefox/ljs58rbs.default/pluginreg.dat
+
+$ systemctl --user start psd.service
+
+$ systemctl --user status psd.service
+$ systemctl --user status psd-resync.service
+
+$ psd preview ou	 $ psd parse
 
 
 1 ERE MAJ PSD.SERVICE 5.75-1 -> 6.03-1
