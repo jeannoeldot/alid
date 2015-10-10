@@ -128,14 +128,14 @@ source $(pwd)/ai-commons
         echo -e "\n${BGreen}Installation du système de base...${White}"
         pacstrap ${MOUNTPOINT} ${liste_paquets}
         retour=$?
-		if [[ $retour = 1 ]]; then
+        if [[ $retour = 1 ]]; then
             messages="${fonction}"
             messages+="/!\ ERREUR :\n"
             messages+="    Erreur durant l'éxécution du script «pacstrap».\n"
             messages+="    ARRÊT immédiat.\n"
             print_whiptail_msgbox "${messages}" "OK"
-			exit 1
-		fi
+            exit 1
+        fi
         # Si WiFi : installe les outils nécessaires
         local name_net_wireless=$(ip link | awk '/wlp/ {print $2}' | sed -e "s/://")
         if [[ -n ${name_net_wireless} ]]; then
@@ -146,15 +146,15 @@ source $(pwd)/ai-commons
             clear
             echo -e "\n${BGreen}Installation des outils pour le WiFi...${White}"
             pacstrap ${MOUNTPOINT} iw wireless_tools wpa_actiond wpa_supplicant dialog
-			retour=$?
-			if [[ $retour = 1 ]]; then
-				messages="${fonction}"
-				messages+="/!\ ERREUR :\n"
-				messages+="    Erreur durant l'éxécution du script «pacstrap».\n"
-				messages+="    ARRÊT immédiat.\n"
-				print_whiptail_msgbox "${messages}" "OK"
-				exit 1
-			fi
+            retour=$?
+            if [[ $retour = 1 ]]; then
+                messages="${fonction}"
+                messages+="/!\ ERREUR :\n"
+                messages+="    Erreur durant l'éxécution du script «pacstrap».\n"
+                messages+="    ARRÊT immédiat.\n"
+                print_whiptail_msgbox "${messages}" "OK"
+                exit 1
+            fi
         fi
     }
     #}}}

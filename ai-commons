@@ -379,9 +379,9 @@ invalid_option() { #{{{
 } #}}}
 pause_function() { #{{{
     print_line
-        echo -e "${BGreen}"
-        read -e -sn 1 -p "Appuyer sur une touche pour continuer..."
-        echo -e "${White}"
+    echo -e "${BGreen}"
+    read -e -sn 1 -p "Appuyer sur une touche pour continuer..."
+    echo -e "${White}"
 } #}}}
 menu_item() { #{{{
     #check if the number of arguments is less then 2
