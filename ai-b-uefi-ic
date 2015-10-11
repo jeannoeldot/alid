@@ -69,7 +69,6 @@
         whiptail --title "${TITRE_BOX_W}" --msgbox "${messages}" --ok-button "Continuer" 22 72
         #
         # Installation de rEFInd
-#        clear
         printf '%s\n' "${BGreen}Installation de ${BYellow}rEFInd${BGreen}...${Reset}"
         pacman -Syu refind-efi
         # Kernels
@@ -86,7 +85,6 @@
         messages+="Copie du fichier de configuration du kernel :\n"
         messages+="- refind_linux.conf-sample --> refind_linux.conf\n"
         whiptail --title "${TITRE_BOX_W}" --msgbox "${messages}" --ok-button "Continuer" 22 72
-#        clear
         printf '%s\n' "${BGreen}Copie des fichiers du kernel (EFISTUB)...${Reset}"
         # CREATION arch_x
         mkdir -p ${DIR_EFI_ARCHLINUX}
@@ -112,7 +110,6 @@
             messages+="- os_arch_${NUMBER_OF_ARCH}.png --> ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}.png\n"
         fi
         print_whiptail_msgbox "${messages}" "Continuer"
-#        clear
         if [[ $IS_MULTI_BOOT_UEFI = 0 ]]; then
             printf '%s\n' "${BGreen}Copie des fichiers d'installation de rEFInd...${Reset}"
             mkdir -p ${NAME_DIR_EFI}
@@ -241,19 +238,16 @@
             fi
             #
             numpartefi=$(echo $EFI_DEVICE | sed 's/\/dev\/sd[a-z]//')
-#            clear
             printf '%s\n' "${BGreen}Configuration du manager de Boot...${Reset}"
             efibootmgr -c -d ${ROOT_DEVICE} -p ${numpartefi} -l ${NAME_DIR_MGR_EFI} -L "rEFInd ArchLinux"
             messages="${fonction}"
-#             messages+="Vérification des entrées dans NVRAM avec «"${EDITOR}"» ?\n"
-#             print_whiptail_yesno "${messages}" "Vérifier" "Continuer"
             messages+="Visualiser les entrées dans NVRAM ?\n"
             print_whiptail_yesno "${messages}" "Visualiser" "Continuer"
             retour=$?
             if [[ $retour = 0 ]]; then
                 efibootmgr -v > /tmp/.efibootmgr
-#                ${EDITOR} /tmp/.efibootmgr
                 cat /tmp/.efibootmgr
+                pause_function
                 rm -f /tmp/.efibootmgr
             fi
         fi
@@ -261,7 +255,6 @@
         messages="${fonction}"
         messages+="Installation et Activation de efistub_update{.path,.service}.\n"
         print_whiptail_msgbox "${messages}" "Continuer"
-#        clear
         printf '%s\n' "${BGreen}Installation de «${BYellow}efistub_update.path${BGreen}» et «${BYellow}efistub_update.service${BGreen}»...${Reset}"
         cp -v ai-fconfig/efi-services/efistub_update.path /etc/systemd/system/efistub_update.path
         cp -v ai-fconfig/efi-services/efistub_update.service /etc/systemd/system/efistub_update.service
@@ -273,7 +266,6 @@
         if [[ $IN_VIRTUAL_BOX = 0 ]]; then
             messages+="Installation et Activation de intel_ucode_update{.path,.service}.\n"
             print_whiptail_msgbox "${messages}" "Continuer"
-#            clear
             printf '%s\n' "${BGreen}Installation de «${BYellow}intel_ucode_update.path${BGreen}» et «${BYellow}intel_ucode_update.service${BGreen}»...${Reset}"
             cp -v ai-fconfig/efi-services/intel_ucode_update.path /etc/systemd/system/intel_ucode_update.path
             cp -v ai-fconfig/efi-services/intel_ucode_update.service /etc/systemd/system/intel_ucode_update.service
@@ -295,7 +287,6 @@
         fi
         print_whiptail_msgbox "${messages}" "Continuer"
         if [[ $IS_MULTI_BOOT_UEFI = 0 ]]; then
-#            clear
             printf '%s\n' "${BGreen}Installation d'un Shell UEFI et Création du script «${BYellow}archlinux.nsh${BGreen}» utilisé par le Shell UEFI...${Reset}"
             wget https://edk2.svn.sourceforge.net/svnroot/edk2/trunk/edk2/ShellBinPkg/UefiShell/X64/Shell.efi
             # OU
@@ -317,7 +308,7 @@
         fi
         # RAJOUT CREATION arch_x_ck VIDE
         mkdir -p ${DIR_EFI_ARCHLINUX}_ck
-        pause_function
+#        pause_function
     }
     #}}}
 

@@ -197,11 +197,9 @@ source $(pwd)/ai-commons
         messages="${fonction}"
         messages+="Nom d'hôte choisi : "${L_HN}"\n\n"
         messages+="Visualiser le fichier «/etc/hosts» ?\n"
-#        messages+="Visualiser le fichier «/etc/hosts» avec «"${EDITOR}"» ?\n"
         print_whiptail_yesno "${messages}" "Visualiser" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
-#            ${EDITOR} /etc/hosts
             cat /etc/hosts
             pause_function
         fi
@@ -217,7 +215,6 @@ source $(pwd)/ai-commons
         print_whiptail_msgbox "${messages}" "Continuer"
         ZONE=${FR_ZONE}
         SUBZONE=${FR_SUBZONE}
-#        clear
         printf '%s\n' "${BGreen}Création lien symbolique ${BYellow}${ZONE}/${SUBZONE}${BGreen}...${Reset}"
         ln -sf /usr/share/zoneinfo/${ZONE}/${SUBZONE} /etc/localtime
         pause_function
@@ -231,7 +228,6 @@ source $(pwd)/ai-commons
         messages="${fonction}"
         messages+="Le mode horloge matérielle sélectionné est : UTC.\n\n"
         print_whiptail_msgbox "${messages}" "Continuer"
-#        clear
         printf '%s\n' "${BGreen}Configuration de l'horloge matérielle en ${BYellow}UTC${BGreen}...${Reset}"
         hwclock --systohc --utc
         pause_function
@@ -300,8 +296,7 @@ source $(pwd)/ai-commons
         if [[ $retour = 0 ]]; then
             ${EDITOR} /etc/mkinitcpio.conf
         fi
-#        clear
-        printf '%s\n' "${BGreen}Génération de ${BYellow}vmlinuz-linux initramfs-linux.img initramfs-linux-fallback.img${BGreen}...${Reset}"
+        printf '%s\n' "${BGreen}Génération de ${BYellow}initramfs-linux.img${BGreen} et ${BYellow}initramfs-linux-fallback.img${BGreen}...${Reset}"
         mkinitcpio -p linux
         pause_function
     }
@@ -318,7 +313,6 @@ source $(pwd)/ai-commons
         messages+="Ajout de l'option «noarp» à etc/dhcpcd.conf.\n"
         print_whiptail_msgbox "${messages}" "Continuer"
         #
-#        clear
         echo "noarp" >> /etc/dhcpcd.conf
         printf '%s\n' "${BGreen}Création du fichier ${BYellow}/etc/resolv.conf.head${BGreen}...${Reset}"
         cp -v ai-fconfig/net-ip-statique/resolv.conf.head /etc/resolv.conf.head
@@ -355,7 +349,6 @@ source $(pwd)/ai-commons
                 fi
             done
         #
-        clear
         printf '%s\n' "${BGreen}Configure le mot de passe «${BYellow}root${BGreen}» :${Reset}"
         echo -e "${L_MDP}\n${L_MDP}" > /tmp/.passwd
         passwd root < /tmp/.passwd
@@ -373,7 +366,6 @@ source $(pwd)/ai-commons
     messages_p2="${fonction}"
     messages_p2+="Mise à jour de la base de pacman.\n"
     print_whiptail_msgbox "${messages_p2}" "Continuer"
-#    clear
     printf '%s\n' "${BGreen}Mise à jour de la base de pacman...${Reset}"
     pacman-db-upgrade
     #
