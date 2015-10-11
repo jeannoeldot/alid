@@ -25,14 +25,14 @@
                      3>&1 1>&2 2>&3)
         case "$BOOTLOADER" in
             "GRUB")
-                clear
+#                clear
                 printf '%s\n' "${BGreen}Installation de ${BYellow}grub${BGreen}...${Reset}"
                 pacman -Syu grub
 #               # make grub automatically detect others OS
 #               pacman -Syu os-prober
                 ;;
             "SYSLINUX")
-                clear
+#                clear
                 if [[ $TYPE_STORAGE_PARTITION == "GPT" ]]; then
                     printf '%s\n' "${BGreen}Installation de ${BYellow}syslinux${BGreen} et ${BYellow}gptfdisk${BGreen}...${Reset}"
                     pacman -Syu syslinux gptfdisk
@@ -42,6 +42,7 @@
                 fi
                 ;;
         esac
+        pause_function
     }
     #}}}
     #CONFIGURE BOOTLOADER {{{
@@ -51,7 +52,7 @@
         fonction+="=================================================\n\n"
         case $BOOTLOADER in
             "GRUB")
-                clear
+#                clear
                 printf '%s\n' "${BGreen}Configuration de ${BYellow}grub${BGreen}...${Reset}"
                 grub-install --target=i386-pc --recheck ${ROOT_DEVICE}
                 #
@@ -75,7 +76,7 @@
                 fi           
                 ;;
             "SYSLINUX")
-                clear
+#                clear
                 printf '%s\n' "${BGreen}Configuration de ${BYellow}syslinux${BGreen}...${Reset}"
                 syslinux-install_update -i -a -m
                 #
@@ -102,5 +103,6 @@
                 fi           
                 ;;
         esac
+        pause_function
     }
     #}}}

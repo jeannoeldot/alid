@@ -128,7 +128,7 @@
 #             mount | grep $1 && umount $1
 #         }
         format_partition() {
-            clear
+#            clear
             printf '%s\n' "${BGreen}Formatage de la partition ${BYellow}$1${BGreen}...${Reset}"
 #            umount_partition "$1"
             [[ -z $3 ]] && select_filesystem
@@ -150,7 +150,7 @@
             print_whiptail_yesno_no "${messages}" "Formater" "Annuler"
             retour=$?
             if [[ $retour = 0 ]]; then
-                clear
+#                clear
                 printf '%s\n' "${BGreen}Formatage de la partition SWAP ${BYellow}$1${BGreen}...${Reset}"
 #                umount_partition "$1"
                 mkswap $1
