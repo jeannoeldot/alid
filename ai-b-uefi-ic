@@ -70,7 +70,7 @@
         #
         # Installation de rEFInd
         clear
-        echo -e "\n${BGreen}Installation de ${BYellow}rEFInd${BGreen}...${White}"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}rEFInd${BGreen}...${Reset}"
         pacman -Syu refind-efi
         # Kernels
         messages="${fonction}"
@@ -87,17 +87,17 @@
         messages+="- refind_linux.conf-sample --> refind_linux.conf\n"
         whiptail --title "${TITRE_BOX_W}" --msgbox "${messages}" --ok-button "Continuer" 22 72
         clear
-        echo -e "\n${BGreen}Copie des fichiers du kernel (EFISTUB)...${White}"
+        printf '%s\n' "${BGreen}Copie des fichiers du kernel (EFISTUB)...${Reset}"
         # CREATION arch_x
         mkdir -p ${DIR_EFI_ARCHLINUX}
         cp -v /boot/vmlinuz-linux ${DIR_EFI_ARCHLINUX}/vmlinuz-${NAME_DIR_ARCHLINUX}.efi
         cp -v /boot/initramfs-linux.img ${DIR_EFI_ARCHLINUX}/initramfs-${NAME_DIR_ARCHLINUX}.img
         cp -v /boot/initramfs-linux-fallback.img ${DIR_EFI_ARCHLINUX}/initramfs-${NAME_DIR_ARCHLINUX}-fallback.img
         if [[ $IN_VIRTUAL_BOX = 0 ]]; then
-            echo -e "\n${BGreen}Copie du fichier de intel-ucode...${White}"
+            printf '%s\n' "${BGreen}Copie du fichier de intel-ucode...${Reset}"
             cp -v /boot/intel-ucode.img ${DIR_EFI_ARCHLINUX}/intel-ucode.img
         fi
-        echo -e "\n${BGreen}Copie du fichier de configuration du kernel (EFISTUB)...${White}"
+        printf '%s\n' "${BGreen}Copie du fichier de configuration du kernel (EFISTUB)...${Reset}"
         cp -v /usr/share/refind/refind_linux.conf-sample ${DIR_EFI_ARCHLINUX}/refind_linux.conf
         # rEFInd : si 1ere installation
         messages="${fonction}"
@@ -114,18 +114,18 @@
         print_whiptail_msgbox "${messages}" "Continuer"
         clear
         if [[ $IS_MULTI_BOOT_UEFI = 0 ]]; then
-            echo -e "\n${BGreen}Copie des fichiers d'installation de rEFInd...${White}"
+            printf '%s\n' "${BGreen}Copie des fichiers d'installation de rEFInd...${Reset}"
             mkdir -p ${NAME_DIR_EFI}
             cp -v /usr/share/refind/refind_${ARCHI_REFIND}.efi /boot/efi${NAME_DIR_MGR_EFI}
             cp -v /usr/share/refind/refind.conf-sample ${NAME_DIR_EFI}/refind.conf
             # Installe icones
             cp -R /usr/share/refind/icons ${NAME_DIR_EFI}/icons
-            echo -e "\n${BGreen}Copie des icones os_arch_${NUMBER_OF_ARCH}.png et os_arch_${NUMBER_OF_ARCH}_ck.png...${White}"
+            printf '%s\n' "${BGreen}Copie des icones os_arch_${NUMBER_OF_ARCH}.png et os_arch_${NUMBER_OF_ARCH}_ck.png...${Reset}"
             cp -v ai-fconfig/refind-icones/os_arch_${NUMBER_OF_ARCH}.png ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}.png
             cp -v ai-fconfig/refind-icones/os_arch_${NUMBER_OF_ARCH}_ck.png ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}_ck.png
         else
-            echo -e "\n${BGreen}MULTI BOOT UEFI : Pas d'installation de rEFInd...${White}"
-            echo -e "\n${BGreen}Copie des icones os_arch_${NUMBER_OF_ARCH}.png et os_arch_${NUMBER_OF_ARCH}_ck.png...${White}"
+            printf '%s\n' "${BGreen}MULTI BOOT UEFI : Pas d'installation de rEFInd...${Reset}"
+            printf '%s\n' "${BGreen}Copie des icones os_arch_${NUMBER_OF_ARCH}.png et os_arch_${NUMBER_OF_ARCH}_ck.png...${Reset}"
             # Installe icones
             cp -v ai-fconfig/refind-icones/os_arch_${NUMBER_OF_ARCH}.png ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}.png
             cp -v ai-fconfig/refind-icones/os_arch_${NUMBER_OF_ARCH}_ck.png ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}_ck.png
@@ -241,7 +241,7 @@
             #
             numpartefi=$(echo $EFI_DEVICE | sed 's/\/dev\/sd[a-z]//')
             clear
-            echo -e "\n${BGreen}Configuration du manager de Boot...${White}"
+            printf '%s\n' "${BGreen}Configuration du manager de Boot...${Reset}"
             efibootmgr -c -d ${ROOT_DEVICE} -p ${numpartefi} -l ${NAME_DIR_MGR_EFI} -L "rEFInd ArchLinux"
             messages="${fonction}"
             messages+="Vérification des entrées dans NVRAM avec «"${EDITOR}"» ?\n"
@@ -258,11 +258,11 @@
         messages+="Installation et Activation de efistub_update{.path,.service}.\n"
         print_whiptail_msgbox "${messages}" "Continuer"
         clear
-        echo -e "\n${BGreen}Installation de «${BYellow}efistub_update.path${BGreen}» et «${BYellow}efistub_update.service${BGreen}»...${White}"
+        printf '%s\n' "${BGreen}Installation de «${BYellow}efistub_update.path${BGreen}» et «${BYellow}efistub_update.service${BGreen}»...${Reset}"
         cp -v ai-fconfig/efi-services/efistub_update.path /etc/systemd/system/efistub_update.path
         cp -v ai-fconfig/efi-services/efistub_update.service /etc/systemd/system/efistub_update.service
         sed -i "s/NAMEDIRARCHLINUX/${NAME_DIR_ARCHLINUX}/g" /etc/systemd/system/efistub_update.service
-        echo -e "\n${BGreen}Activation de «${BYellow}efistub_update.path${BGreen}» et «${BYellow}efistub_update.service${BGreen}»...${White}"
+        printf '%s\n' "${BGreen}Activation de «${BYellow}efistub_update.path${BGreen}» et «${BYellow}efistub_update.service${BGreen}»...${Reset}"
         systemctl enable efistub_update.path
         # Installation de intel_ucode_update.path et intel_ucode_update.service
         messages="${fonction}"
@@ -270,11 +270,11 @@
             messages+="Installation et Activation de intel_ucode_update{.path,.service}.\n"
             print_whiptail_msgbox "${messages}" "Continuer"
             clear
-            echo -e "\n${BGreen}Installation de «${BYellow}intel_ucode_update.path${BGreen}» et «${BYellow}intel_ucode_update.service${BGreen}»...${White}"
+            printf '%s\n' "${BGreen}Installation de «${BYellow}intel_ucode_update.path${BGreen}» et «${BYellow}intel_ucode_update.service${BGreen}»...${Reset}"
             cp -v ai-fconfig/efi-services/intel_ucode_update.path /etc/systemd/system/intel_ucode_update.path
             cp -v ai-fconfig/efi-services/intel_ucode_update.service /etc/systemd/system/intel_ucode_update.service
             sed -i "s/NAMEDIRARCHLINUX/${NAME_DIR_ARCHLINUX}/g" /etc/systemd/system/intel_ucode_update.service
-            echo -e "\n${BGreen}Activation de «${BYellow}intel_ucode_update.path${BGreen}» et «${BYellow}intel_ucode_update.service${BGreen}»...${White}"
+            printf '%s\n' "${BGreen}Activation de «${BYellow}intel_ucode_update.path${BGreen}» et «${BYellow}intel_ucode_update.service${BGreen}»...${Reset}"
             systemctl enable intel_ucode_update.path
         else
             messages+="!!! Installation dans VirtualBox :\n"
@@ -292,7 +292,7 @@
         print_whiptail_msgbox "${messages}" "Continuer"
         if [[ $IS_MULTI_BOOT_UEFI = 0 ]]; then
             clear
-            echo -e "\n${BGreen}Installation d'un Shell UEFI et Création du script «${BYellow}archlinux.nsh${BGreen}» utilisé par le Shell UEFI...${White}"
+            printf '%s\n' "${BGreen}Installation d'un Shell UEFI et Création du script «${BYellow}archlinux.nsh${BGreen}» utilisé par le Shell UEFI...${Reset}"
             wget https://edk2.svn.sourceforge.net/svnroot/edk2/trunk/edk2/ShellBinPkg/UefiShell/X64/Shell.efi
             # OU
             # cp -v /run/archiso/bootmnt/EFI/shellx64_v2.efi /boot/efi/shellx64.efi

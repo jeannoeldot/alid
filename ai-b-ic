@@ -213,7 +213,7 @@ source $(pwd)/ai-commons
         ZONE=${FR_ZONE}
         SUBZONE=${FR_SUBZONE}
         clear
-        echo -e "\n${BGreen}Création lien symbolique ${BYellow}${ZONE}/${SUBZONE}${BGreen}...${White}"
+        printf '%s\n' "${BGreen}Création lien symbolique ${BYellow}${ZONE}/${SUBZONE}${BGreen}...${Reset}"
         ln -sf /usr/share/zoneinfo/${ZONE}/${SUBZONE} /etc/localtime
     }
     #}}}
@@ -226,7 +226,7 @@ source $(pwd)/ai-commons
         messages+="Le mode horloge matérielle sélectionné est : UTC.\n\n"
         print_whiptail_msgbox "${messages}" "Continuer"
         clear
-        echo -e "\n${BGreen}Configuration de l'horloge matérielle en ${BYellow}UTC${BGreen}...${White}"
+        printf '%s\n' "${BGreen}Configuration de l'horloge matérielle en ${BYellow}UTC${BGreen}...${Reset}"
         hwclock --systohc --utc
     }
     #}}}
@@ -253,7 +253,7 @@ source $(pwd)/ai-commons
             ${EDITOR} /etc/locale.conf
         fi
         #
-        echo -e "\n${BGreen}Génération de la langue locale utilisée ${BYellow}${LOCALE}${BGreen}...${White}"
+        printf '%s\n' "${BGreen}Génération de la langue locale utilisée ${BYellow}${LOCALE}${BGreen}...${Reset}"
         sed -i "/${LOCALE}/s/^#//" /etc/locale.gen
         locale-gen
     }
@@ -293,7 +293,7 @@ source $(pwd)/ai-commons
             ${EDITOR} /etc/mkinitcpio.conf
         fi
         clear
-        echo -e "\n${BGreen}Génération de ${BYellow}vmlinuz-linux initramfs-linux.img initramfs-linux-fallback.img${BGreen}...${White}"
+        printf '%s\n' "${BGreen}Génération de ${BYellow}vmlinuz-linux initramfs-linux.img initramfs-linux-fallback.img${BGreen}...${Reset}"
         mkinitcpio -p linux
     }
     #}}}
@@ -311,10 +311,10 @@ source $(pwd)/ai-commons
         #
         clear
         echo "noarp" >> /etc/dhcpcd.conf
-        echo -e "\n${BGreen}Création du fichier ${BYellow}/etc/resolv.conf.head${BGreen}...${White}"
+        printf '%s\n' "${BGreen}Création du fichier ${BYellow}/etc/resolv.conf.head${BGreen}...${Reset}"
         cp -v ai-fconfig/net-ip-statique/resolv.conf.head /etc/resolv.conf.head
         # Enable toutes les interfaces réseaux par défaut
-        echo -e "\n${BGreen}Activation du service ${BYellow}dhcpcd.service${BGreen}...${White}"
+        printf '%s\n' "${BGreen}Activation du service ${BYellow}dhcpcd.service${BGreen}...${Reset}"
 #       systemctl enable dhcpcd@${NAME_NET_WIRED}.service
         systemctl enable dhcpcd.service
     }
@@ -346,7 +346,7 @@ source $(pwd)/ai-commons
             done
         #
         clear
-        echo -e "\n${BGreen}Configure le mot de passe «${BYellow}root${BGreen}» :${White}"
+        printf '%s\n' "${BGreen}Configure le mot de passe «${BYellow}root${BGreen}» :${Reset}"
         echo -e "${L_MDP}\n${L_MDP}" > /tmp/.passwd
         passwd root < /tmp/.passwd
         rm -f /tmp/.passwd
@@ -363,7 +363,7 @@ source $(pwd)/ai-commons
     messages_p2+="Mise à jour de la base de pacman.\n"
     print_whiptail_msgbox "${messages_p2}" "Continuer"
     clear
-    echo -e "\n${BGreen}Mise à jour de la base de pacman...${White}"
+    printf '%s\n' "${BGreen}Mise à jour de la base de pacman...${Reset}"
     pacman-db-upgrade
     #
     read_variables_ali_b1

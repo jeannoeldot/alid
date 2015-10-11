@@ -125,7 +125,7 @@ source $(pwd)/ai-commons
         fi        
         print_whiptail_msgbox "${messages}" "Continuer"
         clear
-        echo -e "\n${BGreen}Installation du système de base...${White}"
+        printf '%s\n' "${BGreen}Installation du système de base...${Reset}"
         pacstrap ${MOUNTPOINT} ${liste_paquets}
         retour=$?
         if [[ $retour = 1 ]]; then
@@ -144,7 +144,7 @@ source $(pwd)/ai-commons
             messages+="Installe les outils nécessaires pour le WiFi\n"
             print_whiptail_msgbox "${messages}" "Continuer"
             clear
-            echo -e "\n${BGreen}Installation des outils pour le WiFi...${White}"
+            printf '%s\n' "${BGreen}Installation des outils pour le WiFi...${Reset}"
             pacstrap ${MOUNTPOINT} iw wireless_tools wpa_actiond wpa_supplicant dialog
             retour=$?
             if [[ $retour = 1 ]]; then
@@ -219,9 +219,9 @@ source $(pwd)/ai-commons
         messages+="dans le répertoire /root du nouveau système.\n\n"
         print_whiptail_msgbox "${messages}" "Copier"
         clear
-        echo -e "\n${BGreen}Copie de «AI» dans le répertoire /root du nouveau système...${White}"
+        printf '%s\n' "${BGreen}Copie de «AI» dans le répertoire /root du nouveau système...${Reset}"
         cp -R $(pwd) ${MOUNTPOINT}/root
-        echo -e "\n${BGreen}Copie des fichiers de configuration dans le répertoire /root du nouveau système...${White}"
+        printf '%s\n' "${BGreen}Copie des fichiers de configuration dans le répertoire /root du nouveau système...${Reset}"
         cp -v ai-fconfig/root-.bashrc ${MOUNTPOINT}/root/.bashrc
         cp -v ai-fconfig/root-.bash_profile ${MOUNTPOINT}/root/.bash_profile
         #
