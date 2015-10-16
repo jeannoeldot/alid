@@ -2,14 +2,11 @@
 
 #-------------------------------------------------------------------------------
 # ai-de
-# Installation de KDE4 ou OpenBox
+# Installation de KDE5 ou OpenBox
 #
-# ne fonctionne qu'avec la langue FR (fr_FR)
-# Created by me for me
+# Ne fonctionne qu'avec la langue FR (fr_FR)
 #
-#Thanks helmuthdu mailto: helmuthdu[at]gmail[dot]com
-#https://github.com/helmuthdu/aui
-#Created by helmuthdu mailto: helmuthdu[at]gmail[dot]com
+# Interface graphique avec whiptail
 #
 # Run this script after your first boot with archlinux (as root)
 
@@ -68,24 +65,6 @@ source $(pwd)/ai-commons
         check_ping_ok
         if [[ $? -ne 0 ]]; then
             print_title "RÉSEAU - Mise en fonction du réseau."
-#             type_ip_networks=("IP-Dynamique" "IP-Statique");
-#             PS3="$prompt1"
-#             echo -e "Indiquer la configuration du réseau ( IP Dynamique ou IP Statique ):"
-#             select OPT in "${type_ip_networks[@]}"; do
-#                 case "$REPLY" in
-#                     1)
-#                         CURRENT_TYPE_IP="dhcpcd"
-#                         break
-#                         ;;
-#                     2)
-#                         CURRENT_TYPE_IP="network_ip_statique"
-#                         break
-#                         ;;
-#                     *)
-#                         invalid_option
-#                         ;;
-#                 esac
-#             done
             CURRENT_TYPE_IP="dhcpcd"
             ret_ping=9
             until [[ $ret_ping -eq 0 ]];
@@ -683,7 +662,7 @@ source $(pwd)/ai-commons
     }
     #}}}
 
-    # Début Install
+    # DÉBUT INSTALLATION
     # Sets the interval of inactivity et fonts
     setterm -blank 0
 #    setfont Lat2-Terminus16
@@ -707,16 +686,13 @@ source $(pwd)/ai-commons
     select_user
     choose_aurhelper
     install_basic_setup
-#    install_preload
-    # SUPPRIMÉ suite à maj systemd 217-6
-#    enable_readahead
     install_xorg
     configure_font_presets
     install_video_cards
     install_dep_opt_systemd
     install_cups
 
-# Début install DE OU WM {{{
+# DÉBUT INSTALLATION DE OU WM {{{
         print_title "CHOIX DE L'ENVIRONNEMENT DE BUREAU ( KDE4, KDE5 ) OU DU GESTIONNAIRE DE FENETRES ( OPENBOX )"
         liste_env_des_wm=("KDE4" "KDE5" "OPENBOX");
         PS3="$prompt1"
@@ -747,8 +723,6 @@ source $(pwd)/ai-commons
         #}}}
 
     install_desktop_environment
-# APPEL SUPPRIMÉ LE 18/09/2014
-#    install_nm_wicd
     install_accessories_apps
     install_system_apps
     install_development_apps
@@ -759,11 +733,10 @@ source $(pwd)/ai-commons
     install_video_apps
     install_audio_video_apps
     install_games
-#}}} FIN install DE OU WM
+#}}} FIN INSTALLATION DE OU WM
 
     install_fonts
     install_optional_dep_for_qt4
-#    clean_orphan_packages
     update_mandb
     clean_cache_pacman
     finish

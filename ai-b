@@ -211,15 +211,15 @@ source $(pwd)/ai-commons
         local fonction="PARTIE 3 : INSTALLATION TERMINÉE.\n"
         fonction+="=================================\n\n"
         messages="${fonction}"
-        # COPY AI TO ROOT FOLDER IN THE NEW SYSTEM
-        # COPY ROOT FILES TO ROOT FOLDER IN THE NEW SYSTEM
         messages+="Une copie de «AI» sera placé\n"
         messages+="dans le répertoire /root du nouveau système.\n\n"
         messages+="Copie des fichiers de configuration\n"
         messages+="dans le répertoire /root du nouveau système.\n\n"
         print_whiptail_msgbox "${messages}" "Copier"
+        # COPY AI TO ROOT FOLDER IN THE NEW SYSTEM
         printf '%s\n' "${BGreen}Copie de «AI» dans le répertoire /root du nouveau système...${Reset}"
         cp -R $(pwd) ${MOUNTPOINT}/root
+        # COPY ROOT FILES TO ROOT FOLDER IN THE NEW SYSTEM
         printf '%s\n' "${BGreen}Copie des fichiers de configuration dans le répertoire /root du nouveau système...${Reset}"
         cp -v ai-fconfig/root-.bashrc ${MOUNTPOINT}/root/.bashrc
         cp -v ai-fconfig/root-.bash_profile ${MOUNTPOINT}/root/.bash_profile

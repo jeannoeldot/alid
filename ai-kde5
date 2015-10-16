@@ -22,7 +22,7 @@
         # KDE5 LOOK
         print_info_cyan "Installation de KDE5 Look"
         package_install "oxygen-icons oxygen-icons-svg"
-	package_install "oxygen-gtk2 oxygen-kde4"
+        package_install "oxygen-gtk2 oxygen-kde4"
         package_install "qtcurve-gtk2 qtcurve-qt4 qtcurve-qt5 breeze-kde4"
         # GTK theme matching Breeze
         package_install "gtk-theme-orion"
@@ -34,13 +34,13 @@
 # 	package_install "kdeplasma-addons-applets-notes kdeplasma-addons-applets-showdesktop"
         # KDE5 MULTIMEDIA
         print_info_cyan "Installation de KDE5 Multimedia"
-	package_install "kdemultimedia-kscd kdemultimedia-audiocd-kio kio-mtp kio-extras"
-	# Remplace kdemultimedia-kmix : PAS de miniature dans Barre des Tâches
-	package_install "kmix"
-	package_install "libdvdcss libdvdread libdvdnav"
+        package_install "kdemultimedia-kscd kdemultimedia-audiocd-kio kio-mtp kio-extras"
+        # Remplace kdemultimedia-kmix : PAS de miniature dans Barre des Tâches
+        package_install "kmix"
+        package_install "libdvdcss libdvdread libdvdnav"
         # KDE5 GRAPHICS
         print_info_cyan "Installation de KDE5 Graphiques"
-	package_install "gwenview kdegraphics-kcolorchooser kdegraphics-kolourpaint kdegraphics-ksnapshot kdegraphics-okular kdegraphics-svgpart kdegraphics-thumbnailers kdegraphics-mobipocket"
+        package_install "gwenview kdegraphics-kcolorchooser kdegraphics-kolourpaint kdegraphics-ksnapshot kdegraphics-okular kdegraphics-svgpart kdegraphics-thumbnailers kdegraphics-mobipocket"
         package_install "kipi-plugins"
         package_install "ffmpegthumbs"
 #         # KDE5 NETWORK
@@ -51,11 +51,11 @@
         package_install "okteta kate dolphin-plugins kdesdk-kioslaves kompare kdesdk-poxml kdebindings-python2 kdebindings-python"
         # KDE5 FONTS
         print_info_cyan "Installation de KDE5 Polices TTF"
-	package_install "ttf-bitstream-vera ttf-dejavu ttf-freefont ttf-liberation ttf-linux-libertine ttf-droid ttf-ubuntu-font-family ttf-oxygen"
+        package_install "ttf-bitstream-vera ttf-dejavu ttf-freefont ttf-liberation ttf-linux-libertine ttf-droid ttf-ubuntu-font-family ttf-oxygen"
         # LSB-RELEASE
         print_info_cyan "Installation de lsb-release"
         package_install "lsb-release"
-	#
+        #
         is_package_installed "cups" && package_install "print-manager xdg-user-dirs"
 #package_install "kde-telepathy telepathy"
         #}}}
