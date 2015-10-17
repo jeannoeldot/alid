@@ -1,13 +1,13 @@
 Scripts personnels d'installation de ArchLinux
 ==============================================
 
-Interface graphique avec whiptail
----------------------------------
+Interface graphique avec dialog
+-------------------------------
 
 
 LICENSE         : GPL2 (Voir COPYING pour les détails).
 
-VERSION         : 0.0.1
+VERSION         : 0.0.2
 
 LANGUE          : uniquement FR (AZERTY ou BÉPO)
 

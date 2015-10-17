@@ -7,7 +7,7 @@
 #
 # Ne fonctionne qu'avec la langue FR (fr_FR)
 #
-# Interface graphique avec whiptail
+# Interface graphique avec dialog
 #
 # Run this script after your first boot with archlinux-AAAA.MM.JJ-dual.iso (as root)
 
@@ -15,14 +15,13 @@ source $(pwd)/ai-commons
 
     #CONFIGURE KEYMAP {{{
     configure_keymap() {
-        local messages=""
-        local fonction="SÉLECTION DU TYPE DE CLAVIER.\n"
-        fonction+="=============================\n\n"
-        messages="\n${fonction}"
+        local messages=""        
+        local titre="SÉLECTION DU TYPE DE CLAVIER"
+        messages="\n"
         messages+="Choisir le type de clavier (AZERTY ou BÉPO) :"
-        REPLY=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Valider" 16 72 5 \
-                "AZERTY" "-" \
-                "BÉPO" "-" \
+        REPLY=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --menu "${messages}" 16 72 5 \
+                "AZERTY" "" \
+                "BÉPO" "" \
                 3>&1 1>&2 2>&3)
         case "$REPLY" in
             "AZERTY")
@@ -34,11 +33,10 @@ source $(pwd)/ai-commons
                 TYPE_KEYBOARD="BEPO"
                 ;;
         esac
-
-        messages="${fonction}"
+        messages="\n"
         messages+="Type de clavier  : "${TYPE_KEYBOARD}"\n"
         messages+="Valeur de KEYMAP : "${KEYMAP}"\n"
-        print_whiptail_msgbox "${messages}" "Continuer"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         loadkeys $KEYMAP
 #        setfont Lat2-Terminus16
         setfont lat9w-16
@@ -51,17 +49,14 @@ source $(pwd)/ai-commons
     #CONFIGURE MIRRORLIST {{{
     configure_mirrorlist() {
         local messages=""
-        local fonction="CONFIGURATION DU FICHIER «/etc/pacman.d/mirrorlist».\n"
-        fonction+="====================================================\n\n"
+        local titre="CONFIGURATION DU FICHIER «/etc/pacman.d/mirrorlist»"
         local retour=9
         local date_du_jour=$(date +%Y-%m-%d)
         local url="https://www.archlinux.org/mirrorlist/?country=FR&use_mirror_status=on"
         local tmpfile=$(mktemp --suffix=-mirrorlist)
         # Get latest mirror list and save to tmpfile
-        curl -so ${tmpfile} ${url} &
-        messages="${fonction}"
-        messages+="Récupération des serveurs FR..."
-        print_whiptail_gauge "$!" "0.5" "${messages}"
+        printf '%s\n' "${BGreen}Récupération des serveurs ${BYellow}FR${BGreen}...${Reset}"
+        curl -so ${tmpfile} ${url}
         # Backup and replace current mirrorlist file (if new file is non-zero)
         if [[ -s ${tmpfile} ]]; then
             date_Generated=$(cat "${tmpfile}" | awk '/Generated/ {print $4}')
@@ -80,19 +75,19 @@ source $(pwd)/ai-commons
         fi
         # Fin ou Erreur
         if [[ $retour = 0 ]]; then
-            messages="${fonction}"
+            messages="\n"
             messages+="Succès de la configuration du fichier «/etc/pacman.d/mirrorlist».\n\n"
             messages+="Visualiser/Éditer le fichier «mirrorlist» avec «"${EDITOR}"» ?\n"
-            print_whiptail_yesno "${messages}" "Éditer" "Continuer"
+            print_dialog_yesno "${titre}" "${messages}" "Éditer" "Continuer"
             retour=$?
             if [[ $retour = 0 ]]; then
                 ${EDITOR} /etc/pacman.d/mirrorlist
             fi           
         else
-            messages="${fonction}"
+            messages="\n"
             messages+="Échec de la configuration du fichier «/etc/pacman.d/mirrorlist».\n\n"
             messages+="Edition manuelle du fichier mirrorlist avec "${EDITOR}"\n"
-            print_whiptail_msgbox "${messages}" "Éditer"
+            print_dialog_msgbox "${titre}" "${messages}" "Éditer"
             mv /etc/pacman.d/mirrorlist.original /etc/pacman.d/mirrorlist
             chmod +r /etc/pacman.d/mirrorlist
             ${EDITOR} /etc/pacman.d/mirrorlist
@@ -104,16 +99,15 @@ source $(pwd)/ai-commons
         local retour=9
         local liste_paquets=""
         local messages=""
-        local fonction="INSTALLATION DU SYSTÈME DE BASE.\n"
-        fonction+="================================\n\n"
-        messages="${fonction}"
+        local titre="INSTALLATION DU SYSTÈME DE BASE"
+        messages="\n"
         messages+="En utilisant le script «pacstrap», seront installés :\n"
         if [[ $IS_UEFI = 1 ]]; then
             messages+="le système de base, gptfdisk, wget"
-            liste_paquets="base libnewt lz4 gptfdisk elinks wget"
+            liste_paquets="base dialog lz4 gptfdisk elinks wget"
         else
             messages+="le système de base, wget"
-            liste_paquets="base libnewt lz4 elinks wget"
+            liste_paquets="base dialog lz4 elinks wget"
         fi
         # Intel Microcode
         if [[ $IN_VIRTUAL_BOX = 0 ]]; then
@@ -123,34 +117,34 @@ source $(pwd)/ai-commons
             messages+=" et elinks.\n\n"
             messages+="Dans VirtualBox : PAS d'intallation des mises à jour du microcode.\n"
         fi        
-        print_whiptail_msgbox "${messages}" "Continuer"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         printf '%s\n' "${BGreen}Installation du système de base...${Reset}"
         pacstrap ${MOUNTPOINT} ${liste_paquets}
         retour=$?
         if [[ $retour = 1 ]]; then
-            messages="${fonction}"
-            messages+="/!\ ERREUR :\n"
+            messages="\n"
+            messages+="\Zb\Z1/!\ ERREUR :\Zn\n"
             messages+="    Erreur durant l'éxécution du script «pacstrap».\n"
             messages+="    ARRÊT immédiat.\n"
-            print_whiptail_msgbox "${messages}" "OK"
+            print_dialog_msgbox "${titre}" "${messages}" "OK"
             exit 1
         fi
         # Si WiFi : installe les outils nécessaires
         local name_net_wireless=$(ip link | awk '/wlp/ {print $2}' | sed -e "s/://")
         if [[ -n ${name_net_wireless} ]]; then
-            messages="${fonction}"
+            messages="\n"
             messages+="En utilisant le script «pacstrap»,\n"
             messages+="Installe les outils nécessaires pour le WiFi\n"
-            print_whiptail_msgbox "${messages}" "Continuer"
+            print_dialog_msgbox "${titre}" "${messages}" "Continuer"
             printf '%s\n' "${BGreen}Installation des outils pour le WiFi...${Reset}"
             pacstrap ${MOUNTPOINT} iw wireless_tools wpa_actiond wpa_supplicant dialog
             retour=$?
             if [[ $retour = 1 ]]; then
-                messages="${fonction}"
-                messages+="/!\ ERREUR :\n"
+                messages="\n"
+                messages+="\Zb\Z1/!\ ERREUR :\Zn\n"
                 messages+="    Erreur durant l'éxécution du script «pacstrap».\n"
                 messages+="    ARRÊT immédiat.\n"
-                print_whiptail_msgbox "${messages}" "OK"
+                print_dialog_msgbox "${titre}" "${messages}" "OK"
                 exit 1
             fi
         fi
@@ -161,12 +155,11 @@ source $(pwd)/ai-commons
     genere_fstab() {
         local retour=9
         local messages=""
-        local fonction="GÉNÉRATION DU FICHIER «/etc/fstab» AVEC UUID.\n"
-        fonction+="=============================================\n\n"
-        messages="${fonction}"
+        local titre="GÉNÉRATION DU FICHIER «/etc/fstab» AVEC UUID"
+        messages="\n"
         genfstab -U -p ${MOUNTPOINT} >> ${MOUNTPOINT}/etc/fstab
         messages+="Visualiser le fichier «/etc/fstab» ?\n"
-        print_whiptail_yesno "${messages}" "Visualiser" "Continuer"
+        print_dialog_yesno "${titre}" "${messages}" "Visualiser" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
             cat ${MOUNTPOINT}/etc/fstab
@@ -208,14 +201,13 @@ source $(pwd)/ai-commons
     #FINISH {{{
     finish() {
         local messages=""        
-        local fonction="PARTIE 3 : INSTALLATION TERMINÉE.\n"
-        fonction+="=================================\n\n"
-        messages="${fonction}"
+        local titre="PARTIE 3 : INSTALLATION TERMINÉE"
+        messages="\n"
         messages+="Une copie de «AI» sera placé\n"
         messages+="dans le répertoire /root du nouveau système.\n\n"
         messages+="Copie des fichiers de configuration\n"
         messages+="dans le répertoire /root du nouveau système.\n\n"
-        print_whiptail_msgbox "${messages}" "Copier"
+        print_dialog_msgbox "${titre}" "${messages}" "Copier"
         # COPY AI TO ROOT FOLDER IN THE NEW SYSTEM
         printf '%s\n' "${BGreen}Copie de «AI» dans le répertoire /root du nouveau système...${Reset}"
         cp -R $(pwd) ${MOUNTPOINT}/root
@@ -225,13 +217,13 @@ source $(pwd)/ai-commons
         cp -v ai-fconfig/root-.bash_profile ${MOUNTPOINT}/root/.bash_profile
         pause_function
         #
-        messages="${fonction}"
+        messages="\n"
         messages+="Fermer tous les terminaux ouverts (TTY 2, ...).\n"
-        print_whiptail_msgbox "${messages}" "Continuer"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         # umount mounted partitions
         umount_partitions
         # Redémarrer ou Éteindre
-        messages="\n${fonction}"
+        messages="\n"
         # Si dans VirtualBox
         if [[ $IN_VIRTUAL_BOX = 1 ]]; then
             messages+="Dans VirtualBox : choisir ÉTEINDRE,\n"
@@ -243,9 +235,9 @@ source $(pwd)/ai-commons
             messages+="Enlever la clé USB ou le CD et redémarrer.\n\n"        
         fi
         messages+="Sélectionner l'arrêt (Redémarrer ou Éteindre) :"
-        REPLY=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Valider" 20 72 5 \
-                "REDÉMARRER" "-" \
-                "ÉTEINDRE" "-" \
+        REPLY=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --menu "${messages}" 20 72 5 \
+                "REDÉMARRER" "" \
+                "ÉTEINDRE" "" \
                 3>&1 1>&2 2>&3)
         case "$REPLY" in
             "REDÉMARRER")
@@ -263,7 +255,6 @@ source $(pwd)/ai-commons
 if [[ -f /root/ai-b.launched ]]; then
     # PARTIE 3 HORS CHROOT
     #
-    messages_p3=""
     # Installation dans VirtualBox ou réelle
     check_is_in_virtualbox
     # Sets the interval of inactivity et fonts
@@ -275,30 +266,29 @@ if [[ -f /root/ai-b.launched ]]; then
 else
     # PARTIE 1 HORS CHROOT
     #
-    messages_p1=""
     # Sets the interval of inactivity
     setterm -blank 0
-    messages_p1+="INSTALLATION PARTIE 1 HORS CHROOT.\n"
-    messages_p1+="==================================\n\n"
+    titre="INSTALLATION PARTIE 1 HORS CHROOT"
+    messages="\n"
     # Editeur par défaut
-    messages_p1+="L'éditeur par défaut est : nano\n"
+    messages+="L'éditeur par défaut est : nano\n"
     # UEFI ou BIOS
     check_is_uefi_or_bios
     if [[ $IS_UEFI = 1 ]]; then
-        messages_p1+="Installation en mode     : UEFI\n"
+        messages+="Installation en mode     : UEFI\n"
         source $(pwd)/ai-b-uefi-hc
     else
-        messages_p1+="Installation en mode     : BIOS\n"
+        messages+="Installation en mode     : BIOS\n"
         source $(pwd)/ai-b-bios-hc
     fi
     # Installation dans VirtualBox ou réelle
     check_is_in_virtualbox
     if [[ $IN_VIRTUAL_BOX = 1 ]]; then
-        messages_p1+="Installation dans        : Oracle VM VirtualBox\n"
+        messages+="Installation dans        : Oracle VM VirtualBox\n"
     else
-        messages_p1+="Installation dans        : PC Réel\n"
+        messages+="Installation dans        : PC Réel\n"
     fi    
-    print_whiptail_msgbox "${messages_p1}" "Continuer"
+    print_dialog_msgbox "${titre}" "${messages}" "Continuer"
     #
     configure_keymap
     # ai-b-bios-hc ou ai-b-uefi-hc
@@ -309,20 +299,18 @@ else
     install_base_system
     genere_fstab
     #
-    messages_p1=""
-    messages_p1+="FIN INSTALLATION PARTIE 1 HORS CHROOT.\n"
-    messages_p1+="======================================\n\n"
-
+    titre="FIN INSTALLATION PARTIE 1 HORS CHROOT"
+    messages="\n"
     # COPIE AI TO ROOT FOLDER IN THE NEW SYSTEM
     cp -R $(pwd) ${MOUNTPOINT}/root
     cp -f ${MOUNTPOINT}/root/ai/ai-b-ic ${MOUNTPOINT}/root/ai/ai-b
     #
     write_variables_ali
     #
-    messages_p1+="Commandes à éxécuter dans l'ordre pour poursuivre l'installation :\n\n"
-    messages_p1+="cd && arch-chroot /mnt /bin/bash => Chroot dans le nouveau système\n"
-    messages_p1+="cd /root/ai && ./ai-b            => Partie 2 de l'installation\n"
-    print_whiptail_msgbox "${messages_p1}" "Continuer"
+    messages+="Commandes à éxécuter dans l'ordre pour poursuivre l'installation :\n\n"
+    messages+="cd && arch-chroot /mnt /bin/bash => Chroot dans le nouveau système\n"
+    messages+="cd /root/ai && ./ai-b            => Partie 2 de l'installation\n"
+    print_dialog_msgbox "${titre}" "${messages}" "Continuer"
     #
     echo "ai-b_launched=1" > /root/ai-b.launched
     exit 0

@@ -7,12 +7,12 @@
 # ne fonctionne qu'avec la langue FR (fr_FR)
 # Created by me for me
 #
-# Interface graphique avec whiptail
+# Interface graphique avec dialog
 
 # CONSTANTES {{{
-# TITRE BOITES DE DIALOG whiptail
-TITRE_BOX_W_DATE="11/10/2015"
-TITRE_BOX_W_VERSION="V 0.0.1"
+# TITRE BOITES DE DIALOG dialog
+TITRE_BOX_W_DATE="17/10/2015"
+TITRE_BOX_W_VERSION="V 0.0.2"
 TITRE_BOX_W_TEXTE="INSTALLATION DE ARCH LINUX"
 TITRE_BOX_W="${TITRE_BOX_W_TEXTE} ${TITRE_BOX_W_VERSION} DU ${TITRE_BOX_W_DATE}"
 
@@ -181,48 +181,29 @@ check_is_hdd_or_ssd() { #{{{
     fi
 } #}}}
 #
-# AFFICHE UNE MESSAGE BOX WHIPTAIL
-# $1 = message
-# $2 = texte bouton OK
-print_whiptail_msgbox() { #{{{
-    whiptail --title "${TITRE_BOX_W}" --msgbox "${1}" --ok-button "${2}" 16 72
+# AFFICHE UNE MESSAGE BOX DIALOG
+# $1 = titre
+# $2 = message
+# $3 = texte bouton OK
+print_dialog_msgbox() { #{{{
+    dialog --colors --backtitle "${TITRE_BOX_W}" --title "${1}" --ok-label "${3}" --msgbox "${2}" 16 72
 } #}}}
-# AFFICHE UNE YESNO BOX WHIPTAIL
-# $1 = message
-# $2 = texte bouton YES
-# $3 = texte bouton NO
-print_whiptail_yesno() { #{{{
-    whiptail --title "${TITRE_BOX_W}" --yesno "${1}" --yes-button "${2}" --no-button "${3}" 16 72
+# AFFICHE UNE YESNO BOX DIALOG
+# $1 = titre
+# $2 = message
+# $3 = texte bouton YES
+# $4 = texte bouton NO
+print_dialog_yesno() { #{{{
+    dialog --colors --backtitle "${TITRE_BOX_W}" --title "${1}" --yes-label "${3}" --no-label "${4}" --yesno "${2}" 16 72
 } #}}}
-# AFFICHE UNE YESNO BOX WHIPTAIL DEFAUT = NO
-# $1 = message
-# $2 = texte bouton YES
-# $3 = texte bouton NO
-print_whiptail_yesno_no() { #{{{
-    whiptail --title "${TITRE_BOX_W}" --yesno "${1}" --defaultno --yes-button "${2}" --no-button "${3}" 16 72
+# AFFICHE UNE YESNO BOX DIALOG DEFAUT = NO
+# $1 = titre
+# $2 = message
+# $3 = texte bouton YES
+# $4 = texte bouton NO
+print_dialog_yesno_no() { #{{{
+    dialog --colors --defaultno --backtitle "${TITRE_BOX_W}" --title "${1}" --yes-label "${3}" --no-label "${4}" --yesno "${2}" 16 72
 } #}}}
-# AFFICHE UNE GAUGE BOX WHIPTAIL
-# $1 = pid
-# $2 = pri
-# $3 = mes
-print_whiptail_gauge() { #{{{
-  { int="1"
-    while (true)
-    do
-        proc=$(ps | grep "${1}")
-        if [ "$?" -gt "0" ]; then break; fi
-        sleep "${2}"
-        echo $int
-        int=$((int+1))
-    done
-    echo 100
-    sleep 1
-    } | whiptail --title "${TITRE_BOX_W}" --gauge "${3}" 8 72 0
-} #}}}
-
-
-
-
 
 #}}}
 # SUPPORT FUNCTIONS {{{

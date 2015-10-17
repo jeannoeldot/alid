@@ -7,7 +7,7 @@
 # Script d'installation en mode BIOS
 # Ne fonctionne qu'avec la langue FR (fr_FR)
 #
-# Interface graphique avec whiptail
+# Interface graphique avec dialog
 #
 #-------------------------------------------------------------------------------
 
@@ -19,19 +19,18 @@
             # sgdisk --zap-all /dev/sda
             local retour=9
             local messages=""
-            local fonction="PARTITIONNEMENT : MISE À ZÉRO DU DISQUE «"${HDD_DEVICE}"».\n"
-            fonction+="===================================================\n\n"
-            messages="${fonction}"
-            messages+="/!\ Si Multi Boot, NE PAS METTRE À ZÉRO le disque.\n"
-            messages+="/!\ TOUTES les données sur le disque sélectionné seront perdues.\n\n"
+            local titre="PARTITIONNEMENT : MISE À ZÉRO DU DISQUE «"${HDD_DEVICE}"»"
+            messages="\n"
+            messages+="\Zb\Z1/!\ Si Multi Boot, NE PAS METTRE À ZÉRO le disque.\Zn\n"
+            messages+="\Zb\Z1/!\ TOUTES les données sur le disque sélectionné seront perdues.\Zn\n\n"
             messages+="Confirmer la mise à zéro du disque «"${HDD_DEVICE}"»\n"
-            print_whiptail_yesno_no "${messages}" "Mettre à zéro" "Annuler"
+            print_dialog_yesno_no "${titre}" "${messages}" "Mettre à zéro" "Annuler"
             retour=$?
             if [[ $retour = 0 ]]; then
                 retour=9
-                messages="${fonction}"
+                messages="\n"
                 messages+="Confirmer une 2ème fois la mise à zéro du disque «"${HDD_DEVICE}"»\n"
-                print_whiptail_yesno_no "${messages}" "Mettre à zéro" "Annuler"
+                print_dialog_yesno_no "${titre}" "${messages}" "Mettre à zéro" "Annuler"
                 retour=$?
                 if [[ $retour = 0 ]]; then
                     sgdisk --zap-all ${HDD_DEVICE}
@@ -41,48 +40,44 @@
         }
         appel_check_is_hdd_or_ssd() {
             local messages=""
-            local fonction="PARTITIONNEMENT : TYPE DE DISQUE.\n"
-            fonction+="=================================\n\n"
-            messages="${fonction}"
+            local titre="PARTITIONNEMENT : TYPE DE DISQUE"
+            messages="\n"
             check_is_hdd_or_ssd "${HDD_DEVICE}"
             if [[ ${IS_HDD_OR_SSD} == "HDD" ]]; then
-                messages+="!!! Le Disque «"${HDD_DEVICE}"» est un HDD.\n"
+                messages+="\Zb\Z6!!! Le Disque «"${HDD_DEVICE}"» est un HDD.\Zn\n"
             else
-                messages+="!!! Le Disque «"${HDD_DEVICE}"» est un SSD.\n"
+                messages+="\Zb\Z6!!! Le Disque «"${HDD_DEVICE}"» est un SSD.\Zn\n"
             fi
-            print_whiptail_msgbox "${messages}" "Continuer"
+            print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         }
         select_storage_partitions() {
             local messages=""
-            local fonction="PARTITIONNEMENT : SÉLECTION DU TYPE DE TABLE DE PARTITIONS.\n"
-            fonction+="===========================================================\n\n"
-            messages="\n${fonction}"
-            messages+="/!\ En mode BIOS (PAS UEFI), si dual boot avec Windows :\n"
-            messages+="    NE PAS CHOISIR GPT.\n\n"
+            local titre="PARTITIONNEMENT : SÉLECTION DU TYPE DE TABLE DE PARTITIONS"
+            messages="\n"
+            messages+="\Zb\Z1/!\ En mode BIOS (PAS UEFI), si dual boot avec Windows :\Zn\n"
+            messages+="\Zb\Z1    NE PAS CHOISIR GPT.\Zn\n\n"
             messages+="Sélectionner le type de table de partitions (MSDOS ou GPT) :"
-            TYPE_STORAGE_PARTITION=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Valider" 20 72 5 \
-                                    "MSDOS" "-" \
-                                    "GPT" "-" \
+            TYPE_STORAGE_PARTITION=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --menu "${messages}" 16 72 5 \
+                                    "MSDOS" "" \
+                                    "GPT" "" \
                                     3>&1 1>&2 2>&3)
-            
-            messages="${fonction}"
+            messages="\n"
             if [[ $TYPE_STORAGE_PARTITION == "MSDOS" ]]; then
                 messages+="«cfdisk» sera lancé afin de créer les partitions sur «"${HDD_DEVICE}"»\n\n"
             else
                 messages+="«cgdisk» sera lancé afin de créer les partitions sur «"${HDD_DEVICE}"»\n\n"
-                messages+="/!\ Si GRUB est prévu, une partition de 2 Mio de type EF02\n"
-                messages+="    doit être créée en 1er sur «"${HDD_DEVICE}"».\n"
+                messages+="\Zb\Z1/!\ Si GRUB est prévu, une partition de 2 Mio de type EF02\Zn\n"
+                messages+="\Zb\Z1    doit être créée en 1er sur «"${HDD_DEVICE}"».\Zn\n"
             fi
-            print_whiptail_msgbox "${messages}" "Continuer"
+            print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         }
         select_hdd_devices() {
             local messages=""
-            local fonction="PARTITIONNEMENT : SÉLECTION DU DISQUE À PARTITIONNER.\n"
-            fonction+="=====================================================\n\n"
-            messages="\n${fonction}"
-            local liste_disque_present=$(LC_ALL=C parted -sl 2> /dev/null | grep -E 'Mod|/dev/sd[a-z]' | sed -e "s/\(^Disk.*\)/\1\n/;s/Model/Modèle/;s/Disk/Disque/")
+            local titre="PARTITIONNEMENT : SÉLECTION DU DISQUE À PARTITIONNER"
+            messages="\n"
+            local liste_disque_present=$(LC_ALL=C parted -sl 2> /dev/null | grep -E 'Mod|/dev/sd[a-z]' | sed -e "s/\(^Disk.*\)/\1\n/;s/Model/\\\nModèle/;s/Disk/Disque/")
             messages+="Liste des Disques présents dans le PC :\n"
-            messages+="---------------------------------------\n"
+            messages+="---------------------------------------"
             messages+=${liste_disque_present}"\n\n"
             messages+="Sélectionner le Disque à partitionner :"
             local hauteur=0
@@ -94,7 +89,7 @@
                 *)  hauteur=40 ;;
             esac
             local liste_hdd_devices=$(LC_ALL=C parted -sl 2> /dev/null | grep "/dev/sd[a-z]" | sed -e "s/://" | awk '{print $2   " "   $3$4}')
-            HDD_DEVICE=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Valider" $hauteur 72 5 ${liste_hdd_devices} 3>&1 1>&2 2>&3)
+            HDD_DEVICE=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --menu "${messages}" $hauteur 72 6 ${liste_hdd_devices} 3>&1 1>&2 2>&3)
         }
         #
         select_hdd_devices
@@ -115,7 +110,7 @@
     #FORMAT DEVICE {{{
     format_device() {
         local messages=""
-        local fonction=""
+        local titre=""
         local retour=9
         select_filesystem() {
         # "ext4" "btrfs" "reiserfs" "ntfs" "vfat" "ext2" "ext3" "jfs" "xfs"
@@ -141,12 +136,11 @@
             mount -t $TYPE $1 $2
         }
         format_swap_partition() {
-            fonction="PARTITIONNEMENT : FORMATAGE DE LA PARTITION «SWAP».\n"
-            fonction+="===================================================\n\n"
-            messages="${fonction}"
-            messages+="!!! Si Multi Boot, NE PAS FORMATER la partition «SWAP».\n\n"
+            titre="PARTITIONNEMENT : FORMATAGE DE LA PARTITION «SWAP»"
+            messages="\n"
+            messages+="\Zb\Z6!!! Si Multi Boot, NE PAS FORMATER la partition «SWAP».\Zn\n\n"
             messages+="Confirmer le formatage de la partition SWAP «"$1"»\n"
-            print_whiptail_yesno_no "${messages}" "Formater" "Annuler"
+            print_dialog_yesno_no "${titre}" "${messages}" "Formater" "Annuler"
             retour=$?
             if [[ $retour = 0 ]]; then
                 printf '%s\n' "${BGreen}Formatage de la partition SWAP ${BYellow}$1${BGreen}...${Reset}"
@@ -177,32 +171,29 @@
 # SI EN GPT et GRUB : 1ère partition  = EF02 BIOS_BOOT_PARTITION ou BOOT_PAR_NUM
         if [[ $TYPE_STORAGE_PARTITION == "GPT" ]]; then
             if [[ ${NUM_LINE_BIOS_BOOT_PART} = 1 ]]; then
-                fonction="PARTITIONNEMENT : SÉLECTION DES PARTITIONS.\n"
-                fonction+="===========================================\n\n"
-                messages="${fonction}"
-                messages+="!!! En GPT : si GRUB est prévu, la 1ère partition est réservée :\n"
-                messages+="    (BIOS_BOOT_PARTITION ou BOOT_PAR_NUM)\n"
-                print_whiptail_msgbox "${messages}" "Continuer"
+                titre="PARTITIONNEMENT : SÉLECTION DES PARTITIONS"
+                messages="\n"
+                messages+="\Zb\Z6!!! En GPT : si GRUB est prévu, la 1ère partition est réservée :\Zn\n"
+                messages+="\Zb\Z6    (BIOS_BOOT_PARTITION ou BOOT_PAR_NUM)\Zn\n"
+                print_dialog_msgbox "${titre}" "${messages}" "Continuer"
             fi
         fi
         partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "${NUM_LINE_BIOS_BOOT_PART}d")
 # CHOIX PARTITION ROOT OBLIGATOIRE
-        fonction="PARTITIONNEMENT : SÉLECTION PARTITION «ROOT».\n"
-        fonction+="=============================================\n\n"
-        messages="\n${fonction}"
-        messages+="/!\ Toutes les données sur la partition choisie seront perdues.\n"
-        ROOT=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Choisir" 25 72 5 ${partitions} 3>&1 1>&2 2>&3)
+        titre="PARTITIONNEMENT : SÉLECTION PARTITION «ROOT»"
+        messages="\n"
+        messages+="\Zb\Z1/!\ Toutes les données sur la partition choisie seront perdues.\Zn\n"
+        ROOT=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Choisir" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
         ROOT_DEVICE=$(echo $ROOT | sed 's/[0-9]//')
         format_partition "$ROOT" "${MOUNTPOINT}"
         CHOIX_PARTITIONS+=$(echo $ROOT)" = /root.  "
 # CHOIX PARTITION SWAP FACULTATIF
-        fonction="PARTITIONNEMENT : SÉLECTION PARTITION «SWAP».\n"
-        fonction+="=============================================\n\n"
-        messages="\n${fonction}"
-        messages+="!!! LA PARTITION «SWAP» EST FACULTATIVE.\n\n"
+        titre="PARTITIONNEMENT : SÉLECTION PARTITION «SWAP»"
+        messages="\n"
+        messages+="\Zb\Z6!!! LA PARTITION «SWAP» EST FACULTATIVE.\Zn\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
         partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "${NUM_LINE_BIOS_BOOT_PART}d")
-        L_SWAP=$(whiptail --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Choisir" --cancel-button "Annuler" 25 72 5 ${partitions} 3>&1 1>&2 2>&3)
+        L_SWAP=$(dialog --colors --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Choisir" --cancel-label "Annuler" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
         retour=$?
         if [[ $retour = 0 ]]; then
             format_swap_partition "$L_SWAP"
@@ -211,14 +202,13 @@
             L_SWAP="/dev/sda98"
         fi
 # CHOIX PARTITION HOME FACULTATIF
-        fonction="PARTITIONNEMENT : SÉLECTION PARTITION «HOME».\n"
-        fonction+="=============================================\n\n"
-        messages="\n${fonction}"
-        messages+="!!! LA PARTITION «HOME» EST FACULTATIVE.\n\n"
-        messages+="/!\ Toutes les données sur la partition choisie seront perdues.\n\n"
+        titre="PARTITIONNEMENT : SÉLECTION PARTITION «HOME»"
+        messages="\n"
+        messages+="\Zb\Z6!!! LA PARTITION «HOME» EST FACULTATIVE.\Zn\n\n"
+        messages+="\Zb\Z1/!\ Toutes les données sur la partition choisie seront perdues.\Zn\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
         partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v $L_SWAP | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "${NUM_LINE_BIOS_BOOT_PART}d")
-        L_HOME=$(whiptail --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Choisir" --cancel-button "Annuler" 25 72 5 ${partitions} 3>&1 1>&2 2>&3)
+        L_HOME=$(dialog --colors --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Choisir" --cancel-label "Annuler" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
         retour=$?
         if [[ $retour = 0 ]]; then
             format_partition "$L_HOME" "${MOUNTPOINT}/home"
