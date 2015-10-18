@@ -6,7 +6,7 @@
 #
 # Ne fonctionne qu'avec la langue FR (fr_FR)
 #
-# Interface graphique avec whiptail
+# Interface graphique avec dialog
 #
 # Run this script after your first boot with archlinux (as root)
 

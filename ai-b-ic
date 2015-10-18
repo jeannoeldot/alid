@@ -7,7 +7,7 @@
 #
 # Ne fonctionne qu'avec la langue FR (fr_FR)
 #
-# Interface graphique avec whiptail
+# Interface graphique avec dialog
 
 source $(pwd)/ai-commons
 
@@ -39,13 +39,12 @@ source $(pwd)/ai-commons
             EFI_DEVICE="${EFI_DEVICE}"
         else
             local messages=""
-            local fonction="LECTURE FICHIER «variables.ali».\n"
-            fonction+="================================\n\n"
-            messages="${fonction}"
-            messages+="/!\ ERREUR :\n"
+            local titre="LECTURE FICHIER «variables.ali»"
+            messages="\n"
+            messages+="\Zb\Z1/!\ ERREUR :\Zn\n"
             messages+="    Le fichier «variables.ali» n'existe pas.\n"
             messages+="    ARRÊT immédiat.\n"
-            print_whiptail_msgbox "${messages}" "OK"
+            print_dialog_msgbox "${titre}" "${messages}" "OK"
             exit 1
         fi
     }
@@ -55,8 +54,7 @@ source $(pwd)/ai-commons
         local retour=9
         local messages=""
         local messages_if=""
-        local fonction="CONFIGURATION DU FICHIER «/etc/fstab».\n"
-        fonction+="======================================\n\n"
+        local titre="CONFIGURATION DU FICHIER «/etc/fstab»"
         #
         if [[ ${TYPE_STORAGE_PARTITION} == "GPT" ]]; then
             local num_ligne_swap=$(grep -n "swap" "/etc/fstab" | cut -f1 -d:)
@@ -81,11 +79,11 @@ source $(pwd)/ai-commons
         if [[ ${IS_HDD_OR_SSD} == "SSD" ]]; then
             # rotational = 0 ==> SSD
             # https://wiki.archlinux.org/index.php/Solid_State_Drives#TRIM
-            messages="\n${fonction}"
+            messages="\n"
             messages+="Activation du Trim (option discard ou service fstrim).\n"
             messages+="------------------------------------------------------\n\n"
             messages+="Configurer le TRIM en se basant sur :\n"
-            REPLY=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Valider" 20 72 5 \
+            REPLY=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --menu "${messages}" 20 72 5 \
                     "DISCARD" "TRIM par option de montage." \
                     "FSTRIM" "TRIM par service «fstrim»." \
                     3>&1 1>&2 2>&3)
@@ -107,13 +105,13 @@ source $(pwd)/ai-commons
             sed -i "s/rw,relatime,data=ordered/defaults,relatime/g" /etc/fstab
         fi
         #
-        messages="${fonction}"
+        messages="\n"
         messages+="${messages_if}"
-        print_whiptail_msgbox "${messages}" "Continuer"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         #
-        messages="${fonction}"
+        messages="\n"
         messages+="Visualiser/Editer le fichier «/etc/fstab» avec «"${EDITOR}"» ?\n"
-        print_whiptail_yesno "${messages}" "Editer" "Continuer"
+        print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
             ${EDITOR} /etc/fstab
@@ -124,21 +122,20 @@ source $(pwd)/ai-commons
     configure_vconsole_conf() {
         local retour=9
         local messages=""
-        local fonction="CONFIGURATION DU FICHIER «/etc/vconsole.conf».\n"
-        fonction+="==============================================\n\n"
+        local titre="CONFIGURATION DU FICHIER «/etc/vconsole.conf»"
         echo "KEYMAP=$KEYMAP" > /etc/vconsole.conf
 #        echo "FONT=Lat2-Terminus16" >> /etc/vconsole.conf
         echo "FONT=lat9w-16" >> /etc/vconsole.conf
 #        echo "FONT_MAP=8859-15_to_uni" >> /etc/vconsole.conf
-        messages="${fonction}"
+        messages="\n"
         messages+="Définition du type de clavier dans les consoles virtuelles.\n\n"
         messages+="Clavier : variable KEYMAP = "$KEYMAP"\n"
         messages+="Police  : variable FONT   = lat9w-16\n"
-        print_whiptail_msgbox "${messages}" "Continuer"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         #
-        messages="${fonction}"
+        messages="\n"
         messages+="Visualiser/Editer le fichier «/etc/vconsole.conf» avec «"${EDITOR}"» ?\n"
-        print_whiptail_yesno "${messages}" "Editer" "Continuer"
+        print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
             ${EDITOR} /etc/vconsole.conf
@@ -149,12 +146,11 @@ source $(pwd)/ai-commons
     configure_pacman_conf() {
         #ADD COLOR TO PACMAN.CONF
         local messages=""
-        local fonction="CONFIGURATION DU FICHIER «/etc/pacman.conf».\n"
-        fonction+="===========================================\n\n"
-        messages="${fonction}"
+        local titre="CONFIGURATION DU FICHIER «/etc/pacman.conf»"
+        messages="\n"
         messages+="Activation de l'option «color».\n"
         messages+="Activation de l'option «VerbosePkgLists».\n"
-        print_whiptail_msgbox "${messages}" "Continuer"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         sed -i "/^#Color/c\Color" /etc/pacman.conf
         sed -i "/^#VerbosePkgLists/c\VerbosePkgLists" /etc/pacman.conf
     }
@@ -163,13 +159,12 @@ source $(pwd)/ai-commons
     configure_hostname() {
         local retour=9
         local messages=""
-        local fonction="CONFIGURATION DU FICHIER «/etc/hostname».\n"
-        fonction+="=========================================\n\n"
-        messages="\n${fonction}"
+        local titre="CONFIGURATION DU FICHIER «/etc/hostname»"
+        messages="\n"
         messages+="Entrer un nom d'hôte pour identifier la machine :\n"
         until [[ $retour = 0 ]];
             do
-                L_HN=$(whiptail --nocancel --title "${TITRE_BOX_W}" --inputbox "${messages}" --ok-button "Valider" 16 72 myarch 3>&1 1>&2 2>&3)
+                L_HN=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --inputbox "${messages}" 16 72 "myarch" 3>&1 1>&2 2>&3)
                 if [[ ${L_HN} == "" ]]; then
                     retour=9
                 else
@@ -178,9 +173,9 @@ source $(pwd)/ai-commons
             done
         echo "$L_HN" > /etc/hostname
         retour=9
-        messages="${fonction}"
+        messages="\n"
         messages+="Visualiser/Editer le fichier «/etc/hostname» avec «"${EDITOR}"» ?\n"
-        print_whiptail_yesno "${messages}" "Editer" "Continuer"
+        print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
             ${EDITOR} /etc/hostname
@@ -192,12 +187,11 @@ source $(pwd)/ai-commons
         sed -i "/127.0.0.1/s/$/ ${L_HN}/" /etc/hosts
         sed -i "/::1/s/$/ ${L_HN}/" /etc/hosts
         retour=9
-        fonction="MODIFICATION DU FICHIER «/etc/hosts».\n"
-        fonction+="=====================================\n\n"
-        messages="${fonction}"
+        titre="MODIFICATION DU FICHIER «/etc/hosts»"
+        messages="\n"
         messages+="Nom d'hôte choisi : "${L_HN}"\n\n"
         messages+="Visualiser le fichier «/etc/hosts» ?\n"
-        print_whiptail_yesno "${messages}" "Visualiser" "Continuer"
+        print_dialog_yesno "${titre}" "${messages}" "Visualiser" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
             cat /etc/hosts
@@ -208,11 +202,10 @@ source $(pwd)/ai-commons
     #CONFIGURE TIMEZONE {{{
     configure_timezone() {
         local messages=""
-        local fonction="CONFIGURATION DU FICHIER «/etc/localtime».\n"
-        fonction+="==========================================\n\n"
-        messages="${fonction}"
+        local titre="CONFIGURATION DU FICHIER «/etc/localtime»"
+        messages="\n"
         messages+="Le fuseau horaire sélectionné est : "${FR_ZONE}"/"${FR_SUBZONE}".\n\n"
-        print_whiptail_msgbox "${messages}" "Continuer"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         ZONE=${FR_ZONE}
         SUBZONE=${FR_SUBZONE}
         printf '%s\n' "${BGreen}Création lien symbolique ${BYellow}${ZONE}/${SUBZONE}${BGreen}...${Reset}"
@@ -223,11 +216,10 @@ source $(pwd)/ai-commons
     #CONFIGURE HARDWARECLOCK {{{
     configure_hardwareclock() {
         local messages=""
-        local fonction="CONFIGURATION DE L'HEURE MATERIELLE.\n"
-        fonction+="====================================\n\n"
-        messages="${fonction}"
+        local titre="CONFIGURATION DE L'HORLOGE MATERIELLE"
+        messages="\n"
         messages+="Le mode horloge matérielle sélectionné est : UTC.\n\n"
-        print_whiptail_msgbox "${messages}" "Continuer"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         printf '%s\n' "${BGreen}Configuration de l'horloge matérielle en ${BYellow}UTC${BGreen}...${Reset}"
         hwclock --systohc --utc
         pause_function
@@ -237,20 +229,19 @@ source $(pwd)/ai-commons
     configure_locale() {
         local retour=9
         local messages=""
-        local fonction="CONFIGURATION DU FICHIER «/etc/locale.conf».\n"
-        fonction+="============================================\n\n"
-        messages="${fonction}"
+        local titre="CONFIGURATION DU FICHIER «/etc/locale.conf»"
+        messages="\n"
         messages+="Définition de la langue utilisée dans le système.\n\n"
         messages+="La langue locale sélectionnée est : "${FR_LOCALE}".\n"
-        print_whiptail_msgbox "${messages}" "Continuer"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         LOCALE=${FR_LOCALE}
         LOCALE_8859="$LOCALE ISO-8859"
         LOCALE_UTF8="$LOCALE.UTF-8"
         echo "LANG=${LOCALE_UTF8}" > /etc/locale.conf
         echo "LC_COLLATE=C" >> /etc/locale.conf
-        messages="${fonction}"
+        messages="\n"
         messages+="Visualiser/Editer le fichier «/etc/locale.conf» avec «"${EDITOR}"» ?\n"
-        print_whiptail_yesno "${messages}" "Editer" "Continuer"
+        print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
             ${EDITOR} /etc/locale.conf
@@ -266,9 +257,8 @@ source $(pwd)/ai-commons
     configure_mkinitcpio() {
         local retour=9
         local messages=""
-        local fonction="CONFIGURATION DU FICHIER «/etc/mkinitcpio.conf».\n"
-        fonction+="================================================\n\n"
-        messages="${fonction}"
+        local titre="CONFIGURATION DU FICHIER «/etc/mkinitcpio.conf»"
+        messages="\n"
         # Remplace udev par systemd. Rajoute keymap
         messages+="HOOKS : Remplacement de udev par systemd.\n"
         messages+="        Ajout de keymap.\n"
@@ -287,11 +277,11 @@ source $(pwd)/ai-commons
         # COMPRESSION="cat" (PAS DE COMPRESSION)
         messages+="COMPRESSION : Ajout de COMPRESSION=\"cat\" (PAS de Compression)\n"
         sed -i "/^#COMPRESSION=\"gzip\"/i\COMPRESSION=\"cat\"" /etc/mkinitcpio.conf
-        print_whiptail_msgbox "${messages}" "Continuer"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         #
-        messages="${fonction}"
+        messages="\n"
         messages+="Visualiser/Editer le fichier «/etc/mkinitcpio.conf» avec «"${EDITOR}"» ?\n"
-        print_whiptail_yesno "${messages}" "Editer" "Continuer"
+        print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
             ${EDITOR} /etc/mkinitcpio.conf
@@ -306,12 +296,11 @@ source $(pwd)/ai-commons
     #NETWORK {{{
     configure_network() {
         local messages=""
-        local fonction="CONFIGURATION DU RESEAU ETHERNET AVEC DHCPCD.\n"
-        fonction+="============================================\n\n"
-        messages="${fonction}"
+        local titre="CONFIGURATION DU RESEAU ETHERNET AVEC DHCPCD"
+        messages="\n"
         messages+="Le nom de l'interface réseau est : "${NAME_NET_WIRED}"\n\n"
         messages+="Ajout de l'option «noarp» à etc/dhcpcd.conf.\n"
-        print_whiptail_msgbox "${messages}" "Continuer"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         #
         echo "noarp" >> /etc/dhcpcd.conf
         printf '%s\n' "${BGreen}Création du fichier ${BYellow}/etc/resolv.conf.head${BGreen}...${Reset}"
@@ -328,23 +317,24 @@ source $(pwd)/ai-commons
         local retour=9
         local messages=""
         local messages_chk=""
-        local fonction="MOT DE PASSE ROOT.\n"
-        fonction+="=================\n\n"
+        local titre="MOT DE PASSE ROOT"
         until [[ $retour = 0 ]];
             do
-                messages="\n${fonction}"
+                messages="\n"
                 messages+="Entrer le mot de passe «root» :\n"
-                messages_chk="\n${fonction}"
+                messages+="!!! 8 caractères minimum.\n"
+                messages_chk="\n"
                 messages_chk+="Confirmer le mot de passe «root» :\n"
-                L_MDP=$(whiptail --nocancel --title "${TITRE_BOX_W}" --passwordbox "${messages}" --ok-button "Valider" 16 72 3>&1 1>&2 2>&3)
-                L_MDP_CHK=$(whiptail --nocancel --title "${TITRE_BOX_W}" --passwordbox "${messages_chk}" --ok-button "Valider" 16 72 3>&1 1>&2 2>&3)
-                if [[ ${L_MDP} == ${L_MDP_CHK} ]]; then
+                messages_chk+="!!! 8 caractères minimum.\n"
+                L_MDP=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --passwordbox "${messages}" 16 72 3>&1 1>&2 2>&3)
+                L_MDP_CHK=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --passwordbox "${messages_chk}" 16 72 3>&1 1>&2 2>&3)
+                if [[ ${#L_MDP} -ge 8 && ${#L_MDP_CHK} -ge 8 && ${L_MDP} != "        " && ${L_MDP_CHK} != "        " && ${L_MDP} == ${L_MDP_CHK} ]]; then
                     retour=0
                 else
-                    messages="\n${fonction}"
-                    messages+="/!\ Mot de passe «root» erroné :\n"
-                    messages+="/!\ Entrer de nouveau le mot de passe «root»."
-                    print_whiptail_msgbox "${messages}" "Recommencer"
+                    messages="\n"
+                    messages+="\Zb\Z1/!\ Mot de passe «root» erroné :\Zn\n"
+                    messages+="    Entrer de nouveau le mot de passe «root»."
+                    print_dialog_msgbox "${titre}" "${messages}" "Recommencer"
                     retour=9
                 fi
             done
@@ -360,12 +350,10 @@ source $(pwd)/ai-commons
     #}}}
 
 # ARCHLINUX INSTALL SCRIPTS - https://github.com/jeannoeldot/arch_install/ai-b-ic
-    messages_p2=""
-    fonction="INSTALLATION PARTIE 2 DANS CHROOT.\n"
-    fonction+="==================================\n\n"
-    messages_p2="${fonction}"
-    messages_p2+="Mise à jour de la base de pacman.\n"
-    print_whiptail_msgbox "${messages_p2}" "Continuer"
+    titre="INSTALLATION PARTIE 2 DANS CHROOT"
+    messages="\n"
+    messages+="Mise à jour de la base de pacman.\n"
+    print_dialog_msgbox "${titre}" "${messages}" "Continuer"
     printf '%s\n' "${BGreen}Mise à jour de la base de pacman...${Reset}"
     pacman-db-upgrade
     #
@@ -378,35 +366,35 @@ source $(pwd)/ai-commons
     else
         KEYMAP=fr-bepo-latin9
     fi
-    messages_p2="${fonction}"
-    messages_p2+="Configure le clavier et la police :\n\n"
-    messages_p2+="Type de clavier  : "${TYPE_KEYBOARD}"\n"
-    messages_p2+="Valeur de KEYMAP : "${KEYMAP}"\n"
-#     messages_p2+="Police           : Lat2-Terminus16\n"
-    messages_p2+="Police           : lat9w-16\n"
-    print_whiptail_msgbox "${messages_p2}" "Continuer"
+    messages="\n"
+    messages+="Configure le clavier et la police :\n\n"
+    messages+="Type de clavier  : "${TYPE_KEYBOARD}"\n"
+    messages+="Valeur de KEYMAP : "${KEYMAP}"\n"
+#     messages+="Police           : Lat2-Terminus16\n"
+    messages+="Police           : lat9w-16\n"
+    print_dialog_msgbox "${titre}" "${messages}" "Continuer"
     loadkeys $KEYMAP
 #    setfont Lat2-Terminus16
     setfont lat9w-16
     #
-    messages_p2="${fonction}"
+    messages="\n"
     # Editeur par défaut
-    messages_p2+="L'éditeur par défaut est : nano\n"
+    messages+="L'éditeur par défaut est : nano\n"
     # UEFI ou BIOS
     if [[ $IS_UEFI = 1 ]]; then
-        messages_p2+="Installation en mode     : UEFI\n"
+        messages+="Installation en mode     : UEFI\n"
         source $(pwd)/ai-b-uefi-ic
     else
-        messages_p2+="Installation en mode     : BIOS\n"
+        messages+="Installation en mode     : BIOS\n"
         source $(pwd)/ai-b-bios-ic
     fi
     # Installation dans VirtualBox ou réelle
     if [[ $IN_VIRTUAL_BOX = 1 ]]; then
-        messages_p2+="Installation dans        : Oracle VM VirtualBox\n"
+        messages+="Installation dans        : Oracle VM VirtualBox\n"
     else
-        messages_p2+="Installation dans        : PC Réel\n"
+        messages+="Installation dans        : PC Réel\n"
     fi
-    print_whiptail_msgbox "${messages_p2}" "Continuer"
+    print_dialog_msgbox "${titre}" "${messages}" "Continuer"
     #
     configure_fstab
     configure_vconsole_conf
@@ -425,11 +413,11 @@ source $(pwd)/ai-commons
     # INSCRIT CHOIX CLAVIER DANS variables_pour_ai_de.txt pour ai-de
     echo "type_choice_keyboard=${TYPE_KEYBOARD}" > /root/variables_pour_ai_de.txt
     #
-    messages_p2="FIN INSTALLATION PARTIE 2 DANS CHROOT.\n"
-    messages_p2+="======================================\n\n"
-    messages_p2+="Commandes à éxécuter dans l'ordre pour poursuivre l'installation :\n\n"
-    messages_p2+="exit                             => Quitte l'environnement Chroot\n"
-    messages_p2+="cd ai && ./ai-b                  => Partie 3 de l'installation\n"
-    print_whiptail_msgbox "${messages_p2}" "Continuer"
+    titre="FIN INSTALLATION PARTIE 2 DANS CHROOT"
+    messages="\n"
+    messages+="Commandes à éxécuter dans l'ordre pour poursuivre l'installation :\n\n"
+    messages+="\Zb\Z3exit                             => Quitte l'environnement Chroot\Zn\n"
+    messages+="\Zb\Z3cd ai && ./ai-b                  => Partie 3 de l'installation\Zn\n"
+    print_dialog_msgbox "${titre}" "${messages}" "Continuer"
     #
     exit 0

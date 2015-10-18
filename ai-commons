@@ -11,7 +11,7 @@
 
 # CONSTANTES {{{
 # TITRE BOITES DE DIALOG dialog
-TITRE_BOX_W_DATE="17/10/2015"
+TITRE_BOX_W_DATE="18/10/2015"
 TITRE_BOX_W_VERSION="V 0.0.2"
 TITRE_BOX_W_TEXTE="INSTALLATION DE ARCH LINUX"
 TITRE_BOX_W="${TITRE_BOX_W_TEXTE} ${TITRE_BOX_W_VERSION} DU ${TITRE_BOX_W_DATE}"
@@ -187,6 +187,14 @@ check_is_hdd_or_ssd() { #{{{
 # $3 = texte bouton OK
 print_dialog_msgbox() { #{{{
     dialog --colors --backtitle "${TITRE_BOX_W}" --title "${1}" --ok-label "${3}" --msgbox "${2}" 16 72
+} #}}}
+# AFFICHE UNE MESSAGE BOX DIALOG HAUTE
+# $1 = titre
+# $2 = message
+# $3 = texte bouton OK
+# $4 = hauteur
+print_dialog_msgbox_h() { #{{{
+    dialog --colors --backtitle "${TITRE_BOX_W}" --title "${1}" --ok-label "${3}" --msgbox "${2}" $4 72
 } #}}}
 # AFFICHE UNE YESNO BOX DIALOG
 # $1 = titre

@@ -7,21 +7,20 @@
 # Script d'installation en mode BIOS
 # Ne fonctionne qu'avec la langue FR (fr_FR)
 #
-# Interface graphique avec whiptail
+# Interface graphique avec dialog
 #
 #-------------------------------------------------------------------------------
 
     #INSTALL BOOTLOADER {{{
     install_bootloader() {
         local messages=""
-        local fonction="PROCESSUS DE BOOT : CHOIX DU CHARGEUR DE DEMARRAGE.\n"
-        fonction+="===================================================\n\n"
-        messages="\n${fonction}"
+        local titre="PROCESSUS DE BOOT : CHOIX DU CHARGEUR DE DEMARRAGE"
+        messages="\n"
         messages+="Sélectionner le Chargeur de Démarrage :"
-        BOOTLOADER=$(whiptail --nocancel --title "${TITRE_BOX_W}" --menu "${messages}" --ok-button "Valider" 20 72 5 \
-                     "GRUB" "-" \
-                     "SYSLINUX" "-" \
-                     "AUCUN" "-" \
+        BOOTLOADER=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --menu "${messages}" 20 72 5 \
+                     "GRUB" "" \
+                     "SYSLINUX" "" \
+                     "AUCUN" "" \
                      3>&1 1>&2 2>&3)
         case "$BOOTLOADER" in
             "GRUB")
@@ -46,27 +45,27 @@
     #CONFIGURE BOOTLOADER {{{
     configure_bootloader() {
         local messages=""
-        local fonction="CONFIGURATION DU CHARGEUR DE DEMARRAGE : "${BOOTLOADER}"\n"
-        fonction+="=================================================\n\n"
+        local titre="CONFIGURATION DU CHARGEUR DE DEMARRAGE : "${BOOTLOADER}""
         case $BOOTLOADER in
             "GRUB")
                 printf '%s\n' "${BGreen}Configuration de ${BYellow}grub${BGreen}...${Reset}"
                 grub-install --target=i386-pc --recheck ${ROOT_DEVICE}
                 #
-                messages="${fonction}"
+                messages="\n"
                 messages+="GRUB_TIMEOUT=3\n"
                 messages+="GRUB_GFXMODE=1024x768\n"
                 messages+="GRUB_DISABLE_SUBMENU=y\n"
-                print_whiptail_msgbox "${messages}" "Continuer"
+                print_dialog_msgbox "${titre}" "${messages}" "Continuer"
                 sed -i "/^GRUB_TIMEOUT=/c\GRUB_TIMEOUT=3" /etc/default/grub
                 sed -i "/^GRUB_GFXMODE=/c\GRUB_GFXMODE=1024x768" /etc/default/grub
                 # BUGS FS#38041 FS#37904
                 echo -e "\nGRUB_DISABLE_SUBMENU=y" >> /etc/default/grub
+                printf '%s\n' "${BGreen}Configuration de ${BYellow}grub.cfg${BGreen}...${Reset}"
                 grub-mkconfig -o /boot/grub/grub.cfg
                 #
-                messages="${fonction}"
+                messages="\n"
                 messages+="Visualiser/Editer le fichier «grub.cfg» avec «"${EDITOR}"» ?\n"
-                print_whiptail_yesno "${messages}" "Editer" "Continuer"
+                print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
                 retour=$?
                 if [[ $retour = 0 ]]; then
                     ${EDITOR} /boot/grub/grub.cfg
@@ -76,9 +75,10 @@
                 printf '%s\n' "${BGreen}Configuration de ${BYellow}syslinux${BGreen}...${Reset}"
                 syslinux-install_update -i -a -m
                 #
-                messages="${fonction}"
+                messages="\n"
                 messages+="Menu Graphique au Démarrage\n"
-                print_whiptail_msgbox "${messages}" "Continuer"
+                print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+                printf '%s\n' "${BGreen}Configuration de ${BYellow}syslinux.cfg${BGreen}...${Reset}"
                 cp -v /usr/lib/syslinux/bios/vesamenu.c32 /boot/syslinux/
                 if [[ $IN_VIRTUAL_BOX = 0 ]]; then
                     cp -v ai-fconfig/boot-syslinux-syslinux-intel-ucode.cfg /boot/syslinux/syslinux.cfg
@@ -90,9 +90,9 @@
                 partuuid=$(ls -l /dev/disk/by-uuid | awk '/'$partroot'/ {print $9}')
                 sed -i "s/root=PART_ROOT/root=UUID=$partuuid/g" /boot/syslinux/syslinux.cfg
                 #
-                messages="${fonction}"
+                messages="\n"
                 messages+="Visualiser/Editer le fichier «syslinux.cfg» avec «"${EDITOR}"» ?\n"
-                print_whiptail_yesno "${messages}" "Editer" "Continuer"
+                print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
                 retour=$?
                 if [[ $retour = 0 ]]; then
                     ${EDITOR} /boot/syslinux/syslinux.cfg

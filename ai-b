@@ -308,8 +308,8 @@ else
     write_variables_ali
     #
     messages+="Commandes à éxécuter dans l'ordre pour poursuivre l'installation :\n\n"
-    messages+="cd && arch-chroot /mnt /bin/bash => Chroot dans le nouveau système\n"
-    messages+="cd /root/ai && ./ai-b            => Partie 2 de l'installation\n"
+    messages+="\Zb\Z3cd && arch-chroot /mnt /bin/bash => Chroot dans le nouveau système\Zn\n"
+    messages+="\Zb\Z3cd /root/ai && ./ai-b            => Partie 2 de l'installation\Zn\n"
     print_dialog_msgbox "${titre}" "${messages}" "Continuer"
     #
     echo "ai-b_launched=1" > /root/ai-b.launched
