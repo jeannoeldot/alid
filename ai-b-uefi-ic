@@ -2,7 +2,7 @@
 
 #-------------------------------------------------------------------------------
 # ai-b-uefi-ic
-# Appelé par ai-b-ic
+# Appele par ai-b-ic
 #
 # Script d'installation en mode UEFI
 # Ne fonctionne qu'avec la langue FR (fr_FR)
@@ -23,7 +23,7 @@
             ARCHI_REFIND="x64"
         fi
         #
-        # Détermine le nom du rep d'installation de arch
+        # Determine le nom du rep d'installation de arch
         if [[ -d /boot/efi/EFI ]]; then
             number_of_arch_first=$(ls "/boot/efi/EFI/" | grep -E "arch" | awk 'length($0)<7' | wc -l)
             if [[ $number_of_arch_first = 0 ]]; then
@@ -42,7 +42,7 @@
             IS_MULTI_BOOT_UEFI=0
         fi
         DIR_EFI_ARCHLINUX="/boot/efi/EFI/${NAME_DIR_ARCHLINUX}"
-        messages+="\Zb\Z6!!! Le répertoire d'installation de Arch Linux est :\Zn\n"
+        messages+="\Zb\Z6!!! Le repertoire d'installation de Arch Linux est :\Zn\n"
         messages+="    "${DIR_EFI_ARCHLINUX}"\n\n"
         # INSCRIT NAME_DIR_ARCHLINUX DANS name_dir_archlinux.uefi pour ai-de
         echo "name_dir_archlinux=${NAME_DIR_ARCHLINUX}" > /root/name_dir_archlinux.uefi
@@ -55,13 +55,13 @@
             NAME_DIR_EFI="/boot/efi/EFI/BOOT"
             NAME_DIR_MGR_EFI="/EFI/BOOT/boot${ARCHI_REFIND}.efi"
         else
-            messages+="\Zb\Z6!!! Installation dans PC Réel :\Zn\n"
+            messages+="\Zb\Z6!!! Installation dans PC Reel :\Zn\n"
             messages+="    Le nom du Manager de Boot est : refind_${ARCHI_REFIND}.efi\n\n"
             MGR_EFI="refind"
             NAME_DIR_EFI="/boot/efi/EFI/refind"
             NAME_DIR_MGR_EFI="/EFI/refind/refind_${ARCHI_REFIND}.efi"
         fi
-        messages+="\Zb\Z6!!! Le répertoire d'installation du Manager de Boot est :\Zn\n"
+        messages+="\Zb\Z6!!! Le repertoire d'installation du Manager de Boot est :\Zn\n"
         messages+="    "${NAME_DIR_EFI}"\n"
         # INSCRIT CHOIX NOM DANS name_dir_archlinux.uefi pour ai-de
         echo "name_mgr_efi=${MGR_EFI}" >> /root/name_dir_archlinux.uefi
@@ -72,7 +72,7 @@
         pacman -Syu refind-efi
         # Kernels
         messages="\n"
-        messages+="Copie des fichiers du kernel dans «${DIR_EFI_ARCHLINUX}» :\n"
+        messages+="Copie des fichiers du kernel dans <${DIR_EFI_ARCHLINUX}> :\n"
         messages+="- vmlinuz-linux --> vmlinuz-${NAME_DIR_ARCHLINUX}.efi\n"
         messages+="- initramfs-linux.img --> initramfs-${NAME_DIR_ARCHLINUX}.img\n"
         messages+="- initramfs-linux-fallback.img --> initramfs-${NAME_DIR_ARCHLINUX}-fallback.img\n"
@@ -96,6 +96,7 @@
         fi
         printf '%s\n' "${BGreen}Copie du fichier de configuration du kernel (EFISTUB)...${Reset}"
         cp -v /usr/share/refind/refind_linux.conf-sample ${DIR_EFI_ARCHLINUX}/refind_linux.conf
+        pause_function
         # rEFInd : si 1ere installation
         messages="\n"
         if [[ $IS_MULTI_BOOT_UEFI = 0 ]]; then
@@ -156,7 +157,7 @@
         # rEFInd 0.8.3 :
         # A ETUDIER
         # #scanfor internal,external,optical,manual => scanfor internal,hdbios,external,optical,manual
-        # ==> Si problème CSM compatibility => à enlever
+        # ==> Si probleme CSM compatibility => a enlever
         # #uefi_deep_legacy_scan => uefi_deep_legacy_scan true
         # ==> NE PAS METTRE DANS VBOX
         if [[ $IS_MULTI_BOOT_UEFI = 0 ]]; then
@@ -177,7 +178,7 @@
             fi
         fi
         messages="\n"
-        messages+="Visualiser/Editer le fichier «refind.conf» avec «"${EDITOR}"» ?\n"
+        messages+="Visualiser/Editer le fichier <refind.conf> avec <"${EDITOR}"> ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
@@ -185,7 +186,7 @@
         fi 
         #
         messages="\n"
-        messages+="Configuration de ${DIR_EFI_ARCHLINUX}/refind_linux.conf.\n"
+        messages+="Configuration de <${DIR_EFI_ARCHLINUX}/refind_linux.conf>.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         partroot=$(echo $ROOT | sed 's/\/dev\///')
         partuuid=$(ls -l /dev/disk/by-partuuid | awk '/'$partroot'/ {print $9}')
@@ -207,7 +208,7 @@
             echo -e '"Fallback en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw add_efi_memmap force_addr=0xaddr systemd.unit=rescue.target initrd=EFI/'$NAME_DIR_ARCHLINUX'/intel-ucode.img initrd=EFI/'$NAME_DIR_ARCHLINUX'/initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
         fi
         messages="\n"
-        messages+="Visualiser/Editer le fichier «refind_linux.conf» avec «"${EDITOR}"» ?\n"
+        messages+="Visualiser/Editer le fichier <refind_linux.conf> avec <"${EDITOR}"> ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
@@ -216,30 +217,30 @@
         #
         messages="\n"
         if [[ $IS_MULTI_BOOT_UEFI = 0 ]]; then
-            messages+="Configuration du manager de Boot.\n"
+            messages+="Mise en place de rEFInd dans NVRAM.\n"
         else
             messages+="\Zb\Z6!!! MULTI BOOT UEFI :\Zn\n"
-            messages+="    Pas de configuration du manager de Boot.\n"
+            messages+="    Pas de mise en place de rEFInd dans NVRAM.\n"
         fi
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         if [[ $IS_MULTI_BOOT_UEFI = 0 ]]; then
             # https://wiki.archlinux.org/index.php/Beginners%27_Guide#For_UEFI_motherboards 12/10/2013
-            # Si /sys/firmware/efi/efivars n'est pas déjà monté.
+            # Si /sys/firmware/efi/efivars n'est pas deja monte.
             # Voir modifs  arch-install-scripts
             if [[ ! -d "/sys/firmware/efi/efivars" ]]; then
                 mount -t efivarfs efivarfs /sys/firmware/efi/efivars
             fi
-            # Supprime entrée rEFInd ArchLinux dans NVRAM si existe déjà
+            # Supprime entree rEFInd ArchLinux dans NVRAM si existe deja
             _num_entree=$(efibootmgr -v | awk '/rEFInd/ {print $1}' | sed -e "s/^Boot//;s/\*$//")
             if [[ ${_num_entree} != "" ]]; then
                 efibootmgr -B -b ${_num_entree}
             fi
             #
             numpartefi=$(echo $EFI_DEVICE | sed 's/\/dev\/sd[a-z]//')
-            printf '%s\n' "${BGreen}Configuration du manager de Boot...${Reset}"
+            printf '%s\n' "${BGreen}Mise en place de rEFInd dans NVRAM...${Reset}"
             efibootmgr -c -d ${ROOT_DEVICE} -p ${numpartefi} -l ${NAME_DIR_MGR_EFI} -L "rEFInd ArchLinux"
             messages="\n"
-            messages+="Visualiser les entrées dans NVRAM ?\n"
+            messages+="Visualiser les entrees dans NVRAM ?\n"
             print_dialog_yesno "${titre}" "${messages}" "Visualiser" "Continuer"
             retour=$?
             if [[ $retour = 0 ]]; then
@@ -253,39 +254,39 @@
         messages="\n"
         messages+="Installation et Activation de efistub_update{.path,.service}.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-        printf '%s\n' "${BGreen}Installation de «${BYellow}efistub_update.path${BGreen}» et «${BYellow}efistub_update.service${BGreen}»...${Reset}"
+        printf '%s\n' "${BGreen}Installation de <${BYellow}efistub_update.path${BGreen}> et <${BYellow}efistub_update.service${BGreen}>...${Reset}"
         cp -v ai-fconfig/efi-services/efistub_update.path /etc/systemd/system/efistub_update.path
         cp -v ai-fconfig/efi-services/efistub_update.service /etc/systemd/system/efistub_update.service
         sed -i "s/NAMEDIRARCHLINUX/${NAME_DIR_ARCHLINUX}/g" /etc/systemd/system/efistub_update.service
-        printf '%s\n' "${BGreen}Activation de «${BYellow}efistub_update.path${BGreen}» et «${BYellow}efistub_update.service${BGreen}»...${Reset}"
+        printf '%s\n' "${BGreen}Activation de <${BYellow}efistub_update.path${BGreen}> et <${BYellow}efistub_update.service${BGreen}>...${Reset}"
         systemctl enable efistub_update.path
         # Installation de intel_ucode_update.path et intel_ucode_update.service
         messages="\n"
         if [[ $IN_VIRTUAL_BOX = 0 ]]; then
             messages+="Installation et Activation de intel_ucode_update{.path,.service}.\n"
             print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-            printf '%s\n' "${BGreen}Installation de «${BYellow}intel_ucode_update.path${BGreen}» et «${BYellow}intel_ucode_update.service${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Installation de <${BYellow}intel_ucode_update.path${BGreen}> et <${BYellow}intel_ucode_update.service${BGreen}>...${Reset}"
             cp -v ai-fconfig/efi-services/intel_ucode_update.path /etc/systemd/system/intel_ucode_update.path
             cp -v ai-fconfig/efi-services/intel_ucode_update.service /etc/systemd/system/intel_ucode_update.service
             sed -i "s/NAMEDIRARCHLINUX/${NAME_DIR_ARCHLINUX}/g" /etc/systemd/system/intel_ucode_update.service
-            printf '%s\n' "${BGreen}Activation de «${BYellow}intel_ucode_update.path${BGreen}» et «${BYellow}intel_ucode_update.service${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Activation de <${BYellow}intel_ucode_update.path${BGreen}> et <${BYellow}intel_ucode_update.service${BGreen}>...${Reset}"
             systemctl enable intel_ucode_update.path
         else
             messages+="\Zb\Z6!!! Installation dans VirtualBox :\Zn\n"
-            messages+="    PAS d'activion des mises à jour du microcode.\n"
+            messages+="    PAS d'activion des mises a jour du microcode.\n"
             print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         fi
         #
         messages="\n"
         if [[ $IS_MULTI_BOOT_UEFI = 0 ]]; then
             messages+="- Installation d'un Shell UEFI.\n"
-            messages+="- Création du script «archlinux.nsh» utilisé par le Shell UEFI.\n"
+            messages+="- Creation du script <archlinux.nsh> utilise par le Shell UEFI.\n"
         else
             messages+="\Zb\Z6!!! MULTI BOOT UEFI : Pas d'installation d'un Shell UEFI.\Zn\n"
         fi
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         if [[ $IS_MULTI_BOOT_UEFI = 0 ]]; then
-            printf '%s\n' "${BGreen}Installation d'un Shell UEFI et Création du script «${BYellow}archlinux.nsh${BGreen}» utilisé par le Shell UEFI...${Reset}"
+            printf '%s\n' "${BGreen}Installation d'un Shell UEFI et Creation du script <${BYellow}archlinux.nsh${BGreen}> utilise par le Shell UEFI...${Reset}"
             wget https://edk2.svn.sourceforge.net/svnroot/edk2/trunk/edk2/ShellBinPkg/UefiShell/X64/Shell.efi
             # OU
             # cp -v /run/archiso/bootmnt/EFI/shellx64_v2.efi /boot/efi/shellx64.efi
@@ -297,7 +298,7 @@
                 echo "\EFI\arch_1\vmlinuz-arch_1.efi root=PARTUUID=$partuuid rw rootfstype=$ROOT_FS_TYPE add_efi_memmap initrd=EFI/arch_1/initramfs-arch_1.img" >> /boot/efi/archlinux.nsh
             fi
             messages="\n"
-            messages+="Visualiser/Editer le script «archlinux.nsh» avec «"${EDITOR}"» ?\n"
+            messages+="Visualiser/Editer le script <archlinux.nsh> avec <"${EDITOR}"> ?\n"
             print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
             retour=$?
             if [[ $retour = 0 ]]; then

@@ -2,7 +2,7 @@
 
 #-------------------------------------------------------------------------------
 # ai-b-bios-ic
-# Appelé par ai-b-ic
+# Appele par ai-b-ic
 #
 # Script d'installation en mode BIOS
 # Ne fonctionne qu'avec la langue FR (fr_FR)
@@ -16,8 +16,8 @@
         local messages=""
         local titre="PROCESSUS DE BOOT : CHOIX DU CHARGEUR DE DEMARRAGE"
         messages="\n"
-        messages+="Sélectionner le Chargeur de Démarrage :"
-        BOOTLOADER=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --menu "${messages}" 20 72 5 \
+        messages+="Selectionner le Chargeur de Demarrage :"
+        BOOTLOADER=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Selectionner" --menu "${messages}" 20 72 5 \
                      "GRUB" "" \
                      "SYSLINUX" "" \
                      "AUCUN" "" \
@@ -64,7 +64,7 @@
                 grub-mkconfig -o /boot/grub/grub.cfg
                 #
                 messages="\n"
-                messages+="Visualiser/Editer le fichier «grub.cfg» avec «"${EDITOR}"» ?\n"
+                messages+="Visualiser/Editer le fichier <grub.cfg> avec <"${EDITOR}"> ?\n"
                 print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
                 retour=$?
                 if [[ $retour = 0 ]]; then
@@ -76,7 +76,7 @@
                 syslinux-install_update -i -a -m
                 #
                 messages="\n"
-                messages+="Menu Graphique au Démarrage\n"
+                messages+="Menu Graphique au Demarrage\n"
                 print_dialog_msgbox "${titre}" "${messages}" "Continuer"
                 printf '%s\n' "${BGreen}Configuration de ${BYellow}syslinux.cfg${BGreen}...${Reset}"
                 cp -v /usr/lib/syslinux/bios/vesamenu.c32 /boot/syslinux/
@@ -91,7 +91,7 @@
                 sed -i "s/root=PART_ROOT/root=UUID=$partuuid/g" /boot/syslinux/syslinux.cfg
                 #
                 messages="\n"
-                messages+="Visualiser/Editer le fichier «syslinux.cfg» avec «"${EDITOR}"» ?\n"
+                messages+="Visualiser/Editer le fichier <syslinux.cfg> avec <"${EDITOR}"> ?\n"
                 print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
                 retour=$?
                 if [[ $retour = 0 ]]; then

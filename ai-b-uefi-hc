@@ -80,7 +80,7 @@
                 *)  hauteur=40 ;;
             esac
             local liste_hdd_devices=$(LC_ALL=C parted -sl 2> /dev/null | grep "/dev/sd[a-z]" | sed -e "s/://" | awk '{print $2   " "   $3$4}')
-            HDD_DEVICE=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --menu "${messages}" $hauteur 72 6 ${liste_hdd_devices} 3>&1 1>&2 2>&3)
+            HDD_DEVICE=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" $hauteur 72 6 ${liste_hdd_devices} 3>&1 1>&2 2>&3)
         }
         select_hdd_devices
         #
@@ -168,7 +168,7 @@
         titre="PARTITIONNEMENT : SÉLECTION PARTITION «ROOT»"
         messages="\n"
         messages+="\Zb\Z1/!\ Toutes les données sur la partition choisie seront perdues.\Zn\n"
-        ROOT=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Choisir" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
+        ROOT=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
         ROOT_DEVICE=$(echo $ROOT | sed 's/[0-9]//')
         format_partition "$ROOT" "${MOUNTPOINT}"
         CHOIX_PARTITIONS+=$(echo $ROOT)" = /root.  "
@@ -177,7 +177,7 @@
         messages="\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
         partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
-        EFI_DEVICE=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Choisir" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
+        EFI_DEVICE=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
         format_efi_partition "$EFI_DEVICE" "${MOUNTPOINT}/boot/efi"
         CHOIX_PARTITIONS+=$(echo $EFI_DEVICE)" = /boot/efi.  "
 # CHOIX PARTITION SWAP FACULTATIF
@@ -186,7 +186,7 @@
         messages+="\Zb\Z6!!! LA PARTITION «SWAP» EST FACULTATIVE.\Zn\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
         partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v $EFI_DEVICE | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
-        L_SWAP=$(dialog --colors --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Choisir" --cancel-label "Annuler" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
+        L_SWAP=$(dialog --colors --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --cancel-label "Annuler" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
         retour=$?
         if [[ $retour = 0 ]]; then
             format_swap_partition "$L_SWAP"
@@ -201,7 +201,7 @@
         messages+="\Zb\Z1/!\ Toutes les données sur la partition choisie seront perdues.\Zn\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
         partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v $EFI_DEVICE | grep -v $L_SWAP | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
-        L_HOME=$(dialog --colors --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Choisir" --cancel-label "Annuler" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
+        L_HOME=$(dialog --colors --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --cancel-label "Annuler" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
         retour=$?
         if [[ $retour = 0 ]]; then
             format_partition "$L_HOME" "${MOUNTPOINT}/home"

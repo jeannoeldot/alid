@@ -18,8 +18,8 @@ source $(pwd)/ai-commons
         local messages=""        
         local titre="SÉLECTION DU TYPE DE CLAVIER"
         messages="\n"
-        messages+="Choisir le type de clavier (AZERTY ou BÉPO) :"
-        REPLY=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --menu "${messages}" 16 72 5 \
+        messages+="Sélectionner le type de clavier (AZERTY ou BÉPO) :"
+        REPLY=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 16 72 5 \
                 "AZERTY" "" \
                 "BÉPO" "" \
                 3>&1 1>&2 2>&3)
@@ -235,7 +235,7 @@ source $(pwd)/ai-commons
             messages+="Enlever la clé USB ou le CD et redémarrer.\n\n"        
         fi
         messages+="Sélectionner l'arrêt (Redémarrer ou Éteindre) :"
-        REPLY=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --menu "${messages}" 20 72 5 \
+        REPLY=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 20 72 5 \
                 "REDÉMARRER" "" \
                 "ÉTEINDRE" "" \
                 3>&1 1>&2 2>&3)

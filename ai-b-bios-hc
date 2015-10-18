@@ -57,7 +57,7 @@
             messages+="\Zb\Z1/!\ En mode BIOS (PAS UEFI), si dual boot avec Windows :\Zn\n"
             messages+="\Zb\Z1    NE PAS CHOISIR GPT.\Zn\n\n"
             messages+="Sélectionner le type de table de partitions (MSDOS ou GPT) :"
-            TYPE_STORAGE_PARTITION=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --menu "${messages}" 16 72 5 \
+            TYPE_STORAGE_PARTITION=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 16 72 5 \
                                     "MSDOS" "" \
                                     "GPT" "" \
                                     3>&1 1>&2 2>&3)
@@ -89,7 +89,7 @@
                 *)  hauteur=40 ;;
             esac
             local liste_hdd_devices=$(LC_ALL=C parted -sl 2> /dev/null | grep "/dev/sd[a-z]" | sed -e "s/://" | awk '{print $2   " "   $3$4}')
-            HDD_DEVICE=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --menu "${messages}" $hauteur 72 6 ${liste_hdd_devices} 3>&1 1>&2 2>&3)
+            HDD_DEVICE=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" $hauteur 72 6 ${liste_hdd_devices} 3>&1 1>&2 2>&3)
         }
         #
         select_hdd_devices
@@ -183,7 +183,7 @@
         titre="PARTITIONNEMENT : SÉLECTION PARTITION «ROOT»"
         messages="\n"
         messages+="\Zb\Z1/!\ Toutes les données sur la partition choisie seront perdues.\Zn\n"
-        ROOT=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Choisir" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
+        ROOT=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
         ROOT_DEVICE=$(echo $ROOT | sed 's/[0-9]//')
         format_partition "$ROOT" "${MOUNTPOINT}"
         CHOIX_PARTITIONS+=$(echo $ROOT)" = /root.  "
@@ -193,7 +193,7 @@
         messages+="\Zb\Z6!!! LA PARTITION «SWAP» EST FACULTATIVE.\Zn\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
         partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "${NUM_LINE_BIOS_BOOT_PART}d")
-        L_SWAP=$(dialog --colors --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Choisir" --cancel-label "Annuler" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
+        L_SWAP=$(dialog --colors --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --cancel-label "Annuler" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
         retour=$?
         if [[ $retour = 0 ]]; then
             format_swap_partition "$L_SWAP"
@@ -208,7 +208,7 @@
         messages+="\Zb\Z1/!\ Toutes les données sur la partition choisie seront perdues.\Zn\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
         partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v $L_SWAP | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "${NUM_LINE_BIOS_BOOT_PART}d")
-        L_HOME=$(dialog --colors --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Choisir" --cancel-label "Annuler" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
+        L_HOME=$(dialog --colors --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --cancel-label "Annuler" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
         retour=$?
         if [[ $retour = 0 ]]; then
             format_partition "$L_HOME" "${MOUNTPOINT}/home"
