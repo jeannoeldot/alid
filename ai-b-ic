@@ -43,7 +43,7 @@ source $(pwd)/ai-commons
             messages="\n"
             messages+="\Zb\Z1/!\ ERREUR :\Zn\n"
             messages+="    Le fichier <variables.ali> n'existe pas.\n"
-            messages+="    ARRÊT immediat.\n"
+            messages+="    ARRET immediat.\n"
             print_dialog_msgbox "${titre}" "${messages}" "OK"
             exit 1
         fi
