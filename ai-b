@@ -123,7 +123,7 @@ source $(pwd)/ai-commons
         retour=$?
         if [[ $retour = 1 ]]; then
             messages="\n"
-            messages+="\Zb\Z1/!\ ERREUR :\Zn\n"
+            messages+="${BRred_dlg}/!\ ERREUR :${Reset_dlg}\n"
             messages+="    Erreur durant l'éxécution du script «pacstrap».\n"
             messages+="    ARRÊT immédiat.\n"
             print_dialog_msgbox "${titre}" "${messages}" "OK"
@@ -141,7 +141,7 @@ source $(pwd)/ai-commons
             retour=$?
             if [[ $retour = 1 ]]; then
                 messages="\n"
-                messages+="\Zb\Z1/!\ ERREUR :\Zn\n"
+                messages+="${BRred_dlg}/!\ ERREUR :${Reset_dlg}\n"
                 messages+="    Erreur durant l'éxécution du script «pacstrap».\n"
                 messages+="    ARRÊT immédiat.\n"
                 print_dialog_msgbox "${titre}" "${messages}" "OK"
@@ -308,8 +308,8 @@ else
     write_variables_ali
     #
     messages+="Commandes à éxécuter dans l'ordre pour poursuivre l'installation :\n\n"
-    messages+="\Zb\Z3cd && arch-chroot /mnt /bin/bash => Chroot dans le nouveau système\Zn\n"
-    messages+="\Zb\Z3cd /root/ai && ./ai-b            => Partie 2 de l'installation\Zn\n"
+    messages+="${Byellow_dlg}cd && arch-chroot /mnt /bin/bash => Chroot dans le nouveau système${Reset_dlg}\n"
+    messages+="${Byellow_dlg}cd /root/ai && ./ai-b            => Partie 2 de l'installation${Reset_dlg}\n"
     print_dialog_msgbox "${titre}" "${messages}" "Continuer"
     #
     echo "ai-b_launched=1" > /root/ai-b.launched

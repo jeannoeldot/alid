@@ -41,7 +41,7 @@ source $(pwd)/ai-commons
             local messages=""
             local titre="LECTURE FICHIER <variables.ali>"
             messages="\n"
-            messages+="\Zb\Z1/!\ ERREUR :\Zn\n"
+            messages+="${BRred_dlg}/!\ ERREUR :${Reset_dlg}\n"
             messages+="    Le fichier <variables.ali> n'existe pas.\n"
             messages+="    ARRET immediat.\n"
             print_dialog_msgbox "${titre}" "${messages}" "OK"
@@ -332,7 +332,7 @@ source $(pwd)/ai-commons
                     retour=0
                 else
                     messages="\n"
-                    messages+="\Zb\Z1/!\ Mot de passe <root> errone :\Zn\n"
+                    messages+="${BRred_dlg}/!\ Mot de passe <root> errone :${Reset_dlg}\n"
                     messages+="    Entrer de nouveau le mot de passe <root>."
                     print_dialog_msgbox "${titre}" "${messages}" "Recommencer"
                     retour=9
@@ -416,8 +416,8 @@ source $(pwd)/ai-commons
     titre="FIN INSTALLATION PARTIE 2 DANS CHROOT"
     messages="\n"
     messages+="Commandes a executer dans l'ordre pour poursuivre l'installation :\n\n"
-    messages+="\Zb\Z3exit                             => Quitte l'environnement Chroot\Zn\n"
-    messages+="\Zb\Z3cd ai && ./ai-b                  => Partie 3 de l'installation\Zn\n"
+    messages+="${Byellow_dlg}exit                             => Quitte l'environnement Chroot${Reset_dlg}\n"
+    messages+="${Byellow_dlg}cd ai && ./ai-b                  => Partie 3 de l'installation${Reset_dlg}\n"
     print_dialog_msgbox "${titre}" "${messages}" "Continuer"
     #
     exit 0

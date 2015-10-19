@@ -11,7 +11,7 @@
 
 # CONSTANTES {{{
 # TITRE BOITES DE DIALOG dialog
-TITRE_BOX_W_DATE="18/10/2015"
+TITRE_BOX_W_DATE="19/10/2015"
 TITRE_BOX_W_VERSION="V 0.0.2"
 TITRE_BOX_W_TEXTE="INSTALLATION DE ARCH LINUX"
 TITRE_BOX_W="${TITRE_BOX_W_TEXTE} ${TITRE_BOX_W_VERSION} DU ${TITRE_BOX_W_DATE}"
@@ -180,6 +180,33 @@ check_is_hdd_or_ssd() { #{{{
         IS_HDD_OR_SSD="SSD"
     fi
 } #}}}
+# DIALOG COLORS {{{
+Bold_dlg="\Zb"
+Reverse_dlg="\Zr"
+Reset_dlg="\Zn"
+# Regular Colors
+black_dlg="\Z0"
+red_dlg="\Z1"
+green_dlg="\Z2"
+yellow_dlg="\Z3"
+blue_dlg="\Z4"
+magenta_dlg="\Z5"
+cyan_dlg="\Z6"
+white_dlg="\Z7"
+# Bold
+Bblack_dlg="${Bold_dlg}${black_dlg}"
+Bred_dlg="${Bold_dlg}${red_dlg}"
+Bgreen_dlg="${Bold_dlg}${green_dlg}"
+Byellow_dlg="${Bold_dlg}${yellow_dlg}"
+Bblue_dlg="${Bold_dlg}${blue_dlg}"
+Bmagenta_dlg="${Bold_dlg}${magenta_dlg}"
+Bcyan_dlg="${Bold_dlg}${cyan_dlg}"
+Bwhite_dlg="${Bold_dlg}${white_dlg}"
+# Reverse
+BRred_dlg="${Bold_dlg}${red_dlg}${Reverse_dlg}"
+BRcyan_dlg="${Bold_dlg}${cyan_dlg}${Reverse_dlg}"
+BRwhite_dlg="${Bold_dlg}${white_dlg}${Reverse_dlg}"
+#}}}
 #
 # AFFICHE UNE MESSAGE BOX DIALOG
 # $1 = titre

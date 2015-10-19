@@ -42,26 +42,26 @@
             IS_MULTI_BOOT_UEFI=0
         fi
         DIR_EFI_ARCHLINUX="/boot/efi/EFI/${NAME_DIR_ARCHLINUX}"
-        messages+="\Zb\Z6!!! Le repertoire d'installation de Arch Linux est :\Zn\n"
+        messages+="${BRcyan_dlg}!!! Le repertoire d'installation de Arch Linux est :${Reset_dlg}\n"
         messages+="    "${DIR_EFI_ARCHLINUX}"\n\n"
         # INSCRIT NAME_DIR_ARCHLINUX DANS name_dir_archlinux.uefi pour ai-de
         echo "name_dir_archlinux=${NAME_DIR_ARCHLINUX}" > /root/name_dir_archlinux.uefi
         #
         # Nom du Manager de Boot
         if [[ $IN_VIRTUAL_BOX = 1 ]]; then
-            messages+="\Zb\Z6!!! Installation dans Oracle VM VirtualBox :\Zn\n"
+            messages+="${BRcyan_dlg}!!! Installation dans Oracle VM VirtualBox :${Reset_dlg}\n"
             messages+="    Le nom du Manager de Boot est : boot${ARCHI_REFIND}.efi\n\n"
             MGR_EFI="boot"
             NAME_DIR_EFI="/boot/efi/EFI/BOOT"
             NAME_DIR_MGR_EFI="/EFI/BOOT/boot${ARCHI_REFIND}.efi"
         else
-            messages+="\Zb\Z6!!! Installation dans PC Reel :\Zn\n"
+            messages+="${BRcyan_dlg}!!! Installation dans PC Reel :${Reset_dlg}\n"
             messages+="    Le nom du Manager de Boot est : refind_${ARCHI_REFIND}.efi\n\n"
             MGR_EFI="refind"
             NAME_DIR_EFI="/boot/efi/EFI/refind"
             NAME_DIR_MGR_EFI="/EFI/refind/refind_${ARCHI_REFIND}.efi"
         fi
-        messages+="\Zb\Z6!!! Le repertoire d'installation du Manager de Boot est :\Zn\n"
+        messages+="${BRcyan_dlg}!!! Le repertoire d'installation du Manager de Boot est :${Reset_dlg}\n"
         messages+="    "${NAME_DIR_EFI}"\n"
         # INSCRIT CHOIX NOM DANS name_dir_archlinux.uefi pour ai-de
         echo "name_mgr_efi=${MGR_EFI}" >> /root/name_dir_archlinux.uefi
@@ -150,7 +150,7 @@
                 messages+="- #resolution --> resolution 1024 768\n"
             fi
         else
-            messages+="\Zb\Z6!!! MULTI BOOT UEFI :\Zn\n"
+            messages+="${BRcyan_dlg}!!! MULTI BOOT UEFI :${Reset_dlg}\n"
             messages+="    Pas de configuration de ${NAME_DIR_EFI}/refind.conf.\n"
         fi
         print_dialog_msgbox_h "${titre}" "${messages}" "Continuer" 20
@@ -219,7 +219,7 @@
         if [[ $IS_MULTI_BOOT_UEFI = 0 ]]; then
             messages+="Mise en place de rEFInd dans NVRAM.\n"
         else
-            messages+="\Zb\Z6!!! MULTI BOOT UEFI :\Zn\n"
+            messages+="${BRcyan_dlg}!!! MULTI BOOT UEFI :${Reset_dlg}\n"
             messages+="    Pas de mise en place de rEFInd dans NVRAM.\n"
         fi
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
@@ -272,7 +272,7 @@
             printf '%s\n' "${BGreen}Activation de <${BYellow}intel_ucode_update.path${BGreen}> et <${BYellow}intel_ucode_update.service${BGreen}>...${Reset}"
             systemctl enable intel_ucode_update.path
         else
-            messages+="\Zb\Z6!!! Installation dans VirtualBox :\Zn\n"
+            messages+="${BRcyan_dlg}!!! Installation dans VirtualBox :${Reset_dlg}\n"
             messages+="    PAS d'activion des mises a jour du microcode.\n"
             print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         fi
@@ -282,7 +282,7 @@
             messages+="- Installation d'un Shell UEFI.\n"
             messages+="- Creation du script <archlinux.nsh> utilise par le Shell UEFI.\n"
         else
-            messages+="\Zb\Z6!!! MULTI BOOT UEFI : Pas d'installation d'un Shell UEFI.\Zn\n"
+            messages+="${BRcyan_dlg}!!! MULTI BOOT UEFI : Pas d'installation d'un Shell UEFI.${Reset_dlg}\n"
         fi
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         if [[ $IS_MULTI_BOOT_UEFI = 0 ]]; then

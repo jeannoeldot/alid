@@ -21,8 +21,8 @@
             local messages=""
             local titre="PARTITIONNEMENT : MISE À ZÉRO DU DISQUE «"${HDD_DEVICE}"»"
             messages="\n"
-            messages+="\Zb\Z1/!\ Si Multi Boot, NE PAS METTRE À ZÉRO le disque.\Zn\n"
-            messages+="\Zb\Z1/!\ TOUTES les données sur le disque sélectionné seront perdues.\Zn\n\n"
+            messages+="${BRred_dlg}/!\ Si Multi Boot, NE PAS METTRE À ZÉRO le disque.${Reset_dlg}\n"
+            messages+="${BRred_dlg}/!\ TOUTES les données sur le disque sélectionné seront perdues.${Reset_dlg}\n\n"
             messages+="Confirmer la mise à zéro du disque «"${HDD_DEVICE}"»\n"
             print_dialog_yesno_no "${titre}" "${messages}" "Mettre à zéro" "Annuler"
             retour=$?
@@ -44,9 +44,9 @@
             messages="\n"
             check_is_hdd_or_ssd "${HDD_DEVICE}"
             if [[ ${IS_HDD_OR_SSD} == "HDD" ]]; then
-                messages+="\Zb\Z6!!! Le Disque «"${HDD_DEVICE}"» est un HDD.\Zn\n"
+                messages+="${BRcyan_dlg}!!! Le Disque «"${HDD_DEVICE}"» est un HDD.${Reset_dlg}\n"
             else
-                messages+="\Zb\Z6!!! Le Disque «"${HDD_DEVICE}"» est un SSD.\Zn\n"
+                messages+="${BRcyan_dlg}!!! Le Disque «"${HDD_DEVICE}"» est un SSD.${Reset_dlg}\n"
             fi
             print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         }
@@ -54,8 +54,8 @@
             local messages=""
             local titre="PARTITIONNEMENT : SÉLECTION DU TYPE DE TABLE DE PARTITIONS"
             messages="\n"
-            messages+="\Zb\Z1/!\ En mode BIOS (PAS UEFI), si dual boot avec Windows :\Zn\n"
-            messages+="\Zb\Z1    NE PAS CHOISIR GPT.\Zn\n\n"
+            messages+="${BRred_dlg}/!\ En mode BIOS (PAS UEFI), si dual boot avec Windows :${Reset_dlg}\n"
+            messages+="${BRred_dlg}    NE PAS CHOISIR GPT.${Reset_dlg}\n\n"
             messages+="Sélectionner le type de table de partitions (MSDOS ou GPT) :"
             TYPE_STORAGE_PARTITION=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 16 72 5 \
                                     "MSDOS" "" \
@@ -66,8 +66,8 @@
                 messages+="«cfdisk» sera lancé afin de créer les partitions sur «"${HDD_DEVICE}"»\n\n"
             else
                 messages+="«cgdisk» sera lancé afin de créer les partitions sur «"${HDD_DEVICE}"»\n\n"
-                messages+="\Zb\Z1/!\ Si GRUB est prévu, une partition de 2 Mio de type EF02\Zn\n"
-                messages+="\Zb\Z1    doit être créée en 1er sur «"${HDD_DEVICE}"».\Zn\n"
+                messages+="${BRred_dlg}/!\ Si GRUB est prévu, une partition de 2 Mio de type EF02${Reset_dlg}\n"
+                messages+="${BRred_dlg}    doit être créée en 1er sur «"${HDD_DEVICE}"».${Reset_dlg}\n"
             fi
             print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         }
@@ -138,7 +138,7 @@
         format_swap_partition() {
             titre="PARTITIONNEMENT : FORMATAGE DE LA PARTITION «SWAP»"
             messages="\n"
-            messages+="\Zb\Z6!!! Si Multi Boot, NE PAS FORMATER la partition «SWAP».\Zn\n\n"
+            messages+="${BRcyan_dlg}!!! Si Multi Boot, NE PAS FORMATER la partition «SWAP».${Reset_dlg}\n\n"
             messages+="Confirmer le formatage de la partition SWAP «"$1"»\n"
             print_dialog_yesno_no "${titre}" "${messages}" "Formater" "Annuler"
             retour=$?
@@ -173,8 +173,8 @@
             if [[ ${NUM_LINE_BIOS_BOOT_PART} = 1 ]]; then
                 titre="PARTITIONNEMENT : SÉLECTION DES PARTITIONS"
                 messages="\n"
-                messages+="\Zb\Z6!!! En GPT : si GRUB est prévu, la 1ère partition est réservée :\Zn\n"
-                messages+="\Zb\Z6    (BIOS_BOOT_PARTITION ou BOOT_PAR_NUM)\Zn\n"
+                messages+="${BRcyan_dlg}!!! En GPT : si GRUB est prévu, la 1ère partition est réservée :${Reset_dlg}\n"
+                messages+="${BRcyan_dlg}    (BIOS_BOOT_PARTITION ou BOOT_PAR_NUM)${Reset_dlg}\n"
                 print_dialog_msgbox "${titre}" "${messages}" "Continuer"
             fi
         fi
@@ -182,7 +182,7 @@
 # CHOIX PARTITION ROOT OBLIGATOIRE
         titre="PARTITIONNEMENT : SÉLECTION PARTITION «ROOT»"
         messages="\n"
-        messages+="\Zb\Z1/!\ Toutes les données sur la partition choisie seront perdues.\Zn\n"
+        messages+="${BRred_dlg}/!\ Toutes les données sur la partition choisie seront perdues.${Reset_dlg}\n"
         ROOT=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
         ROOT_DEVICE=$(echo $ROOT | sed 's/[0-9]//')
         format_partition "$ROOT" "${MOUNTPOINT}"
@@ -190,7 +190,7 @@
 # CHOIX PARTITION SWAP FACULTATIF
         titre="PARTITIONNEMENT : SÉLECTION PARTITION «SWAP»"
         messages="\n"
-        messages+="\Zb\Z6!!! LA PARTITION «SWAP» EST FACULTATIVE.\Zn\n\n"
+        messages+="${BRcyan_dlg}!!! LA PARTITION «SWAP» EST FACULTATIVE.${Reset_dlg}\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
         partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "${NUM_LINE_BIOS_BOOT_PART}d")
         L_SWAP=$(dialog --colors --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --cancel-label "Annuler" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
@@ -204,8 +204,8 @@
 # CHOIX PARTITION HOME FACULTATIF
         titre="PARTITIONNEMENT : SÉLECTION PARTITION «HOME»"
         messages="\n"
-        messages+="\Zb\Z6!!! LA PARTITION «HOME» EST FACULTATIVE.\Zn\n\n"
-        messages+="\Zb\Z1/!\ Toutes les données sur la partition choisie seront perdues.\Zn\n\n"
+        messages+="${BRcyan_dlg}!!! LA PARTITION «HOME» EST FACULTATIVE.${Reset_dlg}\n\n"
+        messages+="${BRred_dlg}/!\ Toutes les données sur la partition choisie seront perdues.${Reset_dlg}\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
         partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v $L_SWAP | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "${NUM_LINE_BIOS_BOOT_PART}d")
         L_HOME=$(dialog --colors --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --cancel-label "Annuler" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
