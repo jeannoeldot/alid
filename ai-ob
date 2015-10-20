@@ -116,12 +116,15 @@
             read_input_text "Autologin pour JND sans Gestionnaire de Connexion ?"
             if [[ $OPTION == o ]]; then
                 # Autologin sans Gestionnaire de Connexion
-                echo -e '\n# Autologin for JND' >> /home/${USERNAME}/.bash_profile
+                # https://wiki.archlinux.org/index.php/Xinitrc#Autostart_X_at_login
+                echo -e '\n# Autostart X at login' >> /home/${USERNAME}/.bash_profile
                 echo -e '[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx' >> /home/${USERNAME}/.bash_profile
-                cp /usr/lib/systemd/system/getty@.service /etc/systemd/system/autologin@.service
-                sed -i 's/--noclear/--noclear -a '${USERNAME}'/' /etc/systemd/system/autologin@.service
-                systemctl disable getty@tty1
-                systemctl enable autologin@tty1
+                # https://wiki.archlinux.org/index.php/Automatic_login_to_virtual_console
+                mkdir -p /etc/systemd/system/getty@tty1.service.d
+                echo -e '[Service]' > /etc/systemd/system/getty@tty1.service.d/autologinuser.conf
+                echo -e 'ExecStart=' >> /etc/systemd/system/getty@tty1.service.d/autologinuser.conf
+                echo -e 'ExecStart=-/usr/bin/agetty --autologin '${USERNAME}' --noclear %I 38400 linux' >> /etc/systemd/system/getty@tty1.service.d/autologinuser.conf
+                systemctl enable getty@tty1.service
                 #create a xinitrc file in home user directory
                 cp -vf ai-fconfig/ob-user-.xinitrc /home/${USERNAME}/.xinitrc
                 if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
