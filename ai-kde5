@@ -29,9 +29,6 @@
         # KDE5 UTILS
         print_info_cyan "Installation de KDE5 Utils"
         package_install "ark filelight kcalc kcharselect kdeutils-kdf kwalletmanager"
-#         # KDE5 PLASMA
-#         print_info_cyan "Installation de KDE5 Plasma Addons Applets"
-# 	package_install "kdeplasma-addons-applets-notes kdeplasma-addons-applets-showdesktop"
         # KDE5 MULTIMEDIA
         print_info_cyan "Installation de KDE5 Multimedia"
         package_install "kdemultimedia-kscd kdemultimedia-audiocd-kio kio-mtp kio-extras"
@@ -43,9 +40,6 @@
         package_install "gwenview kdegraphics-kcolorchooser kdegraphics-kolourpaint kdegraphics-ksnapshot kdegraphics-okular kdegraphics-svgpart kdegraphics-thumbnailers kdegraphics-mobipocket"
         package_install "kipi-plugins"
         package_install "ffmpegthumbs"
-#         # KDE5 NETWORK
-#         print_info_cyan "Installation de KDE5 Réseau"
-# 	package_install "kdenetwork-kget kwebkitpart"
         # KDE5 SDK
         print_info_cyan "Installation de KDE5 Sdk"
         package_install "okteta kate dolphin-plugins kdesdk-kioslaves kompare kdesdk-poxml kdebindings-python2 kdebindings-python"
@@ -57,7 +51,7 @@
         package_install "lsb-release"
         #
         is_package_installed "cups" && package_install "print-manager xdg-user-dirs"
-#package_install "kde-telepathy telepathy"
+#         package_install "kde-telepathy telepathy"
         #}}}
 ##
 # TODO
@@ -119,8 +113,6 @@
         package_install "sddm sddm-kcm"
         systemctl enable sddm.service
         echo -e "\n"
-#        # Application development toolkit for controlling system-wide privileges
-#	systemctl enable polkit.service
         echo -e "\n"
         # Abstraction for enumerating power devices, listening to device events and querying history and statistics
         print_info_cyan "Installation de upower.service"
@@ -144,64 +136,6 @@
         #
         KDE5=1
         pause_function
-    }
-    #}}}
-    # INUTILE : appel supprimé
-    # 16 CONNMAN/NETWORKMANAGER/WICD {{{
-    install_nm_wicd() {
-        print_title "GESTIONNAIRE DE RÉSEAU"
-        echo " 1) networkmanager"
-        echo " 2) wicd"
-        echo " 3) ConnMan"
-        echo ""
-        echo " a) AUCUN"
-        echo ""
-        read_input $NETWORKMANAGER
-        case "$OPTION" in
-            1)
-                print_title "NETWORKMANAGER - https://wiki.archlinux.org/index.php/Networkmanager"
-                print_info "NetworkManager est un outil de gestion du réseau. Il est aussi utile pour les liaisons filaires que sans fils, il supporte les modems et certains type de VPN."
-                package_install "networkmanager kdeplasma-applets-plasma-nm"
-                is_package_installed "ntp" && package_install "networkmanager-dispatcher-ntpd"
-#                groupadd networkmanager
-#                gpasswd -a ${USERNAME} networkmanager
-                #Network Management daemon
-		systemctl disable dhcpcd.service
-                systemctl disable network_ip_statique.service
-                systemctl disable netcfg
-                systemctl enable NetworkManager.service
-                pause_function
-                ;;
-            2)
-                print_title "WICD - https://wiki.archlinux.org/index.php/Wicd"
-                print_info "Wicd est un gestionnaire de connexions réseau (sans fil et filaire) similaire à NetworkManager."
-                package_install "wicd"
-##
-# A REVOIR wicd-kde sur un repo perso
-# TODO
-##
-		echo -e  "Pour installer wicd-kde, ouvrir une console en USER et taper les commandes suivantes"
-		echo -e  "yaourt --noconfirm -S wicd-kde"
-		pause_function
-                #wicd daemon
-		systemctl disable dhcpcd.service
-                systemctl disable network_ip_statique.service
-                systemctl disable netcfg
-                systemctl enable wicd.service
-                pause_function
-                ;;
-            3)
-                print_title "CONNMAN - https://wiki.archlinux.org/index.php/Connman"
-                print_info "ConnMan est une alternative à NetworkManager et Wicd. Il a été créé par Intel et le projet Moblin."
-                package_install "connman "
-                #ConnMan daemon
-                systemctl disable dhcpcd.service
-                systemctl disable network_ip_statique.service
-                systemctl disable netcfg
-                systemctl enable connman.service
-                pause_function
-              ;;
-        esac
     }
     #}}}
     # 17 ACCESSORIES {{{

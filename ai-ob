@@ -34,10 +34,10 @@
         #
         print_info_cyan "Installation de viewnior, gmrun et volwheel."
         package_install "viewnior gmrun volwheel"
-	# Dépendances imagemagick
+        # Dépendances imagemagick
         print_info_cyan "Installation des dépendances de imagemagick."
         package_install "openexr libwmf librsvg libxml2 jasper libpng"
-	# Dépendances spacefm
+        # Dépendances spacefm
         print_info_cyan "Installation des dépendances de spacefm."
         package_install "lsof eject wget gksu udevil udisks udisks2 gvfs-smb gvfs-afc gvfs-gphoto2 gvfs-mtp lxsession"
         # FONTS {{{
@@ -55,7 +55,7 @@
         #
         print_info_cyan "Configuration par défaut de l'utilisateur ${USERNAME}."
         mkdir -p /home/${USERNAME}/.config/openbox
-	cp -v /etc/xdg/openbox/{rc.xml,menu.xml,autostart,environment} /home/${USERNAME}/.config/openbox/
+        cp -v /etc/xdg/openbox/{rc.xml,menu.xml,autostart,environment} /home/${USERNAME}/.config/openbox/
         chown -R ${USERNAME}:users /home/${USERNAME}/.config
         mkdir -p /home/${USERNAME}/.local/share
         chown -R ${USERNAME}:users /home/${USERNAME}/.local
@@ -248,7 +248,6 @@
             aur_package_install "zukitwo-themes"
             aur_package_install "flatwoken-icons-git"
             aur_package_install "awoken-icons"
-#            gtk-update-icon-cache -f /usr/share/icons/Ghnomix
             pause_function
         else
             #create a xinitrc file in home user directory
@@ -260,14 +259,10 @@
             chown -R ${USERNAME}:users /home/${USERNAME}/.xinitrc
             pause_function
         fi
-	#}}}
+        #}}}
         # OPENBOX CUSTOMIZATION {{{
         install_icon_theme() { #{{{
             package_install "faenza-icon-theme faience-icon-theme"
-#             gtk-update-icon-cache -f /usr/share/icons/Faience
-#             gtk-update-icon-cache -f /usr/share/icons/Faience-Azur
-#             gtk-update-icon-cache -f /usr/share/icons/Faience-Claire
-#             gtk-update-icon-cache -f /usr/share/icons/Faience-Ocre
         } #}}}
         install_gtk_theme() { #{{{
             aur_package_install "adwaita-x-dark-and-light-theme"
@@ -281,7 +276,7 @@
             echo " 4) $(menu_item "scrot")"
             echo " 5) $(menu_item "xfburn")"
             echo " 6) $(menu_item "xarchiver")"
-	    echo " 7) $(menu_item "xorg-xcalc")"
+            echo " 7) $(menu_item "xorg-xcalc")"
             echo " 8) $(menu_item "pcmanfm" "PCManFM")"
             echo " 9) $(menu_item "rxvt-unicode")"
             echo "10) $(menu_item "thunar")"
@@ -318,9 +313,9 @@
                     6)
                         package_install "xarchiver"
                         ;;
-		    7)
-			package_install "xorg-xcalc xorg-fonts-100dpi xorg-fonts-75dpi"
-			;;
+                    7)
+                        package_install "xorg-xcalc xorg-fonts-100dpi xorg-fonts-75dpi"
+                        ;;
                     8)
                         package_install "pcmanfm polkit-gnome gvfs"
                         ;;
@@ -345,8 +340,8 @@
         elihw
         done
         #}}}
-	echo "LANG=$LANGUAGE.utf8" >> /etc/environment
-	echo "FT2_SUBPIXEL_HINTING=1" >> /etc/environment
+        echo "LANG=$LANGUAGE.utf8" >> /etc/environment
+        echo "FT2_SUBPIXEL_HINTING=1" >> /etc/environment
         #Abstraction for enumerating power devices, listening to device events and querying history and statistics
         print_info_cyan "Installation de upower.service"
         systemctl enable upower.service
@@ -357,61 +352,6 @@
         #
         OPENBOX=1
         pause_function
-    }
-    #}}}
-    # INUTILE : appel supprimé
-    # 16 CONNMAN/NETWORKMANAGER/WICD {{{
-    install_nm_wicd() {
-        print_title "GESTIONNAIRE DE RÉSEAU"
-        echo " 1) networkmanager"
-        echo " 2) wicd"
-        echo " 3) ConnMan"
-        echo ""
-        echo " a) AUCUN"
-        echo ""
-        read_input $NETWORKMANAGER
-        case "$OPTION" in
-            1)
-                print_title "NETWORKMANAGER - https://wiki.archlinux.org/index.php/Networkmanager"
-                print_info "NetworkManager est un outil de gestion du réseau. Il est aussi utile pour les liaisons filaires que sans fils, il supporte les modems et certains type de VPN."
-                package_install "networkmanager network-manager-applet"
-                is_package_installed "ntp" && package_install "networkmanager-dispatcher-ntpd"
-#                groupadd networkmanager
-#                gpasswd -a ${USERNAME} networkmanager
-                #Network Management daemon
-		systemctl disable dhcpcd.service
-                systemctl disable network_ip_statique.service
-                systemctl disable netcfg
-                systemctl enable NetworkManager.service
-                pause_function
-                ;;
-            2)
-                print_title "WICD - https://wiki.archlinux.org/index.php/Wicd"
-                print_info "Wicd est un gestionnaire de connexions réseau (sans fil et filaire) similaire à NetworkManager."
-                package_install "wicd wicd-gtk"
-##
-# A REVOIR ~/.config/openbox/autostart
-# TODO
-##
-                #Network Management daemon
-		systemctl disable dhcpcd.service
-                systemctl disable network_ip_statique.service
-                systemctl disable netcfg
-                systemctl enable wicd.service
-                pause_function
-                ;;
-            3)
-                print_title "CONNMAN - https://wiki.archlinux.org/index.php/Connman"
-                print_info "ConnMan est une alternative à NetworkManager et Wicd. Il a été créé par Intel et le projet Moblin."
-                package_install "connman "
-                #ConnMan daemon
-                systemctl disable dhcpcd.service
-                systemctl disable network_ip_statique.service
-                systemctl disable netcfg
-                systemctl enable connman.service
-                pause_function
-              ;;
-        esac
     }
     #}}}
     # 17 ACCESSORIES {{{
@@ -504,7 +444,7 @@
                     ;;
                 5)
                     package_install "hddtemp gnu-netcat"
-		    systemctl enable hddtemp.service
+                    systemctl enable hddtemp.service
                     ;;
                 6)
                     package_install "gsmartcontrol"
