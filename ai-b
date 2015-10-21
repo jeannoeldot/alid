@@ -115,7 +115,8 @@ source $(pwd)/ai-commons
             liste_paquets+=" intel-ucode"
         else
             messages+=" et elinks.\n\n"
-            messages+="Dans VirtualBox : PAS d'intallation des mises à jour du microcode.\n"
+            messages+="${BRcyan_dlg}!!!${Reset_dlg} Installation dans Oracle VM VirtualBox :\n"
+            messages+="    PAS d'intallation des mises à jour du microcode.\n"
         fi        
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         printf '%s\n' "${BGreen}Installation du système de base...${Reset}"
