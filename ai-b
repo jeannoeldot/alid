@@ -123,7 +123,7 @@ source $(pwd)/ai-commons
         retour=$?
         if [[ $retour = 1 ]]; then
             messages="\n"
-            messages+="${BRred_dlg}/!\ ERREUR :${Reset_dlg}\n"
+            messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
             messages+="    Erreur durant l'éxécution du script «pacstrap».\n"
             messages+="    ARRÊT immédiat.\n"
             print_dialog_msgbox "${titre}" "${messages}" "OK"
@@ -141,7 +141,7 @@ source $(pwd)/ai-commons
             retour=$?
             if [[ $retour = 1 ]]; then
                 messages="\n"
-                messages+="${BRred_dlg}/!\ ERREUR :${Reset_dlg}\n"
+                messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
                 messages+="    Erreur durant l'éxécution du script «pacstrap».\n"
                 messages+="    ARRÊT immédiat.\n"
                 print_dialog_msgbox "${titre}" "${messages}" "OK"

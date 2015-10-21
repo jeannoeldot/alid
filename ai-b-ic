@@ -41,7 +41,7 @@ source $(pwd)/ai-commons
             local messages=""
             local titre="LECTURE FICHIER <variables.ali>"
             messages="\n"
-            messages+="${BRred_dlg}/!\ ERREUR :${Reset_dlg}\n"
+            messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
             messages+="    Le fichier <variables.ali> n'existe pas.\n"
             messages+="    ARRET immediat.\n"
             print_dialog_msgbox "${titre}" "${messages}" "OK"
@@ -322,17 +322,18 @@ source $(pwd)/ai-commons
             do
                 messages="\n"
                 messages+="Entrer le mot de passe <root> :\n"
-                messages+="!!! 8 caracteres minimum.\n"
+                messages+="${BRcyan_dlg}!!!${Reset_dlg} 8 caracteres minimum.\n"
                 messages_chk="\n"
                 messages_chk+="Confirmer le mot de passe <root> :\n"
-                messages_chk+="!!! 8 caracteres minimum.\n"
+                messages_chk+="${BRcyan_dlg}!!!${Reset_dlg} 8 caracteres minimum.\n"
                 L_MDP=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --passwordbox "${messages}" 16 72 3>&1 1>&2 2>&3)
                 L_MDP_CHK=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --passwordbox "${messages_chk}" 16 72 3>&1 1>&2 2>&3)
                 if [[ ${#L_MDP} -ge 8 && ${#L_MDP_CHK} -ge 8 && ${L_MDP} != "        " && ${L_MDP_CHK} != "        " && ${L_MDP} == ${L_MDP_CHK} ]]; then
                     retour=0
                 else
                     messages="\n"
-                    messages+="${BRred_dlg}/!\ Mot de passe <root> errone :${Reset_dlg}\n"
+                    messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
+                    messages+="    Mot de passe <root> errone. :n"
                     messages+="    Entrer de nouveau le mot de passe <root>."
                     print_dialog_msgbox "${titre}" "${messages}" "Recommencer"
                     retour=9
