@@ -322,10 +322,10 @@ source $(pwd)/ai-commons
             do
                 messages="\n"
                 messages+="Entrer le mot de passe <root> :\n"
-                messages+="${BRcyan_dlg}!!!${Reset_dlg} 8 caractères minimum.\n"
+                messages+="${BRcyan_dlg}!!!${Reset_dlg} 8 caracteres minimum.\n"
                 messages_chk="\n"
                 messages_chk+="Confirmer le mot de passe <root> :\n"
-                messages_chk+="${BRcyan_dlg}!!!${Reset_dlg} 8 caractères minimum.\n"
+                messages_chk+="${BRcyan_dlg}!!!${Reset_dlg} 8 caracteres minimum.\n"
                 L_MDP=$(dialog --colors --insecure --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --passwordbox "${messages}" 16 72 3>&1 1>&2 2>&3)
                 L_MDP_CHK=$(dialog --colors --insecure --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --passwordbox "${messages_chk}" 16 72 3>&1 1>&2 2>&3)
                 if [[ ${#L_MDP} -ge 8 && ${#L_MDP_CHK} -ge 8 && ${L_MDP} != "        " && ${L_MDP_CHK} != "        " && ${L_MDP} == ${L_MDP_CHK} ]]; then
