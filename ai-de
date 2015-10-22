@@ -42,8 +42,13 @@ source $(pwd)/ai-commons
     # 1 CHECK ROOT {{{
     check_root() {
         if [[ "$(id -u)" != "0" ]]; then
-            echo -e "${BRed}ERREUR :${White} L'utilisateur n'est pas 'root'. ARRET immédiat."
-            pause_function
+            local messages=""
+            local titre="REQUIS : ÉXÉCUTER LE SCRIPT EN ROOT"
+            messages="\n"
+            messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
+            messages+="    L'utilisateur n'est pas «root» :\n"
+            messages+="    ARRET immédiat."
+            print_dialog_msgbox "${titre}" "${messages}" "OK"
             exit 1
         fi
     }
