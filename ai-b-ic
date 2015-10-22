@@ -352,12 +352,6 @@ source $(pwd)/ai-commons
 
 # ARCHLINUX INSTALL SCRIPTS - https://github.com/jeannoeldot/arch_install/ai-b-ic
     titre="INSTALLATION PARTIE 2 DANS CHROOT"
-    messages="\n"
-    messages+="Mise a jour de la base de pacman.\n"
-    print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-    printf '%s\n' "${BGreen}Mise a jour de la base de pacman...${Reset}"
-    pacman-db-upgrade
-    #
     read_variables_ali_b1
     # Sets the interval of inactivity
     setterm -blank 0
@@ -377,6 +371,21 @@ source $(pwd)/ai-commons
     loadkeys $KEYMAP
 #    setfont Lat2-Terminus16
     setfont lat9w-16
+    #
+## POUR TEST
+    # TEST ACCENT
+    messages="\n"
+    messages+="Test des accents.\n"
+    messages+="é è ç ê à ô ù.\n"
+    messages+="É È Ç Ê À O Ù.\n"
+    print_dialog_msgbox "${titre}" "${messages}" "FIN-TEST"
+## POUR TEST
+    #
+    messages="\n"
+    messages+="Mise a jour de la base de pacman.\n"
+    print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+    printf '%s\n' "${BGreen}Mise a jour de la base de pacman...${Reset}"
+    pacman-db-upgrade
     #
     messages="\n"
     # Editeur par defaut

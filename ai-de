@@ -14,35 +14,29 @@ source $(pwd)/ai-commons
 
     # 0 WELCOME {{{
     welcome() {
-        clear
-        echo -e "${BWhite}Bienvenue dans le script d'Installation"
-        echo -e "de l'environnement de bureau ou du gestionnaire de fenêtres pour Archlinux"
-        echo -e "Merci à helmuthdu. http://www.github.com/helmuthdu/aui${White}"
-        print_line
-        echo "Requis:"
-        echo "-> Installation de Base de Archlinux"
-        echo "-> Lancer le script en ROOT"
-        echo "-> Une connexion Internet fonctionnelle"
-        echo "-> Ne pas avoir été déjà lancé"
-        print_line
-        echo -e "Le script peut être stoppé à tout moment avec ${BWhite}CTRL+C${White}"
-        print_line
-        echo -e "Ce script installe ${BWhite}KDE4, KDE5 ou OPENBOX${White}"
-        print_line
-        echo -e "Ce script ne fonctionne qu'avec la langue ${BWhite}FR (fr_FR)${White}"
-        print_line
-        echo -e "Le type de clavier est de type ${BWhite}${TYPE_KEYBOARD}${White}"
-        print_line
+        local messages=""
+        local titre="INSTALLATION DE KDE 5 OU OPENBOX"
+        messages="\n"
+        messages+="${BRcyan_dlg}!!!${Reset_dlg} Requis :\n"
+        messages+="------------\n"
+        messages+="Installation de Base de Archlinux\n"
+        messages+="Lancer le script en «ROOT»\n"
+        messages+="Une connexion Internet fonctionnelle\n"
+        messages+="Ne doit pas avoir été déjà lancé\n\n"
+        messages+="${BRcyan_dlg}!!!${Reset_dlg} Infos :\n"
+        messages+="-----------\n"
+        messages+="Ne fonctionne qu'avec la langue ${Bwhite_dlg}FR (fr_FR)${Reset_dlg}\n"
+        messages+="Peut être stoppé à tout moment avec ${Bwhite_dlg}CTRL+C${Reset_dlg}\n\n"
+        messages+="Le type de clavier est de type : ${Bwhite_dlg}${TYPE_KEYBOARD}${Reset_dlg}\n\n"
         if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
-            echo -e "Installation dans ${BWhite}Oracle VM VirtualBox${White}."
+            messages+="Installation dans ${Bwhite_dlg}Oracle VM VirtualBox${Reset_dlg}\n"
         else
-            echo -e "Installation ${BWhite}réelle${White}."
+            messages+="Installation dans ${Bwhite_dlg}PC Réel${Reset_dlg}\n"
         fi
-        print_line
         if [[ $IS_MULTI_BOOT_UEFI -eq 1 ]]; then
-            echo -e "Installation en ${BWhite}Multi Boot UEFI ( ${NAME_DIR_ARCHLINUX} )${White}."
+            messages+="Installation en ${Bwhite_dlg}Multi Boot UEFI (${NAME_DIR_ARCHLINUX})${Reset_dlg}"
         fi
-        pause_function
+        print_dialog_msgbox_h "${titre}" "${messages}" "Continuer" 26
     }
     #}}}
     # 1 CHECK ROOT {{{
