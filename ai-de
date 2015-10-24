@@ -61,9 +61,11 @@ source $(pwd)/ai-commons
                 return 9
             fi
         }
+        local messages=""
+        local titre="REQUIS : CONNEXION INTERNET FONCTIONNELLE"
+        messages="\n"
         check_ping_ok
         if [[ $? -ne 0 ]]; then
-            print_title "RÉSEAU - Mise en fonction du réseau."
             CURRENT_TYPE_IP="dhcpcd"
             ret_ping=9
             until [[ $ret_ping -eq 0 ]];
@@ -72,19 +74,24 @@ source $(pwd)/ai-commons
                     check_ping_ok
                     ret_ping=$?
             done
-            echo -e "\n${BGreen}Connexion à Internet réalisée avec succès.${White}"
-            pause_function
+            messages+="Connexion à Internet réalisée avec succès.\n"
+            print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         else
-            print_info_cyan "Connexion à Internet réalisée avec succès"
-            pause_function
+            messages+="Connexion à Internet réalisée avec succès.\n"
+            print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         fi
     }
     #}}}
     # 2 CHECK DEJA LANCE {{{
     check_already_launched() {
         if [[ -f /root/ai-de.launched ]]; then
-            echo -e "${BRed}ERREUR :${White} Le script 'ai-de' a déjà été lancé. ARRET immédiat."
-            pause_function
+            local messages=""
+            local titre="REQUIS : 1ÈRE ÉXÉCUTION DU SCRIPT"
+            messages="\n"
+            messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
+            messages+="    Le script «ai-de» a déjà été lancé :\n"
+            messages+="    ARRET immédiat."
+            print_dialog_msgbox "${titre}" "${messages}" "OK"
             exit 1
         fi
     }
@@ -96,26 +103,31 @@ source $(pwd)/ai-commons
     #}}}
     # 3 CUSTOM REPOSITORIES {{{
     add_custom_repositories() {
-        # ENABLE MULTILIB REPOSITORY {{{
-        print_title "REPOS PERSONNELS - Ajout de multilib ( si en x86_64 ), archlinuxfr et Xyne."
-        # this option will avoid any problem with packages install
+        local retour=9
+        local messages=""
+        local titre="AJOUT REPOS À «/etc/pacman.conf»"
+        messages="\n"
+        if [[ $ARCHI == x86_64 ]]; then
+            messages+="ARCH = x86_64 : Ajout de Multilib.\n"
+        fi
+        messages+="Ajout de archlinuxfr.\n"
+        messages+="Ajout de Xyne.\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+        # ENABLE MULTILIB REPOSITORY
         if [[ $ARCHI == x86_64 ]]; then
             multilib=$(grep -n "\[multilib\]" /etc/pacman.conf | cut -f1 -d:)
             if $multilib &> /dev/null; then
                 echo -e "\n[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
-                echo -e '\nMultilib repository added into pacman.conf file'
             else
                 sed -i "${multilib}s/^#//" /etc/pacman.conf
                 multilib=$(( $multilib + 1 ))
                 sed -i "${multilib}s/^#//" /etc/pacman.conf
             fi
-            echo -e "\n${BGreen}Ajout de Multilib.${White}"
         fi
         # archlinuxf
         echo -e '\n[archlinuxfr]' >> /etc/pacman.conf
         echo -e 'SigLevel = Never' >> /etc/pacman.conf
         echo -e 'Server = http://repo.archlinux.fr/$arch' >> /etc/pacman.conf
-        echo -e "\n${BGreen}Ajout de archlinuxfr.${White}"
         # Xyne : http://xyne.archlinux.ca/projects/
         if [[ $ARCHI == x86_64 ]]; then
             echo -e '\n[xyne-x86_64]' >> /etc/pacman.conf
@@ -126,46 +138,48 @@ source $(pwd)/ai-commons
             echo -e 'SigLevel = Required' >> /etc/pacman.conf
             echo -e 'Server = http://xyne.archlinux.ca/repos/xyne' >> /etc/pacman.conf
         fi
-        echo -e "\n${BGreen}Ajout de Xyne.${White}"
         #
-        echo -e "\n${BGreen}Repos personnels ajoutés.${White}"
-        pause_function
+        messages="\n"
+        messages+="Visualiser/Éditer le fichier «/etc/pacman.conf» avec «"${EDITOR}"» ?\n"
+        print_dialog_yesno "${titre}" "${messages}" "Éditer" "Continuer"
+        retour=$?
+        if [[ $retour = 0 ]]; then
+            ${EDITOR} /etc/pacman.conf
+        fi
     }
     #}}}
     # 6 SYSTEM UPDATE {{{
     system_upgrade() {
-        print_title "MISE A JOUR DU SYSTEME"
+        local messages=""
+        local titre="MISE À JOUR DU SYSTÈME"
+        messages="\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         pacman -Syyu
         pause_function
     }
     #}}}
     # 7 LANGUAGE SELECTOR {{{
     language_selector() {
-        #AUTOMATICALLY DETECTS THE SYSTEM LANGUAGE {{{
-        #automatically detects the system language based on your locale
+        # LANGUE PAR DÉFAUT EN FR
         LANGUAGE=fr_FR
-        #KDE4 #{{{
+        #KDE4 #
         LANGUAGE_KDE4=fr
-        #}}}
-        #KDE5 #{{{
+        #KDE5 #
         LANGUAGE_KDE5=fr
-        #}}}
-        #FIREFOX #{{{
+        #FIREFOX #
         LANGUAGE_FF=fr
-        #}}}
-        #HUNSPELL #{{{
+        #HUNSPELL #
         LANGUAGE_HS=fr
-        #}}}
-        #ASPELL #{{{
+        #ASPELL #
         LANGUAGE_AS=fr
-        #}}}
-        #LIBREOFFICE #{{{
+        #LIBREOFFICE #
         LANGUAGE_LO=fr
-        #}}}
-        #}}}
-        print_title "LANGUE - https://wiki.archlinux.org/index.php/Locale"
-        print_info "\n La langue par défaut est : \"$LANGUAGE\""
-        pause_function
+        #
+        local messages=""
+        local titre="LANGUE PAR DÉFAUT"
+        messages="\n"
+        messages+="La langue par défaut est : «${LANGUAGE}»\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
     }
     #}}}
     # 8 CONFIGURE SUDO {{{
