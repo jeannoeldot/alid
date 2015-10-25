@@ -162,17 +162,17 @@ source $(pwd)/ai-commons
     language_selector() {
         # LANGUE PAR DÉFAUT EN FR
         LANGUAGE=fr_FR
-        #KDE4 #
+        #KDE4
         LANGUAGE_KDE4=fr
-        #KDE5 #
+        #KDE5
         LANGUAGE_KDE5=fr
-        #FIREFOX #
+        #FIREFOX
         LANGUAGE_FF=fr
-        #HUNSPELL #
+        #HUNSPELL
         LANGUAGE_HS=fr
-        #ASPELL #
+        #ASPELL
         LANGUAGE_AS=fr
-        #LIBREOFFICE #
+        #LIBREOFFICE
         LANGUAGE_LO=fr
         #
         local messages=""
@@ -184,10 +184,15 @@ source $(pwd)/ai-commons
     #}}}
     # 8 CONFIGURE SUDO {{{
     configure_sudo() {
-        print_title "SUDO - https://wiki.archlinux.org/index.php/Sudo"
+        local messages=""
+        local titre="INSTALLATION ET CONFIGURATION DE SUDO"
+        messages="\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         if ! is_package_installed "sudo" ; then
+            printf '%s\n' "${BGreen}Installation de «${BYellow}sudo${BGreen}»...${Reset}"
             package_install "sudo"
         fi
+        printf '%s\n' "${BGreen}Configuration du fichier «${BYellow}/etc/sudoers${BGreen}»...${Reset}"
         ## Uncomment to allow members of group wheel to execute any command
         sed -i '/%wheel ALL=(ALL) ALL/s/^# //' /etc/sudoers
         ## Same thing without a password (not secure)
@@ -197,42 +202,93 @@ source $(pwd)/ai-commons
     #}}}
     # 9 SELECT/CREATE USER {{{
     select_user() {
+        local retour=9
+        local messages=""
+        local messages_chk=""
+        local titre=""
         #CREATE NEW USER {{{
         create_new_user() {
-            print_warning "AVERTISSEMENT: Le nom de l'utilisateur doit être en minuscule."
-            read -p "Utilisateur : " USERNAME
-            USERNAME=$(echo ${USERNAME} | tr '[:upper:]' '[:lower:]')
-#            useradd -m -g users -G audio,lp,optical,storage,video,wheel,games,power,scanner,network -s /bin/bash ${USERNAME}
-#            useradd -m -g users -G audio,lp,optical,storage,video,wheel,games,power,scanner,network,log -s /bin/bash ${USERNAME}
-#            useradd -m -g users -G wheel -s /bin/bash ${USERNAME}
+            retour=9
+            titre="CRÉATION NOUVEL UTILISATEUR"
+            messages="\n"
+            messages+="${BRcyan_dlg}!!!${Reset_dlg} Le nom de l'utilisateur doit être en minuscule.\n"
+            until [[ $retour = 0 ]];
+            do
+                RETRY=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --inputbox "${messages}" 16 72 "" 3>&1 1>&2 2>&3)
+                if [[ ${RETRY} == "" ]]; then
+                    retour=9
+                else
+                    retour=0
+                fi
+            done
+            USERNAME=$(echo ${RETRY} | tr '[:upper:]' '[:lower:]')
             useradd -m -g users -G wheel,sys -s /bin/bash ${USERNAME}
-            print_info "Entrer le mot de passe de ${USERNAME}"
-            local ret_passwd=9
-            until [[ $ret_passwd -eq 0 ]];
-                do
-                    passwd ${USERNAME}
-                    if [[ $? -ne 0 ]]; then
-                        print_warning "Mot de passe pour ${USERNAME} erroné : Entrer de nouveau le mot de passe de ${USERNAME}"
-                        ret_passwd=9
-                    else
-                        ret_passwd=0
-                    fi
-                done
+            retour=9
+            titre="MOT DE PASSE UTILISATEUR"
+            until [[ $retour = 0 ]];
+            do
+                messages="\n"
+                messages+="Entrer le mot de passe de l'utilisateur «${USERNAME}» :\n"
+                messages_chk="\n"
+                messages_chk+="Confirmer le mot de passe de l'utilisateur «${USERNAME}» :\n"
+                L_MDP=$(dialog --colors --insecure --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --passwordbox "${messages}" 16 72 3>&1 1>&2 2>&3)
+                L_MDP_CHK=$(dialog --colors --insecure --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --passwordbox "${messages_chk}" 16 72 3>&1 1>&2 2>&3)
+                if [[ ${L_MDP} != "" && ${L_MDP_CHK} != "" && ${L_MDP} == ${L_MDP_CHK} ]]; then
+                    retour=0
+                else
+                    messages="\n"
+                    messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
+                    messages+="    Mot de passe pour «${USERNAME}» erroné :\n"
+                    messages+="    Entrer de nouveau le mot de passe de «${USERNAME}»."
+                    print_dialog_msgbox "${titre}" "${messages}" "Recommencer"
+                    retour=9
+                fi
+            done
+            #
+            printf '%s\n' "${BGreen}Configuration du mot de passe de l'utilisateur «${BYellow}${USERNAME}${BGreen}» :${Reset}"
+            echo -e "${L_MDP}\n${L_MDP}" > /tmp/.passwd
+            passwd ${USERNAME} < /tmp/.passwd
+            rm -f /tmp/.passwd
+#             # OU
+#             echo -e "${L_MDP}\n${L_MDP}\n" | passwd ${USERNAME}
+            pause_function
         } #}}}
         #CONFIGURE USER ACCOUNT {{{
         configure_user_account() {
-#            cp /etc/skel/.* /home/${USERNAME}/
-            print_title "BASHRC - https://wiki.archlinux.org/index.php/Bashrc"
-            print_info_cyan "Copie des fichiers de configuration dans le répertoire /home de ${USERNAME}."
+            titre="CONFIGURATION DU COMPTE UTILISATEUR"
+            messages="\n"
+            messages+="Copie des fichiers de configuration de «bash» :\n"
+            messages+=".bash_profile\n"
+            messages+=".bashrc\n\n"
+            messages+="Copie des fichiers de configuration de «fontconfig» :\n"
+            messages+=".config/fontconfig/fonts.conf\n\n"
+            messages+="Création du répertoire «bin» :\n\n"
+            if [[ $IS_UEFI -eq 1 ]]; then
+                messages+="Copie des fichiers de configuration de «refind» :\n"
+                if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
+                    messages+="/boot/efi/EFI/refind/refind.conf\n"
+                else
+                    messages+="/boot/efi/EFI/BOOT/refind.conf\n"
+                fi
+                messages+="/boot/efi/EFI/${NAME_DIR_ARCHLINUX}/refind_linux.conf\n\n"
+            fi
+            messages+="Copie des fichiers utiles 00-CMD-....TXT :\n"
+            messages+="00-CMD-CUSTOMIZE-ARCH.TXT\n"
+            messages+="00-CMD-INSTALLATION-LINUX-CK.TXT\n"
+            print_dialog_msgbox_h "${titre}" "${messages}" "Continuer" 26
+            #
+            printf '%s\n' "${BGreen}Copie des fichiers de configuration de «${BYellow}bash${BGreen}» dans le répertoire /home de «${BYellow}${USERNAME}${BGreen}»...${Reset}"
             cp -v ai-fconfig/user-.bash_profile /home/${USERNAME}/.bash_profile
             cp -v ai-fconfig/user-.bashrc /home/${USERNAME}/.bashrc
-            echo -e "\n"
             #
+            printf '%s\n' "${BGreen}Copie des fichiers de configuration de «${BYellow}fontconfig${BGreen}» dans le répertoire /home de «${BYellow}${USERNAME}${BGreen}»...${Reset}"
             mkdir -p /home/${USERNAME}/.config/fontconfig
             cp -v ai-fconfig/user-.config-fontconfig-fonts.conf /home/${USERNAME}/.config/fontconfig/fonts.conf
-            echo -e "\n"
             #
+            printf '%s\n' "${BGreen}Création du répertoire «${BYellow}bin${BGreen}» dans le répertoire /home de «${BYellow}${USERNAME}${BGreen}»...${Reset}"
             mkdir -p /home/${USERNAME}/bin
+            #
+            printf '%s\n' "${BGreen}Copie des fichiers de configuration de «${BYellow}refind${BGreen}» dans le répertoire /home de «${BYellow}${USERNAME}${BGreen}»...${Reset}"
             # SI en UEFI : copie fichiers conf de refind
             if [[ $IS_UEFI -eq 1 ]]; then
                 mkdir -p /home/${USERNAME}/09-Fichiers-Conf/Refind-Fichiers-Conf
@@ -242,36 +298,16 @@ source $(pwd)/ai-commons
                     cp -v /boot/efi/EFI/BOOT/refind.conf /home/${USERNAME}/09-Fichiers-Conf/Refind-Fichiers-Conf/refind.conf
                 fi
                 cp -v /boot/efi/EFI/${NAME_DIR_ARCHLINUX}/refind_linux.conf /home/${USERNAME}/09-Fichiers-Conf/Refind-Fichiers-Conf/refind_linux.conf
-                echo -e "\n"
             fi
-            cp -v ai-fconfig/00-Cmd-Customize-Arch.TXT /home/${USERNAME}/00-Cmd-Customize-Arch.TXT
-            cp -v ai-fconfig/00-Cmd-INSTALLATION-LINUX-CK.TXT /home/${USERNAME}/00-Cmd-INSTALLATION-LINUX-CK.TXT
-            echo -e "\n"
-            chown -R ${USERNAME}:users /home/${USERNAME}
+            #
+            printf '%s\n' "${BGreen}Copie des fichiers utiles «${BYellow}00-CMD-....TXT${BGreen}» dans le répertoire /home de «${BYellow}${USERNAME}${BGreen}»...${Reset}"
+            cp -v ai-fconfig/00-CMD-CUSTOMIZE-ARCH.TXT /home/${USERNAME}/00-CMD-CUSTOMIZE-ARCH.TXT
+            cp -v ai-fconfig/00-CMD-INSTALLATION-LINUX-CK.TXT /home/${USERNAME}/00-CMD-INSTALLATION-LINUX-CK.TXT
+            pause_function
         } #}}}
-        print_title "SÉLECTION/CRÉATION DU COMPTE UTILISATEUR - https://wiki.archlinux.org/index.php/Users_and_Groups"
-        users_list=($(cat /etc/passwd | grep "/home" | cut -d: -f1));
-        PS3="$prompt1"
-        echo -e "\n${BWhite}Utilisateurs disponibles :${White}"
-        if [[ $(( ${#users_list[@]} )) -gt 0 ]]; then
-            print_warning "AVERTISSEMENT: L'utilisateur sélectionné doit avoir les privilèges sudo."
-        else
-            echo ""
-        fi
-        select OPT in "${users_list[@]}" "Créer nouvel utilisateur"; do
-            if [[ $OPT == "Créer nouvel utilisateur" ]]; then
-                create_new_user
-                configure_user_account
-                break
-            elif contains_element "$OPT" "${users_list[@]}"; then
-                USERNAME=$OPT
-                break
-            else
-                invalid_option
-            fi
-        done
-        [[ ! -f /home/${USERNAME}/.bashrc ]] && configure_user_account;
-        pause_function
+        create_new_user
+        configure_user_account
+        chown -R ${USERNAME}:users /home/${USERNAME}
     }
     #}}}
     # 10 AUR HELPER {{{
@@ -298,9 +334,7 @@ source $(pwd)/ai-commons
             chown -R ${USERNAME}:users /home/${USERNAME}/yaourt_tmp
             sed -i "/^#TMPDIR=/c\TMPDIR=\"/home/${USERNAME}/yaourt_tmp\"" /etc/yaourtrc
         fi
-        # Modif /etc/yaourtrc : EDITOR="nano" par défaut
-        # Suite MAJ yaourt 1.6
-#        sed -i "/^#EDITOR=/c\EDITOR=\"nano\"" /etc/yaourtrc
+        # Modif /etc/yaourtrc : VISUA="nano" par défaut
         sed -i "/^#VISUAL=/c\VISUAL=\"nano\"" /etc/yaourtrc
         print_info_cyan "YAOURT - Edition du fichier de configuration de yaourt."
         read_input_text "Editer le fichier de configuration de yaourt ?"

@@ -9,20 +9,18 @@ MAJ SYSTEM ARCHLINUX
 $ su -
 # pacman -Syu   OU  # maj
 
-!!! USER
+MAJ PAQUETS AUR
+===============
 $ yaourt -Syua
-
-$ yaourt -Syua --aur-url https://aur4.archlinux.org
 
 
 SI problème avec linux-ck-haswell
-==================================
-
+=================================
 # pacman -Syyuu
+
 
 APRES MAJ LINUX
 ================
-
 $ systemctl status efistub_update.service
 
 $ systemctl status efistub_ck_update.service
@@ -42,14 +40,13 @@ $ systemctl status intel_ucode_update.service
 
 LANCER CIV4 COMPLETE
 ========================
-
 VOIR /home/jnd/Bureau
 =======================
 Clic Droit -> Ouvrir -> Exécuter
 
 
 BACKUP
-===========
+======
 $ cd && backup
 
 
@@ -64,9 +61,11 @@ $ maj-mirrorlist
 $ maj-repolocal
 
 
-MAJ PAQUETS AUR
-===============
-$ yaourt -Syua
+ARRÊTER L'ÉCONOMISEUR D'ÉCRAN
+=============================
+$ xset -dpms
+$ xset s off
+$ xset -q		POUR VÉRIFIER
 
 
 MAJ PSD.SERVICE
@@ -231,6 +230,9 @@ $ coredumpctl
 
 ANCIENS
 ===========
+!!! USER
+$ yaourt -Syua
+
 $ yaourt -Syua --aur-url https://aur4.archlinux.org
 
 !!! AU 25/01/2014
