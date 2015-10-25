@@ -229,11 +229,13 @@ source $(pwd)/ai-commons
             do
                 messages="\n"
                 messages+="Entrer le mot de passe de l'utilisateur «${USERNAME}» :\n"
+                messages+="${BRcyan_dlg}!!!${Reset_dlg} 7 caractères minimum.\n"
                 messages_chk="\n"
                 messages_chk+="Confirmer le mot de passe de l'utilisateur «${USERNAME}» :\n"
+                messages_chk+="${BRcyan_dlg}!!!${Reset_dlg} 7 caractères minimum.\n"
                 L_MDP=$(dialog --colors --insecure --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --passwordbox "${messages}" 16 72 3>&1 1>&2 2>&3)
                 L_MDP_CHK=$(dialog --colors --insecure --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --passwordbox "${messages_chk}" 16 72 3>&1 1>&2 2>&3)
-                if [[ ${L_MDP} != "" && ${L_MDP_CHK} != "" && ${L_MDP} == ${L_MDP_CHK} ]]; then
+                if [[ ${#L_MDP} -ge 7 && ${#L_MDP_CHK} -ge 7 && ${L_MDP} != "       " && ${L_MDP_CHK} != "       " && ${L_MDP} == ${L_MDP_CHK} ]]; then
                     retour=0
                 else
                     messages="\n"
@@ -312,37 +314,56 @@ source $(pwd)/ai-commons
     #}}}
     # 10 AUR HELPER {{{
     choose_aurhelper() {
-        print_title "YAOURT - https://wiki.archlinux.org/index.php/Yaourt"
-        print_info "Yaourt (Yet AnOther User Repository Tool) est un programme en ligne de commande qui interface les fonctions de pacman et makepkg pour la gestion des paquets sous Arch Linux."
-        print_warning "\tYaourt n'est pas officiellement supporté par les développeurs d'Arch."
+        local retour=9
+        local messages=""
+        local titre=""
+        titre="INSTALLATION DE «YAOURT»"
+        messages="\n"
+        messages+="Yaourt (Yet AnOther User Repository Tool) est un programme en ligne de commande qui interface les fonctions de «pacman» et «makepkg» pour la gestion des paquets.\n\n"
+        messages+="${BRred_dlg}!!!${Reset_dlg} Yaourt n'est pas officiellement supporté par les développeurs d'Arch.\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+        printf '%s\n' "${BGreen}Installation de «${BYellow}base-devel namcap yaourt${BGreen}»...${Reset}"
+        package_install "base-devel namcap yaourt"
+        pause_function
         if ! is_package_installed "yaourt" ; then
-          package_install "base-devel namcap yaourt"
-          if ! is_package_installed "yaourt" ; then
             pacman -Syyuu
             package_install "base-devel namcap yaourt"
-              if ! is_package_installed "yaourt" ; then
-                echo -e "${BRed}ERREUR :${White} Yaourt non installé. ARRET immédiat."
-                pause_function
+            pause_function
+            if ! is_package_installed "yaourt" ; then
+                messages="\n"
+                messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
+                messages+="    Installation de Yaourt impossible.\n"
+                messages+="    ARRET immediat.\n"
+                print_dialog_msgbox "${titre}" "${messages}" "OK"
                 exit 1
-              fi
-          fi
+            fi
         fi
-        # Modif /etc/yaourtrc si taille /tmp < 2000M
-        taille_tmp_en_ram=$(df -h -BM | awk '/\/tmp/ {print $2}' | sed -e "s/M//")
+        # Modif /etc/yaourtrc
+        titre="CONFIGURATION DE «YAOURT»"
+        messages="\n"
+        messages+="Option #VISUAL : VISUA=\"nano\"\n"
+        local taille_tmp_en_ram=$(df -h -BM | awk '/\/tmp/ {print $2}' | sed -e "s/M//")
+        if [[ $taille_tmp_en_ram -lt 2000 ]]; then
+            messages+="Option #TMPDIR : TMPDIR=\"/home/${USERNAME}/yaourt_tmp\"\n"
+        fi
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+        # Modif TMPDIR si taille /tmp < 2000M
         if [[ $taille_tmp_en_ram -lt 2000 ]]; then
             mkdir -p /home/${USERNAME}/yaourt_tmp
             chown -R ${USERNAME}:users /home/${USERNAME}/yaourt_tmp
             sed -i "/^#TMPDIR=/c\TMPDIR=\"/home/${USERNAME}/yaourt_tmp\"" /etc/yaourtrc
         fi
-        # Modif /etc/yaourtrc : VISUA="nano" par défaut
+        # Modif VISUA="nano" par défaut
         sed -i "/^#VISUAL=/c\VISUAL=\"nano\"" /etc/yaourtrc
-        print_info_cyan "YAOURT - Edition du fichier de configuration de yaourt."
-        read_input_text "Editer le fichier de configuration de yaourt ?"
-        if [[ $OPTION == o ]]; then
-            nano -w /etc/yaourtrc
+        #
+        messages="\n"
+        messages+="Visualiser/Éditer le fichier «/etc/yaourtrc» avec «"${EDITOR}"» ?\n"
+        print_dialog_yesno "${titre}" "${messages}" "Éditer" "Continuer"
+        retour=$?
+        if [[ $retour = 0 ]]; then
+            ${EDITOR} /etc/yaourtrc
         fi
         AUR_HELPER="yaourt"
-        pause_function
     }
     #}}}
     # 11 BASIC SETUP {{{
@@ -440,22 +461,8 @@ source $(pwd)/ai-commons
         package_install "ntfs-3g dosfstools exfat-utils fuse fuse-exfat autofs"
 #        is_package_installed "fuse" && add_module "fuse"
         pause_function
-        #}}}
     }
     #}}}
-    # SUPPRIMÉ suite à maj systemd 217-6
-#     # 12 READAHEAD {{{
-#     enable_readahead() {
-#         print_title "READAHEAD - https://wiki.archlinux.org/index.php/Improve_Boot_Performance"
-#         print_info "Systemd comes with its own readahead implementation, this should in principle improve boot time. However, depending on your kernel version and the type of your hard drive, your mileage may vary (i.e. it might be slower)."
-#         read_input_text "Activer Readahead" $READAHEAD
-#         if [[ $OPTION == o ]]; then
-#             systemctl enable systemd-readahead-collect.service
-#             systemctl enable systemd-readahead-replay.service
-#             pause_function
-#         fi
-#     }
-#     #}}}
     # 13 XORG {{{
     install_xorg() {
         print_title "XORG - https://wiki.archlinux.org/index.php/Xorg"
@@ -516,17 +523,17 @@ source $(pwd)/ai-commons
                 if [[ $OPTION == o ]]; then
                     XF86_DRIVERS=$(pacman -Qe | grep xf86-video | awk '{print $1}')
                     [[ -n $XF86_DRIVERS ]] && pacman -Rcsn $XF86_DRIVERS
-                    # NOM DE LA CARTE
+                    # NOM DE LA CARTE
                     NAME_CG_NVIDIA=$(lspci | grep -E "VGA" | sed -e "s/^.*\[//;s/\].*$//")
                     print_info_cyan "Nom de la carte nVidia :${NAME_CG_NVIDIA}"
-                    # Si PC Cervon
+                    # Si PC Cervon
                     if [[ "${NAME_CG_NVIDIA}" == "GeForce 9800 GTX+" ]]; then
                         print_info_cyan "Installe la branche 340xx pour les GPUs G8x, G9x et GT2xx"
                         package_install "nvidia-340xx nvidia-340xx-utils nvidia-340xx-libgl pangox-compat libva-vdpau-driver"
                         #CONFIGURE NVIDIA IN XORG
                         print_info_cyan "Mise en place des réglages de la carte nVidia."
                         cp -v ai-fconfig/20-nvidia-340xx.conf /etc/X11/xorg.conf.d/20-nvidia.conf
-                    # Si PC récent
+                    # Si PC récent
                     else
                         print_info_cyan "Installe la dernière version"
                         package_install "nvidia nvidia-utils nvidia-libgl pangox-compat libva-vdpau-driver"
