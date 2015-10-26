@@ -368,96 +368,145 @@ source $(pwd)/ai-commons
     #}}}
     # 11 BASIC SETUP {{{
     install_basic_setup() {
-        # Installation de cronie. Remplacé par systemd-timer
-        print_title "CRON - https://wiki.archlinux.org/index.php/Cronie"
-        print_info "Cron est un service de planification qui permet l'exécution de commandes de manière périodique."
-        print_info "Peu utile car remplacé par systemd-timer."
-        read_input_text "Installer cronie et activer cronie ?"
-        if [[ $OPTION == o ]]; then
-            package_install "cronie"
-            systemctl enable cronie.service
-            pause_function
-        fi
+        local retour=9
+        local messages=""
+        local titre=""
         # Masque les services non utilisés
-        print_info_cyan "Masque les services non utilisés."
+        titre="SYSTEMD : MASQUER LES SERVICES NON UTILISÉS"
+        messages="\n"
+        messages+="Services non utilisés :\n"
+        messages+="- auditd.service\n"
+        messages+="- plymouth-start.service\n"
+        messages+="- plymouth-quit-wait.service\n"
+        messages+="- syslog.service\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Masquer"
+        printf '%s\n' "${BGreen}Masque les services non utilisés...${Reset}"
         systemctl mask auditd.service plymouth-start.service plymouth-quit-wait.service syslog.service
         pause_function
-        #
-        print_title "OUTILS BASH - https://wiki.archlinux.org/index.php/Bash"
-        package_install "bc mlocate rsync bash-completion wget net-tools tree atool mc"
-        pause_function
+        # Activation de Systemd-timesyncd
         if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
-            print_title "HORLOGE - https://wiki.archlinux.org/index.php/Systemd-timesyncd"
-            print_info "Systemd-timesyncd est un démon qui été ajouté pour synchroniser l'horloge du système à travers le réseau."
-            read_input_text "Activer Systemd-timesyncd ?"
-            if [[ $OPTION == o ]]; then
-                # Changement suite maj 218
-#                 sed -i "/^#NTP=/c\NTP=0.fr.pool.ntp.org 1.fr.pool.ntp.org 2.fr.pool.ntp.org 3.fr.pool.ntp.org" /etc/systemd/timesyncd.conf
-#                 sed -i "s/#FallbackNTP/FallbackNTP/" /etc/systemd/timesyncd.conf
+            titre="SYSTEMD : ACTIVATION DE «SYSTEMD-TIMESYNCD»"
+            messages="\n"
+            messages+="Systemd-timesyncd est un service qui permet de synchroniser l'horloge du système à travers le réseau.\n"
+            print_dialog_yesno "${titre}" "${messages}" "Activer" "Continuer"
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                printf '%s\n' "${BGreen}Configuration de «${BYellow}systemd-timesyncd${BGreen}»...${Reset}"
                 mkdir -p /etc/systemd/timesyncd.conf.d
                 echo "# Reglages personnel de systemd-timesyncd." > /etc/systemd/timesyncd.conf.d/my_timesyncd_conf.conf
                 echo "[Time]" >> /etc/systemd/timesyncd.conf.d/my_timesyncd_conf.conf
                 echo "NTP=0.fr.pool.ntp.org 1.fr.pool.ntp.org 2.fr.pool.ntp.org 3.fr.pool.ntp.org" >> /etc/systemd/timesyncd.conf.d/my_timesyncd_conf.conf
                 echo "FallbackNTP=0.arch.pool.ntp.org 1.arch.pool.ntp.org 2.arch.pool.ntp.org 3.arch.pool.ntp.org" >> /etc/systemd/timesyncd.conf.d/my_timesyncd_conf.conf
-                
+                printf '%s\n' "${BGreen}Activation de «${BYellow}systemd-timesyncd.service${BGreen}»...${Reset}"
                 systemctl enable systemd-timesyncd.service
             fi
             pause_function
-##
-# TODO
-##
-# Fonctionne, mais provoque un Kernel Panic à l'arrêt
-#        else
-#            print_title "Virtualbox - https://wiki.archlinux.org/index.php/Virtualbox#Synchronise_guest_date_with_host"
-#            print_info "vboxservice permet de synchroniser la date et l'heure avec le système hôte."
-#            package_install "virtualbox-guest-utils"
-#            systemctl enable vboxservice.service
-#            pause_function
         fi
-        print_title "DBUS - https://wiki.archlinux.org/index.php/D-Bus"
-        print_info "D-Bus fournit un moyen aisé pour la communication inter-processus."
+        # Installation de cronie. Remplacé par systemd-timer
+        titre="INSTALLATION ET ACTIVATION DE «CRONIE»"
+        messages="\n"
+        messages+="Cronie est un service de planification qui permet l'exécution de commandes de manière périodique.\n\n"
+        messages+="${BRcyan_dlg}!!!${Reset_dlg} Peu utile car remplacé par systemd-timer.\n"
+        print_dialog_yesno "${titre}" "${messages}" "Installer" "Continuer"
+        retour=$?
+        if [[ $retour = 0 ]]; then
+            printf '%s\n' "${BGreen}Installation de «${BYellow}cronie${BGreen}»...${Reset}"
+            package_install "cronie"
+            printf '%s\n' "${BGreen}Activation de «${BYellow}cronie.service${BGreen}»...${Reset}"
+            systemctl enable cronie.service
+            pause_function
+        fi
+        #
+        titre="INSTALLATION D'OUTILS BASH"
+        messages="\n"
+        messages+="Installation de divers outils «BASH» :\n"
+        messages+="bc mlocate rsync bash-completion wget net-tools tree atool mc\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Installer"
+        printf '%s\n' "${BGreen}Installation de «${BYellow}bc mlocate rsync bash-completion wget net-tools tree atool mc${BGreen}»...${Reset}"
+        package_install "bc mlocate rsync bash-completion wget net-tools tree atool mc"
+        pause_function
+        #
+        titre="INSTALLATION DE «D-BUS»"
+        messages="\n"
+        messages+="D-Bus est un système de bus de messages qui fournit un moyen facile pour la communication inter-processus.\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Installer"
+        printf '%s\n' "${BGreen}Installation de «${BYellow}dbus python2-dbus${BGreen}»...${Reset}"
         package_install "dbus python2-dbus"
         pacman -D --asdeps python2-dbus
         pause_function
-        print_title "OUTILS DE (DE)COMPRESSION - https://wiki.archlinux.org/index.php/P7zip"
+        #
+        titre="INSTALLATION DES OUTILS DE (DÉ)COMPRESSION"
+        messages="\n"
+        messages+="Installation de divers outils de (dé)compression :\n"
+        messages+="zip unzip unrar p7zip\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Installer"
+        printf '%s\n' "${BGreen}Installation de «${BYellow}zip unzip unrar p7zip${BGreen}»...${Reset}"
         package_install "zip unzip unrar p7zip"
 #        aur_package_install "rar"
         pause_function
-        print_title "AVAHI - https://wiki.archlinux.org/index.php/Avahi"
-        print_info "Avahi est une mise en oeuvre des protocoles Zeroconf."
+        #
+        titre="INSTALLATION DE «AVAHI»"
+        messages="\n"
+        messages+="Avahi est une mise en oeuvre des protocoles Zeroconf.\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Installer"
+        printf '%s\n' "${BGreen}Installation de «${BYellow}avahi nss-mdns${BGreen}»...${Reset}"
         package_install "avahi nss-mdns"
-        print_info_cyan "AVAHI : Activation de avahi ( Recommandé pour CUPS )."
-        read_input_text "Activer avahi ( Recommandé pour CUPS ) ?"
-        if [[ $OPTION == o ]]; then
+        titre="ACTIVATION DE «AVAHI»"
+        messages="\n"
+        messages+="${BRcyan_dlg}!!!${Reset_dlg} Activer avahi est recommandé pour «CUPS».\n"
+        print_dialog_yesno "${titre}" "${messages}" "Activer" "Continuer"
+        retour=$?
+        if [[ $retour = 0 ]]; then
+            printf '%s\n' "${BGreen}Activation de «${BYellow}avahi-daemon.service${BGreen}»...${Reset}"
             is_package_installed "avahi" && systemctl enable avahi-daemon.service
-#            is_package_installed "avahi" && systemctl enable avahi-dnsconfd.service
+            printf '%s\n' "${BGreen}Activation de «${BYellow}avahi-dnsconfd.service${BGreen}»...${Reset}"
+            is_package_installed "avahi" && systemctl enable avahi-dnsconfd.service
         fi
         pause_function
-        print_title "ACPI - https://wiki.archlinux.org/index.php/ACPI_modules"
-        print_info "Acpid est un démon flexible et extensible pour délivrer des évènements ACPI.\n"
-        read_input_text "Installer acpi et acpid et activer acpid ( Recommandé pour Portable ) ?"
-        if [[ $OPTION == o ]]; then
+        #
+        titre="INSTALLATION DE «ACPI» ET ACTIVATION DE «ACPID»"
+        messages="\n"
+        messages+="Acpid est un démon flexible et extensible pour délivrer des évènements ACPI.\n\n"
+        messages+="${BRcyan_dlg}!!!${Reset_dlg} Activer acpid est recommandé pour un Ordinateur Portable.\n"
+        print_dialog_yesno "${titre}" "${messages}" "Activer" "Continuer"
+        retour=$?
+        if [[ $retour = 0 ]]; then
+            printf '%s\n' "${BGreen}Installation de «${BYellow}acpi acpid${BGreen}»...${Reset}"
             package_install "acpi acpid"
+            printf '%s\n' "${BGreen}Activation de «${BYellow}acpid.service${BGreen}»...${Reset}"
             is_package_installed "acpid" && systemctl enable acpid.service
+            pause_function
         fi
-        pause_function
-        print_title "ALSA - https://wiki.archlinux.org/index.php/Alsa"
-        print_info "ALSA (Advanced Linux Sound Architecture) est un composant du noyau Linux qui gère le support des cartes son."
+        #
+        titre="INSTALLATION DE «ALSA»"
+        messages="\n"
+        messages+="ALSA (Advanced Linux Sound Architecture) est un composant du noyau Linux qui gère le support des cartes SON.\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Installer"
+        printf '%s\n' "${BGreen}Installation de «${BYellow}alsa-utils${BGreen}»...${Reset}"
         package_install "alsa-utils"
-        print_info_cyan "ALSA : Activation des canaux et test du son."
-        read_input_text "Activer les canaux et tester le son ?"
-        if [[ $OPTION == o ]]; then
-            print_info_cyan "ALSA - alsamixer : activer les canaux PCM, Master et Front ( MM -> M ) et régler le volume."
-            pause_function
+        titre="ALSA : ACTIVATION DES CANAUX"
+        messages="\n"
+        messages+="${BRcyan_dlg}!!!${Reset_dlg} Activer les canaux PCM, Master et Front ( MM -> M ).\n"
+        messages+="${BRcyan_dlg}!!!${Reset_dlg} Régler le volume.\n"
+        print_dialog_yesno "${titre}" "${messages}" "Activer" "Continuer"
+        retour=$?
+        if [[ $retour = 0 ]]; then
             alsamixer
-            print_info_cyan "ALSA - speaker-test : test du son."
-            pause_function
-            speaker-test -c 2 -l 2
             alsactl store
+            titre="ALSA : TEST DU SON"
+            messages="\n"
+            messages+="Test du son avec «speaker-test»\n"
+            print_dialog_msgbox "${titre}" "${messages}" "Tester"
+            printf '%s\n' "${BGreen}Test du son avec «${BYellow}speaker-test${BGreen}»...${Reset}"
+            speaker-test -c 2 -l 2
         fi
         pause_function
-        print_title "NTFS/FAT/exFAT - https://wiki.archlinux.org/index.php/File_Systems"
-        print_info "Un système de fichiers est un moyen d'organiser les données devant être conservées, ainsi que de gérer l'espace disponible sur le(s) périphérique(s) qui les contient."
+        #
+        titre="INSTALLATION DE «NTFS/FAT/exFAT»"
+        messages="\n"
+        messages+="Système de fichiers permettant d'organiser les données devant être conservées, ainsi que de gérer l'espace disponible sur le(s) périphérique(s) qui les contient.\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Installer"
+        printf '%s\n' "${BGreen}Installation de «${BYellow}ntfs-3g dosfstools exfat-utils fuse fuse-exfat autofs${BGreen}»...${Reset}"
         package_install "ntfs-3g dosfstools exfat-utils fuse fuse-exfat autofs"
 #        is_package_installed "fuse" && add_module "fuse"
         pause_function
