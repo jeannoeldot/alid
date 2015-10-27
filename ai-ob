@@ -346,10 +346,6 @@
         print_info_cyan "Installation de upower.service"
         systemctl enable upower.service
         #
-        print_info_cyan "Modification de sudo : timestamp_timeout = ${TIMESTAMP_TIMEOUT} minutes"
-        echo -e '\n## My Defaults timestamp_timeout = '${TIMESTAMP_TIMEOUT}' minutes' >> /etc/sudoers
-        echo -e 'Defaults:'"${USERNAME}"' timestamp_timeout='${TIMESTAMP_TIMEOUT}'' >> /etc/sudoers
-        #
         OPENBOX=1
         pause_function
     }

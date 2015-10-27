@@ -260,23 +260,24 @@ source $(pwd)/ai-commons
             titre="CONFIGURATION DU COMPTE UTILISATEUR"
             messages="\n"
             messages+="Copie des fichiers de configuration de «bash» :\n"
-            messages+=".bash_profile\n"
-            messages+=".bashrc\n\n"
+            messages+="- .bash_profile\n"
+            messages+="- .bashrc\n\n"
             messages+="Copie des fichiers de configuration de «fontconfig» :\n"
-            messages+=".config/fontconfig/fonts.conf\n\n"
-            messages+="Création du répertoire «bin» :\n\n"
+            messages+="- .config/fontconfig/fonts.conf\n\n"
+            messages+="Création du répertoire «.compose-cache»\n\n"
+            messages+="Création du répertoire «bin»\n\n"
             if [[ $IS_UEFI -eq 1 ]]; then
                 messages+="Copie des fichiers de configuration de «refind» :\n"
                 if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
-                    messages+="/boot/efi/EFI/refind/refind.conf\n"
+                    messages+="- /boot/efi/EFI/refind/refind.conf\n"
                 else
-                    messages+="/boot/efi/EFI/BOOT/refind.conf\n"
+                    messages+="- /boot/efi/EFI/BOOT/refind.conf\n"
                 fi
-                messages+="/boot/efi/EFI/${NAME_DIR_ARCHLINUX}/refind_linux.conf\n\n"
+                messages+="- /boot/efi/EFI/${NAME_DIR_ARCHLINUX}/refind_linux.conf\n\n"
             fi
             messages+="Copie des fichiers utiles 00-CMD-....TXT :\n"
-            messages+="00-CMD-CUSTOMIZE-ARCH.TXT\n"
-            messages+="00-CMD-INSTALLATION-LINUX-CK.TXT\n"
+            messages+="- 00-CMD-CUSTOMIZE-ARCH.TXT\n"
+            messages+="- 00-CMD-INSTALLATION-LINUX-CK.TXT\n"
             print_dialog_msgbox_h "${titre}" "${messages}" "Continuer" 26
             #
             printf '%s\n' "${BGreen}Copie des fichiers de configuration de «${BYellow}bash${BGreen}» dans le répertoire /home de «${BYellow}${USERNAME}${BGreen}»...${Reset}"
@@ -286,6 +287,9 @@ source $(pwd)/ai-commons
             printf '%s\n' "${BGreen}Copie des fichiers de configuration de «${BYellow}fontconfig${BGreen}» dans le répertoire /home de «${BYellow}${USERNAME}${BGreen}»...${Reset}"
             mkdir -p /home/${USERNAME}/.config/fontconfig
             cp -v ai-fconfig/user-.config-fontconfig-fonts.conf /home/${USERNAME}/.config/fontconfig/fonts.conf
+            #
+            printf '%s\n' "${BGreen}Création du répertoire «${BYellow}.compose-cache${BGreen}» dans le répertoire /home de «${BYellow}${USERNAME}${BGreen}»...${Reset}"
+            mkdir -p /home/${USERNAME}/.compose-cache
             #
             printf '%s\n' "${BGreen}Création du répertoire «${BYellow}bin${BGreen}» dans le répertoire /home de «${BYellow}${USERNAME}${BGreen}»...${Reset}"
             mkdir -p /home/${USERNAME}/bin
@@ -307,8 +311,21 @@ source $(pwd)/ai-commons
             cp -v ai-fconfig/00-CMD-INSTALLATION-LINUX-CK.TXT /home/${USERNAME}/00-CMD-INSTALLATION-LINUX-CK.TXT
             pause_function
         } #}}}
+        #CONFIGURE SUDO TIMESTAMP_TIMEOUT {{{
+        configure_sudo_timestamp_timeout() {
+            titre="CONFIGURATION DU COMPTE UTILISATEUR"
+            messages="\n"
+            messages+="Configuration de «/etc/sudoers» :\n"
+            messages+="- timestamp_timeout = ${TIMESTAMP_TIMEOUT} minutes\n"
+            print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+            printf '%s\n' "${BGreen}Modification de sudo : «${BYellow}timestamp_timeout = ${TIMESTAMP_TIMEOUT}${BGreen}» minutes...${Reset}"
+            echo -e '\n## My Defaults timestamp_timeout = '${TIMESTAMP_TIMEOUT}' minutes' >> /etc/sudoers
+            echo -e 'Defaults:'"${USERNAME}"' timestamp_timeout='${TIMESTAMP_TIMEOUT}'' >> /etc/sudoers
+            pause_function
+        } #}}}
         create_new_user
         configure_user_account
+        configure_sudo_timestamp_timeout
         chown -R ${USERNAME}:users /home/${USERNAME}
     }
     #}}}
@@ -402,6 +419,23 @@ source $(pwd)/ai-commons
             fi
             pause_function
         fi
+        # Configuration de systemd-journal
+        titre="SYSTEMD : CONFIGURATION DE «SYSTEMD-JOURNAL»"
+        messages="\n"
+        messages+="Ajout de «${USERNAME}» au groupe «systemd-journal».\n\n"
+        messages+="Configuration de systemd-journal :\n"
+        messages+="- Option MaxUse = 50M.\n"
+        messages+="- Option MaxFileSize = 10M.\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+        printf '%s\n' "${BGreen}Ajout de «${BYellow}${USERNAME}${BGreen}» au groupe «${BYellow}systemd-journal${BGreen}»...${Reset}"
+        gpasswd -a ${USERNAME} systemd-journal
+        printf '%s\n' "${BGreen}Configuration de «${BYellow}systemd-journal${BGreen}» : «${BYellow}MaxUse=50M${BGreen}» et «${BYellow}MaxFileSize=10M${BGreen}»...${Reset}"
+        mkdir -p /etc/systemd/journald.conf.d
+        echo "# Reglages personnel de systemd-journal." > /etc/systemd/journald.conf.d/my_journald_conf.conf
+        echo "[Journal]" >> /etc/systemd/journald.conf.d/my_journald_conf.conf
+        echo "SystemMaxUse=50M" >> /etc/systemd/journald.conf.d/my_journald_conf.conf
+        echo "SystemMaxFileSize=10M" >> /etc/systemd/journald.conf.d/my_journald_conf.conf
+        pause_function
         # Installation de cronie. Remplacé par systemd-timer
         titre="INSTALLATION ET ACTIVATION DE «CRONIE»"
         messages="\n"
@@ -618,39 +652,6 @@ source $(pwd)/ai-commons
         pause_function
     }
     #}}}
-    #SYSTEMD {{{
-    install_dep_opt_systemd() {
-        print_title "SYSTEMD - https://wiki.archlinux.org/index.php/Systemd"
-#        print_info "systemd est un système d'initialisation qui remplace sysvinit. Il permet entre autre un démarrage en parallèle, à la demande, par activation D-Bus ou socket, un suivi des services, etc..."
-#        package_install "systemd systemd-sysvcompat"
-        print_info "Installation des dépendances optionnelles de systemd."
-        package_install "systemd-sysvcompat"
-        pacman -D --asdeps systemd-sysvcompat
-#         package_install "python2-cairo python2-gobject"
-#         pacman -D --asdeps python2-cairo python2-gobject
-        # Modifs conf
-        print_info_cyan "Ajout de ${USERNAME} au groupe systemd-journal."
-        gpasswd -a ${USERNAME} systemd-journal
-        #
-        # Changement suite maj 218
-#         print_info_cyan "Modification de journald.conf : Taille de /var/log/journal/system.journal"
-#         sed -i "/^#SystemMaxUse/c\SystemMaxUse=50M" /etc/systemd/journald.conf
-#         sed -i "/^#SystemMaxFileSize/c\SystemMaxFileSize=10M" /etc/systemd/journald.conf
-        #
-        print_info_cyan "Modification de systemd-journal : MaxUse et MaxFileSize"
-        mkdir -p /etc/systemd/journald.conf.d
-        echo "# Reglages personnel de systemd-journal." > /etc/systemd/journald.conf.d/my_journald_conf.conf
-        echo "[Journal]" >> /etc/systemd/journald.conf.d/my_journald_conf.conf
-        echo "SystemMaxUse=50M" >> /etc/systemd/journald.conf.d/my_journald_conf.conf
-        echo "SystemMaxFileSize=10M" >> /etc/systemd/journald.conf.d/my_journald_conf.conf
-        #
-        # INUTILE DEPUIS systemd 211
-        # print_info_cyan "Modification de system.conf : RuntimeWatchdogSec = 20 secondes"
-        # #RuntimeWatchdogSec=20
-        # sed -i "/^#RuntimeWatchdogSec/c\RuntimeWatchdogSec=20" /etc/systemd/system.conf
-        pause_function
-    }
-    #}}}
     #CUPS {{{
     install_cups() {
       print_title "CUPS - https://wiki.archlinux.org/index.php/Cups"
@@ -792,7 +793,6 @@ source $(pwd)/ai-commons
     install_xorg
     configure_font_presets
     install_video_cards
-    install_dep_opt_systemd
     install_cups
 
 # DÉBUT INSTALLATION DE OU WM {{{

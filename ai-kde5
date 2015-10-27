@@ -105,8 +105,6 @@
         #}}}
 	echo "LANG=$LANGUAGE.utf8" >> /etc/environment
         echo "FT2_SUBPIXEL_HINTING=1" >> /etc/environment
-	mkdir -p /home/${USERNAME}/.compose-cache
-	chown -R ${USERNAME}:users /home/${USERNAME}/.compose-cache
         echo -e "\n"
         # Installe et Enable sddm.service
         print_info_cyan "Installation de sddm et Activation de sddm.service"
@@ -129,10 +127,6 @@
                 cp -v ai-fconfig/etc-systemd-system-display-manager.service.d-10-wait-for-dri-devices.conf /etc/systemd/system/display-manager.service.d/10-wait-for-dri-devices.conf
             fi
         fi
-        #
-        print_info_cyan "Modification de sudo : timestamp_timeout = ${TIMESTAMP_TIMEOUT} minutes"
-        echo -e '\n## My Defaults timestamp_timeout = '${TIMESTAMP_TIMEOUT}' minutes' >> /etc/sudoers
-        echo -e 'Defaults:'"${USERNAME}"' timestamp_timeout='${TIMESTAMP_TIMEOUT}'' >> /etc/sudoers
         #
         KDE5=1
         pause_function
