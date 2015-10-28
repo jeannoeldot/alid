@@ -548,26 +548,43 @@ source $(pwd)/ai-commons
     #}}}
     # 13 XORG {{{
     install_xorg() {
-        print_title "XORG - https://wiki.archlinux.org/index.php/Xorg"
-        print_info "Xorg est l'implémentation officielle du système graphique X Window System version 11."
-        print_info "Installion de X-Server (requis pour Environement de Bureau, Pilotes GPU, Agencement Clavier, ...)"
+        local messages=""
+        local titre=""
+        titre="INSTALLATION DE XORG"
+        messages="\n"
+        messages+="Xorg est l'implémentation officielle du système graphique X Window System version 11.\n\n"
+        messages+="Installion de X-Server (requis pour Environement de Bureau, Pilotes GPU, Agencement Clavier, ...).\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Installer"
+        printf '%s\n' "${BGreen}Installation de «${BYellow}xorg-server xorg-server-utils xorg-xinit xorg-utils xorg-xkill xorg-twm xorg-xclock xterm${BGreen}»...${Reset}"
         package_install "xorg-server xorg-server-utils xorg-xinit xorg-utils xorg-xkill xorg-twm xorg-xclock xterm"
-#        package_install "xf86-input-synaptics xf86-input-mouse xf86-input-keyboard"
+#         printf '%s\n' "${BGreen}Installation de «${BYellow}xf86-input-synaptics xf86-input-mouse xf86-input-keyboard${BGreen}»...${Reset}"
+#         package_install "xf86-input-synaptics xf86-input-mouse xf86-input-keyboard"
+        printf '%s\n' "${BGreen}Installation de «${BYellow}mesa gamin${BGreen}»...${Reset}"
         package_install "mesa gamin"
+        pause_function
         #CONFIGURE AZERTY OR BEPO KEYBOARD IN XORG
-        print_info_cyan "Mise en place de la disposition du clavier en FR (AZERTY ou BÉPO)."
-        if [[ $TYPE_KEYBOARD == "AZERTY" ]]; then
-            cp -v ai-fconfig/10-keyboard-layout-AZERTY.conf /etc/X11/xorg.conf.d/10-keyboard-layout.conf
-        else
+        titre="CONFIGURATION DU TYPE DE CLAVIER"
+        messages="\n"
+        messages+="Le type de clavier est de type : «${TYPE_KEYBOARD}»\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+        printf '%s\n' "${BGreen}Mise en place de la disposition du clavier en FR «${BYellow}${TYPE_KEYBOARD}${BGreen}»...${Reset}"
+        if [[ $TYPE_KEYBOARD == "BEPO" ]]; then
             cp -v ai-fconfig/10-keyboard-layout-BEPO.conf /etc/X11/xorg.conf.d/10-keyboard-layout.conf
+        else
+            cp -v ai-fconfig/10-keyboard-layout-AZERTY.conf /etc/X11/xorg.conf.d/10-keyboard-layout.conf
         fi
         pause_function
     }
     #}}}
     # FONT CONFIGURATION PRESETS {{{
     configure_font_presets() {
-        print_title "FONT CONFIGURATION - https://wiki.archlinux.org/index.php/Font_Configuration"
-        print_info "Fontconfig est une bibliothèque conçue pour fournir une liste des polices disponibles aux applications, et aussi pour configurer la façon dont les polices seront rendues."
+        local messages=""
+        local titre=""
+        titre="OUTIL DE CONFIGURATION DES POLICES DE CARACTÈRES"
+        messages="\n"
+        messages+="«Fontconfig» est une bibliothèque conçue pour fournir une liste des polices disponibles aux applications, et pour configurer la façon dont les polices seront rendues.\n\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Installer"
+        printf '%s\n' "${BGreen}Installation de «${BYellow}cairo fontconfig freetype2 libxft${BGreen}»...${Reset}"
         package_install "cairo fontconfig freetype2 libxft"
         pause_function
     }
@@ -654,15 +671,33 @@ source $(pwd)/ai-commons
     #}}}
     #CUPS {{{
     install_cups() {
-      print_title "CUPS - https://wiki.archlinux.org/index.php/Cups"
-      print_info "CUPS est le système d'impression opensource basé sur des normes et développé par Apple Inc pour OS®X et autres systèmes d'exploitation UNIX®-like."
-      read_input_text "Installer CUPS ( Common Unix Printing System ) ?"
-      if [[ $OPTION == o ]]; then
-          package_install "cups cups-filters ghostscript gsfonts"
-          package_install "gutenprint foomatic-db foomatic-db-engine foomatic-db-nonfree foomatic-filters hplip splix cups-pdf"
-          systemctl enable org.cups.cupsd.service
-          pause_function
-      fi
+        local retour=9
+        local messages=""
+        local titre=""
+        titre="INSTALLATION DE CUPS (Common Unix Printing System)"
+        messages="\n"
+        messages+="CUPS est le système d'impression opensource basé sur des normes et développé par Apple Inc pour OS®X et autres systèmes d'exploitation UNIX®-like.\n"
+        print_dialog_yesno "${titre}" "${messages}" "Installer" "Continuer"
+        retour=$?
+        if [[ $retour = 0 ]]; then
+            printf '%s\n' "${BGreen}Installation de «${BYellow}cups cups-filters ghostscript gsfonts${BGreen}»...${Reset}"
+            package_install "cups cups-filters ghostscript gsfonts"
+            printf '%s\n' "${BGreen}Installation de «${BYellow}gutenprint foomatic-db foomatic-db-engine foomatic-db-nonfree foomatic-filters hplip splix cups-pdf${BGreen}»...${Reset}"
+            package_install "gutenprint foomatic-db foomatic-db-engine foomatic-db-nonfree foomatic-filters hplip splix cups-pdf"
+            printf '%s\n' "${BGreen}Activation de «${BYellow}org.cups.cupsd.service${BGreen}»...${Reset}"
+            systemctl enable org.cups.cupsd.service
+            local status=$(systemctl status avahi-daemon.service | awk '/Active/ {print $2}')
+            if [[ "${status}" == "inactive" ]];then
+                printf '%s\n' "${BGreen}Activation de «${BYellow}avahi-daemon.service${BGreen}»...${Reset}"
+                is_package_installed "avahi" && systemctl enable avahi-daemon.service
+            fi
+            status=$(systemctl status avahi-dnsconfd.service | awk '/Active/ {print $2}')
+            if [[ "${status}" == "inactive" ]];then
+                printf '%s\n' "${BGreen}Activation de «${BYellow}avahi-dnsconfd.service${BGreen}»...${Reset}"
+                is_package_installed "avahi" && systemctl enable avahi-dnsconfd.service
+            fi
+            pause_function
+        fi
     }
     #}}}
 
