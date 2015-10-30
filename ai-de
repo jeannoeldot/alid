@@ -416,8 +416,8 @@ source $(pwd)/ai-commons
                 echo "FallbackNTP=0.arch.pool.ntp.org 1.arch.pool.ntp.org 2.arch.pool.ntp.org 3.arch.pool.ntp.org" >> /etc/systemd/timesyncd.conf.d/my_timesyncd_conf.conf
                 printf '%s\n' "${BGreen}Activation de «${BYellow}systemd-timesyncd.service${BGreen}»...${Reset}"
                 systemctl enable systemd-timesyncd.service
+                pause_function
             fi
-            pause_function
         fi
         # Configuration de systemd-journal
         titre="SYSTEMD : CONFIGURATION DE «SYSTEMD-JOURNAL»"
@@ -591,10 +591,18 @@ source $(pwd)/ai-commons
     #}}}
     # 14 VIDEO CARDS {{{
     install_video_cards() {
-        print_title "CARTE VIDEO"
+        local retour=9
+        local messages=""
+        local titre=""
+        titre="INSTALLATION DES PILOTES DE LA CARTE VIDÉO"
+        messages="\n"
         if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
-            print_info_cyan "Installation dans Oracle VM Virtualbox."
+            messages+="Installation dans Oracle VM Virtualbox.\n\n"
+            messages+="Installation de virtualbox-guest-utils.\n"
+            print_dialog_msgbox "${titre}" "${messages}" "Installer"
+            printf '%s\n' "${BGreen}Installation de «${BYellow}virtualbox-guest-utils mesa-libgl${BGreen}»...${Reset}"
             package_install "virtualbox-guest-utils mesa-libgl"
+            printf '%s\n' "${BGreen}Démarrage des modules «${BYellow}vboxguest vboxsf vboxvideo${BGreen}»...${Reset}"
             echo "# Load vbox modules guest at boot" > /etc/modules-load.d/vbox_modules_guest.conf
             echo "vboxguest" >> /etc/modules-load.d/vbox_modules_guest.conf
             echo "vboxsf" >> /etc/modules-load.d/vbox_modules_guest.conf
@@ -602,67 +610,101 @@ source $(pwd)/ai-commons
             start_module "vboxguest"
             start_module "vboxsf"
             start_module "vboxvideo"
-            # Inutile : groupe déjà créé
-#            echo -e "\n"
-#            groupadd vboxsf
-            print_info_cyan "Ajout de ${USERNAME} au groupe vboxsf."
+            printf '%s\n' "${BGreen}Ajout de «${BYellow}${USERNAME}${BGreen}» au groupe «${BYellow}vboxsf${BGreen}»...${Reset}"
             gpasswd -a ${USERNAME} vboxsf
         else
             _vga=$(lspci | grep VGA | tr "[:upper:]" "[:lower:]")
             _vga_length=$(lspci | grep VGA | wc -l)
             # test si bumblebee
             if [[ $_vga_length -eq 2 ]] && [[ -n $(echo ${_vga} | grep "nvidia") || -f /sys/kernel/debug/dri/0/vbios.rom ]]; then
-                XF86_DRIVERS=$(pacman -Qe | grep xf86-video | awk '{print $1}')
-                [[ -n $XF86_DRIVERS ]] && pacman -Rcsn $XF86_DRIVERS
+                messages+="Installation sur Portable avec technologie NVIDIA Optimus.\n\n"
+                messages+="Installation de xf86-video-intel bumblebee nvidia.\n"
+                print_dialog_msgbox "${titre}" "${messages}" "Installer"
+                L_XF86_DRIVERS=$(pacman -Qe | grep xf86-video | awk '{print $1}')
+                printf '%s\n' "${BGreen}Désinstallation de «${BYellow}$L_XF86_DRIVERS${BGreen}»...${Reset}"
+                [[ -n $L_XF86_DRIVERS ]] && pacman -Rcsn $L_XF86_DRIVERS
+                printf '%s\n' "${BGreen}Installation de «${BYellow}xf86-video-intel bumblebee nvidia${BGreen}»...${Reset}"
                 package_install "xf86-video-intel bumblebee nvidia"
-                gpasswd -a ${username} bumblebee
+                printf '%s\n' "${BGreen}Ajout de «${BYellow}${USERNAME}${BGreen}» au groupe «${BYellow}bumblebee${BGreen}»...${Reset}"
+                gpasswd -a ${USERNAME} bumblebee
             # test si NVIDIA
             elif [[ -n $(echo ${_vga} | grep "nvidia") || -f /sys/kernel/debug/dri/0/vbios.rom ]]; then
-                print_info_cyan "Carte NVIDIA détectée.\n"
-                read_input_text "Installer le pilote vidéo propriétaire NVIDIA ?"
-                if [[ $OPTION == o ]]; then
-                    XF86_DRIVERS=$(pacman -Qe | grep xf86-video | awk '{print $1}')
-                    [[ -n $XF86_DRIVERS ]] && pacman -Rcsn $XF86_DRIVERS
-                    # NOM DE LA CARTE
-                    NAME_CG_NVIDIA=$(lspci | grep -E "VGA" | sed -e "s/^.*\[//;s/\].*$//")
-                    print_info_cyan "Nom de la carte nVidia :${NAME_CG_NVIDIA}"
+                # NOM DE LA CARTE
+                L_NAME_CG_NVIDIA=$(lspci | grep -E "VGA" | sed -e "s/^.*\[//;s/\].*$//")
+                messages+="Carte Vidéo NVIDIA ${L_NAME_CG_NVIDIA} détectée.\n\n"
+                messages+="Installer le pilote vidéo propriétaire NVIDIA ?\n"
+                print_dialog_yesno "${titre}" "${messages}" "Installer" "Continuer"
+                retour=$?
+                if [[ $retour = 0 ]]; then
+                    L_XF86_DRIVERS=$(pacman -Qe | grep xf86-video | awk '{print $1}')
+                    printf '%s\n' "${BGreen}Désinstallation de «${BYellow}$L_XF86_DRIVERS${BGreen}»...${Reset}"
+                    [[ -n $L_XF86_DRIVERS ]] && pacman -Rcsn $L_XF86_DRIVERS
                     # Si PC Cervon
-                    if [[ "${NAME_CG_NVIDIA}" == "GeForce 9800 GTX+" ]]; then
-                        print_info_cyan "Installe la branche 340xx pour les GPUs G8x, G9x et GT2xx"
+                    if [[ "${L_NAME_CG_NVIDIA}" == "GeForce 9800 GTX+" ]]; then
+                        messages="\n"
+                        messages+="Nom de la carte NVIDIA détectée : ${L_NAME_CG_NVIDIA}\n\n"
+                        messages+="Installation de la branche 340xx des pilotes NVidia pour les GPUs G8x, G9x et GT2xx.\n"
+                        print_dialog_msgbox "${titre}" "${messages}" "Installer"
+                        printf '%s\n' "${BGreen}Installation de «${BYellow}nvidia-340xx nvidia-340xx-utils nvidia-340xx-libgl pangox-compat libva-vdpau-driver${BGreen}»...${Reset}"
                         package_install "nvidia-340xx nvidia-340xx-utils nvidia-340xx-libgl pangox-compat libva-vdpau-driver"
                         #CONFIGURE NVIDIA IN XORG
-                        print_info_cyan "Mise en place des réglages de la carte nVidia."
+                        printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia «${BYellow}20-nvidia.conf${BGreen}»...${Reset}"
                         cp -v ai-fconfig/20-nvidia-340xx.conf /etc/X11/xorg.conf.d/20-nvidia.conf
                     # Si PC récent
                     else
-                        print_info_cyan "Installe la dernière version"
+                        messages="\n"
+                        messages+="Nom de la carte Vidéo NVIDIA détectée : ${L_NAME_CG_NVIDIA}\n\n"
+                        messages+="Installation de la dernière version des pilotes NVidia.\n"
+                        print_dialog_msgbox "${titre}" "${messages}" "Installer"
+                        printf '%s\n' "${BGreen}Installation de «${BYellow}nvidia nvidia-utils nvidia-libgl pangox-compat libva-vdpau-driver${BGreen}»...${Reset}"
                         package_install "nvidia nvidia-utils nvidia-libgl pangox-compat libva-vdpau-driver"
                         #CONFIGURE NVIDIA IN XORG
-                        print_info_cyan "Mise en place des réglages de la carte nVidia."
+                        printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia «${BYellow}20-nvidia.conf${BGreen}»...${Reset}"
                         cp -v ai-fconfig/20-nvidia.conf /etc/X11/xorg.conf.d/20-nvidia.conf                    
                     fi
-                    sed -i "s/NAMECGNVIDIA/${NAME_CG_NVIDIA}/" /etc/X11/xorg.conf.d/20-nvidia.conf
-                    read_input_text "Visualiser et/ou éditer le fichier « 20-nvidia.conf » ?"
-                    if [[ $OPTION == o ]]; then
+                    sed -i "s/NAMECGNVIDIA/${L_NAME_CG_NVIDIA}/" /etc/X11/xorg.conf.d/20-nvidia.conf
+                    retour=9
+                    titre="INSTALLATION DES PILOTES NVIDIA"
+                    messages="\n"
+                    messages+="Visualiser/Éditer le fichier «20-nvidia.conf» avec «"${EDITOR}"» ?\n"
+                    print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
+                    retour=$?
+                    if [[ $retour = 0 ]]; then
                         nano /etc/X11/xorg.conf.d/20-nvidia.conf
                     fi
                 else
+                    messages="\n"
+                    messages+="Nom de la carte NVIDIA détectée : ${L_NAME_CG_NVIDIA}\n\n"
+                    messages+="Installation du pilote libre «nouveau».\n"
+                    print_dialog_msgbox "${titre}" "${messages}" "Installer"
+                    printf '%s\n' "${BGreen}Installation de «${BYellow}mesa-libgl xf86-video-nouveau${BGreen}»...${Reset}"
                     package_install "mesa-libgl xf86-video-nouveau"
+                    printf '%s\n' "${BGreen}Démarrage du module «${BYellow}nouveau${BGreen}»...${Reset}"
                     add_module "nouveau"
                 fi
             # test si intel
             elif [[ -n $(echo ${_vga} | grep "intel corporation") || -f /sys/kernel/debug/dri/0/i915_capabilities ]]; then
-                print_info_cyan "Carte INTEL détectée.\n"
+                messages+="Carte Vidéo INTEL détectée.\n\n"
+                messages+="Installation du pilote libre «intel».\n"
+                print_dialog_msgbox "${titre}" "${messages}" "Installer"
+                printf '%s\n' "${BGreen}Installation de «${BYellow}mesa-libgl xf86-video-intel libva-intel-driver${BGreen}»...${Reset}"
                 package_install "mesa-libgl xf86-video-intel libva-intel-driver"
             # test si ATI/AMD
             elif [[ -n $(echo ${_vga} | grep "advanced micro devices") || -f /sys/kernel/debug/dri/0/radeon_pm_info || -f /sys/kernel/debug/dri/0/radeon_sa_info ]]; then
-                print_info_cyan "Carte ATI détectée.\n"
+                messages+="Carte Vidéo ATI détectée.\n\n"
+                messages+="Installation du pilote libre «ati».\n"
+                print_dialog_msgbox "${titre}" "${messages}" "Installer"
+                printf '%s\n' "${BGreen}Installation de «${BYellow}mesa-libgl xf86-video-ati${BGreen}»...${Reset}"
                 package_install "mesa-libgl xf86-video-ati"
+                printf '%s\n' "${BGreen}Démarrage des modules «${BYellow}radeon ati${BGreen}»...${Reset}"
                 add_module "radeon"
                 add_module "ati"
             # VESA PAR DEFAUT
             else
-                print_info_cyan "Installe le pilote Vesa par défaut.\n"
+                messages+="Aucune Carte Vidéo détectée.\n\n"
+                messages+="Installation du pilote «Vesa» par défaut.\n"
+                print_dialog_msgbox "${titre}" "${messages}" "Installer"
+                printf '%s\n' "${BGreen}Installation de «${BYellow}mesa-libgl xf86-video-ati${BGreen}»...${Reset}"
                 package_install "mesa-libgl xf86-video-vesa"
             fi
         fi
@@ -707,60 +749,85 @@ source $(pwd)/ai-commons
 
     # 25 FONTS {{{
     install_fonts() {
-      while true
-      do
-          print_title "FONTS - https://wiki.archlinux.org/index.php/Fonts"
-          echo " 1) $(menu_item "ttf-google-fonts-git") $AUR"
-          echo " 2) $(menu_item "ttf-inconsolata")"
-          echo ""
-          echo " F) FINI"
-          echo ""
-          FONTS_OPTIONS+=" f"
-          read_input_options "$FONTS_OPTIONS"
-          for OPT in ${OPTIONS[@]}; do
-            case "$OPT" in
-              1)
-                aur_package_install "ttf-google-fonts-git"
-                ;;
-              2)
-                package_install "ttf-inconsolata"
-                ;;
-              "f")
-                break
-                ;;
-              *)
-                invalid_option
-                ;;
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION DE POLICES SUPPLÉMENTAIRES"
+        messages=" \n"
+        until [[ $retour = 0 ]];
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 16 72 2)
+            options=("ttf-google-fonts-git" "(AUR)" OFF
+                    "ttf-inconsolata" "" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            else
+                retour=0
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "ttf-google-fonts-git")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}ttf-google-fonts-git${BGreen}...${Reset}"
+                    aur_package_install "ttf-google-fonts-git"
+                    ;;
+                "ttf-inconsolata")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}ttf-inconsolata${BGreen}...${Reset}"
+                    package_install "ttf-inconsolata"
             esac
-          done
-          elihw
         done
     }
     #}}}
     # 95 INSTALL OPTIONAL DEP FOR QT4 SI INSTALLÉ {{{
     install_optional_dep_for_qt4() {
+        local messages=""
+        local titre=""
         if is_package_installed "qt4" ; then
-            print_title "INSTALLATION de sni-qt: StatusNotifierItem (AppIndicators) support et INSTALLATION de icu"
+            titre="INSTALLATION DES DÉPENDANCES OPTIONNELLES POUR QT4"
+            messages=" \n"
+            messages+="Installation de sni-qt: StatusNotifierItem (AppIndicators) support.\n"
+            messages+="Installation de icu.\n"
+            print_dialog_msgbox "${titre}" "${messages}" "Installer"
+            printf '%s\n' "${BGreen}Installation de ${BYellow}sni-qt icu${BGreen}...${Reset}"
             package_install "sni-qt icu"
             pacman -D --asdeps sni-qt
+            pause_function
         fi
-        pause_function
     }
     #}}}
     # 96 CLEAN ORPHAN PACKAGES {{{
     clean_orphan_packages() {
-        print_title "NETTOYAGE PAQUETS ORPHELINS"
-        pacman -Rsc $(pacman -Qqdt)
-        pacman -Sc
-        pacman-optimize
+        local retour=9
+        local messages=""
+        local titre="SUPPRESSION DES PAQUETS ORPHELINS"
+        local liste_pkg=$(pacman -Qqdt)
+        messages=" \n"
+        messages+="Supprimer les paquets suivants : ${liste_pkg} ?\n"
+        print_dialog_yesno "${titre}" "${messages}" "Supprimer" "Continuer"
+        retour=$?
+        if [[ $retour = 0 ]]; then
+            printf '%s\n' "${BGreen}Suppression des paquets «${BYellow}${liste_pkg}${BGreen}»...${Reset}"
+            pacman -Rsc $(pacman -Qqdt)
+            pause_function
+        fi
     }
     #}}}
     # 97 MAJ MANDB {{{
     update_mandb() {
-        print_title "MANDB - https://wiki.archlinux.org/index.php/Man_Page"
-        print_info "Génération ou mise à jour du cache de man."
-        read_input_text "Générer ou mettre à jour le cache de man (prend qque minutes) ?"
-        if [[ $OPTION == o ]]; then
+        local retour=9
+        local messages=""
+        local titre="GÉNÉRATION DU CACHE DE «man»"
+        messages=" \n"
+        messages+="Générer ou mettre à jour le cache de man (prend qque minutes) ?\n"
+        print_dialog_yesno "${titre}" "${messages}" "Générer" "Continuer"
+        retour=$?
+        if [[ $retour = 0 ]]; then
+            printf '%s\n' "${BGreen}Génération ou mise à jour du cache de «${BYellow}man${BGreen}»...${Reset}"
             /usr/bin/mandb --quiet
             pause_function
         fi
@@ -768,16 +835,18 @@ source $(pwd)/ai-commons
     #}}}
     # 98 CLEAN CACHE PACMAN {{{
     clean_cache_pacman() {
-        print_title "NETTOYAGE DU CACHE DE PACMAN"
+        local messages=""
+        local titre="NETTOYAGE DU CACHE DE PACMAN"
+        messages=" \n"
+        messages+="Nettoyage du répertoire «/var/cache/pacman/pkg».\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Nettoyer"
+        printf '%s\n' "${BGreen}Nettoyage du répertoire «${BYellow}/var/cache/pacman/pkg${BGreen}»...${Reset}"
         pacman -Sc
         pacman-optimize
-        #ADD VERBOSE TO PACMAN.CONF
-        print_info_cyan "Ajoute l'option Verbose à pacman.conf."
-        sed -i "/^#VerbosePkgLists/c\VerbosePkgLists" /etc/pacman.conf
         if is_package_installed "pkgfile" ; then
-            print_info_cyan "Génération ou mise à jour du cache de pkgfile."
+            printf '%s\n' "${BGreen}Génération ou mise à jour du cache de «${BYellow}pkgfile${BGreen}»...${Reset}"
             pkgfile --update
-            print_info_cyan "Activation du service pkgfile-update.timer."
+            printf '%s\n' "${BGreen}Activation du service «${BYellow}pkgfile-update.timer${BGreen}»...${Reset}"
             systemctl enable pkgfile-update.timer
         fi
         pause_function
@@ -785,19 +854,33 @@ source $(pwd)/ai-commons
     #}}}
     # 99 FINISH {{{
     finish() {
-        print_title "ATTENTION: PAQUETS INSTALLÉS DEPUIS AUR"
-        print_warning "Liste des paquets non officiellement supportés:"
-        pacman -Qm | awk '{print $1}' > aur_pkglist.txt
-#        less aur_pkglist.txt
-        cat aur_pkglist.txt
-        pause_function
-        print_title "INSTALLATION TERMINÉE"
-        echo -e "Merci d'avoir utilisé les scripts d'installation de Archlinux."
+        local retour=9
+        local messages=""
+        local titre=""
+        titre="PAQUETS INSTALLÉS DEPUIS AUR"
+        messages=" \n"
+        messages+="Visualiser la liste des paquets non officiellement supportés ?\n"
+        print_dialog_yesno "${titre}" "${messages}" "Visualiser" "Continuer"
+        retour=$?
+        if [[ $retour = 0 ]]; then
+            printf '%s\n' "${BGreen}Liste des paquets non officiellement supportés:${Reset}"
+            pacman -Qm | awk '{print $1}' > aur_pkglist.txt
+            cat aur_pkglist.txt
+            pause_function
+        fi
+        #
         chown -R ${USERNAME}:users /home/${USERNAME}
-        #REBOOT
-        read -p "Rebooter le système [O/N] ? : " OPTION
-        [[ $OPTION == o ]] && reboot
-        exit 0
+        retour=9
+        titre="INSTALLATION TERMINÉE"
+        messages=" \n"
+        messages+="Redémarrer le système ?\n"
+        print_dialog_yesno "${titre}" "${messages}" "Redémarrer" "Non"
+        retour=$?
+        if [[ $retour = 0 ]]; then
+            reboot
+        else
+            exit 0
+        fi
     }
     #}}}
 
