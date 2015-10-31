@@ -82,7 +82,7 @@ source $(pwd)/ai-commons
         fi
     }
     #}}}
-    # 2 CHECK DEJA LANCE {{{
+    # 3 CHECK DEJA LANCE {{{
     check_already_launched() {
         if [[ -f /root/ai-de.launched ]]; then
             local messages=""
@@ -96,12 +96,7 @@ source $(pwd)/ai-commons
         fi
     }
     #}}}
-    # 2 AI-DE LANCE 1 FOIS {{{
-    set_launched() {
-        echo "ai-de_launched=1" > /root/ai-de.launched
-    }
-    #}}}
-    # 3 CUSTOM REPOSITORIES {{{
+    # 4 CUSTOM REPOSITORIES {{{
     add_custom_repositories() {
         local retour=9
         local messages=""
@@ -146,6 +141,11 @@ source $(pwd)/ai-commons
         if [[ $retour = 0 ]]; then
             ${EDITOR} /etc/pacman.conf
         fi
+    }
+    #}}}
+    # 5 AI-DE LANCE 1 FOIS {{{
+    set_launched() {
+        echo "ai-de_launched=1" > /root/ai-de.launched
     }
     #}}}
     # 6 SYSTEM UPDATE {{{
@@ -546,7 +546,7 @@ source $(pwd)/ai-commons
         pause_function
     }
     #}}}
-    # 13 XORG {{{
+    # 12 XORG {{{
     install_xorg() {
         local messages=""
         local titre=""
@@ -576,7 +576,7 @@ source $(pwd)/ai-commons
         pause_function
     }
     #}}}
-    # FONT CONFIGURATION PRESETS {{{
+    # 13 FONT CONFIGURATION PRESETS {{{
     configure_font_presets() {
         local messages=""
         local titre=""
@@ -711,7 +711,7 @@ source $(pwd)/ai-commons
         pause_function
     }
     #}}}
-    #CUPS {{{
+    #15 CUPS {{{
     install_cups() {
         local retour=9
         local messages=""
@@ -747,7 +747,7 @@ source $(pwd)/ai-commons
 # Install DE OU WM
 #
 
-    # 25 FONTS {{{
+    # 40 FONTS {{{
     install_fonts() {
         local retour=9
         local messages=""
@@ -836,7 +836,7 @@ source $(pwd)/ai-commons
     # 98 CLEAN CACHE PACMAN {{{
     clean_cache_pacman() {
         local messages=""
-        local titre="NETTOYAGE DU CACHE DE PACMAN"
+        local titre="NETTOYAGE ET OPTIMISATION DU CACHE DE PACMAN"
         messages=" \n"
         messages+="Nettoyage du répertoire «/var/cache/pacman/pkg».\n"
         print_dialog_msgbox "${titre}" "${messages}" "Nettoyer"
@@ -864,8 +864,8 @@ source $(pwd)/ai-commons
         retour=$?
         if [[ $retour = 0 ]]; then
             printf '%s\n' "${BGreen}Liste des paquets non officiellement supportés:${Reset}"
-            pacman -Qm | awk '{print $1}' > aur_pkglist.txt
-            cat aur_pkglist.txt
+            pacman -Qm | awk '{print $1}' > /tmp/aur_pkglist.txt
+            cat /tmp/aur_pkglist.txt
             pause_function
         fi
         #
@@ -914,35 +914,23 @@ source $(pwd)/ai-commons
     install_cups
 
 # DÉBUT INSTALLATION DE OU WM {{{
-        print_title "CHOIX DE L'ENVIRONNEMENT DE BUREAU ( KDE4, KDE5 ) OU DU GESTIONNAIRE DE FENETRES ( OPENBOX )"
-        liste_env_des_wm=("KDE4" "KDE5" "OPENBOX");
-        PS3="$prompt1"
-        echo -e "${BWhite}"
-        echo -e "Sélectionner l'environnement de bureau ou le gestionnaire de fenêtres :"
-        select OPT in "${liste_env_des_wm[@]}"; do
-            case "$REPLY" in
-                1)
-                    source $(pwd)/ai-kde4
-                    break
-                    ;;
-                2)
-                    source $(pwd)/ai-kde5
-                    break
-                    ;;
-                3)
-                    source $(pwd)/ai-ob
-                    break
-                    ;;
-                *)
-                    invalid_option
-                    echo -e "${BWhite}"
-                    echo -e "Sélectionner l'environnement de bureau ou le gestionnaire de fenêtres :"
-                    ;;
-            esac
-        done
-        echo -e "${White}"
-        #}}}
-
+    messages=""
+    titre="SÉLECTION DU D.E. «KDE 5» OU DU W.M. «OPENBOX»"
+    messages="\n"
+    messages+="Sélectionner l'environnement de bureau «KDE 5» ou le gestionnaire de fenêtres «OPENBOX» :"
+    REPLY=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 16 72 5 \
+            "KDE5" "Environnement de bureau" \
+            "OPENBOX" "Gestionnaire de fenêtres" \
+            3>&1 1>&2 2>&3)
+    case "$REPLY" in
+        "KDE5")
+            source $(pwd)/ai-kde5
+            ;;
+        "OPENBOX")
+            source $(pwd)/ai-ob
+            ;;
+    esac
+    #
     install_desktop_environment
     install_accessories_apps
     install_system_apps
@@ -958,6 +946,7 @@ source $(pwd)/ai-commons
 
     install_fonts
     install_optional_dep_for_qt4
+#     clean_orphan_packages             # APPEL SUPPRIMÉ
     update_mandb
     clean_cache_pacman
     finish
