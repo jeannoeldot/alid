@@ -126,146 +126,168 @@
                 pause_function
             fi
         fi
-# TODO
-        ## LM_SENSORS SI PAS DANS VIRTUALBOX
-        #if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
-            #if is_package_installed "lm_sensors" ; then
-                #print_info_cyan "LM_SENSORS - sensors-detect : détections des capteurs."
-                #pause_function
-                #sensors-detect
-                #systemctl enable lm_sensors.service
-            #fi
-        #fi
     }
     #}}}
     # 17 ACCESSORIES {{{
     install_accessories_apps() {
-    while true
-    do
-        print_title "APPLICATIONS ACCESSOIRES"
-        echo " 1) $(menu_item "conky" "Conky")"
-        echo " 2) $(menu_item "docky" "Docky-Dock")"
-        echo ""
-        echo " F) FINI"
-        echo ""
-        ACCESSORIES_OPTIONS+=" f"
-        read_input_options "$ACCESSORIES_OPTIONS"
-        for OPT in ${OPTIONS[@]}; do
-            case "$OPT" in
-                1)
-                    package_install "conky"
-##
-# TODO
-# A REVOIR ~/00-Conky
-##
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS ACCESSOIRES"
+        messages=" \n"
+        until [[ $retour = 0 ]];
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 16 72 3)
+            options=("cairo-dock" "" OFF
+                    "conky-lua-nv" "(AUR)" OFF
+                    "docky" "" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            else
+                retour=0
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "cairo-dock")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}cairo-dock cairo-dock-plugins${BGreen}...${Reset}"
+                    package_install "cairo-dock cairo-dock-plugins"
                     ;;
-                2)
+                "conky-lua-nv")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}conky-lua-nv${BGreen}...${Reset}"
+                    aur_package_install "conky-lua-nv"
+                    ;;
+                "docky")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}docky${BGreen}...${Reset}"
                     package_install "docky"
-                    ;;
-                "f")
-                    break
-                    ;;
-                *)
-                    invalid_option
-                    ;;
             esac
         done
-    elihw
-    done
+        pause_function
     }
     #}}}
     # 17 SYSTEM TOOLS {{{
     install_system_apps() {
-    while true
-    do
-        print_title "OUTILS SYSTÈME"
-        echo " 1) $(menu_item "gparted")"
-        echo " 2) $(menu_item "grsync")"
-        echo " 3) $(menu_item "htop iotop lshw hwinfo dmidecode ncdu dfc expac pkgfile i7z inxi")"
-        echo " 4) $(menu_item "lm_sensors")"
-        echo " 5) $(menu_item "hddtemp gnu-netcat")"
-        echo " 6) $(menu_item "gsmartcontrol" "S.M.A.R.T.")"
-        echo " 7) $(menu_item "hdparm bonnie++")"
-        echo " 8) $(menu_item "cpupower")"
-        echo " 9) $(menu_item "pacnew_scripts")"
-        echo "10) $(menu_item "mesa-demos")"
-        echo "11) $(menu_item "syslog-ng")"
-        echo "12) $(menu_item "qt5ct")"
-        echo ""
-        echo " F) FINI"
-        echo ""
-        SYSTEMTOOLS_OPTIONS+=" f"
-        read_input_options "$SYSTEMTOOLS_OPTIONS"
-        for OPT in ${OPTIONS[@]}; do
-            case "$OPT" in
-                1)
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'OUTILS SYSTÈME"
+        messages=" \n"
+        until [[ $retour = 0 ]];
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 22 72 12)
+            options=("gparted" "+ gptfdisk" OFF
+                    "grsync" "" OFF
+                    "htop" "+ iotop lshw hwinfo ..." OFF
+                    "lm_sensors" "+ rrdtool" OFF
+                    "hddtemp" "+ gnu-netcat" OFF
+                    "gsmartcontrol" "(S.M.A.R.T.)" OFF
+                    "hdparm" "+ bonnie++" OFF
+                    "pacnew_scripts" "" OFF
+                    "mesa-demos" "" OFF
+                    "qt5ct" "" OFF
+                    "cpupower" "(Inutile si Intel I7-4770K Haswell)" OFF
+                    "syslog-ng" "" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            else
+                retour=0
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "gparted")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gparted gptfdisk${BGreen}...${Reset}"
                     package_install "gparted gptfdisk"
-		    mkdir -p /home/${USERNAME}/.local/share/applications
-		    cp -v ai-fconfig/kde-user-gparted.desktop /home/${USERNAME}/.local/share/applications/gparted.desktop
-		    chown -R ${USERNAME}:users /home/${USERNAME}/.local
+                    mkdir -p /home/${USERNAME}/.local/share/applications
+                    cp -v ai-fconfig/kde-user-gparted.desktop /home/${USERNAME}/.local/share/applications/gparted.desktop
+                    chown -R ${USERNAME}:users /home/${USERNAME}/.local
                     ;;
-                2)
+                "grsync")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}grsync${BGreen}...${Reset}"
                     package_install "grsync"
                     ;;
-                3)
+                "htop")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}htop iotop lshw hwinfo dmidecode ncdu dfc expac pkgfile i7z inxi${BGreen}...${Reset}"
                     package_install "htop iotop lshw hwinfo dmidecode ncdu dfc expac pkgfile i7z inxi"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}lsof strace${BGreen}...${Reset}"
                     package_install "lsof strace"
                     ;;
-                4)
+                "lm_sensors")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}lm_sensors rrdtool${BGreen}...${Reset}"
                     package_install "lm_sensors rrdtool"
                     # SI PAS DANS VIRTUALBOX
                     if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
-                        print_info_cyan "LM_SENSORS - sensors-detect : détections des capteurs."
+                        printf '%s\n' "${BGreen}LM_SENSORS - sensors-detect : détections des capteurs...${Reset}"
                         pause_function
                         sensors-detect
+                        printf '%s\n' "${BGreen}Activation de ${BYellow}lm_sensors.service${BGreen}...${Reset}"
                         systemctl enable lm_sensors.service
                     fi
                     ;;
-                5)
+                "hddtemp")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}hddtemp gnu-netcat${BGreen}...${Reset}"
                     package_install "hddtemp gnu-netcat"
-		    systemctl enable hddtemp.service
+                    printf '%s\n' "${BGreen}Activation de ${BYellow}hddtemp.service${BGreen}...${Reset}"
+                    systemctl enable hddtemp.service
                     ;;
-                6)
+                "gsmartcontrol")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gsmartcontrol${BGreen}...${Reset}"
                     package_install "gsmartcontrol"
                     mkdir -p /home/${USERNAME}/.local/share/applications
                     cp -v ai-fconfig/kde-user-gsmartcontrol.desktop /home/${USERNAME}/.local/share/applications/gsmartcontrol.desktop
                     chown -R ${USERNAME}:users /home/${USERNAME}/.local
                     ;;
-                7)
+                "hdparm")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}hdparm bonnie++${BGreen}...${Reset}"
                     package_install "hdparm bonnie++"
                     ;;
-                8)
-                    print_info_cyan "Cpupower : Ne pas installer si Intel I7-4770K Haswell."
-                    read_input_text "Installer cpupower ?"
-                    if [[ $OPTION == o ]]; then
+                "pacnew_scripts")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}pacnew_scripts${BGreen}...${Reset}"
+                    package_install "pacnew_scripts"
+                    ;;
+                "mesa-demos")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}mesa-demos${BGreen}...${Reset}"
+                    package_install "mesa-demos"
+                    ;;
+                "qt5ct")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}qt5ct${BGreen}...${Reset}"
+                    package_install "qt5ct"
+                    ;;
+                "cpupower")
+                    retour=9
+                    messages="\n"
+                    messages+="Installation de Cpupower :\n"
+                    messages+="${BRcyan_dlg}!!!${Reset_dlg}Ne pas installer si Intel I7-4770K Haswell.\n\n"
+                    messages+="Installer cpupower ?"
+                    print_dialog_yesno "${titre}" "${messages}" "Installer" "Continuer"
+                    retour=$?
+                    if [[ $retour = 0 ]]; then
+                        printf '%s\n' "${BGreen}Installation de ${BYellow}cpupower${BGreen}...${Reset}"
                         package_install "cpupower"
+                        printf '%s\n' "${BGreen}Activation de ${BYellow}cpupower.service${BGreen}...${Reset}"
                         systemctl enable cpupower.service
                     fi
                     ;;
-                9)
-                    package_install "pacnew_scripts"
-                    ;;
-                10)
-                    package_install "mesa-demos"
-                    ;;
-                11)
+                "syslog-ng")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}syslog-ng${BGreen}...${Reset}"
                     package_install "syslog-ng"
+                    printf '%s\n' "${BGreen}Activation de ${BYellow}syslog-ng.service${BGreen}...${Reset}"
                     systemctl enable syslog-ng.service
+                    printf '%s\n' "${BGreen}Ajout de ${BYellow}${USERNAME}${BGreen} au groupe ${BYellow}log${BGreen}...${Reset}"
                     gpasswd -a ${USERNAME} log
-                    ;;
-                12)
-                    package_install "qt5ct"
-                    ;;
-                "f")
-                    break
-                    ;;
-                *)
-                    invalid_option
-                    ;;
             esac
         done
-    elihw
-    done
+        pause_function
     }
     #}}}
     # 18 DEVELOPEMENT {{{
