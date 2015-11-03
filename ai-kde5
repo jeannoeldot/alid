@@ -5,123 +5,84 @@
 # Appelé par ai-de
 #
 # Ce script installe KDE5
-# et ne fonctionne qu'avec la langue FR (fr_FR)
 #
+# Ne fonctionne qu'avec la langue FR (fr_FR)
+#
+# Interface graphique avec dialog
 #-------------------------------------------------------------------------------
 
-#ARCHLINUX INSTALL
     # 15 DESKTOP ENVIRONMENT {{{
     install_desktop_environment() {
-        # KDE5 {{{
-        print_title "KDE5 - https://wiki.archlinux.org/index.php/KDE"
-        print_info "KDE5 est constitué d'un grand nombre d'applications individuelles et d'un espace de travail de bureau comme un shell pour exécuter ces applications."
+        local retour=9
+        local messages=""
+        local titre=""
+        # KDE5
+        titre="INSTALLATION DE KDE 5"
+        messages="\n"
+        messages+="KDE est un projet de logiciel comprenant actuellement un environnement de bureau appelé Plasma (ou Plasma Workspaces), une collection de bibliothèques et de cadres (KDE Frameworks) et plusieurs applications (KDE Applications).\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         # KDE5 BASE
-        print_info_cyan "Installation de KDE5 Base."
+        printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Base${BGreen}...${Reset}"
         package_install "plasma kf5 kf5-aids kde-l10n-$LANGUAGE_KDE5"
         package_install "konsole kwrite dolphin"
         # KDE5 LOOK
-        print_info_cyan "Installation de KDE5 Look"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Look${BGreen}...${Reset}"
         package_install "oxygen-icons oxygen-icons-svg"
         package_install "oxygen-gtk2 oxygen-kde4"
         package_install "qtcurve-gtk2 qtcurve-qt4 qtcurve-qt5 breeze-kde4"
         # GTK theme matching Breeze
         package_install "gtk-theme-orion"
         # KDE5 UTILS
-        print_info_cyan "Installation de KDE5 Utils"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Utils${BGreen}...${Reset}"
         package_install "ark filelight kcalc kcharselect kdeutils-kdf kwalletmanager"
         # KDE5 MULTIMEDIA
-        print_info_cyan "Installation de KDE5 Multimedia"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Multimedia${BGreen}...${Reset}"
         package_install "kdemultimedia-kscd kdemultimedia-audiocd-kio kio-mtp kio-extras"
         # Remplace kdemultimedia-kmix : PAS de miniature dans Barre des Tâches
         package_install "kmix"
         package_install "libdvdcss libdvdread libdvdnav"
         # KDE5 GRAPHICS
-        print_info_cyan "Installation de KDE5 Graphiques"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Graphiques${BGreen}...${Reset}"
         package_install "gwenview kdegraphics-kcolorchooser kdegraphics-kolourpaint kdegraphics-ksnapshot kdegraphics-okular kdegraphics-svgpart kdegraphics-thumbnailers kdegraphics-mobipocket"
         package_install "kipi-plugins"
         package_install "ffmpegthumbs"
         # KDE5 SDK
-        print_info_cyan "Installation de KDE5 Sdk"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 SDK${BGreen}...${Reset}"
         package_install "okteta kate dolphin-plugins kdesdk-kioslaves kompare kdesdk-poxml kdebindings-python2 kdebindings-python"
         # KDE5 FONTS
-        print_info_cyan "Installation de KDE5 Polices TTF"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Polices TTF${BGreen}...${Reset}"
         package_install "ttf-bitstream-vera ttf-dejavu ttf-freefont ttf-liberation ttf-linux-libertine ttf-droid ttf-ubuntu-font-family ttf-oxygen"
         # LSB-RELEASE
-        print_info_cyan "Installation de lsb-release"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}lsb-release${BGreen}...${Reset}"
         package_install "lsb-release"
         #
-        is_package_installed "cups" && package_install "print-manager xdg-user-dirs"
-#         package_install "kde-telepathy telepathy"
-        #}}}
-##
-# TODO
-##
-# A SUPPRIMER QUAND systemctl enable vboxservice.service NE PROVOQUERA PLUS DE KERNEL PANIC A L'ARRET
-        # VBOX SHARED FOLDER AUTO {{{
-        # SI INSTALLATION DANS VIRTUALBOX
-        if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
-            print_info_cyan "Montage Automatique de VBox Shared Folder pour JND."
-            read_input_text "Monter automatiquement VBox Shared Folder pour JND ?"
-            if [[ $OPTION == o ]]; then
-                liste_des_pc_hotes=("PC-John" "PC-Jnd")
-                PS3="$prompt1"
-                echo -e "${BGreen}Choisir le PC Hôte ( PC-John Windows 7 ou PC-Jnd Arch ) :${White}${BWhite}"
-                select OPT in "${liste_des_pc_hotes[@]}"; do
-                    case "$REPLY" in
-                        1)
-                            name_rep_partage="Partage-Win7-WMs"
-                            break
-                            ;;
-                        2)
-                            name_rep_partage="90-Partage"
-                            break
-                            ;;
-                        *)
-                            invalid_option
-                            echo -e "${BGreen}Choisir le PC Hôte ( PC-John Windows 7 ou PC-Jnd Arch ) :${White}${BWhite}"
-                            ;;
-                    esac
-                done
-                mkdir -p /home/${USERNAME}/vbox-shared-folder
-                chown -R ${USERNAME}:users /home/${USERNAME}/vbox-shared-folder
-                user_uid=$(id -u ${USERNAME})
-                user_gid=$(id -g ${USERNAME})
-                echo -e '\n# Shared Folders as Arch Linux Guest' >> /etc/fstab
-                echo -e "$name_rep_partage"'     /home/jnd/vbox-shared-folder    vboxsf  uid='"$user_uid"',gid='"$user_gid"',rw,dmode=700,fmode=600,comment=systemd.automount       0 0' >> /etc/fstab
-                pause_function
-            fi
+        if is_package_installed "cups" ; then
+            printf '%s\n' "${BGreen}Installation de ${BYellow}print-manager xdg-user-dirs${BGreen}...${Reset}"
+            package_install "print-manager xdg-user-dirs"
         fi
-        # LM_SENSORS SI PAS DANS VIRTUALBOX
-        if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
-            if is_package_installed "lm_sensors" ; then
-                print_info_cyan "LM_SENSORS - sensors-detect : détections des capteurs."
-                pause_function
-                sensors-detect
-                systemctl enable lm_sensors.service
-            fi
-        fi
-        #}}}
-        #KDE5 CUSTOMIZATION {{{
-        #}}}
-	echo "LANG=$LANGUAGE.utf8" >> /etc/environment
+        #
+        printf '%s\n' "${BGreen}Configuration de ${BYellow}/etc/environment${BGreen}...${Reset}"
+        echo "LANG=$LANGUAGE.utf8" >> /etc/environment
         echo "FT2_SUBPIXEL_HINTING=1" >> /etc/environment
-        echo -e "\n"
         # Installe et Enable sddm.service
-        print_info_cyan "Installation de sddm et Activation de sddm.service"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}sddm sddm-kcm${BGreen}...${Reset}"
         package_install "sddm sddm-kcm"
+        printf '%s\n' "${BGreen}Activation de ${BYellow}sddm.service${BGreen}...${Reset}"
         systemctl enable sddm.service
-        echo -e "\n"
-        echo -e "\n"
         # Abstraction for enumerating power devices, listening to device events and querying history and statistics
-        print_info_cyan "Installation de upower.service"
+        printf '%s\n' "${BGreen}Activation de ${BYellow}upower.service${BGreen}...${Reset}"
         systemctl enable upower.service
-        echo -e "\n"
         # Mise en place d'un drop-in pour sddm.service si carte nvivia et drivers nvidia installé
         # https://bbs.archlinux.org/viewtopic.php?id=173153. brain0    Developer
         if is_package_installed "nvidia" ; then
-            print_info_cyan "Carte Vidéo Nvidia : Mise en place d'un drop-in pour sddm.service."
-            read_input_text "Mettre en place un drop-in pour sddm.service ?"
-            if [[ $OPTION == o ]]; then
+            retour=9
+            messages="\n"
+            messages+="Carte Vidéo Nvidia ${L_NAME_CG_NVIDIA} :\n\n"
+            messages+="Activer un drop-in pour «sddm.service» ?"
+            print_dialog_yesno "${titre}" "${messages}" "Activer" "Continuer"
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                printf '%s\n' "${BGreen}Activation d'un drop-in pour ${BYellow}sddm.service${BGreen}...${Reset}"
                 cp -v ai-fconfig/etc-udev-rules.d-99-systemd-dri-devices.rules /etc/udev/rules.d/99-systemd-dri-devices.rules
                 mkdir -p /etc/systemd/system/display-manager.service.d
                 cp -v ai-fconfig/etc-systemd-system-display-manager.service.d-10-wait-for-dri-devices.conf /etc/systemd/system/display-manager.service.d/10-wait-for-dri-devices.conf
@@ -130,6 +91,51 @@
         #
         KDE5=1
         pause_function
+        # VBOX SHARED FOLDER AUTO
+        # SI INSTALLATION DANS VIRTUALBOX
+        if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
+            retour=9
+            messages="\n"
+            messages+="Installation dans «Oracle VM VirtualBox».\n\n"
+            messages+="Monter automatiquement «VBox Shared Folder» pour «${USERNAME}» ?"
+            print_dialog_yesno "${titre}" "${messages}" "Monter" "Continuer"
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                messages="\n"
+                messages+="Installation dans «Oracle VM VirtualBox».\n\n"
+                messages+="Choisir le PC Hôte «PC-John Windows 7» ou «PC-Jnd Arch Linux»"
+                REPLY=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 16 72 5 \
+                    "PC-John" "Windows 7" \
+                    "PC-Jnd" "Arch Linux" \
+                    3>&1 1>&2 2>&3)
+                case "$REPLY" in
+                    "PC-John")
+                        name_rep_partage="Partage-Win7-WMs"
+                        ;;
+                    "PC-Jnd")
+                        name_rep_partage="90-Partage"
+                        ;;
+                esac
+                printf '%s\n' "${BGreen}Configuration de ${BYellow}/etc/fstab${BGreen}...${Reset}"
+                mkdir -p /home/${USERNAME}/vbox-shared-folder
+                chown -R ${USERNAME}:users /home/${USERNAME}/vbox-shared-folder
+                user_uid=$(id -u ${USERNAME})
+                user_gid=$(id -g ${USERNAME})
+                echo -e '\n# Shared Folders as Arch Linux Guest' >> /etc/fstab
+                echo -e "${name_rep_partage}"'     /home/'"${USERNAME}"'/vbox-shared-folder    vboxsf  uid='"$user_uid"',gid='"$user_gid"',rw,dmode=700,fmode=600,comment=systemd.automount       0 0' >> /etc/fstab
+                pause_function
+            fi
+        fi
+# TODO
+        ## LM_SENSORS SI PAS DANS VIRTUALBOX
+        #if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
+            #if is_package_installed "lm_sensors" ; then
+                #print_info_cyan "LM_SENSORS - sensors-detect : détections des capteurs."
+                #pause_function
+                #sensors-detect
+                #systemctl enable lm_sensors.service
+            #fi
+        #fi
     }
     #}}}
     # 17 ACCESSORIES {{{

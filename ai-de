@@ -162,8 +162,6 @@ source $(pwd)/ai-commons
     language_selector() {
         # LANGUE PAR DÉFAUT EN FR
         LANGUAGE=fr_FR
-        #KDE4
-        LANGUAGE_KDE4=fr
         #KDE5
         LANGUAGE_KDE5=fr
         #FIREFOX

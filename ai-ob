@@ -5,11 +5,11 @@
 # Appelé par ai-de
 #
 # Ce script installe OPENBOX
-# et ne fonctionne qu'avec la langue FR (fr_FR)
+# Ne fonctionne qu'avec la langue FR (fr_FR)
 #
+# Interface graphique avec dialog
 #-------------------------------------------------------------------------------
 
-#ARCHLINUX INSTALL
     # 15 DESKTOP ENVIRONMENT {{{
     install_desktop_environment() {
         # OPENBOX {{{
@@ -40,10 +40,10 @@
         # Dépendances spacefm
         print_info_cyan "Installation des dépendances de spacefm."
         package_install "lsof eject wget gksu udevil udisks udisks2 gvfs-smb gvfs-afc gvfs-gphoto2 gvfs-mtp lxsession"
-        # FONTS {{{
+        # FONTS
         print_info_cyan "Installation de polices TTF."
         package_install "ttf-bitstream-vera ttf-dejavu ttf-freefont ttf-liberation ttf-linux-libertine ttf-droid ttf-ubuntu-font-family ttf-oxygen"
-        # LSB-RELEASE {{{
+        # LSB-RELEASE
         print_info_cyan "Installation de lsb-release"
         package_install "lsb-release"
         # UPOWER
@@ -94,7 +94,7 @@
                 user_uid=$(id -u ${USERNAME})
                 user_gid=$(id -g ${USERNAME})
                 echo -e '\n# Shared Folders as Arch Linux Guest' >> /etc/fstab
-                echo -e "$name_rep_partage"'     /home/jnd/vbox-shared-folder    vboxsf  uid='"$user_uid"',gid='"$user_gid"',rw,dmode=700,fmode=600,comment=systemd.automount       0 0' >> /etc/fstab
+                echo -e "$name_rep_partage"'     /home/'"${USERNAME}"'/vbox-shared-folder    vboxsf  uid='"$user_uid"',gid='"$user_gid"',rw,dmode=700,fmode=600,comment=systemd.automount       0 0' >> /etc/fstab
                 pause_function
             fi
         fi
