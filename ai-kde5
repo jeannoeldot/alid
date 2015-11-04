@@ -167,7 +167,9 @@
                     package_install "docky"
             esac
         done
-        pause_function
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
     }
     #}}}
     # 17 SYSTEM TOOLS {{{
@@ -179,13 +181,13 @@
         until [[ $retour = 0 ]];
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 22 72 12)
-            options=("gparted" "+ gptfdisk" OFF
+            options=("gparted" "(+ gptfdisk)" OFF
                     "grsync" "" OFF
-                    "htop" "+ iotop lshw hwinfo ..." OFF
-                    "lm_sensors" "+ rrdtool" OFF
-                    "hddtemp" "+ gnu-netcat" OFF
+                    "htop" "(+ iotop lshw hwinfo ...)" OFF
+                    "lm_sensors" "(+ rrdtool)" OFF
+                    "hddtemp" "(+ gnu-netcat)" OFF
                     "gsmartcontrol" "(S.M.A.R.T.)" OFF
-                    "hdparm" "+ bonnie++" OFF
+                    "hdparm" "(+ bonnie++)" OFF
                     "pacnew_scripts" "" OFF
                     "mesa-demos" "" OFF
                     "qt5ct" "" OFF
@@ -287,206 +289,242 @@
                     gpasswd -a ${USERNAME} log
             esac
         done
-        pause_function
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
     }
     #}}}
     # 18 DEVELOPEMENT {{{
     install_development_apps() {
-    while true
-    do
-        print_title "APPLICATIONS DE DÉVELOPPEMENT"
-        echo " 1) $(menu_item "kdevelop")"
-        echo " 2) $(menu_item "qtcreator" "QtCreator Qt(5)")"
-        echo " 3) $(menu_item "devtools")"
-        echo " 4) $(menu_item "gdb" "Debugger Tools")"
-        echo " 5) $(menu_item "git subversion")"
-        echo " 6) $(menu_item "cmake")"
-        echo " 7) $(menu_item "clang")"
-        echo ""
-        echo " F) FINI"
-        echo ""
-        DEVELOPMENT_OPTIONS+=" f"
-        read_input_options "$DEVELOPMENT_OPTIONS"
-        for OPT in ${OPTIONS[@]}; do
-            case "$OPT" in
-                1)
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS DE DÉVELOPPEMENT"
+        messages=" \n"
+        until [[ $retour = 0 ]];
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 20 72 7)
+            options=("kdevelop" "" OFF
+                    "qtcreator" "(+ Qt5)" OFF
+                    "devtools" "" OFF
+                    "gdb" "(+ valgrind splint tidyhtml)" OFF
+                    "git" "(+ subversion)" OFF
+                    "cmake" "" OFF
+                    "clang" "" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            else
+                retour=0
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "kdevelop")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}kdevelop${BGreen}...${Reset}"
                     package_install "kdevelop"
                     ;;
-                2)
+                "qtcreator")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}qtcreator qt qt5-doc libxkbcommon-x11${BGreen}...${Reset}"
                     package_install "qtcreator qt qt5-doc libxkbcommon-x11"
                     ;;
-                3)
+                "devtools")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}devtools${BGreen}...${Reset}"
                     package_install "devtools"
                     ;;
-                4)
+                "gdb")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}valgrind gdb splint tidyhtml${BGreen}...${Reset}"
                     package_install "valgrind gdb splint tidyhtml"
                     ;;
-                5)
+                "git")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}git subversion${BGreen}...${Reset}"
                     package_install "git subversion"
                     ;;
-                6)
+                "cmake")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}cmake${BGreen}...${Reset}"
                     package_install "cmake"
                     ;;
-                7)
+                "clang")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}clang${BGreen}...${Reset}"
                     package_install "clang"
-                    ;;
-                "f")
-                    break
-                    ;;
-                *)
-                    invalid_option
-                    ;;
             esac
         done
-    elihw
-    done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
     }
     #}}}
     # 19 OFFICE {{{
     install_office_apps() {
-    while true
-    do
-        print_title "APPLICATIONS DE BUREAUTIQUE"
-        echo " 1) $(menu_item "libreoffice-still" "LibreOffice Still")"
-        echo " 2) $(menu_item "calligra" "Calligra office suite")"
-        echo ""
-        echo " F) FINI"
-        echo ""
-        OFFICE_OPTIONS+=" f"
-        read_input_options "$OFFICE_OPTIONS"
-        for OPT in ${OPTIONS[@]}; do
-            case "$OPT" in
-                1)
-                    print_title "LIBREOFFICE - https://wiki.archlinux.org/index.php/LibreOffice"
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS DE BUREAUTIQUE"
+        messages=" \n"
+        until [[ $retour = 0 ]];
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 16 72 2)
+            options=("libreoffice" "(LibreOffice Still)" OFF
+                    "calligra" "(Calligra Office Suite)" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            else
+                retour=0
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "libreoffice")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}libreoffice-still${BGreen}...${Reset}"
                     package_install "libreoffice-still-$LANGUAGE_LO libreoffice-still libwpg unoconv"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}hyphen hunspell mythes${BGreen}...${Reset}"
                     package_install "hyphen-fr hyphen hunspell-fr hunspell mythes-fr libmythes"
                     ;;
-                2)
+                "calligra")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}calligra${BGreen}...${Reset}"
                     package_install "calligra calligra-l10n-fr"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}hyphen hunspell mythes${BGreen}...${Reset}"
                     package_install "hyphen-fr hyphen hunspell-fr hunspell mythes-fr libmythes"
-                    ;;
-                "f")
-                    break
-                    ;;
-                *)
-                    invalid_option
-                    ;;
             esac
         done
-    elihw
-    done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
     }
     #}}}
     # 20 GRAPHICS {{{
     install_graphics_apps() {
-    while true
-    do
-        print_title "APPLICATIONS GRAPHIQUES"
-        echo " 1) $(menu_item "blender")"
-        echo " 2) $(menu_item "gimp")"
-        echo " 3) $(menu_item "inkscape")"
-        echo ""
-        echo " F) FINI"
-        echo ""
-        GRAPHICS_OPTIONS+=" f"
-        read_input_options "$GRAPHICS_OPTIONS"
-        for OPT in ${OPTIONS[@]}; do
-            case "$OPT" in
-                1)
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS GRAPHIQUES"
+        messages=" \n"
+        until [[ $retour = 0 ]];
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 16 72 3)
+            options=("blender" "(+ cuda)" OFF
+                    "gimp" "(+ plugins)" OFF
+                    "inkscape" "(+ extensions et filtres" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            else
+                retour=0
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "blender")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}blender${BGreen}...${Reset}"
                     package_install "blender"
                     if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
-                        is_package_installed "nvidia" && package_install "cuda opencl-nvidia"
+                        if is_package_installed "nvidia" ; then
+                            printf '%s\n' "${BGreen}Installation de ${BYellow}cuda opencl-nvidia${BGreen}...${Reset}"
+                            package_install "cuda opencl-nvidia"
+                        fi
                     fi
                     ;;
-                2)
+                "gimp")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gimp libopenraw${BGreen}...${Reset}"
                     package_install "gimp libopenraw"
                     pacman -D --asdeps libopenraw
-                    package_install "webkitgtk2 potrace gimp-ufraw gimp-plugin-fblur gimp-plugin-gmic gimp-plugin-lqr gimp-plugin-mathmap gimp-plugin-wavelet-decompose gimp-plugin-wavelet-denoise gimp-refocus"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gimp-plugin${BGreen}...${Reset}"
+                    package_install "webkitgtk2 potrace gimp-dbp gimp-plugin-fblur gimp-plugin-gmic gimp-plugin-lqr gimp-plugin-mathmap gimp-plugin-wavelet-decompose gimp-plugin-wavelet-denoise gimp-refocus gimp-ufraw"
                     ;;
-                3)
-                    package_install "inkscape uniconvertor"
-                    ;;
-                "f")
-                    break
-                    ;;
-                *)
-                    invalid_option
-                    ;;
+                "inkscape")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}inkscape${BGreen}...${Reset}"
+                    package_install "inkscape"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}pstoedit python2-lxml python2-numpy texlive-core uniconvertor${BGreen}...${Reset}"
+                    package_install "pstoedit python2-lxml python2-numpy texlive-core uniconvertor"
             esac
         done
-    elihw
-    done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
     }
     #}}}
     # 21 INTERNET {{{
     install_internet_apps() {
-    while true
-    do
-        print_title "BROWSER - DOWNLOAD/FILESHARE - EMAIL - INSTANT MESSAGING - IRC"
-        echo " 1) $(menu_item "chromium")"
-        echo " 2) $(menu_item "rekonq")"
-        echo " 3) $(menu_item "firefox")"
-        echo " 4) $(menu_item "opera")"
-        echo " 5) $(menu_item "transmission-qt")"
-        echo " 6) $(menu_item "dropbox") $AUR"
-        echo " 7) $(menu_item "thunderbird")"
-        echo " 8) $(menu_item "emesene")"
-        echo " 9) $(menu_item "quassel")"
-        echo "10) $(menu_item "konversation")"
-        echo ""
-        echo " F) FINI"
-        echo ""
-        BROWSERS_OPTIONS+=" f"
-        read_input_options "$BROWSERS_OPTIONS"
-        for OPT in ${OPTIONS[@]}; do
-            case "$OPT" in
-                1)
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS INTERNET"
+        messages=" \n"
+        until [[ $retour = 0 ]];
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 20 72 7)
+            options=("chromium" "(Navigateur)" OFF
+                    "firefox" "(Navigateur)" OFF
+                    "transmission" "(Download)" OFF
+                    "dropbox" "(Partage de fichiers)" OFF
+                    "thunderbird" "(Mail)" OFF
+                    "konversation" "(IRC client)" OFF
+                    "quassel" "(IRC client)" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            else
+                retour=0
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "chromium")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}chromium icedtea-web${BGreen}...${Reset}"
                     package_install "chromium icedtea-web"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}chromium-pepper-flash${BGreen}...${Reset}"
                     aur_package_install "chromium-pepper-flash"
                     ;;
-                2)
-                    package_install "rekonq icedtea-web"
-                    ;;
-                3)
+                "firefox")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}firefox firefox-adblock-plus icedtea-web${BGreen}...${Reset}"
                     package_install "firefox firefox-i18n-$LANGUAGE_FF firefox-adblock-plus icedtea-web"
 #                    aur_package_install "firefox-extension-https-everywhere"
 #                    aur_package_install "freshplayerplugin"
 #                    aur_package_install "chromium-pepper-flash"
                     ;;
-                4)
-                    package_install "opera icedtea-web"
-                    aur_package_install "chromium-pepper-flash"
-                    ;;
-                5)
+                "transmission")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}transmission-qt${BGreen}...${Reset}"
                     package_install "transmission-qt"
                     ;;
-                6)
-                    aur_package_install "dropbox"
-                    aur_package_install "kfilebox"
+                "dropbox")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}dropbox${BGreen}...${Reset}"
+                    package_install "dropbox"
+                    printf '%s\n' "${BGreen}Activation de ${BYellow}dropboxd.service${BGreen}...${Reset}"
                     systemctl enable dropboxd.service
                     ;;
-                7)
+                "thunderbird")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}thunderbird${BGreen}...${Reset}"
                     package_install "thunderbird thunderbird-i18n-$LANGUAGE_FF"
                     ;;
-                8)
-                    package_install "emesene"
-                    ;;
-                9)
-                    package_install "quassel"
-                    ;;
-                10)
+                "konversation")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}konversation${BGreen}...${Reset}"
                     package_install "konversation"
                     ;;
-                "f")
-                    break
-                    ;;
-                *)
-                    invalid_option
-                    ;;
+                "quassel")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}quassel${BGreen}...${Reset}"
+                    package_install "quassel"
             esac
         done
-    elihw
-    done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
     }
     #}}}
     # 22 AUDIO {{{

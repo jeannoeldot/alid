@@ -779,6 +779,9 @@ source $(pwd)/ai-commons
                     package_install "ttf-inconsolata"
             esac
         done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
     }
     #}}}
     # 95 INSTALL OPTIONAL DEP FOR QT4 SI INSTALLÉ {{{
