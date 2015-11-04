@@ -61,6 +61,8 @@
             package_install "print-manager xdg-user-dirs"
         fi
         #
+        #KDE5 CUSTOMIZATION {{{
+        #}}}
         printf '%s\n' "${BGreen}Configuration de ${BYellow}/etc/environment${BGreen}...${Reset}"
         echo "LANG=$LANGUAGE.utf8" >> /etc/environment
         echo "FT2_SUBPIXEL_HINTING=1" >> /etc/environment
@@ -134,7 +136,7 @@
         local messages=""
         local titre="INSTALLATION D'APPLICATIONS ACCESSOIRES"
         messages=" \n"
-        until [[ $retour = 0 ]];
+        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 16 72 3)
             options=("cairo-dock" "" OFF
@@ -147,8 +149,6 @@
                 if [[ $REPLY == "" ]]; then
                     retour=9
                 fi
-            else
-                retour=0
             fi
         done
         for choix in $REPLY
@@ -178,7 +178,7 @@
         local messages=""
         local titre="INSTALLATION D'OUTILS SYSTÈME"
         messages=" \n"
-        until [[ $retour = 0 ]];
+        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 22 72 12)
             options=("gparted" "(+ gptfdisk)" OFF
@@ -200,8 +200,6 @@
                 if [[ $REPLY == "" ]]; then
                     retour=9
                 fi
-            else
-                retour=0
             fi
         done
         for choix in $REPLY
@@ -300,7 +298,7 @@
         local messages=""
         local titre="INSTALLATION D'APPLICATIONS DE DÉVELOPPEMENT"
         messages=" \n"
-        until [[ $retour = 0 ]];
+        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 20 72 7)
             options=("kdevelop" "" OFF
@@ -317,8 +315,6 @@
                 if [[ $REPLY == "" ]]; then
                     retour=9
                 fi
-            else
-                retour=0
             fi
         done
         for choix in $REPLY
@@ -364,7 +360,7 @@
         local messages=""
         local titre="INSTALLATION D'APPLICATIONS DE BUREAUTIQUE"
         messages=" \n"
-        until [[ $retour = 0 ]];
+        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 16 72 2)
             options=("libreoffice" "(LibreOffice Still)" OFF
@@ -376,8 +372,6 @@
                 if [[ $REPLY == "" ]]; then
                     retour=9
                 fi
-            else
-                retour=0
             fi
         done
         for choix in $REPLY
@@ -407,12 +401,12 @@
         local messages=""
         local titre="INSTALLATION D'APPLICATIONS GRAPHIQUES"
         messages=" \n"
-        until [[ $retour = 0 ]];
+        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 16 72 3)
             options=("blender" "(+ cuda)" OFF
                     "gimp" "(+ plugins)" OFF
-                    "inkscape" "(+ extensions et filtres" OFF
+                    "inkscape" "(+ extensions et filtres)" OFF
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
@@ -420,8 +414,6 @@
                 if [[ $REPLY == "" ]]; then
                     retour=9
                 fi
-            else
-                retour=0
             fi
         done
         for choix in $REPLY
@@ -462,7 +454,7 @@
         local messages=""
         local titre="INSTALLATION D'APPLICATIONS INTERNET"
         messages=" \n"
-        until [[ $retour = 0 ]];
+        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 20 72 7)
             options=("chromium" "(Navigateur)" OFF
@@ -479,8 +471,6 @@
                 if [[ $REPLY == "" ]]; then
                     retour=9
                 fi
-            else
-                retour=0
             fi
         done
         for choix in $REPLY
@@ -529,86 +519,106 @@
     #}}}
     # 22 AUDIO {{{
     install_audio_apps() {
-    while true
-    do
-        print_title "APPLICATIONS AUDIO"
-        echo " 1) $(menu_item "amarok")"
-        echo " 2) $(menu_item "clementine")"
-        echo " 3) $(menu_item "soundkonverter")"
-        echo " 4) $(menu_item "audacity")"
-        echo " 5) $(menu_item "gst-plugins-base" "Gstreamer")"
-        echo ""
-        echo " F) FINI"
-        echo ""
-        AUDIO_OPTIONS+=" f"
-        read_input_options "$AUDIO_OPTIONS"
-        for OPT in ${OPTIONS[@]}; do
-            case "$OPT" in
-                1)
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS AUDIO"
+        messages=" \n"
+        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 18 72 5)
+            options=("amarok" "" OFF
+                    "clementine" "" OFF
+                    "soundkonverter" "" OFF
+                    "audacity" "" OFF
+                    "gstreamer" "(gst gstreamer gstreamer0.10)" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "amarok")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}amarok${BGreen}...${Reset}"
                     package_install "amarok"
                     ;;
-                2)
+                "clementine")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}clementine${BGreen}...${Reset}"
                     package_install "clementine"
                     ;;
-                3)
+                "soundkonverter")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}soundkonverter${BGreen}...${Reset}"
                     package_install "soundkonverter"
                     ;;
-                4)
+                "audacity")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}audacity${BGreen}...${Reset}"
                     package_install "audacity"
                     ;;
-                5)
+                "gstreamer")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gst-plugins-base${BGreen}...${Reset}"
                     package_install "gst-plugins-base gst-plugins-base-libs gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav mpg123 flac"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gstreamer${BGreen}...${Reset}"
                     package_install "libcanberra-gstreamer"
-                    if is_package_installed "amarok banshee clementine exaile rhythmbox xfburn" ; then
+                    if is_package_installed "clementine" ; then
+                        printf '%s\n' "${BGreen}Installation de ${BYellow}gstreamer0.10${BGreen}...${Reset}"
                         package_install "gstreamer0.10 gstreamer0.10-plugins"
                     fi
-                    ;;
-                "f")
-                    break
-                    ;;
-                *)
-                    invalid_option
-                    ;;
             esac
         done
-    elihw
-    done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
     }
     #}}}
     # 23 VIDEO {{{
     install_video_apps() {
-    while true
-    do
-        print_title "APPLICATIONS VIDEO"
-        echo " 1) $(menu_item "vlc")"
-        echo " 2) $(menu_item "kdenlive")"
-        echo " 3) $(menu_item "libbluray libquicktime libdvdread libdvdnav libdvdcss libaacs cdrdao" "DVD Libs")"
-        echo ""
-        echo " F) FINI"
-        echo ""
-        VIDEO_OPTIONS+=" f"
-        read_input_options "$VIDEO_OPTIONS"
-        for OPT in ${OPTIONS[@]}; do
-            case "$OPT" in
-                1)
-                    package_install "vlc libdvdcss libva-vdpau-driver opus"
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS VIDÉO"
+        messages=" \n"
+        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 16 72 3)
+            options=("vlc" "" OFF
+                    "kdenlive" "" OFF
+                    "DVD-Libs" "(libbluray libdvdread libdvdnav libdvdcss libaacs)" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "vlc")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}vlc libbluray libdvdcss libcdio opus vcdimager${BGreen}...${Reset}"
+                    package_install "vlc libbluray libdvdcss libcdio opus vcdimager"
+                    if is_package_installed "nvidia" ; then
+                        printf '%s\n' "${BGreen}Installation de ${BYellow}libva-vdpau-driver${BGreen}...${Reset}"
+                        package_install "libva-vdpau-driver"
+                    fi
                     ;;
-                2)
-                    package_install "kdenlive"
+                "kdenlive")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}kdenlive cdrkit dvdauthor dvgrab ffmpeg recordmydesktop${BGreen}...${Reset}"
+                    package_install "kdenlive cdrkit dvdauthor dvgrab ffmpeg recordmydesktop"
                     ;;
-                3)
-                    package_install "libbluray libquicktime libdvdread libdvdnav libdvdcss libaacs cdrdao"
-                    ;;
-                "f")
-                    break
-                    ;;
-                *)
-                    invalid_option
-                    ;;
+                "DVD-Libs")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}libbluray libdvdread libdvdnav libdvdcss libaacs cdrdao libquicktime${BGreen}...${Reset}"
+                    package_install "libbluray libdvdread libdvdnav libdvdcss libaacs cdrdao libquicktime"
             esac
         done
-    elihw
-    done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
     }
     #}}}
     # 24 AUDIO-VIDEO {{{

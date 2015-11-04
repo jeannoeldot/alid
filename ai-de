@@ -751,7 +751,7 @@ source $(pwd)/ai-commons
         local messages=""
         local titre="INSTALLATION DE POLICES SUPPLÉMENTAIRES"
         messages=" \n"
-        until [[ $retour = 0 ]];
+        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 16 72 2)
             options=("ttf-google-fonts-git" "(AUR)" OFF
@@ -763,8 +763,6 @@ source $(pwd)/ai-commons
                 if [[ $REPLY == "" ]]; then
                     retour=9
                 fi
-            else
-                retour=0
             fi
         done
         for choix in $REPLY
