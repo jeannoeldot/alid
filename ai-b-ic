@@ -319,26 +319,26 @@ source $(pwd)/ai-commons
         local messages_chk=""
         local titre="MOT DE PASSE ROOT"
         until [[ $retour = 0 ]];
-            do
+        do
+            messages="\n"
+            messages+="Entrer le mot de passe <root> :\n"
+            messages+="${BRcyan_dlg}!!!${Reset_dlg} 8 caracteres minimum et sans espace.\n"
+            messages_chk="\n"
+            messages_chk+="Confirmer le mot de passe <root> :\n"
+            messages_chk+="${BRcyan_dlg}!!!${Reset_dlg} 8 caracteres minimum et sans espace.\n"
+            L_MDP=$(dialog --colors --insecure --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --passwordbox "${messages}" 16 72 3>&1 1>&2 2>&3)
+            L_MDP_CHK=$(dialog --colors --insecure --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --passwordbox "${messages_chk}" 16 72 3>&1 1>&2 2>&3)
+            if [[ ${#L_MDP} -lt 8 || ${#L_MDP_CHK} -lt 8 || ${L_MDP} =~ " " || ${L_MDP_CHK} =~ " " || ${L_MDP} != ${L_MDP_CHK} ]]; then
                 messages="\n"
-                messages+="Entrer le mot de passe <root> :\n"
-                messages+="${BRcyan_dlg}!!!${Reset_dlg} 8 caracteres minimum.\n"
-                messages_chk="\n"
-                messages_chk+="Confirmer le mot de passe <root> :\n"
-                messages_chk+="${BRcyan_dlg}!!!${Reset_dlg} 8 caracteres minimum.\n"
-                L_MDP=$(dialog --colors --insecure --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --passwordbox "${messages}" 16 72 3>&1 1>&2 2>&3)
-                L_MDP_CHK=$(dialog --colors --insecure --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --passwordbox "${messages_chk}" 16 72 3>&1 1>&2 2>&3)
-                if [[ ${#L_MDP} -ge 8 && ${#L_MDP_CHK} -ge 8 && ${L_MDP} != "        " && ${L_MDP_CHK} != "        " && ${L_MDP} == ${L_MDP_CHK} ]]; then
-                    retour=0
-                else
-                    messages="\n"
-                    messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
-                    messages+="    Mot de passe <root> errone :\n"
-                    messages+="    Entrer de nouveau le mot de passe <root>."
-                    print_dialog_msgbox "${titre}" "${messages}" "Recommencer"
-                    retour=9
-                fi
-            done
+                messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
+                messages+="    Mot de passe <root> errone :\n"
+                messages+="    Entrer de nouveau le mot de passe <root>."
+                print_dialog_msgbox "${titre}" "${messages}" "Recommencer"
+                retour=9
+            else
+                retour=0
+            fi
+        done
         #
         printf '%s\n' "${BGreen}Configure le mot de passe <${BYellow}root${BGreen}> :${Reset}"
         echo -e "${L_MDP}\n${L_MDP}" > /tmp/.passwd

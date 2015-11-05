@@ -227,21 +227,21 @@ source $(pwd)/ai-commons
             do
                 messages="\n"
                 messages+="Entrer le mot de passe de l'utilisateur «${USERNAME}» :\n"
-                messages+="${BRcyan_dlg}!!!${Reset_dlg} 7 caractères minimum.\n"
+                messages+="${BRcyan_dlg}!!!${Reset_dlg} 7 caractères minimum et sans espace.\n"
                 messages_chk="\n"
                 messages_chk+="Confirmer le mot de passe de l'utilisateur «${USERNAME}» :\n"
-                messages_chk+="${BRcyan_dlg}!!!${Reset_dlg} 7 caractères minimum.\n"
+                messages_chk+="${BRcyan_dlg}!!!${Reset_dlg} 7 caractères minimum et sans espace.\n"
                 L_MDP=$(dialog --colors --insecure --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --passwordbox "${messages}" 16 72 3>&1 1>&2 2>&3)
                 L_MDP_CHK=$(dialog --colors --insecure --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --passwordbox "${messages_chk}" 16 72 3>&1 1>&2 2>&3)
-                if [[ ${#L_MDP} -ge 7 && ${#L_MDP_CHK} -ge 7 && ${L_MDP} != "       " && ${L_MDP_CHK} != "       " && ${L_MDP} == ${L_MDP_CHK} ]]; then
-                    retour=0
-                else
+                if [[ ${#L_MDP} -lt 7 || ${#L_MDP_CHK} -lt 7 || ${L_MDP} =~ " " || ${L_MDP_CHK} =~ " " || ${L_MDP} != ${L_MDP_CHK} ]]; then
                     messages="\n"
                     messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
                     messages+="    Mot de passe pour «${USERNAME}» erroné :\n"
                     messages+="    Entrer de nouveau le mot de passe de «${USERNAME}»."
                     print_dialog_msgbox "${titre}" "${messages}" "Recommencer"
                     retour=9
+                else
+                    retour=0
                 fi
             done
             #
