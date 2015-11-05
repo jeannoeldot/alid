@@ -939,7 +939,6 @@ source $(pwd)/ai-commons
     install_internet_apps
     install_audio_apps
     install_video_apps
-    install_audio_video_apps
     install_games
 #}}} FIN INSTALLATION DE OU WM
 

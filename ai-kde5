@@ -60,9 +60,47 @@
             printf '%s\n' "${BGreen}Installation de ${BYellow}print-manager xdg-user-dirs${BGreen}...${Reset}"
             package_install "print-manager xdg-user-dirs"
         fi
+        #KDE5 CUSTOMIZATION
+        retour=9
+        messages=" \n"
+        messages+="PERSONNALISATION DE KDE5\n\n"
+        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 18 72 4)
+            options=("choqok" "(Client Twitter)" OFF
+                    "digikam" "(Gestion de photos)" OFF
+                    "k3b" "(Gravure)" OFF
+                    "skrooge" "(Gestion de finances)" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "choqok")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}choqok${BGreen}...${Reset}"
+                    package_install "choqok"
+                    ;;
+                "digikam")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}digikam${BGreen}...${Reset}"
+                    package_install "digikam"
+                    ;;
+                "k3b")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}k3b cdrdao dvd+rw-tools vcdimager transcode emovix cdparanoia${BGreen}...${Reset}"
+                    package_install "k3b cdrdao dvd+rw-tools vcdimager transcode emovix cdparanoia"
+                    ;;
+                "skrooge")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}skrooge${BGreen}...${Reset}"
+                    package_install "skrooge"
+            esac
+        done
         #
-        #KDE5 CUSTOMIZATION {{{
-        #}}}
         printf '%s\n' "${BGreen}Configuration de ${BYellow}/etc/environment${BGreen}...${Reset}"
         echo "LANG=$LANGUAGE.utf8" >> /etc/environment
         echo "FT2_SUBPIXEL_HINTING=1" >> /etc/environment
@@ -621,68 +659,39 @@
         fi
     }
     #}}}
-    # 24 AUDIO-VIDEO {{{
-    install_audio_video_apps() {
-        while true
-        do
-            print_title "APPLICATIONS AUDIO/VIDEO POUR KDE5"
-            echo " 1) $(menu_item "digikam")"
-            echo " 2) $(menu_item "k3b")"
-            echo ""
-            echo " F) FINI"
-            echo ""
-            AUDIO_VIDEO_OPTIONS+=" f"
-            read_input_options "$AUDIO_VIDEO_OPTIONS"
-            for OPT in ${OPTIONS[@]}; do
-                case "$OPT" in
-                    1)
-                        package_install "digikam"
-                        ;;
-                    2)
-                        package_install "k3b cdrdao dvd+rw-tools vcdimager transcode emovix cdparanoia"
-                        ;;
-                    "f")
-                        break
-                        ;;
-                    *)
-                        invalid_option
-                        ;;
-                esac
-            done
-        elihw
-        done
-    }
-    #}}}
     # 25 GAMES {{{
     install_games() {
 ##
 # A REVOIR jndqrami sur un repo perso
 # TODO
 ##
-    while true
-    do
-        print_title "JEUX"
-        echo " 1) $(menu_item "pokerth" "Poker TH")"
-        echo ""
-        echo " F) FINI"
-        echo ""
-        GAME_OPTIONS+=" f"
-        read_input_options "$GAME_OPTIONS"
-        for OPT in ${OPTIONS[@]}; do
-            case "$OPT" in
-                1)
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS JEUX"
+        messages=" \n"
+        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 16 72 2)
+            options=("pokerth" "" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "pokerth")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}pokerth${BGreen}...${Reset}"
                     package_install "pokerth"
-                    ;;
-                "f")
-                    break
-                    ;;
-                *)
-                    invalid_option
-                    ;;
             esac
         done
-    elihw
-    done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
     }
     #}}}
-#}}}}
