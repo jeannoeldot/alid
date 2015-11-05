@@ -10,7 +10,7 @@
 # Interface graphique avec dialog
 #-------------------------------------------------------------------------------
 
-    # 15 DESKTOP ENVIRONMENT {{{
+    # 20 DESKTOP ENVIRONMENT {{{
     install_desktop_environment() {
         # OPENBOX {{{
         print_title "OPENBOX - http://wiki.archlinux.org/index.php/Openbox"
@@ -350,7 +350,7 @@
         pause_function
     }
     #}}}
-    # 17 ACCESSORIES {{{
+    # 21 ACCESSORIES {{{
     install_accessories_apps() {
     while true
     do
@@ -394,7 +394,7 @@
     done
     }
     #}}}
-    # 17 SYSTEM TOOLS {{{
+    # 22 SYSTEM TOOLS {{{
     install_system_apps() {
     while true
     do
@@ -482,7 +482,7 @@
     done
     }
     #}}}
-    # 18 DEVELOPEMENT {{{
+    # 23 DEVELOPEMENT {{{
     install_development_apps() {
     while true
     do
@@ -534,7 +534,7 @@
     done
     }
     #}}}
-    # 19 OFFICE {{{
+    # 24 OFFICE {{{
     install_office_apps() {
     while true
     do
@@ -569,7 +569,7 @@
     done
     }
     #}}}
-    # 20 GRAPHICS {{{
+    # 25 GRAPHICS {{{
     install_graphics_apps() {
     while true
     do
@@ -610,7 +610,7 @@
     done
     }
     #}}}
-    # 21 INTERNET {{{
+    # 26 INTERNET {{{
     install_internet_apps() {
     while true
     do
@@ -685,7 +685,7 @@
     done
     }
     #}}}
-    # 22 AUDIO {{{
+    # 27 AUDIO {{{
     install_audio_apps() {
     while true
     do
@@ -728,7 +728,7 @@
     done
     }
     #}}}
-    # 23 VIDEO {{{
+    # 28 VIDEO {{{
     install_video_apps() {
     while true
     do
@@ -764,13 +764,7 @@
     done
     }
     #}}}
-# TODO
-    # 24 AUDIO-VIDEO {{{
-    install_audio_video_apps() {
-        clear
-    }
-    #}}}
-    # 25 GAMES {{{
+    # 29 GAMES {{{
     install_games() {
 ##
 # A REVOIR jndqrami sur un repo perso

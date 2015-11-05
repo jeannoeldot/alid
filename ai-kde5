@@ -11,7 +11,7 @@
 # Interface graphique avec dialog
 #-------------------------------------------------------------------------------
 
-    # 15 DESKTOP ENVIRONMENT {{{
+    # 20 DESKTOP ENVIRONMENT {{{
     install_desktop_environment() {
         local retour=9
         local messages=""
@@ -168,7 +168,7 @@
         fi
     }
     #}}}
-    # 17 ACCESSORIES {{{
+    # 21 ACCESSORIES {{{
     install_accessories_apps() {
         local retour=9
         local messages=""
@@ -210,7 +210,7 @@
         fi
     }
     #}}}
-    # 17 SYSTEM TOOLS {{{
+    # 22 SYSTEM TOOLS {{{
     install_system_apps() {
         local retour=9
         local messages=""
@@ -330,7 +330,7 @@
         fi
     }
     #}}}
-    # 18 DEVELOPEMENT {{{
+    # 23 DEVELOPEMENT {{{
     install_development_apps() {
         local retour=9
         local messages=""
@@ -392,7 +392,7 @@
         fi
     }
     #}}}
-    # 19 OFFICE {{{
+    # 24 OFFICE {{{
     install_office_apps() {
         local retour=9
         local messages=""
@@ -433,7 +433,7 @@
         fi
     }
     #}}}
-    # 20 GRAPHICS {{{
+    # 25 GRAPHICS {{{
     install_graphics_apps() {
         local retour=9
         local messages=""
@@ -486,7 +486,7 @@
         fi
     }
     #}}}
-    # 21 INTERNET {{{
+    # 26 INTERNET {{{
     install_internet_apps() {
         local retour=9
         local messages=""
@@ -555,7 +555,7 @@
         fi
     }
     #}}}
-    # 22 AUDIO {{{
+    # 27 AUDIO {{{
     install_audio_apps() {
         local retour=9
         local messages=""
@@ -613,7 +613,7 @@
         fi
     }
     #}}}
-    # 23 VIDEO {{{
+    # 28 VIDEO {{{
     install_video_apps() {
         local retour=9
         local messages=""
@@ -659,7 +659,7 @@
         fi
     }
     #}}}
-    # 25 GAMES {{{
+    # 29 GAMES {{{
     install_games() {
 ##
 # A REVOIR jndqrami sur un repo perso
