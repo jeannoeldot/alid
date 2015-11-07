@@ -153,6 +153,8 @@ source $(pwd)/ai-commons
         local messages=""
         local titre="MISE À JOUR DU SYSTÈME"
         messages="\n"
+        messages+="Synchronise les nouveaux repos.\n"
+        messages+="Met à jour le système.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         pacman -Syyu
         pause_function
@@ -185,6 +187,7 @@ source $(pwd)/ai-commons
         local messages=""
         local titre="INSTALLATION ET CONFIGURATION DE SUDO"
         messages="\n"
+        messages+="SUDO est un programme conçu pour permettre à un administrateur système de déléguer des privilèges à des utilisateurs.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         if ! is_package_installed "sudo" ; then
             printf '%s\n' "${BGreen}Installation de «${BYellow}sudo${BGreen}»...${Reset}"
@@ -356,7 +359,7 @@ source $(pwd)/ai-commons
         # Modif /etc/yaourtrc
         titre="CONFIGURATION DE «YAOURT»"
         messages="\n"
-        messages+="Option #VISUAL : VISUA=\"nano\"\n"
+        messages+="Option #VISUAL : VISUAL=\"nano\"\n"
         local taille_tmp_en_ram=$(df -h -BM | awk '/\/tmp/ {print $2}' | sed -e "s/M//")
         if [[ $taille_tmp_en_ram -lt 2000 ]]; then
             messages+="Option #TMPDIR : TMPDIR=\"/home/${USERNAME}/yaourt_tmp\"\n"
@@ -518,19 +521,20 @@ source $(pwd)/ai-commons
         package_install "alsa-utils"
         titre="ALSA : ACTIVATION DES CANAUX"
         messages="\n"
-        messages+="${BRcyan_dlg}!!!${Reset_dlg} Activer les canaux PCM, Master et Front ( MM -> M ).\n"
+        messages+="${BRcyan_dlg}!!!${Reset_dlg} Activer les canaux PCM, Master et Front.\n"
+        messages+="    Touche [M] : MM --> 00\n"
         messages+="${BRcyan_dlg}!!!${Reset_dlg} Régler le volume.\n"
         print_dialog_yesno "${titre}" "${messages}" "Activer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
             alsamixer
-            alsactl store
             titre="ALSA : TEST DU SON"
             messages="\n"
             messages+="Test du son avec «speaker-test»\n"
             print_dialog_msgbox "${titre}" "${messages}" "Tester"
             printf '%s\n' "${BGreen}Test du son avec «${BYellow}speaker-test${BGreen}»...${Reset}"
             speaker-test -c 2 -l 2
+            alsactl store
         fi
         pause_function
         #
@@ -540,7 +544,6 @@ source $(pwd)/ai-commons
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
         printf '%s\n' "${BGreen}Installation de «${BYellow}ntfs-3g dosfstools exfat-utils fuse fuse-exfat autofs${BGreen}»...${Reset}"
         package_install "ntfs-3g dosfstools exfat-utils fuse fuse-exfat autofs"
-#        is_package_installed "fuse" && add_module "fuse"
         pause_function
     }
     #}}}
@@ -753,7 +756,7 @@ source $(pwd)/ai-commons
         messages=" \n"
         until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 16 72 2)
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 2)
             options=("ttf-google-fonts-git" "(AUR)" OFF
                     "ttf-inconsolata" "" OFF
                     )

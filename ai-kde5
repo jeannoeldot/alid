@@ -24,37 +24,85 @@
         # KDE5 BASE
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Base${BGreen}...${Reset}"
         package_install "plasma kf5 kf5-aids kde-l10n-$LANGUAGE_KDE5"
+## POUR TEST
+        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
+        pause_function
         package_install "konsole kwrite dolphin"
+## POUR TEST
+        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
+        pause_function
         # KDE5 LOOK
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Look${BGreen}...${Reset}"
         package_install "oxygen-icons oxygen-icons-svg"
+## POUR TEST
+        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
+        pause_function
         package_install "oxygen-gtk2 oxygen-kde4"
+## POUR TEST
+        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
+        pause_function
         package_install "qtcurve-gtk2 qtcurve-qt4 qtcurve-qt5 breeze-kde4"
+## POUR TEST
+        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
+        pause_function
         # GTK theme matching Breeze
         package_install "gtk-theme-orion"
+## POUR TEST
+        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
+        pause_function
         # KDE5 UTILS
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Utils${BGreen}...${Reset}"
         package_install "ark filelight kcalc kcharselect kdeutils-kdf kwalletmanager"
+## POUR TEST
+        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
+        pause_function
         # KDE5 MULTIMEDIA
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Multimedia${BGreen}...${Reset}"
-        package_install "kdemultimedia-kscd kdemultimedia-audiocd-kio kio-mtp kio-extras"
+        package_install "kdemultimedia-kscd kdemultimedia-audiocd-kio kio-extras"
+## POUR TEST
+        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
+        pause_function
         # Remplace kdemultimedia-kmix : PAS de miniature dans Barre des Tâches
         package_install "kmix"
+## POUR TEST
+        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
+        pause_function
         package_install "libdvdcss libdvdread libdvdnav"
+## POUR TEST
+        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
+        pause_function
         # KDE5 GRAPHICS
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Graphiques${BGreen}...${Reset}"
         package_install "gwenview kdegraphics-kcolorchooser kdegraphics-kolourpaint kdegraphics-ksnapshot kdegraphics-okular kdegraphics-svgpart kdegraphics-thumbnailers kdegraphics-mobipocket"
+## POUR TEST
+        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
+        pause_function
         package_install "kipi-plugins"
+## POUR TEST
+        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
+        pause_function
         package_install "ffmpegthumbs"
+## POUR TEST
+        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
+        pause_function
         # KDE5 SDK
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 SDK${BGreen}...${Reset}"
         package_install "okteta kate dolphin-plugins kdesdk-kioslaves kompare kdesdk-poxml kdebindings-python2 kdebindings-python"
-        # KDE5 FONTS
-        printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Polices TTF${BGreen}...${Reset}"
+## POUR TEST
+        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
+        pause_function
+        # FONTS TTF
+        printf '%s\n' "${BGreen}Installation de ${BYellow}Polices TTF${BGreen}...${Reset}"
         package_install "ttf-bitstream-vera ttf-dejavu ttf-freefont ttf-liberation ttf-linux-libertine ttf-droid ttf-ubuntu-font-family ttf-oxygen"
+## POUR TEST
+        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
+        pause_function
         # LSB-RELEASE
         printf '%s\n' "${BGreen}Installation de ${BYellow}lsb-release${BGreen}...${Reset}"
         package_install "lsb-release"
+## POUR TEST
+        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
+        pause_function
         #
         if is_package_installed "cups" ; then
             printf '%s\n' "${BGreen}Installation de ${BYellow}print-manager xdg-user-dirs${BGreen}...${Reset}"
@@ -176,10 +224,10 @@
         messages=" \n"
         until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 16 72 3)
-            options=("cairo-dock" "" OFF
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 3)
+            options=("cairo-dock" "Cairo Dock" OFF
                     "conky-lua-nv" "(AUR)" OFF
-                    "docky" "" OFF
+                    "docky" "Docky Dock" OFF
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
@@ -218,7 +266,7 @@
         messages=" \n"
         until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 22 72 12)
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 22 72 12)
             options=("gparted" "(+ gptfdisk)" OFF
                     "grsync" "" OFF
                     "htop" "(+ iotop lshw hwinfo ...)" OFF
@@ -265,7 +313,7 @@
                     package_install "lm_sensors rrdtool"
                     # SI PAS DANS VIRTUALBOX
                     if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
-                        printf '%s\n' "${BGreen}LM_SENSORS - sensors-detect : détections des capteurs...${Reset}"
+                        printf '%s\n' "${BGreen}LM_SENSORS - sensors-detect : ${BYellow}Détections des capteurs${BGreen}...${Reset}"
                         pause_function
                         sensors-detect
                         printf '%s\n' "${BGreen}Activation de ${BYellow}lm_sensors.service${BGreen}...${Reset}"
@@ -338,7 +386,7 @@
         messages=" \n"
         until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 20 72 7)
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 7)
             options=("kdevelop" "" OFF
                     "qtcreator" "(+ Qt5)" OFF
                     "devtools" "" OFF
@@ -400,7 +448,7 @@
         messages=" \n"
         until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 16 72 2)
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 2)
             options=("libreoffice" "(LibreOffice Still)" OFF
                     "calligra" "(Calligra Office Suite)" OFF
                     )
@@ -441,7 +489,7 @@
         messages=" \n"
         until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 16 72 3)
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 3)
             options=("blender" "(+ cuda)" OFF
                     "gimp" "(+ plugins)" OFF
                     "inkscape" "(+ extensions et filtres)" OFF
@@ -494,7 +542,7 @@
         messages=" \n"
         until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 20 72 7)
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 7)
             options=("chromium" "(Navigateur)" OFF
                     "firefox" "(Navigateur)" OFF
                     "transmission" "(Download)" OFF
@@ -563,7 +611,7 @@
         messages=" \n"
         until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 18 72 5)
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 18 72 5)
             options=("amarok" "" OFF
                     "clementine" "" OFF
                     "soundkonverter" "" OFF
@@ -621,7 +669,7 @@
         messages=" \n"
         until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 16 72 3)
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 3)
             options=("vlc" "" OFF
                     "kdenlive" "" OFF
                     "DVD-Libs" "(libbluray libdvdread libdvdnav libdvdcss libaacs)" OFF
@@ -671,7 +719,7 @@
         messages=" \n"
         until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Annuler" --checklist "${messages}" 16 72 2)
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 2)
             options=("pokerth" "(Poker TH)" OFF
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
