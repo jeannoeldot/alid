@@ -23,86 +23,52 @@
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         # KDE5 BASE
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Base${BGreen}...${Reset}"
-        package_install "plasma kf5 kf5-aids kde-l10n-$LANGUAGE_KDE5"
 ## POUR TEST
-        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
+#         package_install "plasma kf5 kf5-aids kde-l10n-$LANGUAGE_KDE5"
+        package_install "plasma"
+        printf '%s\n' "${BYellow}POUR TEST INSTALLATION DE KDE 5${Reset}"
         pause_function
+        package_install "kf5"
+        printf '%s\n' "${BYellow}POUR TEST INSTALLATION DE KDE 5${Reset}"
+        pause_function
+        package_install "kf5-aids"
+        printf '%s\n' "${BYellow}POUR TEST INSTALLATION DE KDE 5${Reset}"
+        pause_function
+        package_install "kde-l10n-$LANGUAGE_KDE5"
+        printf '%s\n' "${BYellow}POUR TEST INSTALLATION DE KDE 5${Reset}"
+        pause_function
+## POUR TEST
         package_install "konsole kwrite dolphin"
-## POUR TEST
-        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
-        pause_function
         # KDE5 LOOK
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Look${BGreen}...${Reset}"
         package_install "oxygen-icons oxygen-icons-svg"
-## POUR TEST
-        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
-        pause_function
         package_install "oxygen-gtk2 oxygen-kde4"
-## POUR TEST
-        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
-        pause_function
         package_install "qtcurve-gtk2 qtcurve-qt4 qtcurve-qt5 breeze-kde4"
-## POUR TEST
-        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
-        pause_function
         # GTK theme matching Breeze
         package_install "gtk-theme-orion"
-## POUR TEST
-        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
-        pause_function
         # KDE5 UTILS
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Utils${BGreen}...${Reset}"
         package_install "ark filelight kcalc kcharselect kdeutils-kdf kwalletmanager"
-## POUR TEST
-        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
-        pause_function
         # KDE5 MULTIMEDIA
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Multimedia${BGreen}...${Reset}"
         package_install "kdemultimedia-kscd kdemultimedia-audiocd-kio kio-extras"
-## POUR TEST
-        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
-        pause_function
         # Remplace kdemultimedia-kmix : PAS de miniature dans Barre des Tâches
         package_install "kmix"
-## POUR TEST
-        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
-        pause_function
         package_install "libdvdcss libdvdread libdvdnav"
-## POUR TEST
-        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
-        pause_function
         # KDE5 GRAPHICS
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Graphiques${BGreen}...${Reset}"
         package_install "gwenview kdegraphics-kcolorchooser kdegraphics-kolourpaint kdegraphics-ksnapshot kdegraphics-okular kdegraphics-svgpart kdegraphics-thumbnailers kdegraphics-mobipocket"
-## POUR TEST
-        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
-        pause_function
         package_install "kipi-plugins"
-## POUR TEST
-        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
-        pause_function
         package_install "ffmpegthumbs"
-## POUR TEST
-        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
-        pause_function
         # KDE5 SDK
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 SDK${BGreen}...${Reset}"
         package_install "okteta kate dolphin-plugins kdesdk-kioslaves kompare kdesdk-poxml kdebindings-python2 kdebindings-python"
-## POUR TEST
-        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
-        pause_function
         # FONTS TTF
         printf '%s\n' "${BGreen}Installation de ${BYellow}Polices TTF${BGreen}...${Reset}"
         package_install "ttf-bitstream-vera ttf-dejavu ttf-freefont ttf-liberation ttf-linux-libertine ttf-droid ttf-ubuntu-font-family ttf-oxygen"
-## POUR TEST
-        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
-        pause_function
         # LSB-RELEASE
         printf '%s\n' "${BGreen}Installation de ${BYellow}lsb-release${BGreen}...${Reset}"
         package_install "lsb-release"
-## POUR TEST
-        printf '%s\n' "${BGreen}POUR ${BYellow}TEST INSTALLATION DE KDE 5${BGreen}...${Reset}"
-        pause_function
         #
         if is_package_installed "cups" ; then
             printf '%s\n' "${BGreen}Installation de ${BYellow}print-manager xdg-user-dirs${BGreen}...${Reset}"

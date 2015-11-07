@@ -463,7 +463,7 @@ source $(pwd)/ai-commons
         #
         titre="INSTALLATION DE «D-BUS»"
         messages="\n"
-        messages+="D-Bus est un système de bus de messages qui fournit un moyen facile pour la communication inter-processus.\n"
+        messages+="D-Bus est un système de bus de messages qui fournit un mécanisme facilitant la communication inter-processus.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
         printf '%s\n' "${BGreen}Installation de «${BYellow}dbus python2-dbus${BGreen}»...${Reset}"
         package_install "dbus python2-dbus"

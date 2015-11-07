@@ -210,10 +210,10 @@ source $(pwd)/ai-commons
         messages+="dans le répertoire /root du nouveau système.\n\n"
         print_dialog_msgbox "${titre}" "${messages}" "Copier"
         # COPY AI TO ROOT FOLDER IN THE NEW SYSTEM
-        printf '%s\n' "${BGreen}Copie de «AI» dans le répertoire /root du nouveau système...${Reset}"
+        printf '%s\n' "${BGreen}Copie de «${BYellow}AI${BGreen}» dans le répertoire «${BYellow}/root${BGreen}» du nouveau système...${Reset}"
         cp -R $(pwd) ${MOUNTPOINT}/root
         # COPY ROOT FILES TO ROOT FOLDER IN THE NEW SYSTEM
-        printf '%s\n' "${BGreen}Copie des fichiers de configuration dans le répertoire /root du nouveau système...${Reset}"
+        printf '%s\n' "${BGreen}Copie des fichiers de configuration de «${BYellow}bash${BGreen}» dans le répertoire «${BYellow}/root${BGreen}» du nouveau système...${Reset}"
         cp -v ai-fconfig/root-.bashrc ${MOUNTPOINT}/root/.bashrc
         cp -v ai-fconfig/root-.bash_profile ${MOUNTPOINT}/root/.bash_profile
         pause_function
