@@ -96,7 +96,9 @@ source $(pwd)/ai-commons
                     messages_if+="SSD : Options pour ext4 : defaults,relatime.\n"
                     messages_if+="SSD + TRIM : Activation de fstrim.timer.\n"
                     sed -i "s/rw,relatime,data=ordered/defaults,relatime/g" /etc/fstab
+                    printf '%s\n' "${BGreen}Activation de ${BYellow}fstrim.timer${BGreen}...${Reset}"
                     systemctl enable fstrim.timer
+                    pause_function
                     ;;
             esac
         else
@@ -377,6 +379,7 @@ source $(pwd)/ai-commons
     print_dialog_msgbox "${titre}" "${messages}" "Continuer"
     printf '%s\n' "${BGreen}Mise a jour de la base de pacman...${Reset}"
     pacman-db-upgrade
+    pause_function
     #
     messages="\n"
     # Editeur par defaut

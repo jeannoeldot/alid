@@ -486,18 +486,19 @@ source $(pwd)/ai-commons
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
         printf '%s\n' "${BGreen}Installation de «${BYellow}avahi nss-mdns${BGreen}»...${Reset}"
         package_install "avahi nss-mdns"
+        pause_function
         titre="ACTIVATION DE «AVAHI»"
         messages="\n"
         messages+="${BRcyan_dlg}!!!${Reset_dlg} Activer avahi est recommandé pour «CUPS».\n"
-        print_dialog_yesno "${titre}" "${messages}" "Activer" "Continuer"
+        print_dialog_yesno_no "${titre}" "${messages}" "Activer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
             printf '%s\n' "${BGreen}Activation de «${BYellow}avahi-daemon.service${BGreen}»...${Reset}"
             is_package_installed "avahi" && systemctl enable avahi-daemon.service
             printf '%s\n' "${BGreen}Activation de «${BYellow}avahi-dnsconfd.service${BGreen}»...${Reset}"
             is_package_installed "avahi" && systemctl enable avahi-dnsconfd.service
+            pause_function
         fi
-        pause_function
         #
         titre="INSTALLATION DE «ACPI» ET ACTIVATION DE «ACPID»"
         messages="\n"
@@ -519,6 +520,7 @@ source $(pwd)/ai-commons
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
         printf '%s\n' "${BGreen}Installation de «${BYellow}alsa-utils${BGreen}»...${Reset}"
         package_install "alsa-utils"
+        pause_function
         titre="ALSA : ACTIVATION DES CANAUX"
         messages="\n"
         messages+="${BRcyan_dlg}!!!${Reset_dlg} Activer les canaux PCM, Master et Front.\n"
@@ -774,19 +776,19 @@ source $(pwd)/ai-commons
         do
             case $choix in
                 "ttf-google-fonts-git")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}ttf-google-fonts-git${BGreen}...${Reset}"
+                    printf '%s\n' "${BGreen}Installation de «${BYellow}ttf-google-fonts-git${BGreen}»...${Reset}"
                     aur_package_install "ttf-google-fonts-git"
                     ;;
                 "ttf-inconsolata")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}ttf-inconsolata${BGreen}...${Reset}"
+                    printf '%s\n' "${BGreen}Installation de «${BYellow}ttf-inconsolata${BGreen}»...${Reset}"
                     package_install "ttf-inconsolata"
                     ;;
                 "noto-fonts")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}noto-fonts${BGreen}...${Reset}"
+                    printf '%s\n' "${BGreen}Installation de «${BYellow}noto-fonts${BGreen}»...${Reset}"
                     package_install "noto-fonts"
                     ;;
                 "noto-fonts-emoji")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}noto-fonts-emoji${BGreen}...${Reset}"
+                    printf '%s\n' "${BGreen}Installation de «${BYellow}noto-fonts-emoji${BGreen}»...${Reset}"
                     package_install "noto-fonts-emoji"
             esac
         done
@@ -805,7 +807,7 @@ source $(pwd)/ai-commons
             messages+="Installation de sni-qt: StatusNotifierItem (AppIndicators) support.\n"
             messages+="Installation de icu.\n"
             print_dialog_msgbox "${titre}" "${messages}" "Installer"
-            printf '%s\n' "${BGreen}Installation de ${BYellow}sni-qt icu${BGreen}...${Reset}"
+            printf '%s\n' "${BGreen}Installation de «${BYellow}sni-qt icu${BGreen}»...${Reset}"
             package_install "sni-qt icu"
             pacman -D --asdeps sni-qt
             pause_function

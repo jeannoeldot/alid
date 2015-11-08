@@ -74,15 +74,9 @@ BPurple=${Bold}$(tput setaf 5)
 BCyan=${Bold}$(tput setaf 6)
 BWhite=${Bold}$(tput setaf 7)
 #}}}
-# PROMPT {{{
-prompt1="Entrer le n° de l'option choisie: "
-prompt2="Entrer le n° des options (ex: 1 2 3 ou 1-3): "
-prompt3="Entrer manuellement les commandes suivantes, ensuite presser ${BYellow}ctrl+d${White} ou entrer ${BYellow}exit${White}:"
-#}}}
 # DESKTOP ENVIRONMENT {{{
 E17=0
 GNOME=0
-KDE4=0
 KDE5=0
 LXDE=0
 OPENBOX=0
@@ -94,8 +88,6 @@ EDITOR=nano
 # ARCHITECTURE {{{
 ARCHI=$(uname -m)
 #}}}
-# AUR PACKAGE
-AUR=$(echo -e "(${BPurple}AUR${White})")
 # CURRENT DIRECTORY
 AUI_DIR=$(pwd)
 MOUNTPOINT="/mnt"
@@ -239,16 +231,8 @@ print_dialog_yesno() { #{{{
 print_dialog_yesno_no() { #{{{
     dialog --colors --defaultno --backtitle "${TITRE_BOX_W}" --title "${1}" --yes-label "${3}" --no-label "${4}" --yesno "${2}" 16 72
 } #}}}
-
 #}}}
 # SUPPORT FUNCTIONS {{{
-arch_chroot() { #{{{
-    arch-chroot ${MOUNTPOINT} /bin/bash -c "${1}"
-}
-#}}}
-read_input() { #{{{
-    read -p "$prompt1" OPTION
-} #}}}
 read_input_text() { #{{{
     # Par défaut : Oui
     read -p "$1 [O/n]: " OPTION
@@ -258,64 +242,8 @@ read_input_text() { #{{{
         OPTION=o
     fi
 } #}}}
-read_input_options() { #{{{
-    local line
-    local packages
-    read -p "$prompt2" OPTION
-    array=("$OPTION")
-    for line in ${array[@]/,/ }; do
-        if [[ ${line/-/} != $line ]]; then
-            for ((i=${line%-*}; i<=${line#*-}; i++)); do
-                packages+=($i);
-            done
-        else
-            packages+=($line)
-        fi
-    done
-    OPTIONS=("${packages[@]}")
-} #}}}
 print_line() { #{{{
     printf "%$(tput cols)s\n"|tr ' ' '-'
-} #}}}
-print_title() { #{{{
-    clear
-    print_line
-    echo -e "# ${BWhite}$1${White}"
-    print_line
-    echo ""
-} #}}}
-ncecho() { #{{{
-    echo -ne "$1"
-} #}}}
-print_info_cyan() { #{{{
-    echo -e "\n"
-    ncecho "${BCyan}==> INFO : ${White}"
-    echo -e "${BWhite}$1${White}\n"
-} #}}}
-print_info() { #{{{
-    #Console width number
-    T_COLS=$(tput cols)
-    echo -e "${BWhite}$1${White}\n" | fold -sw $(( $T_COLS - 18 )) | sed 's/^/\t/'
-} #}}}
-print_warning() { #{{{
-    #Console width number
-    T_COLS=$(tput cols)
-    echo -e "${BRed}$1${White}\n" | fold -sw $(( $T_COLS - 1 ))
-} #}}}
-print_help_setting() { #{{{
-    #Console width number
-    T_COLS=$(tput cols)
-    echo -e "${BWhite}$1${White}\n" | fold -sw $(( $T_COLS - 1 ))
-} #}}}
-print_info_finish() { #{{{
-    #Console width number
-    T_COLS=$(tput cols)
-    echo -e "${BGreen}$1${White}\n" | fold -sw $(( $T_COLS - 1 ))
-} #}}}
-print_run_command() { #{{{
-    #Console width number
-    T_COLS=$(tput cols)
-    echo -e "${BYellow}$1${White}\n" | fold -sw $(( $T_COLS - 1 ))
 } #}}}
 start_module() { #{{{
     modprobe $1
@@ -334,14 +262,6 @@ is_package_installed() { #{{{
   done
   return 1
 } #}}}
-checkbox() { #{{{
-    #display [X] or [ ]
-    [[ "$1" -eq 1 ]] && echo -e "${BBlue}[${White}${BWhite}X${White}${BBlue}]${White}" || echo -e "${BBlue}[${White} ${BBlue}]${White}";
-} #}}}
-checkbox_package() { #{{{
-    #check if [X] or [ ]
-    is_package_installed "$1" && checkbox 1 || checkbox 0
-} #}}}
 aur_package_install() { #{{{
     #install package from aur
     for PACKAGE in $1; do
@@ -350,7 +270,7 @@ aur_package_install() { #{{{
             #RECHECK #{{{
             #check if the package wasnt installed
             if ! is_package_installed "${PACKAGE}" ; then
-                read_input_text "Paquet ${PACKAGE} non installé, essayer de l'installer encore?"
+                read_input_text "Paquet ${PACKAGE} NON installé, essayer de l'installer encore?"
                 [[ $OPTION == o ]] && su - ${USERNAME} -c "${AUR_HELPER} -S ${PACKAGE}"
             fi
             #}}}
@@ -378,42 +298,17 @@ package_install() { #{{{
     pacman -Syu --needed ${1}
     #check if the package wasnt installed
     if ! is_package_installed "$1" ; then
-        read_input_text "Paquet $1 non installé. Continuer?"
+        read_input_text "Paquet $1 NON installé. Continuer?"
     fi
 } #}}}
 package_remove() { #{{{
     #remove package
     pacman -Rcsn ${1}
 } #}}}
-contains_element() { #{{{
-    #check if an element exist in a string
-    for e in "${@:2}"; do [[ $e == $1 ]] && break; done;
-} #}}}
-invalid_option() { #{{{
-    print_line
-    echo -e "${BRed}Option invalide. Essayez une autre option.${White}"
-    pause_function
-} #}}}
 pause_function() { #{{{
     print_line
     printf '%s' "${BGreen}"
     read -e -sn 1 -p "Appuyer sur une touche pour continuer..."
     printf '%s\n' "${Reset}"
-} #}}}
-menu_item() { #{{{
-    #check if the number of arguments is less then 2
-    [[ $# -lt 2 ]] && PACKAGE_NAME="$1" || PACKAGE_NAME="$2";
-    #list of chars to remove from the package name
-    CHARS_TO_REMOVE=("Ttf-" "-bzr" "-hg" "-svn" "-git" "-stable" "-icon-theme" "Gnome-shell-theme-" "Gnome-shell-extension-");
-    #remove chars from package name
-    for CHARS in ${CHARS_TO_REMOVE[@]}; do PACKAGE_NAME=$(echo ${PACKAGE_NAME^} | sed 's/'$CHARS'//'); done
-    #display checkbox and package name
-    echo -e "$(checkbox_package "$1") ${BWhite}$PACKAGE_NAME${White}"
-} #}}}
-mainmenu_item() { #{{{
-    echo -e "$(checkbox "$1") ${BWhite}$2${White}"
-} #}}}
-elihw() { #{{{
-    [[ $OPT == f || $OPT == b || $OPT == d || $OPT == r ]] && break;
 } #}}}
 #}}}
