@@ -340,12 +340,12 @@ source $(pwd)/ai-commons
         messages+="Yaourt (Yet AnOther User Repository Tool) est un programme en ligne de commande qui interface les fonctions de «pacman» et «makepkg» pour la gestion des paquets.\n\n"
         messages+="${BRred_dlg}!!!${Reset_dlg} Yaourt n'est pas officiellement supporté par les développeurs d'Arch.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-        printf '%s\n' "${BGreen}Installation de «${BYellow}base-devel namcap yaourt${BGreen}»...${Reset}"
-        package_install "base-devel namcap yaourt"
+        printf '%s\n' "${BGreen}Installation de «${BYellow}base-devel namcap yaourt git subversion${BGreen}»...${Reset}"
+        package_install "base-devel namcap yaourt git subversion"
         pause_function
         if ! is_package_installed "yaourt" ; then
             pacman -Syyuu
-            package_install "base-devel namcap yaourt"
+            package_install "base-devel namcap yaourt git subversion"
             pause_function
             if ! is_package_installed "yaourt" ; then
                 messages="\n"
