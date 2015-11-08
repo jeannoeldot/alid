@@ -652,8 +652,8 @@
                     fi
                     ;;
                 "kdenlive")
-                    printf '%s\n' "${BGreen}Installation de «${BYellow}kdenlive cdrkit dvdauthor dvgrab ffmpeg recordmydesktop${BGreen}»...${Reset}"
-                    package_install "kdenlive cdrkit dvdauthor dvgrab ffmpeg recordmydesktop"
+                    printf '%s\n' "${BGreen}Installation de «${BYellow}kdenlive cdrkit dvdauthor dvgrab ffmpeg recordmydesktop frei0r-plugins${BGreen}»...${Reset}"
+                    package_install "kdenlive cdrkit dvdauthor dvgrab ffmpeg recordmydesktop frei0r-plugins"
                     ;;
                 "handbrake")
                     printf '%s\n' "${BGreen}Installation de «${BYellow}handbrake${BGreen}»...${Reset}"
