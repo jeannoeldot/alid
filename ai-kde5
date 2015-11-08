@@ -82,8 +82,8 @@
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 18 72 4)
             options=("choqok" "(Client Twitter)" OFF
-                    "digikam" "(Gestion de photos)" OFF
-                    "k3b" "(Gravure)" OFF
+                    "digikam" "(Gestion de photos)" ON
+                    "k3b" "(Gravure)" ON
                     "skrooge" "(Gestion de finances)" OFF
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
@@ -233,17 +233,17 @@
         until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 22 72 12)
-            options=("gparted" "(+ gptfdisk)" OFF
-                    "grsync" "" OFF
-                    "htop" "(+ iotop lshw hwinfo ...)" OFF
-                    "lm_sensors" "(+ rrdtool)" OFF
-                    "hddtemp" "(+ gnu-netcat)" OFF
-                    "gsmartcontrol" "(S.M.A.R.T.)" OFF
-                    "hdparm" "(+ bonnie++)" OFF
-                    "pacnew_scripts" "" OFF
-                    "mesa-demos" "" OFF
-                    "qt5ct" "" OFF
-                    "cpupower" "(Inutile si Intel I7-4770K Haswell)" OFF
+            options=("gparted" "(Clone de Partition Magic)" ON
+                    "grsync" "(IHM Graphique GTK pour rsync)" ON
+                    "htop" "(Outils système)" ON
+                    "lm_sensors" "(Surveillance du matériel)" ON
+                    "hddtemp" "(Température HDD)" ON
+                    "gsmartcontrol" "(S.M.A.R.T.)" ON
+                    "hdparm" "(Ajustement paramètres HDD)" ON
+                    "pacnew_scripts" "(Scripts pour fichiers .pacnew)" ON
+                    "mesa-demos" "(Démos et outils Mesa)" ON
+                    "qt5ct" "(Configuration de Qt5)" ON
+                    "cpupower" "(Économie d'énergie du processeur)" OFF
                     "syslog-ng" "" OFF
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
@@ -279,7 +279,7 @@
                     package_install "lm_sensors rrdtool"
                     # SI PAS DANS VIRTUALBOX
                     if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
-                        printf '%s\n' "${BGreen}LM_SENSORS - sensors-detect : ${BYellow}Détections des capteurs${BGreen}...${Reset}"
+                        printf '%s\n' "${BGreen}LM_SENSORS - ${BYellow}sensors-detect${BGreen} : ${BYellow}Détections des capteurs${BGreen}...${Reset}"
                         pause_function
                         sensors-detect
                         printf '%s\n' "${BGreen}Activation de ${BYellow}lm_sensors.service${BGreen}...${Reset}"
@@ -353,13 +353,13 @@
         until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 7)
-            options=("kdevelop" "" OFF
-                    "qtcreator" "(+ Qt5)" OFF
-                    "devtools" "" OFF
-                    "gdb" "(+ valgrind splint tidyhtml)" OFF
-                    "git" "(+ subversion)" OFF
-                    "cmake" "" OFF
-                    "clang" "" OFF
+            options=("kdevelop" "(IDE C/C ++ pour KDE)" OFF
+                    "qtcreator" "(IDE léger et multi-plateforme - Qt5)" ON
+                    "devtools" "(Outils pour les mainteneurs de paquets)" ON
+                    "gdb" "(Débogueur GNU)" ON
+                    "git" "(Système de contrôle de version - VCS)" ON
+                    "cmake" "(Système de compilation multi-plateforme)" ON
+                    "clang" "(C interface pour LLVM)" OFF
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
@@ -415,7 +415,7 @@
         until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 2)
-            options=("libreoffice" "(LibreOffice Still)" OFF
+            options=("libreoffice" "(LibreOffice Still)" ON
                     "calligra" "(Calligra Office Suite)" OFF
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
@@ -456,9 +456,9 @@
         until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 3)
-            options=("blender" "(+ cuda)" OFF
-                    "gimp" "(+ plugins)" OFF
-                    "inkscape" "(+ extensions et filtres)" OFF
+            options=("blender" "(Création graphique 3D)" ON
+                    "gimp" "(Programme de Manipulation d'Image)" ON
+                    "inkscape" "(Éditeur de graphiques vectoriels)" ON
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
@@ -510,12 +510,12 @@
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 7)
             options=("chromium" "(Navigateur)" OFF
-                    "firefox" "(Navigateur)" OFF
-                    "transmission" "(Download)" OFF
+                    "firefox" "(Navigateur)" ON
+                    "transmission" "(Téléchargement Torrent)" ON
                     "dropbox" "(Partage de fichiers)" OFF
-                    "thunderbird" "(Mail)" OFF
-                    "konversation" "(IRC client)" OFF
-                    "quassel" "(IRC client)" OFF
+                    "thunderbird" "(Lecteur de Mail/News)" OFF
+                    "konversation" "(Client IRC)" OFF
+                    "quassel" "(Client IRC)" OFF
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
@@ -577,12 +577,13 @@
         messages=" \n"
         until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 18 72 5)
-            options=("amarok" "" OFF
-                    "clementine" "" OFF
-                    "soundkonverter" "" OFF
-                    "audacity" "" OFF
-                    "gstreamer" "(gst gstreamer gstreamer0.10)" OFF
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 6)
+            options=("amarok" "(Lecteur de musique pour KDE)" ON
+                    "clementine" "(Lecteur de musique)" ON
+                    "soundkonverter" "(Convertisseur audio)" ON
+                    "audacity" "(Manipulateur d'ondes audio numériques)" ON
+                    "easytag" "(Éditeur de tags des fichiers audio)" ON
+                    "gstreamer" "(Framework multimédia)" ON
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
@@ -611,6 +612,10 @@
                     printf '%s\n' "${BGreen}Installation de ${BYellow}audacity${BGreen}...${Reset}"
                     package_install "audacity"
                     ;;
+                "easytag")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}easytag${BGreen}...${Reset}"
+                    package_install "easytag"
+                    ;;
                 "gstreamer")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gst-plugins-base${BGreen}...${Reset}"
                     package_install "gst-plugins-base gst-plugins-base-libs gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav mpg123 flac"
@@ -635,10 +640,11 @@
         messages=" \n"
         until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 3)
-            options=("vlc" "" OFF
-                    "kdenlive" "" OFF
-                    "DVD-Libs" "(libbluray libdvdread libdvdnav libdvdcss libaacs)" OFF
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 18 72 4)
+            options=("vlc" "(Lecteur vidéo MPEG, VCD/DVD et DivX)" ON
+                    "kdenlive" "(Éditeur vidéo)" ON
+                    "handbrake" "(Convertisseur vidéo)" ON
+                    "DVD-Libs" "(libbluray libdvdread libdvdnav libdvdcss libaacs)" ON
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
@@ -663,6 +669,10 @@
                     printf '%s\n' "${BGreen}Installation de ${BYellow}kdenlive cdrkit dvdauthor dvgrab ffmpeg recordmydesktop${BGreen}...${Reset}"
                     package_install "kdenlive cdrkit dvdauthor dvgrab ffmpeg recordmydesktop"
                     ;;
+                "handbrake")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}handbrake${BGreen}...${Reset}"
+                    package_install "handbrake"
+                    ;;
                 "DVD-Libs")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}libbluray libdvdread libdvdnav libdvdcss libaacs cdrdao libquicktime${BGreen}...${Reset}"
                     package_install "libbluray libdvdread libdvdnav libdvdcss libaacs cdrdao libquicktime"
@@ -685,8 +695,8 @@
         messages=" \n"
         until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 2)
-            options=("pokerth" "(Poker TH)" OFF
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 1)
+            options=("pokerth" "(Poker Texas Hold'em)" ON
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?

@@ -1061,10 +1061,9 @@ $ systemctl --user start psd.service
 $ systemctl --user stop psd.service
 
 $ kwrite $HOME/.config/psd/psd.conf &
-19  #USE_OVERLAYFS="no"   ==>  A LAISSER
-52  #BROWSERS=""          ==>  BROWSERS="firefox"
-63  #VOLATILE="/tmp"      ==>  A LAISSER
-71  #USE_BACKUPS="yes"    ==>  A LAISSER
+15  #USE_OVERLAYFS="no"   ==>  A LAISSER
+48  #BROWSERS=""          ==>  BROWSERS="firefox"
+56  #USE_BACKUPS="yes"    ==>  A LAISSER
 
 $ rm -i $HOME/.config/psd/psd.conf~
 
@@ -1362,11 +1361,10 @@ CREEER FICHIER $HOME/.config/psd/psd.conf
 $ systemctl --user start psd.service
 $ systemctl --user stop psd.service
 
-$ kwrite $HOME/.config/psd/psd.conf &
-19  #USE_OVERLAYFS="no"   ==>  A LAISSER
-52  #BROWSERS=""          ==>  BROWSERS="firefox"
-63  #VOLATILE="/tmp"      ==>  A LAISSER
-71  #USE_BACKUPS="yes"    ==>  A LAISSER
+$ geany $HOME/.config/psd/psd.conf &
+15  #USE_OVERLAYFS="no"   ==>  A LAISSER
+48  #BROWSERS=""          ==>  BROWSERS="firefox"
+56  #USE_BACKUPS="yes"    ==>  A LAISSER
 
 $ rm -i $HOME/.config/psd/psd.conf~
 

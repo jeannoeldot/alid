@@ -154,7 +154,7 @@
             messages+="    Pas de configuration de ${NAME_DIR_EFI}/refind.conf.\n"
         fi
         print_dialog_msgbox_h "${titre}" "${messages}" "Continuer" 20
-        # rEFInd 0.8.3 :
+        # rEFInd 0.8.3 :
         # A ETUDIER
         # #scanfor internal,external,optical,manual => scanfor internal,hdbios,external,optical,manual
         # ==> Si probleme CSM compatibility => a enlever

@@ -12,120 +12,104 @@
 
     # 20 DESKTOP ENVIRONMENT {{{
     install_desktop_environment() {
+        local retour=9
+        local messages=""
+        local titre=""
         # OPENBOX {{{
-        print_title "OPENBOX - http://wiki.archlinux.org/index.php/Openbox"
-        print_info "Openbox est un gestionnaire de fenêtres très léger, simple et configurable."
+        titre="INSTALLATION DE OPENBOX"
+        messages="\n"
+        messages+="Openbox est un gestionnaire de fenêtres très léger, simple et configurable.\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+        #
+        printf '%s\n' "${BGreen}Installation de ${BYellow}OPENBOX Base${BGreen}...${Reset}"
         package_install "openbox obconf obmenu menumaker openbox-themes xcursor-themes"
         #
-        print_info_cyan "Installation de xdg-user-dirs."
+        printf '%s\n' "${BGreen}Installation de ${BYellow}xdg-user-dirs${BGreen}...${Reset}"
         package_install "xdg-user-dirs python2-xdg"
         #
-        print_info_cyan "Installation de numlockx, idesk, nitrogen et feh."
+        printf '%s\n' "${BGreen}Installation de ${BYellow}numlockx, idesk, nitrogen et feh${BGreen}...${Reset}"
         package_install "numlockx idesk nitrogen feh"
         #
-        print_info_cyan "Installation de lxappearance."
+        printf '%s\n' "${BGreen}Installation de ${BYellow}lxappearance${BGreen}...${Reset}"
         package_install "lxappearance lxappearance-obconf"
         #
-        print_info_cyan "Installation de leafpad, epdfview et imagemagick."
+        printf '%s\n' "${BGreen}Installation de ${BYellow}leafpad, epdfview et imagemagick${BGreen}...${Reset}"
         package_install "leafpad epdfview imagemagick"
         #
-        print_info_cyan "Installation de spacefm, fbpanel, lxterminal et terminator."
+        printf '%s\n' "${BGreen}Installation de ${BYellow}spacefm, fbpanel, lxterminal et terminator${BGreen}...${Reset}"
         package_install "spacefm fbpanel lxterminal terminator perl-file-mimeinfo"
         #
-        print_info_cyan "Installation de viewnior, gmrun et volwheel."
+        printf '%s\n' "${BGreen}Installation de ${BYellow}viewnior, gmrun et volwheel${BGreen}...${Reset}"
         package_install "viewnior gmrun volwheel"
-        # Dépendances imagemagick
-        print_info_cyan "Installation des dépendances de imagemagick."
+        #
+        printf '%s\n' "${BGreen}Installation des dépendances de ${BYellow}imagemagick${BGreen}...${Reset}"
         package_install "openexr libwmf librsvg libxml2 jasper libpng"
-        # Dépendances spacefm
-        print_info_cyan "Installation des dépendances de spacefm."
+        #
+        printf '%s\n' "${BGreen}Installation des dépendances de ${BYellow}spacefm${BGreen}...${Reset}"
         package_install "lsof eject wget gksu udevil udisks udisks2 gvfs-smb gvfs-afc gvfs-gphoto2 gvfs-mtp lxsession"
         # FONTS
-        print_info_cyan "Installation de polices TTF."
+        printf '%s\n' "${BGreen}Installation de ${BYellow}Polices TTF${BGreen}...${Reset}"
         package_install "ttf-bitstream-vera ttf-dejavu ttf-freefont ttf-liberation ttf-linux-libertine ttf-droid ttf-ubuntu-font-family ttf-oxygen"
         # LSB-RELEASE
-        print_info_cyan "Installation de lsb-release"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}lsb-release${BGreen}...${Reset}"
         package_install "lsb-release"
         # UPOWER
-        print_info_cyan "Installation de upower"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}upower${BGreen}...${Reset}"
         package_install "upower"
         # POLKIT-GNOME
-        print_info_cyan "Installation de polkit-gnome"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}polkit-gnome${BGreen}...${Reset}"
         package_install "polkit-gnome"
         #
-        print_info_cyan "Configuration par défaut de l'utilisateur ${USERNAME}."
+        if is_package_installed "cups" ; then
+            printf '%s\n' "${BGreen}Installation de ${BYellow}system-config-printer${BGreen}...${Reset}"
+            package_install "system-config-printer"
+        fi
+
+        printf '%s\n' "${BGreen}Configuration par défaut de l'utilisateur ${BYellow}${USERNAME}${BGreen}...${Reset}"
         mkdir -p /home/${USERNAME}/.config/openbox
         cp -v /etc/xdg/openbox/{rc.xml,menu.xml,autostart,environment} /home/${USERNAME}/.config/openbox/
         chown -R ${USERNAME}:users /home/${USERNAME}/.config
         mkdir -p /home/${USERNAME}/.local/share
         chown -R ${USERNAME}:users /home/${USERNAME}/.local
-        #}}}
-##
-# TODO
-##
-# A SUPPRIMER QUAND systemctl enable vboxservice.service NE PROVOQUERA PLUS DE KERNEL PANIC A L'ARRET
-        # VBOX SHARED FOLDER AUTO {{{
-        # SI INSTALLATION DANS VIRTUALBOX
-        if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
-            print_info_cyan "Montage Automatique de VBox Shared Folder pour JND."
-            read_input_text "Monter automatiquement VBox Shared Folder pour JND ?"
-            if [[ $OPTION == o ]]; then
-                liste_des_pc_hotes=("PC-John" "PC-Jnd")
-                PS3="$prompt1"
-                echo -e "${BGreen}Choisir le PC Hôte ( PC-John Windows 7 ou PC-Jnd Arch ) :${White}${BWhite}"
-                select OPT in "${liste_des_pc_hotes[@]}"; do
-                    case "$REPLY" in
-                        1)
-                            name_rep_partage="Partage-Win7-WMs"
-                            break
-                            ;;
-                        2)
-                            name_rep_partage="90-Partage"
-                            break
-                            ;;
-                        *)
-                            invalid_option
-                            echo -e "${BGreen}Choisir le PC Hôte ( PC-John Windows 7 ou PC-Jnd Arch ) :${White}${BWhite}"
-                            ;;
-                    esac
-                done
-                mkdir -p /home/${USERNAME}/vbox-shared-folder
-                chown -R ${USERNAME}:users /home/${USERNAME}/vbox-shared-folder
-                user_uid=$(id -u ${USERNAME})
-                user_gid=$(id -g ${USERNAME})
-                echo -e '\n# Shared Folders as Arch Linux Guest' >> /etc/fstab
-                echo -e "$name_rep_partage"'     /home/'"${USERNAME}"'/vbox-shared-folder    vboxsf  uid='"$user_uid"',gid='"$user_gid"',rw,dmode=700,fmode=600,comment=systemd.automount       0 0' >> /etc/fstab
-                pause_function
-            fi
-        fi
-        #}}}
         # OPENBOX CUSTOMIZATION AUTO {{{
-        print_info "\nCustomisation Personnelle Automatique pour JND."
-        read_input_text "Customiser OpenBox pour JND ?"
-        if [[ $OPTION == o ]]; then
+        messages="\n"
+        messages+="Customisation Personnelle Automatique pour «${USERNAME}».\n\n"
+        messages+="Customiser OpenBox pour «${USERNAME}» ?\n"
+        print_dialog_yesno "${titre}" "${messages}" "Customiser" "Continuer"
+        retour=$?
+        if [[ $retour = 0 ]]; then
             # system grub si existe
             if is_package_installed "grub-bios" ; then
+                printf '%s\n' "${BGreen}Customisation de ${BYellow}GRUB${BGreen}...${Reset}"
                 echo -e '\n# Customization for JND' >> /etc/default/grub
                 echo -e 'GRUB_COLOR_NORMAL="white/black"' >> /etc/default/grub
                 echo -e 'GRUB_COLOR_HIGHLIGHT="black/light-gray"' >> /etc/default/grub
                 echo -e 'GRUB_BACKGROUND="/boot/grub/arch-wallpaper-grub.jpg"' >> /etc/default/grub
                 cp -v ai-fconfig/arch-wallpaper-grub.jpg /boot/grub/
                 grub-mkconfig -o /boot/grub/grub.cfg
-                echo ""
             fi
-            read_input_text "Autologin pour JND sans Gestionnaire de Connexion ?"
-            if [[ $OPTION == o ]]; then
+            retour=9
+            messages="\n"
+            messages+="Customisation Personnelle Automatique pour «${USERNAME}».\n\n"
+            messages+="Autologin pour «${USERNAME}» sans Gestionnaire de Connexion ?\n"
+            print_dialog_yesno "${titre}" "${messages}" "Autologin" "Continuer"
+            retour=$?
+            if [[ $retour = 0 ]]; then
                 # Autologin sans Gestionnaire de Connexion
                 # https://wiki.archlinux.org/index.php/Xinitrc#Autostart_X_at_login
+                printf '%s\n' "${BGreen}Configuration de ${BYellow}/home/${USERNAME}/.bash_profile${BGreen}...${Reset}"
                 echo -e '\n# Autostart X at login' >> /home/${USERNAME}/.bash_profile
                 echo -e '[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx' >> /home/${USERNAME}/.bash_profile
                 # https://wiki.archlinux.org/index.php/Automatic_login_to_virtual_console
+                printf '%s\n' "${BGreen}Configuration de ${BYellow}getty@tty1.service${BGreen}...${Reset}"
                 mkdir -p /etc/systemd/system/getty@tty1.service.d
                 echo -e '[Service]' > /etc/systemd/system/getty@tty1.service.d/autologinuser.conf
                 echo -e 'ExecStart=' >> /etc/systemd/system/getty@tty1.service.d/autologinuser.conf
                 echo -e 'ExecStart=-/usr/bin/agetty --autologin '${USERNAME}' --noclear %I 38400 linux' >> /etc/systemd/system/getty@tty1.service.d/autologinuser.conf
+                printf '%s\n' "${BGreen}Activation de ${BYellow}getty@tty1.service${BGreen}...${Reset}"
                 systemctl enable getty@tty1.service
                 #create a xinitrc file in home user directory
+                printf '%s\n' "${BGreen}Configuration de ${BYellow}/home/${USERNAME}/.xinitrc${BGreen}...${Reset}"
                 cp -vf ai-fconfig/ob-user-.xinitrc /home/${USERNAME}/.xinitrc
                 if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
                     echo -e "/usr/bin/VBoxClient-all &" >> /home/${USERNAME}/.xinitrc
@@ -134,16 +118,18 @@
                 chown -R ${USERNAME}:users /home/${USERNAME}/.xinitrc
             else
                 #install_display_manager LightDM
-                print_info_cyan "Installation du Gestionnaire de Connexion LightDM."
+                printf '%s\n' "${BGreen}Installation du Gestionnaire de Connexion ${BYellow}LightDM${BGreen}...${Reset}"
                 package_install "lightdm lightdm-gtk-greeter"
                 # system LightDM
+                printf '%s\n' "${BGreen}Configuration de ${BYellow}/etc/lightdm/lightdm.conf${BGreen}...${Reset}"
                 sed -i "/^#greeter-session=example-gtk-gnome/c\greeter-session=lightdm-gtk-greeter" /etc/lightdm/lightdm.conf
                 sed -i "/^#greeter-setup-script=/c\greeter-setup-script=/usr/bin/numlockx on" /etc/lightdm/lightdm.conf
+                printf '%s\n' "${BGreen}Configuration de ${BYellow}/etc/lightdm/lightdm-gtk-greeter.conf${BGreen}...${Reset}"
                 cp -vf ai-fconfig/ob-lightdm-skyzl1-1920x1080.jpg /usr/share/pixmaps/skyzl1-1920x1080.jpg
                 sed -i "/^#background=/c\background=/usr/share/pixmaps/skyzl1-1920x1080.jpg" /etc/lightdm/lightdm-gtk-greeter.conf
-                
+                printf '%s\n' "${BGreen}Activation de ${BYellow}lightdm.service${BGreen}...${Reset}"                
                 systemctl enable lightdm.service
-                
+                printf '%s\n' "${BGreen}Configuration de ${BYellow}/home/${USERNAME}/.xprofile${BGreen}...${Reset}"
                 cp -vf ai-fconfig/ob-user-.xinitrc /home/${USERNAME}/.xprofile
                 if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
                     echo -e "/usr/bin/VBoxClient-all &" >> /home/${USERNAME}/.xprofile
@@ -151,6 +137,7 @@
                 chown -R ${USERNAME}:users /home/${USERNAME}/.xprofile
             fi
             # system sudoers
+            printf '%s\n' "${BGreen}Configuration de ${BYellow}/etc/sudoers${BGreen}...${Reset}"
             echo -e '\n## My Cmnd alias' >> /etc/sudoers
             echo -e 'Cmnd_Alias SHUTDOWN_CMDS = /sbin/shutdown, /sbin/halt, /sbin/reboot, /sbin/poweroff' >> /etc/sudoers
             echo -e 'Cmnd_Alias PACMAN_CMDS = /usr/bin/pacman' >> /etc/sudoers
@@ -162,14 +149,18 @@
             echo -e 'ADMINS ALL=(ALL) NOPASSWD: PACMAN_CMDS' >> /etc/sudoers
             echo -e 'ADMINS ALL=(ALL) NOPASSWD: HDDTEMP_CMDS' >> /etc/sudoers
             # system openbox theme
+            printf '%s\n' "${BGreen}Mise en place du thème ${BYellow}BlueSmoke${BGreen}...${Reset}"
             cp -R ai-fconfig/ob-usr-share-themes-BlueSmoke /usr/share/themes/BlueSmoke
             # system icon
+            printf '%s\n' "${BGreen}Mise en place d'icones...${Reset}"
             cp -v ai-fconfig/accessories-calculator.png /usr/share/icons/hicolor/48x48/apps/
             cp -v ai-fconfig/xterm.png /usr/share/icons/hicolor/48x48/apps/
             # user wallpaper
+            printf '%s\n' "${BGreen}Mise en place du fond d'écran ${BYellow}skyzl1-1920x1080.jpg${BGreen}...${Reset}"
             mkdir -p /home/${USERNAME}/09-Configurations/OO-Images-bureau
             cp -v ai-fconfig/ob-user-skyzl1-1920x1080.jpg /home/${USERNAME}/09-Configurations/OO-Images-bureau/skyzl1-1920x1080.jpg
             # user logo fbpanel
+            printf '%s\n' "${BGreen}Mise en place du logo de ${BYellow}fbpanel${BGreen}...${Reset}"
             mkdir -p /home/${USERNAME}/09-Configurations/OO-Logo-fbpanel
             cp -v ai-fconfig/ob-user-fbpanel-archlinux-logo.png /home/${USERNAME}/09-Configurations/OO-Logo-fbpanel/archlinux-logo.png
             cp -v ai-fconfig/ob-user-fbpanel-installation-archlinux-logo.png.TXT /home/${USERNAME}/09-Configurations/OO-Logo-fbpanel/installation-archlinux-logo.png.TXT
@@ -182,12 +173,10 @@
             chmod 644 /usr/share/fbpanel/images/logo.png
             cp -v ai-fconfig/etc-systemd-system-fbpanel_update.path /etc/systemd/system/fbpanel_update.path
             cp -v ai-fconfig/etc-systemd-system-fbpanel_update.service /etc/systemd/system/fbpanel_update.service
+            printf '%s\n' "${BGreen}Activation de ${BYellow}fbpanel_update.path${BGreen}...${Reset}"
             systemctl enable fbpanel_update.path
-            # user nitrogen
-            mkdir -p /home/${USERNAME}/.config/nitrogen
-            cp -v ai-fconfig/ob-user-.config-nitrogen-bg-saved.cfg /home/${USERNAME}/.config/nitrogen/bg-saved.cfg
-            cp -v ai-fconfig/ob-user-.config-nitrogen-nitrogen.cfg /home/${USERNAME}/.config/nitrogen/nitrogen.cfg
             # user fbpanel
+            printf '%s\n' "${BGreen}Configuration de ${BYellow}fbpanel${BGreen}...${Reset}"
             mkdir -p /home/${USERNAME}/.config/fbpanel
             if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
                 cp -v ai-fconfig/ob-user-.config-fbpanel-default-vbox /home/${USERNAME}/.config/fbpanel/default
@@ -196,17 +185,25 @@
             else
                 cp -v ai-fconfig/ob-user-.config-fbpanel-default-reel /home/${USERNAME}/.config/fbpanel/default
             fi
+            # user nitrogen
+            printf '%s\n' "${BGreen}Configuration de ${BYellow}nitrogen${BGreen}...${Reset}"
+            mkdir -p /home/${USERNAME}/.config/nitrogen
+            cp -v ai-fconfig/ob-user-.config-nitrogen-bg-saved.cfg /home/${USERNAME}/.config/nitrogen/bg-saved.cfg
+            cp -v ai-fconfig/ob-user-.config-nitrogen-nitrogen.cfg /home/${USERNAME}/.config/nitrogen/nitrogen.cfg
             # user terminator
+            printf '%s\n' "${BGreen}Configuration de ${BYellow}terminator${BGreen}...${Reset}"
             mkdir -p /home/${USERNAME}/.config/terminator
             cp -v ai-fconfig/ob-user-.config-terminator-config /home/${USERNAME}/.config/terminator/config
             # user lxterminal
+            printf '%s\n' "${BGreen}Configuration de ${BYellow}lxterminal${BGreen}...${Reset}"
             mkdir -p /home/${USERNAME}/.config/lxterminal
             cp -v ai-fconfig/ob-user-.config-lxterminal-lxterminal.conf /home/${USERNAME}/.config/lxterminal/lxterminal.conf
             # user gtk-3.0
+            printf '%s\n' "${BGreen}Configuration de ${BYellow}gtk-3${BGreen}...${Reset}"
             mkdir -p /home/${USERNAME}/.config/gtk-3.0
             cp -v ai-fconfig/ob-user-.config-gtk-3.0-settings.ini /home/${USERNAME}/.config/gtk-3.0/settings.ini
             # user openbox
-#           mkdir -p /home/${USERNAME}/.config/openbox
+            printf '%s\n' "${BGreen}Configuration de ${BYellow}openbox${BGreen}...${Reset}"
             if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
                 cp -v ai-fconfig/ob-user-.config-openbox-autostart-vbox /home/${USERNAME}/.config/openbox/autostart
             else
@@ -218,8 +215,9 @@
             chown -R ${USERNAME}:users /home/${USERNAME}/.config
             # user bin
 #           mkdir -p /home/${USERNAME}/bin
-            print_info_cyan "Installation des dépendances de openbox-logout."
+            printf '%s\n' "${BGreen}Installation des dépendances de ${BYellow}openbox-logout${BGreen}...${Reset}"
             package_install "python2-pillow"
+            printf '%s\n' "${BGreen}Mise en place et Configuration des scripts dans ${BYellow}/home/${USERNAME}/bin${BGreen}...${Reset}"
             cp -R ai-fconfig/ob-user-bin-openbox-logout /home/${USERNAME}/bin/openbox-logout
             cp -v ai-fconfig/ob-user-bin-ob-quitter /home/${USERNAME}/bin/ob-quitter
             chmod +x /home/${USERNAME}/bin/openbox-logout/ob_logout.py
@@ -234,23 +232,28 @@
             fi
             chown -R ${USERNAME}:users /home/${USERNAME}/bin
             # user gtkrc-2.0
+            printf '%s\n' "${BGreen}Configuration de ${BYellow}gtk-2${BGreen}...${Reset}"
             cp -v ai-fconfig/ob-user-.gtkrc-2.0 /home/${USERNAME}/.gtkrc-2.0
             chown -R ${USERNAME}:users /home/${USERNAME}/.gtkrc-2.0
             # user feh
+            printf '%s\n' "${BGreen}Configuration de ${BYellow}feh${BGreen}...${Reset}"
             cp -v ai-fconfig/ob-user-.fehbg /home/${USERNAME}/.fehbg
             chown -R ${USERNAME}:users /home/${USERNAME}/.fehbg
             #
+            printf '%s\n' "${BGreen}Copie du fichier «${BYellow}00-CMD-UTILES-OB-CK.TXT${BGreen}» dans le répertoire /home de «${BYellow}${USERNAME}${BGreen}»...${Reset}"
             cp -v ai-fconfig/00-CMD-UTILES-OB-CK.TXT /home/${USERNAME}/00-CMD-UTILES-OB-CK.TXT
             #
             chown -R ${USERNAME}:users /home/${USERNAME}
-            print_info_cyan "Installation des thèmes GTK 3/2 et Icones."
+            printf '%s\n' "${BGreen}Installation de thèmes ${BYellow}GTK 3/2${BGreen}...${Reset}"
             package_install "gtk-update-icon-cache"
             aur_package_install "zukitwo-themes"
+            printf '%s\n' "${BGreen}Installation d'${BYellow}Icones${BGreen}...${Reset}"
             aur_package_install "flatwoken-icons-git"
             aur_package_install "awoken-icons"
             pause_function
         else
             #create a xinitrc file in home user directory
+            printf '%s\n' "${BGreen}Configuration de ${BYellow}/home/${USERNAME}/.xinitrc${BGreen}...${Reset}"
             cp -vf ai-fconfig/ob-user-.xinitrc /home/${USERNAME}/.xinitrc
             if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
                 echo -e "/usr/bin/VBoxClient-all &" >> /home/${USERNAME}/.xinitrc
@@ -260,508 +263,636 @@
             pause_function
         fi
         #}}}
-        # OPENBOX CUSTOMIZATION {{{
-        install_icon_theme() { #{{{
-            package_install "faenza-icon-theme faience-icon-theme"
-        } #}}}
-        install_gtk_theme() { #{{{
-            aur_package_install "adwaita-x-dark-and-light-theme"
-         } #}}}
-        while true
+        #OPENBOX CUSTOMIZATION
+        retour=9
+        messages=" \n"
+        messages+="PERSONNALISATION DE OPENBOX :\n\n"
+        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
-            print_title "PERSONNALISATION DE OPENBOX"
-            echo " 1) $(menu_item "adwaita-x-dark-and-light-theme" "GTK Themes") $AUR"
-            echo " 2) $(menu_item "faenza-icon-theme" "Icones Themes")"
-            echo " 3) $(menu_item "compton-git") $AUR"
-            echo " 4) $(menu_item "scrot")"
-            echo " 5) $(menu_item "xfburn")"
-            echo " 6) $(menu_item "xarchiver")"
-            echo " 7) $(menu_item "xorg-xcalc")"
-            echo " 8) $(menu_item "pcmanfm" "PCManFM")"
-            echo " 9) $(menu_item "rxvt-unicode")"
-            echo "10) $(menu_item "thunar")"
-            echo "11) $(menu_item "tint2-git") $AUR"
-            echo ""
-            echo " F) FINI"
-            echo ""
-            AWESOMEOB_OPTIONS+=" f"
-            read_input_options "$AWESOMEOB_OPTIONS"
-            for OPT in ${OPTIONS[@]}; do
-                case "$OPT" in
-                    1)
-                        install_gtk_theme
-                        OPT=1
-                        ;;
-                    2)
-                        install_icon_theme
-                        OPT=2
-                        ;;
-                    3)
-                        aur_package_install "compton-git"
-                        if is_package_installed "compton-git" ; then
-                            sed -i "s/#compton/compton/g" /home/${USERNAME}/.config/openbox/autostart
-                            cp -v ai-fconfig/ob-user-.config-compton.conf /home/${USERNAME}/.config/compton.conf
-                            chown -R ${USERNAME}:users /home/${USERNAME}/.config
-                        fi
-                        ;;
-                    4)
-                        package_install "scrot"
-                        ;;
-                    5)
-                        package_install "xfburn"
-                        ;;
-                    6)
-                        package_install "xarchiver"
-                        ;;
-                    7)
-                        package_install "xorg-xcalc xorg-fonts-100dpi xorg-fonts-75dpi"
-                        ;;
-                    8)
-                        package_install "pcmanfm polkit-gnome gvfs"
-                        ;;
-                    9)
-                        package_install "rxvt-unicode"
-                        ;;
-                    10)
-                        package_install "thunar tumbler polkit-gnome gvfs"
-                        ;;
-                    11)
-                        aur_package_install "tint2-git"
-                        package_install "orage"
-                        ;;
-                    "f")
-                        break
-                        ;;
-                    *)
-                        invalid_option
-                        ;;
-                esac
-            done
-        elihw
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 22 72 11)
+            options=("adwaita" "(Thèmes GTK) - (AUR)" ON
+                    "faenza" "(Thèmes d'Icones)" ON
+                    "compton-git" "(Compositeur pour X) - (AUR)" ON
+                    "scrot" "(Capture d'écran pour X)" ON
+                    "xfburn" "(Gravure)" ON
+                    "xarchiver" "(Archivers)" ON
+                    "xorg-xcalc" "(Calculatrice)" ON
+                    "pcmanfm" "(Gestionnaire de Fichiers)" OFF
+                    "rxvt-unicode" "(Émulateur de Terminal)" OFF
+                    "thunar" "(Gestionnaire de Fichiers)" OFF
+                    "tint2-git" "(Panneau/Barre des tâches) - (AUR)" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
         done
-        #}}}
+        for choix in $REPLY
+        do
+            case $choix in
+                "adwaita")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}adwaita-x-dark-and-light-theme${BGreen}...${Reset}"
+                    aur_package_install "adwaita-x-dark-and-light-theme"
+                    ;;
+                "faenza")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}faenza-icon-theme${BGreen}...${Reset}"
+                    package_install "faenza-icon-theme faience-icon-theme"
+                    ;;
+                "compton-git")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}compton-git${BGreen}...${Reset}"
+                    aur_package_install "compton-git"
+                    if is_package_installed "compton-git" ; then
+                        printf '%s\n' "${BGreen}Configuration de ${BYellow}compton-git${BGreen}...${Reset}"
+                        sed -i "s/#compton/compton/g" /home/${USERNAME}/.config/openbox/autostart
+                        cp -v ai-fconfig/ob-user-.config-compton.conf /home/${USERNAME}/.config/compton.conf
+                        chown -R ${USERNAME}:users /home/${USERNAME}/.config
+                    fi
+                    ;;
+                "scrot")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}scrot${BGreen}...${Reset}"
+                    package_install "scrot"
+                    ;;
+                "xfburn")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}xfburn${BGreen}...${Reset}"
+                    package_install "xfburn"
+                    ;;
+                "xarchiver")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}xarchiver${BGreen}...${Reset}"
+                    package_install "xarchiver"
+                    ;;
+                "xorg-xcalc")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}xorg-xcalc xorg-fonts-100dpi xorg-fonts-75dpi${BGreen}...${Reset}"
+                    package_install "xorg-xcalc xorg-fonts-100dpi xorg-fonts-75dpi"
+                    ;;
+                "pcmanfm")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}pcmanfm polkit-gnome gvfs${BGreen}...${Reset}"
+                    package_install "pcmanfm polkit-gnome gvfs"
+                    ;;
+                "rxvt-unicode")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}rxvt-unicode${BGreen}...${Reset}"
+                    package_install "rxvt-unicode"
+                    ;;
+                "thunar")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}thunar tumbler polkit-gnome gvfs${BGreen}...${Reset}"
+                    package_install "thunar tumbler polkit-gnome gvfs"
+                    ;;
+                "tint2-git")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}tint2-git${BGreen}...${Reset}"
+                    aur_package_install "tint2-git"
+                    package_install "orage"
+            esac
+        done
+        #
+        printf '%s\n' "${BGreen}Configuration de ${BYellow}/etc/environment${BGreen}...${Reset}"
         echo "LANG=$LANGUAGE.utf8" >> /etc/environment
         echo "FT2_SUBPIXEL_HINTING=1" >> /etc/environment
-        #Abstraction for enumerating power devices, listening to device events and querying history and statistics
-        print_info_cyan "Installation de upower.service"
+        # Abstraction for enumerating power devices, listening to device events and querying history and statistics
+        printf '%s\n' "${BGreen}Activation de ${BYellow}upower.service${BGreen}...${Reset}"
         systemctl enable upower.service
         #
         OPENBOX=1
         pause_function
+        # VBOX SHARED FOLDER AUTO
+        # SI INSTALLATION DANS VIRTUALBOX
+        if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
+            retour=9
+            messages="\n"
+            messages+="Installation dans «Oracle VM VirtualBox».\n\n"
+            messages+="Monter automatiquement «VBox Shared Folder» pour «${USERNAME}» ?"
+            print_dialog_yesno "${titre}" "${messages}" "Monter" "Continuer"
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                messages="\n"
+                messages+="Installation dans «Oracle VM VirtualBox».\n\n"
+                messages+="Choisir le PC Hôte «PC-John Windows 7» ou «PC-Jnd Arch Linux»"
+                REPLY=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 16 72 5 \
+                    "PC-John" "Windows 7" \
+                    "PC-Jnd" "Arch Linux" \
+                    3>&1 1>&2 2>&3)
+                case "$REPLY" in
+                    "PC-John")
+                        name_rep_partage="Partage-Win7-WMs"
+                        ;;
+                    "PC-Jnd")
+                        name_rep_partage="90-Partage"
+                        ;;
+                esac
+                printf '%s\n' "${BGreen}Configuration de ${BYellow}/etc/fstab${BGreen}...${Reset}"
+                mkdir -p /home/${USERNAME}/vbox-shared-folder
+                chown -R ${USERNAME}:users /home/${USERNAME}/vbox-shared-folder
+                user_uid=$(id -u ${USERNAME})
+                user_gid=$(id -g ${USERNAME})
+                echo -e '\n# Shared Folders as Arch Linux Guest' >> /etc/fstab
+                echo -e "${name_rep_partage}"'     /home/'"${USERNAME}"'/vbox-shared-folder    vboxsf  uid='"$user_uid"',gid='"$user_gid"',rw,dmode=700,fmode=600,comment=systemd.automount       0 0' >> /etc/fstab
+                pause_function
+            fi
+        fi
     }
     #}}}
     # 21 ACCESSORIES {{{
     install_accessories_apps() {
-    while true
-    do
-        print_title "APPLICATIONS ACCESSOIRES"
-        echo " 1) $(menu_item "conky" "Conky")"
-        echo " 2) $(menu_item "docky" "Docky-Dock")"
-        echo " 3) $(menu_item "wbar" "Wbar-Dock")"
-        echo " 4) $(menu_item "plank" "Plank-Dock")"
-        echo ""
-        echo " F) FINI"
-        echo ""
-        ACCESSORIES_OPTIONS+=" f"
-        read_input_options "$ACCESSORIES_OPTIONS"
-        for OPT in ${OPTIONS[@]}; do
-            case "$OPT" in
-                1)
-                    package_install "conky"
-##
-# A REVOIR ~/Conky
-# TODO
-##
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS ACCESSOIRES"
+        messages=" \n"
+        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 18 72 5)
+            options=("cairo-dock" "(Cairo Dock)" OFF
+                    "conky-lua-nv" "(Moniteur Système pour X) - (AUR)" OFF
+                    "docky" "(Docky Dock)" OFF
+                    "plank" "(Plank Dock)" OFF
+                    "wbar" "(Wbar Dock)" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "cairo-dock")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}cairo-dock cairo-dock-plugins${BGreen}...${Reset}"
+                    package_install "cairo-dock cairo-dock-plugins"
                     ;;
-                2)
+                "conky-lua-nv")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}conky-lua-nv${BGreen}...${Reset}"
+                    aur_package_install "conky-lua-nv"
+                    ;;
+                "docky")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}docky${BGreen}...${Reset}"
                     package_install "docky"
                     ;;
-                3)
-                    package_install "wbar"
-                    ;;
-                4)
+                "plank")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}plank${BGreen}...${Reset}"
                     package_install "plank"
                     ;;
-                "f")
-                    break
-                    ;;
-                *)
-                    invalid_option
-                    ;;
+                "wbar")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}wbar${BGreen}...${Reset}"
+                    package_install "wbar"
             esac
         done
-    elihw
-    done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
     }
     #}}}
     # 22 SYSTEM TOOLS {{{
     install_system_apps() {
-    while true
-    do
-        print_title "OUTILS SYSTÈME"
-        echo " 1) $(menu_item "gparted")"
-        echo " 2) $(menu_item "grsync")"
-        echo " 3) $(menu_item "htop iotop lshw hwinfo dmidecode ncdu dfc expac pkgfile i7z inxi")"
-        echo " 4) $(menu_item "lm_sensors")"
-        echo " 5) $(menu_item "hddtemp gnu-netcat")"
-        echo " 6) $(menu_item "gsmartcontrol" "S.M.A.R.T.")"
-        echo " 7) $(menu_item "hdparm bonnie++")"
-        echo " 8) $(menu_item "cpupower")"
-        echo " 9) $(menu_item "pacnew_scripts")"
-        echo "10) $(menu_item "mesa-demos")"
-        echo "11) $(menu_item "syslog-ng")"
-        echo "12) $(menu_item "qt5ct")"
-        echo ""
-        echo " F) FINI"
-        echo ""
-        SYSTEMTOOLS_OPTIONS+=" f"
-        read_input_options "$SYSTEMTOOLS_OPTIONS"
-        for OPT in ${OPTIONS[@]}; do
-            case "$OPT" in
-                1)
-                    package_install "gparted gptfdisk"
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'OUTILS SYSTÈME"
+        messages=" \n"
+        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 22 72 12)
+            options=("gparted" "(Clone de Partition Magic)" ON
+                    "grsync" "(IHM Graphique GTK pour rsync)" ON
+                    "htop" "(Outils système)" ON
+                    "lm_sensors" "(Surveillance du matériel)" ON
+                    "hddtemp" "(Température HDD)" ON
+                    "gsmartcontrol" "(S.M.A.R.T.)" ON
+                    "hdparm" "(Ajustement paramètres HDD)" ON
+                    "pacnew_scripts" "(Scripts pour fichiers .pacnew)" ON
+                    "mesa-demos" "(Démos et outils Mesa)" ON
+                    "qt5ct" "(Configuration de Qt5)" ON
+                    "cpupower" "(Économie d'énergie du processeur)" OFF
+                    "syslog-ng" "" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "gparted")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gparted gptfdisk${BGreen}...${Reset}"
+                   package_install "gparted gptfdisk"
                     ;;
-                2)
+                "grsync")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}grsync${BGreen}...${Reset}"
                     package_install "grsync"
                     ;;
-                3)
+                "htop")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}htop iotop lshw hwinfo dmidecode ncdu dfc expac pkgfile i7z inxi${BGreen}...${Reset}"
                     package_install "htop iotop lshw hwinfo dmidecode ncdu dfc expac pkgfile i7z inxi"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}lsof strace${BGreen}...${Reset}"
                     package_install "lsof strace"
                     ;;
-                4)
+                "lm_sensors")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}lm_sensors rrdtool${BGreen}...${Reset}"
                     package_install "lm_sensors rrdtool"
                     # SI PAS DANS VIRTUALBOX
                     if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
-                        print_info_cyan "LM_SENSORS - sensors-detect : détections des capteurs."
+                        printf '%s\n' "${BGreen}LM_SENSORS - ${BYellow}sensors-detect${BGreen} : ${BYellow}Détections des capteurs${BGreen}...${Reset}"
                         pause_function
                         sensors-detect
+                        printf '%s\n' "${BGreen}Activation de ${BYellow}lm_sensors.service${BGreen}...${Reset}"
                         systemctl enable lm_sensors.service
                     fi
                     ;;
-                5)
+                "hddtemp")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}hddtemp gnu-netcat${BGreen}...${Reset}"
                     package_install "hddtemp gnu-netcat"
+                    printf '%s\n' "${BGreen}Activation de ${BYellow}hddtemp.service${BGreen}...${Reset}"
                     systemctl enable hddtemp.service
                     ;;
-                6)
+                "gsmartcontrol")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gsmartcontrol${BGreen}...${Reset}"
                     package_install "gsmartcontrol"
                     ;;
-                7)
+                "hdparm")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}hdparm bonnie++${BGreen}...${Reset}"
                     package_install "hdparm bonnie++"
                     ;;
-                8)
-                    print_info_cyan "Cpupower : Ne pas installer si Intel I7-4770K Haswell."
-                    read_input_text "Installer cpupower ?"
-                    if [[ $OPTION == o ]]; then
+                "pacnew_scripts")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}pacnew_scripts${BGreen}...${Reset}"
+                    package_install "pacnew_scripts"
+                    ;;
+                "mesa-demos")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}mesa-demos${BGreen}...${Reset}"
+                    package_install "mesa-demos"
+                    ;;
+                "qt5ct")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}qt5ct${BGreen}...${Reset}"
+                    package_install "qt5ct"
+                    ;;
+                "cpupower")
+                    retour=9
+                    messages="\n"
+                    messages+="Installation de Cpupower :\n"
+                    messages+="${BRcyan_dlg}!!!${Reset_dlg}Ne pas installer si Intel I7-4770K Haswell.\n\n"
+                    messages+="Installer cpupower ?"
+                    print_dialog_yesno "${titre}" "${messages}" "Installer" "Continuer"
+                    retour=$?
+                    if [[ $retour = 0 ]]; then
+                        printf '%s\n' "${BGreen}Installation de ${BYellow}cpupower${BGreen}...${Reset}"
                         package_install "cpupower"
+                        printf '%s\n' "${BGreen}Activation de ${BYellow}cpupower.service${BGreen}...${Reset}"
                         systemctl enable cpupower.service
                     fi
                     ;;
-                9)
-                    package_install "pacnew_scripts"
-                    ;;
-                10)
-                    package_install "mesa-demos"
-                    ;;
-                11)
+                "syslog-ng")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}syslog-ng${BGreen}...${Reset}"
                     package_install "syslog-ng"
+                    printf '%s\n' "${BGreen}Activation de ${BYellow}syslog-ng.service${BGreen}...${Reset}"
                     systemctl enable syslog-ng.service
+                    printf '%s\n' "${BGreen}Ajout de ${BYellow}${USERNAME}${BGreen} au groupe ${BYellow}log${BGreen}...${Reset}"
                     gpasswd -a ${USERNAME} log
-                    ;;
-                12)
-                    package_install "qt5ct"
-                    ;;
-                "f")
-                    break
-                    ;;
-                *)
-                    invalid_option
-                    ;;
             esac
         done
-    elihw
-    done
-    }
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
+   }
     #}}}
     # 23 DEVELOPEMENT {{{
     install_development_apps() {
-    while true
-    do
-        print_title "APPLICATIONS DE DÉVELOPPEMENT"
-        echo " 1) $(menu_item "geany")"
-        echo " 2) $(menu_item "qtcreator" "QtCreator Qt(5)")"
-        echo " 3) $(menu_item "devtools")"
-        echo " 4) $(menu_item "gdb" "Debugger Tools")"
-        echo " 5) $(menu_item "git subversion")"
-        echo " 6) $(menu_item "cmake")"
-        echo " 7) $(menu_item "clang")"
-        echo ""
-        echo " F) FINI"
-        echo ""
-        DEVELOPMENT_OPTIONS+=" f"
-        read_input_options "$DEVELOPMENT_OPTIONS"
-        for OPT in ${OPTIONS[@]}; do
-            case "$OPT" in
-                1)
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS DE DÉVELOPPEMENT"
+        messages=" \n"
+        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 7)
+            options=("geany" "(IDE rapide et léger)" ON
+                    "qtcreator" "(IDE léger et multi-plateforme - Qt5)" ON
+                    "devtools" "(Outils pour les mainteneurs de paquets)" ON
+                    "gdb" "(Débogueur GNU)" ON
+                    "git" "(Système de contrôle de version - VCS)" ON
+                    "cmake" "(Système de compilation multi-plateforme)" ON
+                    "clang" "(C interface pour LLVM)" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "geany")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}geany${BGreen}...${Reset}"
                     package_install "geany"
                     ;;
-                2)
+                "qtcreator")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}qtcreator qt qt5-doc libxkbcommon-x11${BGreen}...${Reset}"
                     package_install "qtcreator qt qt5-doc libxkbcommon-x11"
                     ;;
-                3)
+                "devtools")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}devtools${BGreen}...${Reset}"
                     package_install "devtools"
                     ;;
-                4)
+                "gdb")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}valgrind gdb splint tidyhtml${BGreen}...${Reset}"
                     package_install "valgrind gdb splint tidyhtml"
                     ;;
-                5)
+                "git")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}git subversion${BGreen}...${Reset}"
                     package_install "git subversion"
                     ;;
-                6)
+                "cmake")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}cmake${BGreen}...${Reset}"
                     package_install "cmake"
                     ;;
-                7)
+                "clang")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}clang${BGreen}...${Reset}"
                     package_install "clang"
-                    ;;
-                "f")
-                    break
-                    ;;
-                *)
-                    invalid_option
-                    ;;
             esac
         done
-    elihw
-    done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
     }
     #}}}
     # 24 OFFICE {{{
     install_office_apps() {
-    while true
-    do
-        print_title "APPLICATIONS DE BUREAUTIQUE"
-        echo " 1) $(menu_item "libreoffice-still" "LibreOffice Still")"
-        echo " 2) $(menu_item "goffice" "Abiword + Gnumeric")"
-        echo ""
-        echo " F) FINI"
-        echo ""
-        OFFICE_OPTIONS+=" f"
-        read_input_options "$OFFICE_OPTIONS"
-        for OPT in ${OPTIONS[@]}; do
-            case "$OPT" in
-                1)
-                    print_title "LIBREOFFICE - https://wiki.archlinux.org/index.php/LibreOffice"
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS DE BUREAUTIQUE"
+        messages=" \n"
+        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 2)
+            options=("libreoffice" "(LibreOffice Still)" ON
+                    "goffice" "(Abiword + Gnumeric)" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "libreoffice")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}libreoffice-still${BGreen}...${Reset}"
                     package_install "libreoffice-still-$LANGUAGE_LO libreoffice-still libwpg unoconv"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}hyphen hunspell mythes${BGreen}...${Reset}"
                     package_install "hyphen-fr hyphen hunspell-fr hunspell mythes-fr libmythes"
                     ;;
-                2)
-                    package_install "gnumeric abiword abiword-plugins"
+                "goffice")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gnumeric abiword${BGreen}...${Reset}"
+                    package_install "gnumeric abiword"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}hyphen hunspell mythes${BGreen}...${Reset}"
                     package_install "hyphen-fr hyphen hunspell-fr hunspell mythes-fr libmythes"
-                    ;;
-                "f")
-                    break
-                    ;;
-                *)
-                    invalid_option
-                    ;;
             esac
         done
-    elihw
-    done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
     }
     #}}}
     # 25 GRAPHICS {{{
     install_graphics_apps() {
-    while true
-    do
-        print_title "APPLICATIONS GRAPHIQUES"
-        echo " 1) $(menu_item "blender")"
-        echo " 2) $(menu_item "gimp")"
-        echo " 3) $(menu_item "inkscape")"
-        echo ""
-        echo " F) FINI"
-        echo ""
-        GRAPHICS_OPTIONS+=" f"
-        read_input_options "$GRAPHICS_OPTIONS"
-        for OPT in ${OPTIONS[@]}; do
-            case "$OPT" in
-                1)
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS GRAPHIQUES"
+        messages=" \n"
+        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 3)
+            options=("blender" "(Création graphique 3D)" ON
+                    "gimp" "(Programme de Manipulation d'Image)" ON
+                    "inkscape" "(Éditeur de graphiques vectoriels)" ON
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "blender")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}blender${BGreen}...${Reset}"
                     package_install "blender"
                     if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
-                        is_package_installed "nvidia" && package_install "cuda opencl-nvidia"
+                        if is_package_installed "nvidia" ; then
+                            printf '%s\n' "${BGreen}Installation de ${BYellow}cuda opencl-nvidia${BGreen}...${Reset}"
+                            package_install "cuda opencl-nvidia"
+                        fi
                     fi
                     ;;
-                2)
+                "gimp")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gimp libopenraw${BGreen}...${Reset}"
                     package_install "gimp libopenraw"
                     pacman -D --asdeps libopenraw
-                    package_install "webkitgtk2 potrace gimp-ufraw gimp-plugin-fblur gimp-plugin-gmic gimp-plugin-lqr gimp-plugin-mathmap gimp-plugin-wavelet-decompose gimp-plugin-wavelet-denoise gimp-refocus"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gimp-plugin${BGreen}...${Reset}"
+                    package_install "webkitgtk2 potrace gimp-dbp gimp-plugin-fblur gimp-plugin-gmic gimp-plugin-lqr gimp-plugin-mathmap gimp-plugin-wavelet-decompose gimp-plugin-wavelet-denoise gimp-refocus gimp-ufraw"
                     ;;
-                3)
-                    package_install "inkscape python2-numpy python-lxml"
-                    ;;
-                "f")
-                    break
-                    ;;
-                *)
-                    invalid_option
-                    ;;
+                "inkscape")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}inkscape${BGreen}...${Reset}"
+                    package_install "inkscape"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}pstoedit python2-lxml python2-numpy texlive-core uniconvertor${BGreen}...${Reset}"
+                    package_install "pstoedit python2-lxml python2-numpy texlive-core uniconvertor"
             esac
         done
-    elihw
-    done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
     }
     #}}}
     # 26 INTERNET {{{
     install_internet_apps() {
-    while true
-    do
-        print_title "BROWSER - DOWNLOAD/FILESHARE - EMAIL - INSTANT MESSAGING - IRC"
-        echo " 1) $(menu_item "chromium")"
-        echo " 2) $(menu_item "midori")"
-        echo " 3) $(menu_item "firefox")"
-        echo " 4) $(menu_item "opera")"
-        echo " 5) $(menu_item "transmission-gtk")"
-        echo " 6) $(menu_item "dropbox") $AUR"
-        echo " 7) $(menu_item "thunderbird")"
-        echo " 8) $(menu_item "liferea")"
-        echo " 9) $(menu_item "emesene")"
-        echo "10) $(menu_item "xchat")"
-        echo ""
-        echo " F) FINI"
-        echo ""
-        BROWSERS_OPTIONS+=" f"
-        read_input_options "$BROWSERS_OPTIONS"
-        for OPT in ${OPTIONS[@]}; do
-            case "$OPT" in
-                1)
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS INTERNET"
+        messages=" \n"
+        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 7)
+            options=("chromium" "(Navigateur)" OFF
+                    "firefox" "(Navigateur)" ON
+                    "transmission" "(Téléchargement Torrent)" ON
+                    "dropbox" "(Partage de fichiers)" OFF
+                    "thunderbird" "(Lecteur de Mail/News)" OFF
+                    "lifera" "(Lecteur de nouvelles en ligne et weblogs)" OFF
+                    "xchat" "(Client IRC)" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "chromium")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}chromium icedtea-web${BGreen}...${Reset}"
                     package_install "chromium icedtea-web"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}chromium-pepper-flash${BGreen}...${Reset}"
                     aur_package_install "chromium-pepper-flash"
                     ;;
-                2)
-                    package_install "midori icedtea-web"
-                    sed -i "s/chromium/midori/g" /home/${USERNAME}/.config/fbpanel/default
-                    ;;
-                3)
+                "firefox")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}firefox firefox-adblock-plus icedtea-web${BGreen}...${Reset}"
                     package_install "firefox firefox-i18n-$LANGUAGE_FF firefox-adblock-plus icedtea-web"
                     aur_package_install "firefox-extension-https-everywhere"
                     aur_package_install "freshplayerplugin"
                     aur_package_install "chromium-pepper-flash"
+                    printf '%s\n' "${BGreen}Configuration de ${BYellow}fbpanel${BGreen}...${Reset}"
                     sed -i "s/chromium/firefox/g" /home/${USERNAME}/.config/fbpanel/default
                     ;;
-                4)
-                    package_install "opera icedtea-web"
-                    aur_package_install "chromium-pepper-flash"
-                    sed -i "s/chromium.png/opera-browser.png/" /home/${USERNAME}/.config/fbpanel/default
-                    sed -i "s/chromium/opera/" /home/${USERNAME}/.config/fbpanel/default
-                    ;;
-                5)
+                "transmission")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}transmission-gtk${BGreen}...${Reset}"
                     package_install "transmission-gtk"
                     ;;
-                6)
-                    aur_package_install "dropbox"
-                    aur_package_install "dropbox-cli"
+                "dropbox")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}dropbox${BGreen}...${Reset}"
+                    package_install "dropbox"
+                    printf '%s\n' "${BGreen}Activation de ${BYellow}dropboxd.service${BGreen}...${Reset}"
                     systemctl enable dropboxd.service
                     ;;
-                7)
+                "thunderbird")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}thunderbird${BGreen}...${Reset}"
                     package_install "thunderbird thunderbird-i18n-$LANGUAGE_FF"
                     ;;
-                8)
-                    package_install "liferea"
+                "lifera")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}lifera${BGreen}...${Reset}"
+                    package_install "lifera"
                     ;;
-                9)
-                    package_install "emesene"
-                    ;;
-                10)
+                "xchat")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}xchat${BGreen}...${Reset}"
                     package_install "xchat"
-                    ;;
-                "f")
-                    break
-                    ;;
-                *)
-                    invalid_option
-                    ;;
             esac
         done
-    elihw
-    done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
     }
     #}}}
     # 27 AUDIO {{{
     install_audio_apps() {
-    while true
-    do
-        print_title "APPLICATIONS AUDIO"
-        echo " 1) $(menu_item "clementine")"
-        echo " 2) $(menu_item "soundconverter")"
-        echo " 3) $(menu_item "audacity")"
-        echo " 4) $(menu_item "gst-plugins-base" "Gstreamer")"
-        echo ""
-        echo " F) FINI"
-        echo ""
-        AUDIO_OPTIONS+=" f"
-        read_input_options "$AUDIO_OPTIONS"
-        for OPT in ${OPTIONS[@]}; do
-            case "$OPT" in
-                1)
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS AUDIO"
+        messages=" \n"
+        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 18 72 5)
+            options=("clementine" "(Lecteur de musique)" ON
+                    "soundconverter" "(Convertisseur audio)" ON
+                    "audacity" "(Manipulateur d'ondes audio numériques)" ON
+                    "easytag" "(Éditeur de tags des fichiers audio)" ON
+                    "gstreamer" "(Framework multimédia)" ON
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "clementine")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}clementine${BGreen}...${Reset}"
                     package_install "clementine"
                     ;;
-                2)
+                "soundconverter")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}soundconverter${BGreen}...${Reset}"
                     package_install "soundconverter"
                     ;;
-                3)
+                "audacity")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}audacity${BGreen}...${Reset}"
                     package_install "audacity"
                     ;;
-                4)
+                "easytag")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}easytag${BGreen}...${Reset}"
+                    package_install "easytag"
+                    ;;
+                "gstreamer")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gst-plugins-base${BGreen}...${Reset}"
                     package_install "gst-plugins-base gst-plugins-base-libs gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav mpg123 flac"
-                    if is_package_installed "amarok banshee clementine exaile rhythmbox xfburn" ; then
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gstreamer${BGreen}...${Reset}"
+                    package_install "libcanberra-gstreamer"
+                    if is_package_installed "clementine" ; then
+                        printf '%s\n' "${BGreen}Installation de ${BYellow}gstreamer0.10${BGreen}...${Reset}"
                         package_install "gstreamer0.10 gstreamer0.10-plugins"
                     fi
-                    ;;
-                "f")
-                    break
-                    ;;
-                *)
-                    invalid_option
-                    ;;
             esac
         done
-    elihw
-    done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
     }
     #}}}
     # 28 VIDEO {{{
     install_video_apps() {
-    while true
-    do
-        print_title "APPLICATIONS VIDEO"
-        echo " 1) $(menu_item "vlc")"
-        echo " 2) $(menu_item "openshot")"
-        echo " 3) $(menu_item "libbluray libquicktime libdvdread libdvdnav libdvdcss libaacs cdrdao" "DVD Libs")"
-        echo ""
-        echo " F) FINI"
-        echo ""
-        VIDEO_OPTIONS+=" f"
-        read_input_options "$VIDEO_OPTIONS"
-        for OPT in ${OPTIONS[@]}; do
-            case "$OPT" in
-                1)
-                    package_install "vlc libdvdcss libva-vdpau-driver opus"
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS VIDÉO"
+        messages=" \n"
+        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 18 72 4)
+            options=("vlc" "(Lecteur vidéo MPEG, VCD/DVD et DivX)" ON
+                    "openshot" "(Éditeur vidéo)" ON
+                    "handbrake" "(Convertisseur vidéo)" ON
+                    "DVD-Libs" "(libbluray libdvdread libdvdnav libdvdcss libaacs)" ON
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "vlc")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}vlc libbluray libdvdcss libcdio opus vcdimager${BGreen}...${Reset}"
+                    package_install "vlc libbluray libdvdcss libcdio opus vcdimager"
+                    if is_package_installed "nvidia" ; then
+                        printf '%s\n' "${BGreen}Installation de ${BYellow}libva-vdpau-driver${BGreen}...${Reset}"
+                        package_install "libva-vdpau-driver"
+                    fi
                     ;;
-                2)
-                    package_install "openshot"
+                "openshot")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}openshotfaac frei0r-plugins libavc1394${BGreen}...${Reset}"
+                    package_install "openshot faac frei0r-plugins libavc1394"
                     ;;
-                3)
-                    package_install "libbluray libquicktime libdvdread libdvdnav libdvdcss libaacs cdrdao"
+                "handbrake")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}handbrake${BGreen}...${Reset}"
+                    package_install "handbrake"
                     ;;
-                "f")
-                    break
-                    ;;
-                *)
-                    invalid_option
-                    ;;
+                "DVD-Libs")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}libbluray libdvdread libdvdnav libdvdcss libaacs cdrdao libquicktime${BGreen}...${Reset}"
+                    package_install "libbluray libdvdread libdvdnav libdvdcss libaacs cdrdao libquicktime"
             esac
         done
-    elihw
-    done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
     }
     #}}}
     # 29 GAMES {{{
@@ -770,30 +901,34 @@
 # A REVOIR jndqrami sur un repo perso
 # TODO
 ##
-    while true
-    do
-        print_title "JEUX"
-        echo " 1) $(menu_item "pokerth" "Poker TH")"
-        echo ""
-        echo " F) FINI"
-        echo ""
-        GAME_OPTIONS+=" f"
-        read_input_options "$GAME_OPTIONS"
-        for OPT in ${OPTIONS[@]}; do
-            case "$OPT" in
-                1)
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS JEUX"
+        messages=" \n"
+        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 1)
+            options=("pokerth" "(Poker Texas Hold'em)" ON
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if [[ $retour = 0 ]]; then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "pokerth")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}pokerth${BGreen}...${Reset}"
                     package_install "pokerth"
-                    ;;
-                "f")
-                    break
-                    ;;
-                *)
-                    invalid_option
-                    ;;
             esac
         done
-    elihw
-    done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
     }
     #}}}
 #}}}}

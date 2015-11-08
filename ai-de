@@ -756,9 +756,11 @@ source $(pwd)/ai-commons
         messages=" \n"
         until [[ $retour = 0 ]] || [[ $retour = 1 ]];
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 2)
-            options=("ttf-google-fonts-git" "(AUR)" OFF
-                    "ttf-inconsolata" "" OFF
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 18 72 4)
+            options=("ttf-google-fonts-git" "(Polices TrueType de Google) - (AUR)" OFF
+                    "ttf-inconsolata" "(Police Monospace)" OFF
+                    "noto-fonts" "(Polices TTF Google Noto)" OFF
+                    "noto-fonts-emoji" "(Polices TTF emoji Google Noto)" OFF
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
@@ -778,6 +780,14 @@ source $(pwd)/ai-commons
                 "ttf-inconsolata")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}ttf-inconsolata${BGreen}...${Reset}"
                     package_install "ttf-inconsolata"
+                    ;;
+                "noto-fonts")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}noto-fonts${BGreen}...${Reset}"
+                    package_install "noto-fonts"
+                    ;;
+                "noto-fonts-emoji")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}noto-fonts-emoji${BGreen}...${Reset}"
+                    package_install "noto-fonts-emoji"
             esac
         done
         if [[ $REPLY != "" ]]; then
