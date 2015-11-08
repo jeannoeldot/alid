@@ -71,6 +71,7 @@
         chown -R ${USERNAME}:users /home/${USERNAME}/.config
         mkdir -p /home/${USERNAME}/.local/share
         chown -R ${USERNAME}:users /home/${USERNAME}/.local
+        pause_function
         # OPENBOX CUSTOMIZATION AUTO {{{
         messages="\n"
         messages+="Customisation Personnelle Automatique pour «${USERNAME}».\n\n"
@@ -245,7 +246,7 @@
             #
             chown -R ${USERNAME}:users /home/${USERNAME}
             printf '%s\n' "${BGreen}Installation de thèmes ${BYellow}GTK 3/2${BGreen}...${Reset}"
-            package_install "gtk-update-icon-cache"
+            package_install "gtk-update-icon-cache git zenity"
             aur_package_install "zukitwo-themes"
             printf '%s\n' "${BGreen}Installation d'${BYellow}Icones${BGreen}...${Reset}"
             aur_package_install "flatwoken-icons-git"
@@ -298,7 +299,7 @@
                     aur_package_install "adwaita-x-dark-and-light-theme"
                     ;;
                 "faenza")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}faenza-icon-theme${BGreen}...${Reset}"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}faenza-icon-theme faience-icon-theme${BGreen}...${Reset}"
                     package_install "faenza-icon-theme faience-icon-theme"
                     ;;
                 "compton-git")
@@ -479,7 +480,7 @@
             case $choix in
                 "gparted")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gparted gptfdisk${BGreen}...${Reset}"
-                   package_install "gparted gptfdisk"
+                   package_install "gparted gpart mtools gptfdisk"
                     ;;
                 "grsync")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}grsync${BGreen}...${Reset}"
@@ -588,7 +589,7 @@
             case $choix in
                 "geany")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}geany${BGreen}...${Reset}"
-                    package_install "geany"
+                    package_install "geany geany-plugins"
                     ;;
                 "qtcreator")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}qtcreator qt qt5-doc libxkbcommon-x11${BGreen}...${Reset}"
@@ -878,7 +879,7 @@
                     fi
                     ;;
                 "openshot")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}openshotfaac frei0r-plugins libavc1394${BGreen}...${Reset}"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}openshot faac frei0r-plugins libavc1394${BGreen}...${Reset}"
                     package_install "openshot faac frei0r-plugins libavc1394"
                     ;;
                 "handbrake")

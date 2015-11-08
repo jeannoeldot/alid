@@ -442,7 +442,7 @@ source $(pwd)/ai-commons
         messages="\n"
         messages+="Cronie est un service de planification qui permet l'exécution de commandes de manière périodique.\n\n"
         messages+="${BRcyan_dlg}!!!${Reset_dlg} Peu utile car remplacé par systemd-timer.\n"
-        print_dialog_yesno "${titre}" "${messages}" "Installer" "Continuer"
+        print_dialog_yesno_no "${titre}" "${messages}" "Installer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
             printf '%s\n' "${BGreen}Installation de «${BYellow}cronie${BGreen}»...${Reset}"
@@ -503,7 +503,7 @@ source $(pwd)/ai-commons
         messages="\n"
         messages+="Acpid est un démon flexible et extensible pour délivrer des évènements ACPI.\n\n"
         messages+="${BRcyan_dlg}!!!${Reset_dlg} Activer acpid est recommandé pour un Ordinateur Portable.\n"
-        print_dialog_yesno "${titre}" "${messages}" "Activer" "Continuer"
+        print_dialog_yesno_no "${titre}" "${messages}" "Activer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
             printf '%s\n' "${BGreen}Installation de «${BYellow}acpi acpid${BGreen}»...${Reset}"
@@ -720,7 +720,7 @@ source $(pwd)/ai-commons
         titre="INSTALLATION DE CUPS (Common Unix Printing System)"
         messages="\n"
         messages+="CUPS est le système d'impression opensource basé sur des normes et développé par Apple Inc pour OS®X et autres systèmes d'exploitation UNIX®-like.\n"
-        print_dialog_yesno "${titre}" "${messages}" "Installer" "Continuer"
+        print_dialog_yesno_no "${titre}" "${messages}" "Installer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
             printf '%s\n' "${BGreen}Installation de «${BYellow}cups cups-filters ghostscript gsfonts${BGreen}»...${Reset}"
@@ -820,7 +820,7 @@ source $(pwd)/ai-commons
         local liste_pkg=$(pacman -Qqdt)
         messages=" \n"
         messages+="Supprimer les paquets suivants : ${liste_pkg} ?\n"
-        print_dialog_yesno "${titre}" "${messages}" "Supprimer" "Continuer"
+        print_dialog_yesno_no "${titre}" "${messages}" "Supprimer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
             printf '%s\n' "${BGreen}Suppression des paquets «${BYellow}${liste_pkg}${BGreen}»...${Reset}"

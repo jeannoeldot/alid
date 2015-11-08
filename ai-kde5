@@ -259,7 +259,7 @@
             case $choix in
                 "gparted")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gparted gptfdisk${BGreen}...${Reset}"
-                    package_install "gparted gptfdisk"
+                    package_install "gparted gpart mtools gptfdisk"
                     mkdir -p /home/${USERNAME}/.local/share/applications
                     cp -v ai-fconfig/kde-user-gparted.desktop /home/${USERNAME}/.local/share/applications/gparted.desktop
                     chown -R ${USERNAME}:users /home/${USERNAME}/.local
