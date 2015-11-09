@@ -73,15 +73,6 @@
       </startupnotify>
     </action>
   </item>
-  <item label="Midori" icon="/usr/share/icons/hicolor/48x48/apps/midori.png">
-    <action name="Execute">
-      <command>midori</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-        <wmclass>Midori</wmclass>
-      </startupnotify>
-    </action>
-  </item>
   <item label="Firefox" icon="/usr/share/icons/hicolor/48x48/apps/firefox.png">
     <action name="Execute">
       <command>firefox</command>
@@ -91,26 +82,9 @@
       </startupnotify>
     </action>
   </item>
-  <item label="Opera">
+  <item label="Thunderbird" icon="/usr/share/icons/hicolor/48x48/apps/thunderbird.png">
     <action name="Execute">
-      <command>opera</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-        <wmclass>Opera</wmclass>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Pidgin Instant Messenger">
-    <action name="Execute">
-      <command>pidgin</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="XChat" icon="/usr/share/icons/hicolor/48x48/apps/xchat.png">
-    <action name="Execute">
-      <command>xchat</command>
+      <command>thunderbird</command>
       <startupnotify>
         <enabled>yes</enabled>
       </startupnotify>
@@ -119,6 +93,22 @@
   <item label="Transmission Gtk" icon="/usr/share/icons/hicolor/48x48/apps/transmission.png">
     <action name="Execute">
       <command>transmission-gtk</command>
+      <startupnotify>
+        <enabled>yes</enabled>
+      </startupnotify>
+    </action>
+  </item>
+  <item label="Liferea" icon="/usr/share/icons/hicolor/48x48/apps/liferea.png">
+    <action name="Execute">
+      <command>liferea</command>
+      <startupnotify>
+        <enabled>yes</enabled>
+      </startupnotify>
+    </action>
+  </item>
+  <item label="XChat" icon="/usr/share/icons/hicolor/48x48/apps/xchat.png">
+    <action name="Execute">
+      <command>xchat</command>
       <startupnotify>
         <enabled>yes</enabled>
       </startupnotify>
@@ -200,6 +190,46 @@
       </startupnotify>
     </action>
   </item>
+  <item label="EasyTag" icon="/usr/share/icons/hicolor/48x48/apps/easytag.png">
+    <action name="Execute">
+      <command>easytag</command>
+      <startupnotify>
+        <enabled>yes</enabled>
+      </startupnotify>
+    </action>
+  </item>
+  <item label="SoundConverter" icon="/usr/share/icons/hicolor/48x48/apps/soundconverter.png">
+    <action name="Execute">
+      <command>soundconverter</command>
+      <startupnotify>
+        <enabled>yes</enabled>
+      </startupnotify>
+    </action>
+  </item>
+  <item label="OpenShot" icon="/usr/share/pixmaps/openshot.svg">
+    <action name="Execute">
+      <command>openshot</command>
+      <startupnotify>
+        <enabled>yes</enabled>
+      </startupnotify>
+    </action>
+  </item>
+  <item label="HandBrake" icon="/usr/share/icons/hicolor/scalable/apps/hb-icon.svg">
+    <action name="Execute">
+      <command>ghb</command>
+      <startupnotify>
+        <enabled>yes</enabled>
+      </startupnotify>
+    </action>
+  </item>
+  <item label="Xfburn" icon="/usr/share/icons/hicolor/48x48/stock/media/stock_xfburn.png">
+    <action name="Execute">
+      <command>xfburn</command>
+      <startupnotify>
+        <enabled>yes</enabled>
+      </startupnotify>
+    </action>
+  </item>
 </menu>
 
 <menu id="apps-fileman-menu" label="Gestionnaires de Fichiers">
@@ -216,15 +246,6 @@
       <command>Thunar</command>
       <startupnotify>
         <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Rox">
-    <action name="Execute">
-      <command>rox</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-        <wmclass>ROX-Filer</wmclass>
       </startupnotify>
     </action>
   </item>
@@ -292,6 +313,30 @@
       <startupnotify><enabled>yes</enabled></startupnotify>
     </action>
   </item>
+  <item label="Paramètres Qt5" icon="/usr/share/pixmaps/obconf.png">
+    <action name="Execute">
+      <command>qt5ct</command>
+      <startupnotify><enabled>yes</enabled></startupnotify>
+    </action>
+  </item>
+  <item label="GParted" icon="/usr/share/icons/hicolor/48x48/apps/gparted.png">
+    <action name="Execute">
+      <command>gksu gparted</command>
+      <startupnotify><enabled>yes</enabled></startupnotify>
+    </action>
+  </item>
+  <item label="GSmartControl" icon="/usr/share/icons/hicolor/48x48/apps/gsmartcontrol.png">
+    <action name="Execute">
+      <command>gsmartcontrol</command>
+      <startupnotify><enabled>yes</enabled></startupnotify>
+    </action>
+  </item>
+  <item label="Grsync" icon="/usr/share/pixmaps/grsync.png">
+    <action name="Execute">
+      <command>grsync</command>
+      <startupnotify><enabled>yes</enabled></startupnotify>
+    </action>
+  </item>
   <item label="Manage Cups Printers">
     <action name="Execute">
       <command>xdg-open http://localhost:631/</command>
@@ -304,12 +349,6 @@
   <item label="NVIDIA X Server Settings" icon="/usr/share/pixmaps/nvidia-settings.png">
     <action name="Execute">
       <command>nvidia-settings</command>
-      <startupnotify><enabled>yes</enabled></startupnotify>
-    </action>
-  </item>
-  <item label="Paramètres Qt5" icon="/usr/share/pixmaps/obconf.png">
-    <action name="Execute">
-      <command>qt5ct</command>
       <startupnotify><enabled>yes</enabled></startupnotify>
     </action>
   </item>

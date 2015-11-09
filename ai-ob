@@ -730,7 +730,7 @@
                     "transmission" "(Téléchargement Torrent)" ON
                     "dropbox" "(Partage de fichiers)" OFF
                     "thunderbird" "(Lecteur de Mail/News)" OFF
-                    "lifera" "(Lecteur de nouvelles en ligne et weblogs)" OFF
+                    "liferea" "(Lecteur de nouvelles en ligne et weblogs)" OFF
                     "xchat" "(Client IRC)" OFF
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
@@ -774,9 +774,9 @@
                     printf '%s\n' "${BGreen}Installation de «${BYellow}thunderbird${BGreen}»...${Reset}"
                     package_install "thunderbird thunderbird-i18n-$LANGUAGE_FF"
                     ;;
-                "lifera")
-                    printf '%s\n' "${BGreen}Installation de «${BYellow}lifera${BGreen}»...${Reset}"
-                    package_install "lifera"
+                "liferea")
+                    printf '%s\n' "${BGreen}Installation de «${BYellow}liferea${BGreen}»...${Reset}"
+                    package_install "liferea"
                     ;;
                 "xchat")
                     printf '%s\n' "${BGreen}Installation de «${BYellow}xchat${BGreen}»...${Reset}"
@@ -880,8 +880,8 @@
                     fi
                     ;;
                 "openshot")
-                    printf '%s\n' "${BGreen}Installation de «${BYellow}openshot faac frei0r-plugins libavc1394${BGreen}»...${Reset}"
-                    package_install "openshot faac frei0r-plugins libavc1394"
+                    printf '%s\n' "${BGreen}Installation de «${BYellow}openshot faac frei0r-plugins libavc1394 movit${BGreen}»...${Reset}"
+                    package_install "openshot faac frei0r-plugins libavc1394 movit"
                     ;;
                 "handbrake")
                     printf '%s\n' "${BGreen}Installation de «${BYellow}handbrake${BGreen}»...${Reset}"
