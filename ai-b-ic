@@ -196,6 +196,7 @@ source $(pwd)/ai-commons
         print_dialog_yesno "${titre}" "${messages}" "Visualiser" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
+            printf '%s\n' "${BGreen}Visualisation de ${BYellow}/etc/hosts${BGreen}...${Reset}"
             cat /etc/hosts
             pause_function
         fi
@@ -342,7 +343,7 @@ source $(pwd)/ai-commons
             fi
         done
         #
-        printf '%s\n' "${BGreen}Configure le mot de passe <<${BYellow}root${BGreen}>> :${Reset}"
+        printf '%s\n' "${BGreen}Configure le mot de passe ${BYellow}root${BGreen} :${Reset}"
         echo -e "${L_MDP}\n${L_MDP}" > /tmp/.passwd
         passwd root < /tmp/.passwd
         rm -f /tmp/.passwd

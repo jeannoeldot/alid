@@ -190,10 +190,10 @@ source $(pwd)/ai-commons
         messages+="SUDO est un programme conçu pour permettre à un administrateur système de déléguer des privilèges à des utilisateurs.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         if ! is_package_installed "sudo" ; then
-            printf '%s\n' "${BGreen}Installation de «${BYellow}sudo${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Installation de ${BYellow}sudo${BGreen}...${Reset}"
             package_install "sudo"
         fi
-        printf '%s\n' "${BGreen}Configuration du fichier «${BYellow}/etc/sudoers${BGreen}»...${Reset}"
+        printf '%s\n' "${BGreen}Configuration du fichier ${BYellow}/etc/sudoers${BGreen}...${Reset}"
         ## Uncomment to allow members of group wheel to execute any command
         sed -i '/%wheel ALL=(ALL) ALL/s/^# //' /etc/sudoers
         ## Same thing without a password (not secure)
@@ -248,7 +248,7 @@ source $(pwd)/ai-commons
                 fi
             done
             #
-            printf '%s\n' "${BGreen}Configuration du mot de passe de l'utilisateur «${BYellow}${USERNAME}${BGreen}» :${Reset}"
+            printf '%s\n' "${BGreen}Configuration du mot de passe de l'utilisateur ${BYellow}${USERNAME}${BGreen} :${Reset}"
             echo -e "${L_MDP}\n${L_MDP}" > /tmp/.passwd
             passwd ${USERNAME} < /tmp/.passwd
             rm -f /tmp/.passwd
@@ -281,21 +281,21 @@ source $(pwd)/ai-commons
             messages+="- 00-CMD-INSTALLATION-LINUX-CK.TXT\n"
             print_dialog_msgbox_h "${titre}" "${messages}" "Continuer" 26
             #
-            printf '%s\n' "${BGreen}Copie des fichiers de configuration de «${BYellow}bash${BGreen}» dans le répertoire /home de «${BYellow}${USERNAME}${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Copie des fichiers de configuration de ${BYellow}bash${BGreen} dans le répertoire /home de ${BYellow}${USERNAME}${BGreen}...${Reset}"
             cp -v ai-fconfig/user-.bash_profile /home/${USERNAME}/.bash_profile
             cp -v ai-fconfig/user-.bashrc /home/${USERNAME}/.bashrc
             #
-            printf '%s\n' "${BGreen}Copie des fichiers de configuration de «${BYellow}fontconfig${BGreen}» dans le répertoire /home de «${BYellow}${USERNAME}${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Copie des fichiers de configuration de ${BYellow}fontconfig${BGreen} dans le répertoire /home de ${BYellow}${USERNAME}${BGreen}...${Reset}"
             mkdir -p /home/${USERNAME}/.config/fontconfig
             cp -v ai-fconfig/user-.config-fontconfig-fonts.conf /home/${USERNAME}/.config/fontconfig/fonts.conf
             #
-            printf '%s\n' "${BGreen}Création du répertoire «${BYellow}.compose-cache${BGreen}» dans le répertoire /home de «${BYellow}${USERNAME}${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Création du répertoire ${BYellow}.compose-cache${BGreen} dans le répertoire /home de ${BYellow}${USERNAME}${BGreen}...${Reset}"
             mkdir -p /home/${USERNAME}/.compose-cache
             #
-            printf '%s\n' "${BGreen}Création du répertoire «${BYellow}bin${BGreen}» dans le répertoire /home de «${BYellow}${USERNAME}${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Création du répertoire ${BYellow}bin${BGreen} dans le répertoire /home de ${BYellow}${USERNAME}${BGreen}...${Reset}"
             mkdir -p /home/${USERNAME}/bin
             #
-            printf '%s\n' "${BGreen}Copie des fichiers de configuration de «${BYellow}refind${BGreen}» dans le répertoire /home de «${BYellow}${USERNAME}${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Copie des fichiers de configuration de ${BYellow}refind${BGreen} dans le répertoire /home de ${BYellow}${USERNAME}${BGreen}...${Reset}"
             # SI en UEFI : copie fichiers conf de refind
             if [[ $IS_UEFI -eq 1 ]]; then
                 mkdir -p /home/${USERNAME}/09-Fichiers-Conf/Refind-Fichiers-Conf
@@ -307,7 +307,7 @@ source $(pwd)/ai-commons
                 cp -v /boot/efi/EFI/${NAME_DIR_ARCHLINUX}/refind_linux.conf /home/${USERNAME}/09-Fichiers-Conf/Refind-Fichiers-Conf/refind_linux.conf
             fi
             #
-            printf '%s\n' "${BGreen}Copie des fichiers utiles «${BYellow}00-CMD-....TXT${BGreen}» dans le répertoire /home de «${BYellow}${USERNAME}${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Copie des fichiers utiles ${BYellow}00-CMD-....TXT${BGreen} dans le répertoire /home de ${BYellow}${USERNAME}${BGreen}...${Reset}"
             cp -v ai-fconfig/00-CMD-CUSTOMIZE-ARCH.TXT /home/${USERNAME}/00-CMD-CUSTOMIZE-ARCH.TXT
             cp -v ai-fconfig/00-CMD-INSTALLATION-LINUX-CK.TXT /home/${USERNAME}/00-CMD-INSTALLATION-LINUX-CK.TXT
             pause_function
@@ -319,7 +319,7 @@ source $(pwd)/ai-commons
             messages+="Configuration de «/etc/sudoers» :\n"
             messages+="- timestamp_timeout = ${TIMESTAMP_TIMEOUT} minutes\n"
             print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-            printf '%s\n' "${BGreen}Modification de sudo : «${BYellow}timestamp_timeout = ${TIMESTAMP_TIMEOUT}${BGreen}» minutes...${Reset}"
+            printf '%s\n' "${BGreen}Modification de sudo : ${BYellow}timestamp_timeout = ${TIMESTAMP_TIMEOUT}${BGreen} minutes...${Reset}"
             echo -e '\n## My Defaults timestamp_timeout = '${TIMESTAMP_TIMEOUT}' minutes' >> /etc/sudoers
             echo -e 'Defaults:'"${USERNAME}"' timestamp_timeout='${TIMESTAMP_TIMEOUT}'' >> /etc/sudoers
             pause_function
@@ -340,7 +340,7 @@ source $(pwd)/ai-commons
         messages+="Yaourt (Yet AnOther User Repository Tool) est un programme en ligne de commande qui interface les fonctions de «pacman» et «makepkg» pour la gestion des paquets.\n\n"
         messages+="${BRred_dlg}!!!${Reset_dlg} Yaourt n'est pas officiellement supporté par les développeurs d'Arch.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-        printf '%s\n' "${BGreen}Installation de «${BYellow}base-devel namcap yaourt git subversion${BGreen}»...${Reset}"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}base-devel namcap yaourt git subversion${BGreen}...${Reset}"
         package_install "base-devel namcap yaourt git subversion"
         pause_function
         if ! is_package_installed "yaourt" ; then
@@ -409,13 +409,13 @@ source $(pwd)/ai-commons
             print_dialog_yesno "${titre}" "${messages}" "Activer" "Continuer"
             retour=$?
             if [[ $retour = 0 ]]; then
-                printf '%s\n' "${BGreen}Configuration de «${BYellow}systemd-timesyncd${BGreen}»...${Reset}"
+                printf '%s\n' "${BGreen}Configuration de ${BYellow}systemd-timesyncd${BGreen}...${Reset}"
                 mkdir -p /etc/systemd/timesyncd.conf.d
                 echo "# Reglages personnel de systemd-timesyncd." > /etc/systemd/timesyncd.conf.d/my_timesyncd_conf.conf
                 echo "[Time]" >> /etc/systemd/timesyncd.conf.d/my_timesyncd_conf.conf
                 echo "NTP=0.fr.pool.ntp.org 1.fr.pool.ntp.org 2.fr.pool.ntp.org 3.fr.pool.ntp.org" >> /etc/systemd/timesyncd.conf.d/my_timesyncd_conf.conf
                 echo "FallbackNTP=0.arch.pool.ntp.org 1.arch.pool.ntp.org 2.arch.pool.ntp.org 3.arch.pool.ntp.org" >> /etc/systemd/timesyncd.conf.d/my_timesyncd_conf.conf
-                printf '%s\n' "${BGreen}Activation de «${BYellow}systemd-timesyncd.service${BGreen}»...${Reset}"
+                printf '%s\n' "${BGreen}Activation de ${BYellow}systemd-timesyncd.service${BGreen}...${Reset}"
                 systemctl enable systemd-timesyncd.service
                 pause_function
             fi
@@ -428,9 +428,9 @@ source $(pwd)/ai-commons
         messages+="- Option MaxUse = 50M.\n"
         messages+="- Option MaxFileSize = 10M.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-        printf '%s\n' "${BGreen}Ajout de «${BYellow}${USERNAME}${BGreen}» au groupe «${BYellow}systemd-journal${BGreen}»...${Reset}"
+        printf '%s\n' "${BGreen}Ajout de ${BYellow}${USERNAME}${BGreen} au groupe ${BYellow}systemd-journal${BGreen}...${Reset}"
         gpasswd -a ${USERNAME} systemd-journal
-        printf '%s\n' "${BGreen}Configuration de «${BYellow}systemd-journal${BGreen}» : «${BYellow}MaxUse=50M${BGreen}» et «${BYellow}MaxFileSize=10M${BGreen}»...${Reset}"
+        printf '%s\n' "${BGreen}Configuration de ${BYellow}systemd-journal${BGreen} : ${BYellow}MaxUse=50M${BGreen} et ${BYellow}MaxFileSize=10M${BGreen}...${Reset}"
         mkdir -p /etc/systemd/journald.conf.d
         echo "# Reglages personnel de systemd-journal." > /etc/systemd/journald.conf.d/my_journald_conf.conf
         echo "[Journal]" >> /etc/systemd/journald.conf.d/my_journald_conf.conf
@@ -445,9 +445,9 @@ source $(pwd)/ai-commons
         print_dialog_yesno_no "${titre}" "${messages}" "Installer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
-            printf '%s\n' "${BGreen}Installation de «${BYellow}cronie${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Installation de ${BYellow}cronie${BGreen}...${Reset}"
             package_install "cronie"
-            printf '%s\n' "${BGreen}Activation de «${BYellow}cronie.service${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Activation de ${BYellow}cronie.service${BGreen}...${Reset}"
             systemctl enable cronie.service
             pause_function
         fi
@@ -457,7 +457,7 @@ source $(pwd)/ai-commons
         messages+="Installation de divers outils «BASH» :\n"
         messages+="bc mlocate rsync bash-completion wget net-tools tree atool mc\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de «${BYellow}bc mlocate rsync bash-completion wget net-tools tree atool mc${BGreen}»...${Reset}"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}bc mlocate rsync bash-completion wget net-tools tree atool mc${BGreen}...${Reset}"
         package_install "bc mlocate rsync bash-completion wget net-tools tree atool mc"
         pause_function
         #
@@ -465,7 +465,7 @@ source $(pwd)/ai-commons
         messages="\n"
         messages+="D-Bus est un système de bus de messages qui fournit un mécanisme facilitant la communication inter-processus.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de «${BYellow}dbus python2-dbus${BGreen}»...${Reset}"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}dbus python2-dbus${BGreen}...${Reset}"
         package_install "dbus python2-dbus"
         pacman -D --asdeps python2-dbus
         pause_function
@@ -475,7 +475,7 @@ source $(pwd)/ai-commons
         messages+="Installation de divers outils de (dé)compression :\n"
         messages+="zip unzip unrar p7zip\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de «${BYellow}zip unzip unrar p7zip${BGreen}»...${Reset}"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}zip unzip unrar p7zip${BGreen}...${Reset}"
         package_install "zip unzip unrar p7zip"
 #        aur_package_install "rar"
         pause_function
@@ -484,7 +484,7 @@ source $(pwd)/ai-commons
         messages="\n"
         messages+="Avahi est une mise en oeuvre des protocoles Zeroconf.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de «${BYellow}avahi nss-mdns${BGreen}»...${Reset}"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}avahi nss-mdns${BGreen}...${Reset}"
         package_install "avahi nss-mdns"
         pause_function
         titre="ACTIVATION DE «AVAHI»"
@@ -493,9 +493,9 @@ source $(pwd)/ai-commons
         print_dialog_yesno_no "${titre}" "${messages}" "Activer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
-            printf '%s\n' "${BGreen}Activation de «${BYellow}avahi-daemon.service${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Activation de ${BYellow}avahi-daemon.service${BGreen}...${Reset}"
             is_package_installed "avahi" && systemctl enable avahi-daemon.service
-            printf '%s\n' "${BGreen}Activation de «${BYellow}avahi-dnsconfd.service${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Activation de ${BYellow}avahi-dnsconfd.service${BGreen}...${Reset}"
             is_package_installed "avahi" && systemctl enable avahi-dnsconfd.service
             pause_function
         fi
@@ -507,9 +507,9 @@ source $(pwd)/ai-commons
         print_dialog_yesno_no "${titre}" "${messages}" "Activer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
-            printf '%s\n' "${BGreen}Installation de «${BYellow}acpi acpid${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Installation de ${BYellow}acpi acpid${BGreen}...${Reset}"
             package_install "acpi acpid"
-            printf '%s\n' "${BGreen}Activation de «${BYellow}acpid.service${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Activation de ${BYellow}acpid.service${BGreen}...${Reset}"
             is_package_installed "acpid" && systemctl enable acpid.service
             pause_function
         fi
@@ -518,7 +518,7 @@ source $(pwd)/ai-commons
         messages="\n"
         messages+="ALSA (Advanced Linux Sound Architecture) est un composant du noyau Linux qui gère le support des cartes SON.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de «${BYellow}alsa-utils${BGreen}»...${Reset}"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}alsa-utils${BGreen}...${Reset}"
         package_install "alsa-utils"
         pause_function
         titre="ALSA : ACTIVATION DES CANAUX"
@@ -534,7 +534,7 @@ source $(pwd)/ai-commons
             messages="\n"
             messages+="Test du son avec «speaker-test»\n"
             print_dialog_msgbox "${titre}" "${messages}" "Tester"
-            printf '%s\n' "${BGreen}Test du son avec «${BYellow}speaker-test${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Test du son avec ${BYellow}speaker-test${BGreen}...${Reset}"
             speaker-test -c 2 -l 2
             alsactl store
         fi
@@ -544,7 +544,7 @@ source $(pwd)/ai-commons
         messages="\n"
         messages+="Système de fichiers permettant d'organiser les données devant être conservées, ainsi que de gérer l'espace disponible sur le(s) périphérique(s) qui les contient.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de «${BYellow}ntfs-3g dosfstools exfat-utils fuse fuse-exfat autofs${BGreen}»...${Reset}"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}ntfs-3g dosfstools exfat-utils fuse fuse-exfat autofs${BGreen}...${Reset}"
         package_install "ntfs-3g dosfstools exfat-utils fuse fuse-exfat autofs"
         pause_function
     }
@@ -558,11 +558,11 @@ source $(pwd)/ai-commons
         messages+="Xorg est l'implémentation officielle du système graphique X Window System version 11.\n\n"
         messages+="Installion de X-Server (requis pour Environement de Bureau, Pilotes GPU, Agencement Clavier, ...).\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de «${BYellow}xorg-server xorg-server-utils xorg-xinit xorg-utils xorg-xkill xorg-twm xorg-xclock xterm${BGreen}»...${Reset}"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}xorg-server xorg-server-utils xorg-xinit xorg-utils xorg-xkill xorg-twm xorg-xclock xterm${BGreen}...${Reset}"
         package_install "xorg-server xorg-server-utils xorg-xinit xorg-utils xorg-xkill xorg-twm xorg-xclock xterm"
-#         printf '%s\n' "${BGreen}Installation de «${BYellow}xf86-input-synaptics xf86-input-mouse xf86-input-keyboard${BGreen}»...${Reset}"
+#         printf '%s\n' "${BGreen}Installation de ${BYellow}xf86-input-synaptics xf86-input-mouse xf86-input-keyboard${BGreen}...${Reset}"
 #         package_install "xf86-input-synaptics xf86-input-mouse xf86-input-keyboard"
-        printf '%s\n' "${BGreen}Installation de «${BYellow}mesa gamin${BGreen}»...${Reset}"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}mesa gamin${BGreen}...${Reset}"
         package_install "mesa gamin"
         pause_function
         #CONFIGURE AZERTY OR BEPO KEYBOARD IN XORG
@@ -570,7 +570,7 @@ source $(pwd)/ai-commons
         messages="\n"
         messages+="Le type de clavier est de type : «${TYPE_KEYBOARD}»\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-        printf '%s\n' "${BGreen}Mise en place de la disposition du clavier en FR «${BYellow}${TYPE_KEYBOARD}${BGreen}»...${Reset}"
+        printf '%s\n' "${BGreen}Mise en place de la disposition du clavier en FR ${BYellow}${TYPE_KEYBOARD}${BGreen}...${Reset}"
         if [[ $TYPE_KEYBOARD == "BEPO" ]]; then
             cp -v ai-fconfig/10-keyboard-layout-BEPO.conf /etc/X11/xorg.conf.d/10-keyboard-layout.conf
         else
@@ -587,7 +587,7 @@ source $(pwd)/ai-commons
         messages="\n"
         messages+="«Fontconfig» est une bibliothèque conçue pour fournir une liste des polices disponibles aux applications, et pour configurer la façon dont les polices seront rendues.\n\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de «${BYellow}cairo fontconfig freetype2 libxft${BGreen}»...${Reset}"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}cairo fontconfig freetype2 libxft${BGreen}...${Reset}"
         package_install "cairo fontconfig freetype2 libxft"
         pause_function
     }
@@ -603,9 +603,9 @@ source $(pwd)/ai-commons
             messages+="Installation dans Oracle VM Virtualbox.\n\n"
             messages+="Installation de virtualbox-guest-utils.\n"
             print_dialog_msgbox "${titre}" "${messages}" "Installer"
-            printf '%s\n' "${BGreen}Installation de «${BYellow}virtualbox-guest-utils mesa-libgl${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Installation de ${BYellow}virtualbox-guest-utils mesa-libgl${BGreen}...${Reset}"
             package_install "virtualbox-guest-utils mesa-libgl"
-            printf '%s\n' "${BGreen}Démarrage des modules «${BYellow}vboxguest vboxsf vboxvideo${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Démarrage des modules ${BYellow}vboxguest vboxsf vboxvideo${BGreen}...${Reset}"
             echo "# Load vbox modules guest at boot" > /etc/modules-load.d/vbox_modules_guest.conf
             echo "vboxguest" >> /etc/modules-load.d/vbox_modules_guest.conf
             echo "vboxsf" >> /etc/modules-load.d/vbox_modules_guest.conf
@@ -613,7 +613,7 @@ source $(pwd)/ai-commons
             start_module "vboxguest"
             start_module "vboxsf"
             start_module "vboxvideo"
-            printf '%s\n' "${BGreen}Ajout de «${BYellow}${USERNAME}${BGreen}» au groupe «${BYellow}vboxsf${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Ajout de ${BYellow}${USERNAME}${BGreen} au groupe ${BYellow}vboxsf${BGreen}...${Reset}"
             gpasswd -a ${USERNAME} vboxsf
         else
             _vga=$(lspci | grep VGA | tr "[:upper:]" "[:lower:]")
@@ -624,11 +624,11 @@ source $(pwd)/ai-commons
                 messages+="Installation de xf86-video-intel bumblebee nvidia.\n"
                 print_dialog_msgbox "${titre}" "${messages}" "Installer"
                 L_XF86_DRIVERS=$(pacman -Qe | grep xf86-video | awk '{print $1}')
-                printf '%s\n' "${BGreen}Désinstallation de «${BYellow}$L_XF86_DRIVERS${BGreen}»...${Reset}"
+                printf '%s\n' "${BGreen}Désinstallation de ${BYellow}$L_XF86_DRIVERS${BGreen}...${Reset}"
                 [[ -n $L_XF86_DRIVERS ]] && pacman -Rcsn $L_XF86_DRIVERS
-                printf '%s\n' "${BGreen}Installation de «${BYellow}xf86-video-intel bumblebee nvidia${BGreen}»...${Reset}"
+                printf '%s\n' "${BGreen}Installation de ${BYellow}xf86-video-intel bumblebee nvidia${BGreen}...${Reset}"
                 package_install "xf86-video-intel bumblebee nvidia"
-                printf '%s\n' "${BGreen}Ajout de «${BYellow}${USERNAME}${BGreen}» au groupe «${BYellow}bumblebee${BGreen}»...${Reset}"
+                printf '%s\n' "${BGreen}Ajout de ${BYellow}${USERNAME}${BGreen} au groupe ${BYellow}bumblebee${BGreen}...${Reset}"
                 gpasswd -a ${USERNAME} bumblebee
             # test si NVIDIA
             elif [[ -n $(echo ${_vga} | grep "nvidia") || -f /sys/kernel/debug/dri/0/vbios.rom ]]; then
@@ -640,7 +640,7 @@ source $(pwd)/ai-commons
                 retour=$?
                 if [[ $retour = 0 ]]; then
                     L_XF86_DRIVERS=$(pacman -Qe | grep xf86-video | awk '{print $1}')
-                    printf '%s\n' "${BGreen}Désinstallation de «${BYellow}$L_XF86_DRIVERS${BGreen}»...${Reset}"
+                    printf '%s\n' "${BGreen}Désinstallation de ${BYellow}$L_XF86_DRIVERS${BGreen}...${Reset}"
                     [[ -n $L_XF86_DRIVERS ]] && pacman -Rcsn $L_XF86_DRIVERS
                     # Si PC Cervon
                     if [[ "${L_NAME_CG_NVIDIA}" == "GeForce 9800 GTX+" ]]; then
@@ -648,10 +648,10 @@ source $(pwd)/ai-commons
                         messages+="Nom de la carte NVIDIA détectée : ${L_NAME_CG_NVIDIA}\n\n"
                         messages+="Installation de la branche 340xx des pilotes NVidia pour les GPUs G8x, G9x et GT2xx.\n"
                         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-                        printf '%s\n' "${BGreen}Installation de «${BYellow}nvidia-340xx nvidia-340xx-utils nvidia-340xx-libgl pangox-compat libva-vdpau-driver${BGreen}»...${Reset}"
+                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia-340xx nvidia-340xx-utils nvidia-340xx-libgl pangox-compat libva-vdpau-driver${BGreen}...${Reset}"
                         package_install "nvidia-340xx nvidia-340xx-utils nvidia-340xx-libgl pangox-compat libva-vdpau-driver"
                         #CONFIGURE NVIDIA IN XORG
-                        printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia «${BYellow}20-nvidia.conf${BGreen}»...${Reset}"
+                        printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia ${BYellow}20-nvidia.conf${BGreen}...${Reset}"
                         cp -v ai-fconfig/20-nvidia-340xx.conf /etc/X11/xorg.conf.d/20-nvidia.conf
                     # Si PC récent
                     else
@@ -659,10 +659,10 @@ source $(pwd)/ai-commons
                         messages+="Nom de la carte Vidéo NVIDIA détectée : ${L_NAME_CG_NVIDIA}\n\n"
                         messages+="Installation de la dernière version des pilotes NVidia.\n"
                         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-                        printf '%s\n' "${BGreen}Installation de «${BYellow}nvidia nvidia-utils nvidia-libgl pangox-compat libva-vdpau-driver${BGreen}»...${Reset}"
+                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia nvidia-utils nvidia-libgl pangox-compat libva-vdpau-driver${BGreen}...${Reset}"
                         package_install "nvidia nvidia-utils nvidia-libgl pangox-compat libva-vdpau-driver"
                         #CONFIGURE NVIDIA IN XORG
-                        printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia «${BYellow}20-nvidia.conf${BGreen}»...${Reset}"
+                        printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia ${BYellow}20-nvidia.conf${BGreen}...${Reset}"
                         cp -v ai-fconfig/20-nvidia.conf /etc/X11/xorg.conf.d/20-nvidia.conf                    
                     fi
                     sed -i "s/NAMECGNVIDIA/${L_NAME_CG_NVIDIA}/" /etc/X11/xorg.conf.d/20-nvidia.conf
@@ -680,9 +680,9 @@ source $(pwd)/ai-commons
                     messages+="Nom de la carte NVIDIA détectée : ${L_NAME_CG_NVIDIA}\n\n"
                     messages+="Installation du pilote libre «nouveau».\n"
                     print_dialog_msgbox "${titre}" "${messages}" "Installer"
-                    printf '%s\n' "${BGreen}Installation de «${BYellow}mesa-libgl xf86-video-nouveau${BGreen}»...${Reset}"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}mesa-libgl xf86-video-nouveau${BGreen}...${Reset}"
                     package_install "mesa-libgl xf86-video-nouveau"
-                    printf '%s\n' "${BGreen}Démarrage du module «${BYellow}nouveau${BGreen}»...${Reset}"
+                    printf '%s\n' "${BGreen}Démarrage du module ${BYellow}nouveau${BGreen}...${Reset}"
                     add_module "nouveau"
                 fi
             # test si intel
@@ -690,16 +690,16 @@ source $(pwd)/ai-commons
                 messages+="Carte Vidéo INTEL détectée.\n\n"
                 messages+="Installation du pilote libre «intel».\n"
                 print_dialog_msgbox "${titre}" "${messages}" "Installer"
-                printf '%s\n' "${BGreen}Installation de «${BYellow}mesa-libgl xf86-video-intel libva-intel-driver${BGreen}»...${Reset}"
+                printf '%s\n' "${BGreen}Installation de ${BYellow}mesa-libgl xf86-video-intel libva-intel-driver${BGreen}...${Reset}"
                 package_install "mesa-libgl xf86-video-intel libva-intel-driver"
             # test si ATI/AMD
             elif [[ -n $(echo ${_vga} | grep "advanced micro devices") || -f /sys/kernel/debug/dri/0/radeon_pm_info || -f /sys/kernel/debug/dri/0/radeon_sa_info ]]; then
                 messages+="Carte Vidéo ATI détectée.\n\n"
                 messages+="Installation du pilote libre «ati».\n"
                 print_dialog_msgbox "${titre}" "${messages}" "Installer"
-                printf '%s\n' "${BGreen}Installation de «${BYellow}mesa-libgl xf86-video-ati${BGreen}»...${Reset}"
+                printf '%s\n' "${BGreen}Installation de ${BYellow}mesa-libgl xf86-video-ati${BGreen}...${Reset}"
                 package_install "mesa-libgl xf86-video-ati"
-                printf '%s\n' "${BGreen}Démarrage des modules «${BYellow}radeon ati${BGreen}»...${Reset}"
+                printf '%s\n' "${BGreen}Démarrage des modules ${BYellow}radeon ati${BGreen}...${Reset}"
                 add_module "radeon"
                 add_module "ati"
             # VESA PAR DEFAUT
@@ -707,7 +707,7 @@ source $(pwd)/ai-commons
                 messages+="Aucune Carte Vidéo détectée.\n\n"
                 messages+="Installation du pilote «Vesa» par défaut.\n"
                 print_dialog_msgbox "${titre}" "${messages}" "Installer"
-                printf '%s\n' "${BGreen}Installation de «${BYellow}mesa-libgl xf86-video-ati${BGreen}»...${Reset}"
+                printf '%s\n' "${BGreen}Installation de ${BYellow}mesa-libgl xf86-video-ati${BGreen}...${Reset}"
                 package_install "mesa-libgl xf86-video-vesa"
             fi
         fi
@@ -725,20 +725,20 @@ source $(pwd)/ai-commons
         print_dialog_yesno_no "${titre}" "${messages}" "Installer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
-            printf '%s\n' "${BGreen}Installation de «${BYellow}cups cups-filters ghostscript gsfonts${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Installation de ${BYellow}cups cups-filters ghostscript gsfonts${BGreen}...${Reset}"
             package_install "cups cups-filters ghostscript gsfonts"
-            printf '%s\n' "${BGreen}Installation de «${BYellow}gutenprint foomatic-db foomatic-db-engine foomatic-db-nonfree foomatic-filters hplip splix cups-pdf${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Installation de ${BYellow}gutenprint foomatic-db foomatic-db-engine foomatic-db-nonfree foomatic-filters hplip splix cups-pdf${BGreen}...${Reset}"
             package_install "gutenprint foomatic-db foomatic-db-engine foomatic-db-nonfree foomatic-filters hplip splix cups-pdf"
-            printf '%s\n' "${BGreen}Activation de «${BYellow}org.cups.cupsd.service${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Activation de ${BYellow}org.cups.cupsd.service${BGreen}...${Reset}"
             systemctl enable org.cups.cupsd.service
             local status=$(systemctl status avahi-daemon.service | awk '/Active/ {print $2}')
             if [[ "${status}" == "inactive" ]];then
-                printf '%s\n' "${BGreen}Activation de «${BYellow}avahi-daemon.service${BGreen}»...${Reset}"
+                printf '%s\n' "${BGreen}Activation de ${BYellow}avahi-daemon.service${BGreen}...${Reset}"
                 is_package_installed "avahi" && systemctl enable avahi-daemon.service
             fi
             status=$(systemctl status avahi-dnsconfd.service | awk '/Active/ {print $2}')
             if [[ "${status}" == "inactive" ]];then
-                printf '%s\n' "${BGreen}Activation de «${BYellow}avahi-dnsconfd.service${BGreen}»...${Reset}"
+                printf '%s\n' "${BGreen}Activation de ${BYellow}avahi-dnsconfd.service${BGreen}...${Reset}"
                 is_package_installed "avahi" && systemctl enable avahi-dnsconfd.service
             fi
             pause_function
@@ -776,19 +776,19 @@ source $(pwd)/ai-commons
         do
             case $choix in
                 "ttf-google-fonts-git")
-                    printf '%s\n' "${BGreen}Installation de «${BYellow}ttf-google-fonts-git${BGreen}»...${Reset}"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}ttf-google-fonts-git${BGreen}...${Reset}"
                     aur_package_install "ttf-google-fonts-git"
                     ;;
                 "ttf-inconsolata")
-                    printf '%s\n' "${BGreen}Installation de «${BYellow}ttf-inconsolata${BGreen}»...${Reset}"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}ttf-inconsolata${BGreen}...${Reset}"
                     package_install "ttf-inconsolata"
                     ;;
                 "noto-fonts")
-                    printf '%s\n' "${BGreen}Installation de «${BYellow}noto-fonts${BGreen}»...${Reset}"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}noto-fonts${BGreen}...${Reset}"
                     package_install "noto-fonts"
                     ;;
                 "noto-fonts-emoji")
-                    printf '%s\n' "${BGreen}Installation de «${BYellow}noto-fonts-emoji${BGreen}»...${Reset}"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}noto-fonts-emoji${BGreen}...${Reset}"
                     package_install "noto-fonts-emoji"
             esac
         done
@@ -807,7 +807,7 @@ source $(pwd)/ai-commons
             messages+="Installation de sni-qt: StatusNotifierItem (AppIndicators) support.\n"
             messages+="Installation de icu.\n"
             print_dialog_msgbox "${titre}" "${messages}" "Installer"
-            printf '%s\n' "${BGreen}Installation de «${BYellow}sni-qt icu${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Installation de ${BYellow}sni-qt icu${BGreen}...${Reset}"
             package_install "sni-qt icu"
             pacman -D --asdeps sni-qt
             pause_function
@@ -825,7 +825,7 @@ source $(pwd)/ai-commons
         print_dialog_yesno_no "${titre}" "${messages}" "Supprimer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
-            printf '%s\n' "${BGreen}Suppression des paquets «${BYellow}${liste_pkg}${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Suppression des paquets ${BYellow}${liste_pkg}${BGreen}...${Reset}"
             pacman -Rsc $(pacman -Qqdt)
             pause_function
         fi
@@ -841,7 +841,7 @@ source $(pwd)/ai-commons
         print_dialog_yesno "${titre}" "${messages}" "Générer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
-            printf '%s\n' "${BGreen}Génération ou mise à jour du cache de «${BYellow}man${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Génération ou mise à jour du cache de ${BYellow}man${BGreen}...${Reset}"
             /usr/bin/mandb --quiet
             pause_function
         fi
@@ -854,13 +854,13 @@ source $(pwd)/ai-commons
         messages=" \n"
         messages+="Nettoyage du répertoire «/var/cache/pacman/pkg».\n"
         print_dialog_msgbox "${titre}" "${messages}" "Nettoyer"
-        printf '%s\n' "${BGreen}Nettoyage du répertoire «${BYellow}/var/cache/pacman/pkg${BGreen}»...${Reset}"
+        printf '%s\n' "${BGreen}Nettoyage du répertoire ${BYellow}/var/cache/pacman/pkg${BGreen}...${Reset}"
         pacman -Sc
         pacman-optimize
         if is_package_installed "pkgfile" ; then
-            printf '%s\n' "${BGreen}Génération ou mise à jour du cache de «${BYellow}pkgfile${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Génération ou mise à jour du cache de ${BYellow}pkgfile${BGreen}...${Reset}"
             pkgfile --update
-            printf '%s\n' "${BGreen}Activation du service «${BYellow}pkgfile-update.timer${BGreen}»...${Reset}"
+            printf '%s\n' "${BGreen}Activation du service ${BYellow}pkgfile-update.timer${BGreen}...${Reset}"
             systemctl enable pkgfile-update.timer
         fi
         pause_function

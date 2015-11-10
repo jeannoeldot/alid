@@ -55,7 +55,7 @@ source $(pwd)/ai-commons
         local url="https://www.archlinux.org/mirrorlist/?country=FR&use_mirror_status=on"
         local tmpfile=$(mktemp --suffix=-mirrorlist)
         # Get latest mirror list and save to tmpfile
-        printf '%s\n' "${BGreen}Récupération des serveurs ${BYellow}FR${BGreen}...${Reset}"
+        printf '%s\n' "${BGreen}Récupération des ${BYellow}serveurs FR${BGreen}...${Reset}"
         curl -so ${tmpfile} ${url}
         # Backup and replace current mirrorlist file (if new file is non-zero)
         if [[ -s ${tmpfile} ]]; then
@@ -119,7 +119,7 @@ source $(pwd)/ai-commons
             messages+="    PAS d'intallation des mises à jour du microcode.\n"
         fi        
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-        printf '%s\n' "${BGreen}Installation du système de base...${Reset}"
+        printf '%s\n' "${BGreen}Installation du ${BYellow}Système de Base${BGreen}...${Reset}"
         pacstrap ${MOUNTPOINT} ${liste_paquets}
         retour=$?
         if [[ $retour = 1 ]]; then
@@ -137,7 +137,7 @@ source $(pwd)/ai-commons
             messages+="En utilisant le script «pacstrap»,\n"
             messages+="Installe les outils nécessaires pour le WiFi\n"
             print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-            printf '%s\n' "${BGreen}Installation des outils pour le WiFi...${Reset}"
+            printf '%s\n' "${BGreen}Installation des outils pour le ${BYellow}WiFi${BGreen}...${Reset}"
             pacstrap ${MOUNTPOINT} iw wireless_tools wpa_actiond wpa_supplicant dialog
             retour=$?
             if [[ $retour = 1 ]]; then
@@ -163,6 +163,7 @@ source $(pwd)/ai-commons
         print_dialog_yesno "${titre}" "${messages}" "Visualiser" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
+            printf '%s\n' "${BGreen}Visualisation de ${BYellow}/etc/fstab${BGreen}...${Reset}"
             cat ${MOUNTPOINT}/etc/fstab
             pause_function
         fi           
@@ -210,10 +211,10 @@ source $(pwd)/ai-commons
         messages+="dans le répertoire /root du nouveau système.\n\n"
         print_dialog_msgbox "${titre}" "${messages}" "Copier"
         # COPY AI TO ROOT FOLDER IN THE NEW SYSTEM
-        printf '%s\n' "${BGreen}Copie de «${BYellow}AI${BGreen}» dans le répertoire «${BYellow}/root${BGreen}» du nouveau système...${Reset}"
+        printf '%s\n' "${BGreen}Copie de ${BYellow}AI${BGreen} dans le répertoire ${BYellow}/root${BGreen} du nouveau système...${Reset}"
         cp -R $(pwd) ${MOUNTPOINT}/root
         # COPY ROOT FILES TO ROOT FOLDER IN THE NEW SYSTEM
-        printf '%s\n' "${BGreen}Copie des fichiers de configuration de «${BYellow}bash${BGreen}» dans le répertoire «${BYellow}/root${BGreen}» du nouveau système...${Reset}"
+        printf '%s\n' "${BGreen}Copie des fichiers de configuration de ${BYellow}bash${BGreen} dans le répertoire ${BYellow}/root${BGreen} du nouveau système...${Reset}"
         cp -v ai-fconfig/root-.bashrc ${MOUNTPOINT}/root/.bashrc
         cp -v ai-fconfig/root-.bash_profile ${MOUNTPOINT}/root/.bash_profile
         pause_function
