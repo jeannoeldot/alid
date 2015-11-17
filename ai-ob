@@ -139,16 +139,12 @@
             fi
             # system sudoers
             printf '%s\n' "${BGreen}Configuration de ${BYellow}/etc/sudoers${BGreen}...${Reset}"
-            echo -e '\n## My Cmnd alias' >> /etc/sudoers
-            echo -e 'Cmnd_Alias SHUTDOWN_CMDS = /sbin/shutdown, /sbin/halt, /sbin/reboot, /sbin/poweroff' >> /etc/sudoers
-            echo -e 'Cmnd_Alias PACMAN_CMDS = /usr/bin/pacman' >> /etc/sudoers
-            echo -e 'Cmnd_Alias HDDTEMP_CMDS = /usr/bin/hddtemp' >> /etc/sudoers
-            echo -e '\n## My User alias' >> /etc/sudoers
-            echo -e 'User_Alias ADMINS = '"${USERNAME}" >> /etc/sudoers
-            echo -e '\n## User specification' >> /etc/sudoers
-            echo -e 'ADMINS ALL=(ALL) NOPASSWD: SHUTDOWN_CMDS' >> /etc/sudoers
-            echo -e 'ADMINS ALL=(ALL) NOPASSWD: PACMAN_CMDS' >> /etc/sudoers
-            echo -e 'ADMINS ALL=(ALL) NOPASSWD: HDDTEMP_CMDS' >> /etc/sudoers
+            sed -i "/^## User alias specification/i## My User alias" /etc/sudoers
+            sed -i "/^## User alias specification/iUser_Alias ADMINS = ${USERNAME}\n##" /etc/sudoers
+            sed -i "/^## Cmnd alias specification/i## My Cmnd alias" /etc/sudoers
+            sed -i "/^## Cmnd alias specification/iCmnd_Alias HDDTEMP_CMDS = /usr/bin/hddtemp\n##" /etc/sudoers
+            sed -i "/^## Defaults specification/i## My User specification" /etc/sudoers
+            sed -i "/^## Defaults specification/iADMINS ALL=(ALL) NOPASSWD: HDDTEMP_CMDS\n##" /etc/sudoers
             # system openbox theme
             printf '%s\n' "${BGreen}Mise en place du thème ${BYellow}BlueSmoke${BGreen}...${Reset}"
             cp -R ai-fconfig/ob-usr-share-themes-BlueSmoke /usr/share/themes/BlueSmoke
