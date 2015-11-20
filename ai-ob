@@ -64,7 +64,7 @@
             printf '%s\n' "${BGreen}Installation de ${BYellow}system-config-printer${BGreen}...${Reset}"
             package_install "system-config-printer"
         fi
-
+        #
         printf '%s\n' "${BGreen}Configuration par défaut de l'utilisateur ${BYellow}${USERNAME}${BGreen}...${Reset}"
         mkdir -p /home/${USERNAME}/.config/openbox
         cp -v /etc/xdg/openbox/{rc.xml,menu.xml,autostart,environment} /home/${USERNAME}/.config/openbox/

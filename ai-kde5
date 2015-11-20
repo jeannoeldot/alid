@@ -60,6 +60,11 @@
             printf '%s\n' "${BGreen}Installation de ${BYellow}print-manager xdg-user-dirs${BGreen}...${Reset}"
             package_install "print-manager xdg-user-dirs"
         fi
+        # user wallpaper
+        printf '%s\n' "${BGreen}Mise en place du fond d'écran ${BYellow}KDE-arch4k-1920x1080.jpg${BGreen}...${Reset}"
+        mkdir -p /home/${USERNAME}/09-Configurations/OO-Images-bureau
+        cp -v ai-fconfig/KDE-arch4k-1920x1080.jpg /home/${USERNAME}/09-Configurations/OO-Images-bureau/KDE-arch4k-1920x1080.jpg
+        chown -R ${USERNAME}:users /home/${USERNAME}/09-Configurations
         #KDE5 CUSTOMIZATION
         retour=9
         messages=" \n"
