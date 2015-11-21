@@ -57,7 +57,7 @@
             messages+="${BRred_dlg}!!!${Reset_dlg} En mode BIOS (PAS UEFI), si dual boot avec Windows :\n"
             messages+="    NE PAS CHOISIR GPT.\n\n"
             messages+="Sélectionner le type de table de partitions (MSDOS ou GPT) :"
-            TYPE_STORAGE_PARTITION=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 16 72 5 \
+            TYPE_STORAGE_PARTITION=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 16 72 5 \
                                     "MSDOS" "" \
                                     "GPT" "" \
                                     3>&1 1>&2 2>&3)

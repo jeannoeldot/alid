@@ -366,7 +366,7 @@
                 messages="\n"
                 messages+="Installation dans ${Bwhite_dlg}Oracle VM VirtualBox${Reset_dlg}.\n\n"
                 messages+="Choisir le PC Hôte ${Byellow_dlg}PC-John Windows${Reset_dlg} ou ${Byellow_dlg}PC-Jnd Arch Linux${Reset_dlg}"
-                REPLY=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 16 72 5 \
+                REPLY=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 16 72 5 \
                     "PC-John" "Windows" \
                     "PC-Jnd" "Arch Linux" \
                     3>&1 1>&2 2>&3)
