@@ -20,7 +20,7 @@ source $(pwd)/ai-commons
         messages+="${BRcyan_dlg}!!!${Reset_dlg} Requis :\n"
         messages+="------------\n"
         messages+="Installation de Base de Archlinux\n"
-        messages+="Lancer le script en «ROOT»\n"
+        messages+="Lancer le script en ${Byellow_dlg}ROOT${Reset_dlg}\n"
         messages+="Une connexion Internet fonctionnelle\n"
         messages+="Ne doit pas avoir été déjà lancé\n\n"
         messages+="${BRcyan_dlg}!!!${Reset_dlg} Infos :\n"
@@ -46,7 +46,7 @@ source $(pwd)/ai-commons
             local titre="REQUIS : ÉXÉCUTER LE SCRIPT EN ROOT"
             messages="\n"
             messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
-            messages+="    L'utilisateur n'est pas «root» :\n"
+            messages+="    L'utilisateur n'est pas ${Byellow_dlg}root${Reset_dlg}.\n"
             messages+="    ARRET immédiat."
             print_dialog_msgbox "${titre}" "${messages}" "OK"
             exit 1
@@ -89,7 +89,7 @@ source $(pwd)/ai-commons
             local titre="REQUIS : 1ÈRE ÉXÉCUTION DU SCRIPT"
             messages="\n"
             messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
-            messages+="    Le script «ai-de» a déjà été lancé :\n"
+            messages+="    Le script ${Byellow_dlg}ai-de${Reset_dlg} a déjà été lancé.\n"
             messages+="    ARRET immédiat."
             print_dialog_msgbox "${titre}" "${messages}" "OK"
             exit 1
@@ -135,7 +135,7 @@ source $(pwd)/ai-commons
         fi
         #
         messages="\n"
-        messages+="Visualiser/Éditer le fichier «/etc/pacman.conf» avec «"${EDITOR}"» ?\n"
+        messages+="Visualiser/Éditer le fichier ${Byellow_dlg}/etc/pacman.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Éditer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
@@ -178,7 +178,7 @@ source $(pwd)/ai-commons
         local messages=""
         local titre="LANGUE PAR DÉFAUT"
         messages="\n"
-        messages+="La langue par défaut est : «${LANGUAGE}»\n"
+        messages+="La langue par défaut est : ${Bwhite_dlg}${LANGUAGE}${Reset_dlg}\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
     }
     #}}}
@@ -229,18 +229,18 @@ source $(pwd)/ai-commons
             until [[ $retour = 0 ]];
             do
                 messages="\n"
-                messages+="Entrer le mot de passe de l'utilisateur «${USERNAME}» :\n"
+                messages+="Entrer le mot de passe de l'utilisateur ${Byellow_dlg}${USERNAME}${Reset_dlg} :\n"
                 messages+="${BRcyan_dlg}!!!${Reset_dlg} 7 caractères minimum et sans espace.\n"
                 messages_chk="\n"
-                messages_chk+="Confirmer le mot de passe de l'utilisateur «${USERNAME}» :\n"
+                messages_chk+="Confirmer le mot de passe de l'utilisateur ${Byellow_dlg}${USERNAME}${Reset_dlg} :\n"
                 messages_chk+="${BRcyan_dlg}!!!${Reset_dlg} 7 caractères minimum et sans espace.\n"
                 L_MDP=$(dialog --colors --insecure --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --passwordbox "${messages}" 16 72 3>&1 1>&2 2>&3)
                 L_MDP_CHK=$(dialog --colors --insecure --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --passwordbox "${messages_chk}" 16 72 3>&1 1>&2 2>&3)
                 if [[ ${#L_MDP} -lt 7 || ${#L_MDP_CHK} -lt 7 || ${L_MDP} =~ " " || ${L_MDP_CHK} =~ " " || ${L_MDP} != ${L_MDP_CHK} ]]; then
                     messages="\n"
                     messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
-                    messages+="    Mot de passe pour «${USERNAME}» erroné :\n"
-                    messages+="    Entrer de nouveau le mot de passe de «${USERNAME}»."
+                    messages+="    Mot de passe pour ${Byellow_dlg}${USERNAME}${Reset_dlg} erroné.\n"
+                    messages+="    Entrer de nouveau le mot de passe de ${Byellow_dlg}${USERNAME}${Reset_dlg}."
                     print_dialog_msgbox "${titre}" "${messages}" "Recommencer"
                     retour=9
                 else
@@ -260,15 +260,15 @@ source $(pwd)/ai-commons
         configure_user_account() {
             titre="CONFIGURATION DU COMPTE UTILISATEUR"
             messages="\n"
-            messages+="Copie des fichiers de configuration de «bash» :\n"
+            messages+="Copie des fichiers de configuration de ${Byellow_dlg}bash${Reset_dlg} :\n"
             messages+="- .bash_profile\n"
             messages+="- .bashrc\n\n"
-            messages+="Copie des fichiers de configuration de «fontconfig» :\n"
+            messages+="Copie des fichiers de configuration de ${Byellow_dlg}fontconfig${Reset_dlg} :\n"
             messages+="- .config/fontconfig/fonts.conf\n\n"
-            messages+="Création du répertoire «.compose-cache»\n\n"
-            messages+="Création du répertoire «bin»\n\n"
+            messages+="Création du répertoire ${Byellow_dlg}.compose-cache${Reset_dlg}\n\n"
+            messages+="Création du répertoire ${Byellow_dlg}bin${Reset_dlg}\n\n"
             if [[ $IS_UEFI -eq 1 ]]; then
-                messages+="Copie des fichiers de configuration de «refind» :\n"
+                messages+="Copie des fichiers de configuration de ${Byellow_dlg}refind${Reset_dlg} :\n"
                 if [[ $IN_VIRTUAL_BOX -eq 0 ]]; then
                     messages+="- /boot/efi/EFI/refind/refind.conf\n"
                 else
@@ -276,7 +276,7 @@ source $(pwd)/ai-commons
                 fi
                 messages+="- /boot/efi/EFI/${NAME_DIR_ARCHLINUX}/refind_linux.conf\n\n"
             fi
-            messages+="Copie des fichiers utiles 00-CMD-....TXT :\n"
+            messages+="Copie des fichiers utiles ${Byellow_dlg}00-CMD-....TXT${Reset_dlg} :\n"
             messages+="- 00-CMD-CUSTOMIZE-ARCH.TXT\n"
             messages+="- 00-CMD-INSTALLATION-LINUX-CK.TXT\n"
             print_dialog_msgbox_h "${titre}" "${messages}" "Continuer" 26
@@ -316,7 +316,7 @@ source $(pwd)/ai-commons
         configure_sudo_timestamp_timeout() {
             titre="CONFIGURATION DU COMPTE UTILISATEUR"
             messages="\n"
-            messages+="Configuration de «/etc/sudoers» :\n"
+            messages+="Configuration de ${Byellow_dlg}/etc/sudoers${Reset_dlg} :\n"
             messages+="- timestamp_timeout = ${TIMESTAMP_TIMEOUT} minutes\n"
             print_dialog_msgbox "${titre}" "${messages}" "Continuer"
             printf '%s\n' "${BGreen}Modification de sudo : ${BYellow}timestamp_timeout = ${TIMESTAMP_TIMEOUT}${BGreen} minutes...${Reset}"
@@ -337,7 +337,7 @@ source $(pwd)/ai-commons
         local titre=""
         titre="INSTALLATION DE «YAOURT»"
         messages="\n"
-        messages+="Yaourt (Yet AnOther User Repository Tool) est un programme en ligne de commande qui interface les fonctions de «pacman» et «makepkg» pour la gestion des paquets.\n\n"
+        messages+="Yaourt (Yet AnOther User Repository Tool) est un programme en ligne de commande qui interface les fonctions de ${Byellow_dlg}pacman${Reset_dlg} et ${Byellow_dlg}makepkg${Reset_dlg} pour la gestion des paquets.\n\n"
         messages+="${BRred_dlg}!!!${Reset_dlg} Yaourt n'est pas officiellement supporté par les développeurs d'Arch.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         printf '%s\n' "${BGreen}Installation de ${BYellow}base-devel namcap yaourt git subversion${BGreen}...${Reset}"
@@ -350,7 +350,7 @@ source $(pwd)/ai-commons
             if ! is_package_installed "yaourt" ; then
                 messages="\n"
                 messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
-                messages+="    Installation de Yaourt impossible.\n"
+                messages+="    Installation de ${Byellow_dlg}Yaourt${Reset_dlg} impossible.\n"
                 messages+="    ARRET immediat.\n"
                 print_dialog_msgbox "${titre}" "${messages}" "OK"
                 exit 1
@@ -375,7 +375,7 @@ source $(pwd)/ai-commons
         sed -i "/^#VISUAL=/c\VISUAL=\"nano\"" /etc/yaourtrc
         #
         messages="\n"
-        messages+="Visualiser/Éditer le fichier «/etc/yaourtrc» avec «"${EDITOR}"» ?\n"
+        messages+="Visualiser/Éditer le fichier ${Byellow_dlg}/etc/yaourtrc${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Éditer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
@@ -423,7 +423,7 @@ source $(pwd)/ai-commons
         # Configuration de systemd-journal
         titre="SYSTEMD : CONFIGURATION DE «SYSTEMD-JOURNAL»"
         messages="\n"
-        messages+="Ajout de «${USERNAME}» au groupe «systemd-journal».\n\n"
+        messages+="Ajout de ${Byellow_dlg}${USERNAME}${Reset_dlg} au groupe ${Byellow_dlg}systemd-journal${Reset_dlg}.\n\n"
         messages+="Configuration de systemd-journal :\n"
         messages+="- Option MaxUse = 50M.\n"
         messages+="- Option MaxFileSize = 10M.\n"
@@ -441,7 +441,7 @@ source $(pwd)/ai-commons
         titre="INSTALLATION ET ACTIVATION DE «CRONIE»"
         messages="\n"
         messages+="Cronie est un service de planification qui permet l'exécution de commandes de manière périodique.\n\n"
-        messages+="${BRcyan_dlg}!!!${Reset_dlg} Peu utile car remplacé par systemd-timer.\n"
+        messages+="${BRcyan_dlg}!!!${Reset_dlg} Peu utile car remplacé par ${Byellow_dlg}systemd-timer${Reset_dlg}.\n"
         print_dialog_yesno_no "${titre}" "${messages}" "Installer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
@@ -454,7 +454,7 @@ source $(pwd)/ai-commons
         #
         titre="INSTALLATION D'OUTILS BASH"
         messages="\n"
-        messages+="Installation de divers outils «BASH» :\n"
+        messages+="Installation de divers outils ${Byellow_dlg}BASH${Reset_dlg} :\n"
         messages+="bc mlocate rsync bash-completion wget net-tools tree atool mc\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
         printf '%s\n' "${BGreen}Installation de ${BYellow}bc mlocate rsync bash-completion wget net-tools tree atool mc${BGreen}...${Reset}"
@@ -489,7 +489,7 @@ source $(pwd)/ai-commons
         pause_function
         titre="ACTIVATION DE «AVAHI»"
         messages="\n"
-        messages+="${BRcyan_dlg}!!!${Reset_dlg} Activer avahi est recommandé pour «CUPS».\n"
+        messages+="${BRcyan_dlg}!!!${Reset_dlg} Activer avahi est recommandé pour ${Byellow_dlg}CUPS${Reset_dlg}.\n"
         print_dialog_yesno_no "${titre}" "${messages}" "Activer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
@@ -532,7 +532,7 @@ source $(pwd)/ai-commons
             alsamixer
             titre="ALSA : TEST DU SON"
             messages="\n"
-            messages+="Test du son avec «speaker-test»\n"
+            messages+="Test du son avec ${Byellow_dlg}speaker-test${Reset_dlg}\n"
             print_dialog_msgbox "${titre}" "${messages}" "Tester"
             printf '%s\n' "${BGreen}Test du son avec ${BYellow}speaker-test${BGreen}...${Reset}"
             speaker-test -c 2 -l 2
@@ -568,7 +568,7 @@ source $(pwd)/ai-commons
         #CONFIGURE AZERTY OR BEPO KEYBOARD IN XORG
         titre="CONFIGURATION DU TYPE DE CLAVIER"
         messages="\n"
-        messages+="Le type de clavier est de type : «${TYPE_KEYBOARD}»\n"
+        messages+="Le type de clavier est de type : ${BRwhite_dlg}${TYPE_KEYBOARD}${Reset_dlg}\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         printf '%s\n' "${BGreen}Mise en place de la disposition du clavier en FR ${BYellow}${TYPE_KEYBOARD}${BGreen}...${Reset}"
         if [[ $TYPE_KEYBOARD == "BEPO" ]]; then
@@ -585,7 +585,7 @@ source $(pwd)/ai-commons
         local titre=""
         titre="OUTIL DE CONFIGURATION DES POLICES DE CARACTÈRES"
         messages="\n"
-        messages+="«Fontconfig» est une bibliothèque conçue pour fournir une liste des polices disponibles aux applications, et pour configurer la façon dont les polices seront rendues.\n\n"
+        messages+="${Byellow_dlg}Fontconfig${Reset_dlg} est une bibliothèque conçue pour fournir une liste des polices disponibles aux applications, et pour configurer la façon dont les polices seront rendues.\n\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
         printf '%s\n' "${BGreen}Installation de ${BYellow}cairo fontconfig freetype2 libxft${BGreen}...${Reset}"
         package_install "cairo fontconfig freetype2 libxft"
@@ -600,7 +600,7 @@ source $(pwd)/ai-commons
         titre="INSTALLATION DES PILOTES DE LA CARTE VIDÉO"
         messages="\n"
         if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
-            messages+="Installation dans Oracle VM Virtualbox.\n\n"
+            messages+="Installation dans ${BRwhite_dlg}Oracle VM Virtualbox${Reset_dlg}.\n\n"
             messages+="Installation de virtualbox-guest-utils.\n"
             print_dialog_msgbox "${titre}" "${messages}" "Installer"
             printf '%s\n' "${BGreen}Installation de ${BYellow}virtualbox-guest-utils mesa-libgl${BGreen}...${Reset}"
@@ -620,7 +620,7 @@ source $(pwd)/ai-commons
             _vga_length=$(lspci | grep VGA | wc -l)
             # test si bumblebee
             if [[ $_vga_length -eq 2 ]] && [[ -n $(echo ${_vga} | grep "nvidia") || -f /sys/kernel/debug/dri/0/vbios.rom ]]; then
-                messages+="Installation sur Portable avec technologie NVIDIA Optimus.\n\n"
+                messages+="Installation sur Portable avec technologie ${BRwhite_dlg}NVidia Optimus${Reset_dlg}.\n\n"
                 messages+="Installation de xf86-video-intel bumblebee nvidia.\n"
                 print_dialog_msgbox "${titre}" "${messages}" "Installer"
                 L_XF86_DRIVERS=$(pacman -Qe | grep xf86-video | awk '{print $1}')
@@ -630,12 +630,12 @@ source $(pwd)/ai-commons
                 package_install "xf86-video-intel bumblebee nvidia"
                 printf '%s\n' "${BGreen}Ajout de ${BYellow}${USERNAME}${BGreen} au groupe ${BYellow}bumblebee${BGreen}...${Reset}"
                 gpasswd -a ${USERNAME} bumblebee
-            # test si NVIDIA
+            # test si NVidia
             elif [[ -n $(echo ${_vga} | grep "nvidia") || -f /sys/kernel/debug/dri/0/vbios.rom ]]; then
                 # NOM DE LA CARTE
                 L_NAME_CG_NVIDIA=$(lspci | grep -E "VGA" | sed -e "s/^.*\[//;s/\].*$//")
-                messages+="Carte Vidéo NVIDIA ${L_NAME_CG_NVIDIA} détectée.\n\n"
-                messages+="Installer le pilote vidéo propriétaire NVIDIA ?\n"
+                messages+="Carte Vidéo ${BRwhite_dlg}NVidia ${L_NAME_CG_NVIDIA}${Reset_dlg} détectée.\n\n"
+                messages+="Installer le pilote vidéo propriétaire NVidia ?\n"
                 print_dialog_yesno "${titre}" "${messages}" "Installer" "Continuer"
                 retour=$?
                 if [[ $retour = 0 ]]; then
@@ -645,23 +645,23 @@ source $(pwd)/ai-commons
                     # Si PC Cervon
                     if [[ "${L_NAME_CG_NVIDIA}" == "GeForce 9800 GTX+" ]]; then
                         messages="\n"
-                        messages+="Nom de la carte NVIDIA détectée : ${L_NAME_CG_NVIDIA}\n\n"
+                        messages+="Nom de la carte NVidia détectée : ${Byellow_dlg}${L_NAME_CG_NVIDIA}${Reset_dlg}\n\n"
                         messages+="Installation de la branche 340xx des pilotes NVidia pour les GPUs G8x, G9x et GT2xx.\n"
                         print_dialog_msgbox "${titre}" "${messages}" "Installer"
                         printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia-340xx nvidia-340xx-utils nvidia-340xx-libgl pangox-compat libva-vdpau-driver${BGreen}...${Reset}"
                         package_install "nvidia-340xx nvidia-340xx-utils nvidia-340xx-libgl pangox-compat libva-vdpau-driver"
-                        #CONFIGURE NVIDIA IN XORG
+                        #CONFIGURE NVidia IN XORG
                         printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia ${BYellow}20-nvidia.conf${BGreen}...${Reset}"
                         cp -v ai-fconfig/20-nvidia-340xx.conf /etc/X11/xorg.conf.d/20-nvidia.conf
                     # Si PC récent
                     else
                         messages="\n"
-                        messages+="Nom de la carte Vidéo NVIDIA détectée : ${L_NAME_CG_NVIDIA}\n\n"
+                        messages+="Nom de la carte Vidéo NVidia détectée : ${Byellow_dlg}${L_NAME_CG_NVIDIA}${Reset_dlg}\n\n"
                         messages+="Installation de la dernière version des pilotes NVidia.\n"
                         print_dialog_msgbox "${titre}" "${messages}" "Installer"
                         printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia nvidia-utils nvidia-libgl pangox-compat libva-vdpau-driver${BGreen}...${Reset}"
                         package_install "nvidia nvidia-utils nvidia-libgl pangox-compat libva-vdpau-driver"
-                        #CONFIGURE NVIDIA IN XORG
+                        #CONFIGURE NVidia IN XORG
                         printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia ${BYellow}20-nvidia.conf${BGreen}...${Reset}"
                         cp -v ai-fconfig/20-nvidia.conf /etc/X11/xorg.conf.d/20-nvidia.conf                    
                     fi
@@ -669,7 +669,7 @@ source $(pwd)/ai-commons
                     retour=9
                     titre="INSTALLATION DES PILOTES NVIDIA"
                     messages="\n"
-                    messages+="Visualiser/Éditer le fichier «20-nvidia.conf» avec «"${EDITOR}"» ?\n"
+                    messages+="Visualiser/Éditer le fichier ${Byellow_dlg}20-nvidia.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
                     print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
                     retour=$?
                     if [[ $retour = 0 ]]; then
@@ -677,8 +677,8 @@ source $(pwd)/ai-commons
                     fi
                 else
                     messages="\n"
-                    messages+="Nom de la carte NVIDIA détectée : ${L_NAME_CG_NVIDIA}\n\n"
-                    messages+="Installation du pilote libre «nouveau».\n"
+                    messages+="Nom de la carte NVidia détectée : ${Byellow_dlg}${L_NAME_CG_NVIDIA}${Reset_dlg}\n\n"
+                    messages+="Installation du pilote libre ${Byellow_dlg}nouveau${Reset_dlg}.\n"
                     print_dialog_msgbox "${titre}" "${messages}" "Installer"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}mesa-libgl xf86-video-nouveau${BGreen}...${Reset}"
                     package_install "mesa-libgl xf86-video-nouveau"
@@ -687,15 +687,15 @@ source $(pwd)/ai-commons
                 fi
             # test si intel
             elif [[ -n $(echo ${_vga} | grep "intel corporation") || -f /sys/kernel/debug/dri/0/i915_capabilities ]]; then
-                messages+="Carte Vidéo INTEL détectée.\n\n"
-                messages+="Installation du pilote libre «intel».\n"
+                messages+="Carte Vidéo ${BRwhite_dlg}INTEL${Reset_dlg} détectée.\n\n"
+                messages+="Installation du pilote libre ${Byellow_dlg}intel${Reset_dlg}.\n"
                 print_dialog_msgbox "${titre}" "${messages}" "Installer"
                 printf '%s\n' "${BGreen}Installation de ${BYellow}mesa-libgl xf86-video-intel libva-intel-driver${BGreen}...${Reset}"
                 package_install "mesa-libgl xf86-video-intel libva-intel-driver"
             # test si ATI/AMD
             elif [[ -n $(echo ${_vga} | grep "advanced micro devices") || -f /sys/kernel/debug/dri/0/radeon_pm_info || -f /sys/kernel/debug/dri/0/radeon_sa_info ]]; then
-                messages+="Carte Vidéo ATI détectée.\n\n"
-                messages+="Installation du pilote libre «ati».\n"
+                messages+="Carte Vidéo ${BRwhite_dlg}ATI${Reset_dlg} détectée.\n\n"
+                messages+="Installation du pilote libre ${Byellow_dlg}ati${Reset_dlg}.\n"
                 print_dialog_msgbox "${titre}" "${messages}" "Installer"
                 printf '%s\n' "${BGreen}Installation de ${BYellow}mesa-libgl xf86-video-ati${BGreen}...${Reset}"
                 package_install "mesa-libgl xf86-video-ati"
@@ -705,7 +705,7 @@ source $(pwd)/ai-commons
             # VESA PAR DEFAUT
             else
                 messages+="Aucune Carte Vidéo détectée.\n\n"
-                messages+="Installation du pilote «Vesa» par défaut.\n"
+                messages+="Installation du pilote ${Byellow_dlg}Vesa${Reset_dlg} par défaut.\n"
                 print_dialog_msgbox "${titre}" "${messages}" "Installer"
                 printf '%s\n' "${BGreen}Installation de ${BYellow}mesa-libgl xf86-video-ati${BGreen}...${Reset}"
                 package_install "mesa-libgl xf86-video-vesa"
@@ -804,8 +804,8 @@ source $(pwd)/ai-commons
         if is_package_installed "qt4" ; then
             titre="INSTALLATION DES DÉPENDANCES OPTIONNELLES POUR QT4"
             messages=" \n"
-            messages+="Installation de sni-qt: StatusNotifierItem (AppIndicators) support.\n"
-            messages+="Installation de icu.\n"
+            messages+="Installation de ${Byellow_dlg}sni-qt${Reset_dlg}: StatusNotifierItem (AppIndicators) support.\n"
+            messages+="Installation de ${Byellow_dlg}icu${Reset_dlg}.\n"
             print_dialog_msgbox "${titre}" "${messages}" "Installer"
             printf '%s\n' "${BGreen}Installation de ${BYellow}sni-qt icu${BGreen}...${Reset}"
             package_install "sni-qt icu"
@@ -821,7 +821,7 @@ source $(pwd)/ai-commons
         local titre="SUPPRESSION DES PAQUETS ORPHELINS"
         local liste_pkg=$(pacman -Qqdt)
         messages=" \n"
-        messages+="Supprimer les paquets suivants : ${liste_pkg} ?\n"
+        messages+="Supprimer les paquets suivants : ${Byellow_dlg}${liste_pkg}${Reset_dlg} ?\n"
         print_dialog_yesno_no "${titre}" "${messages}" "Supprimer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
@@ -837,7 +837,7 @@ source $(pwd)/ai-commons
         local messages=""
         local titre="GÉNÉRATION DU CACHE DE «man»"
         messages=" \n"
-        messages+="Générer ou mettre à jour le cache de man (prend qque minutes) ?\n"
+        messages+="Générer ou mettre à jour le cache de ${Byellow_dlg}man${Reset_dlg} (prend qque minutes) ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Générer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
@@ -852,7 +852,7 @@ source $(pwd)/ai-commons
         local messages=""
         local titre="NETTOYAGE ET OPTIMISATION DU CACHE DE PACMAN"
         messages=" \n"
-        messages+="Nettoyage du répertoire «/var/cache/pacman/pkg».\n"
+        messages+="Nettoyage du répertoire ${Byellow_dlg}/var/cache/pacman/pkg${Reset_dlg}.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Nettoyer"
         printf '%s\n' "${BGreen}Nettoyage du répertoire ${BYellow}/var/cache/pacman/pkg${BGreen}...${Reset}"
         pacman -Sc
@@ -931,7 +931,7 @@ source $(pwd)/ai-commons
     messages=""
     titre="SÉLECTION DU D.E. «KDE 5» OU DU W.M. «OPENBOX»"
     messages="\n"
-    messages+="Sélectionner l'environnement de bureau «KDE 5» ou le gestionnaire de fenêtres «OPENBOX» :"
+    messages+="Sélectionner l'environnement de bureau ${Byellow_dlg}KDE 5${Reset_dlg} ou le gestionnaire de fenêtres ${Byellow_dlg}OPENBOX${Reset_dlg} :"
     REPLY=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 16 72 5 \
             "KDE5" "Environnement de bureau" \
             "OPENBOX" "Gestionnaire de fenêtres" \

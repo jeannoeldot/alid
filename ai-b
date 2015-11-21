@@ -34,8 +34,8 @@ source $(pwd)/ai-commons
                 ;;
         esac
         messages="\n"
-        messages+="Type de clavier  : "${TYPE_KEYBOARD}"\n"
-        messages+="Valeur de KEYMAP : "${KEYMAP}"\n"
+        messages+="Type de clavier  : ${Bwhite_dlg}${TYPE_KEYBOARD}${Reset_dlg}\n"
+        messages+="Valeur de KEYMAP : ${Bwhite_dlg}${KEYMAP}${Reset_dlg}\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         loadkeys $KEYMAP
 #        setfont Lat2-Terminus16
@@ -76,8 +76,8 @@ source $(pwd)/ai-commons
         # Fin ou Erreur
         if [[ $retour = 0 ]]; then
             messages="\n"
-            messages+="Succès de la configuration du fichier «/etc/pacman.d/mirrorlist».\n\n"
-            messages+="Visualiser/Éditer le fichier «mirrorlist» avec «"${EDITOR}"» ?\n"
+            messages+="Succès de la configuration du fichier ${Byellow_dlg}/etc/pacman.d/mirrorlist${Reset_dlg}.\n\n"
+            messages+="Visualiser/Éditer le fichier ${Byellow_dlg}mirrorlist${Reset_dlg} avec ${Bwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
             print_dialog_yesno "${titre}" "${messages}" "Éditer" "Continuer"
             retour=$?
             if [[ $retour = 0 ]]; then
@@ -85,8 +85,8 @@ source $(pwd)/ai-commons
             fi           
         else
             messages="\n"
-            messages+="Échec de la configuration du fichier «/etc/pacman.d/mirrorlist».\n\n"
-            messages+="Edition manuelle du fichier mirrorlist avec "${EDITOR}"\n"
+            messages+="Échec de la configuration du fichier ${Byellow_dlg}/etc/pacman.d/mirrorlist${Reset_dlg}.\n\n"
+            messages+="Edition manuelle du fichier ${Byellow_dlg}mirrorlist${Reset_dlg} avec ${Bwhite_dlg}${EDITOR}${Reset_dlg}\n"
             print_dialog_msgbox "${titre}" "${messages}" "Éditer"
             mv /etc/pacman.d/mirrorlist.original /etc/pacman.d/mirrorlist
             chmod +r /etc/pacman.d/mirrorlist
@@ -101,7 +101,7 @@ source $(pwd)/ai-commons
         local messages=""
         local titre="INSTALLATION DU SYSTÈME DE BASE"
         messages="\n"
-        messages+="En utilisant le script «pacstrap», seront installés :\n"
+        messages+="En utilisant le script ${Byellow_dlg}pacstrap${Reset_dlg}, seront installés :\n"
         if [[ $IS_UEFI = 1 ]]; then
             messages+="le système de base, gptfdisk, wget"
             liste_paquets="base dialog lz4 gptfdisk elinks wget"
@@ -125,7 +125,7 @@ source $(pwd)/ai-commons
         if [[ $retour = 1 ]]; then
             messages="\n"
             messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
-            messages+="    Erreur durant l'éxécution du script «pacstrap».\n"
+            messages+="    Erreur durant l'éxécution du script ${Byellow_dlg}pacstrap${Reset_dlg}.\n"
             messages+="    ARRÊT immédiat.\n"
             print_dialog_msgbox "${titre}" "${messages}" "OK"
             exit 1
@@ -134,7 +134,7 @@ source $(pwd)/ai-commons
         local name_net_wireless=$(ip link | awk '/wlp/ {print $2}' | sed -e "s/://")
         if [[ -n ${name_net_wireless} ]]; then
             messages="\n"
-            messages+="En utilisant le script «pacstrap»,\n"
+            messages+="En utilisant le script ${Byellow_dlg}pacstrap${Reset_dlg},\n"
             messages+="Installe les outils nécessaires pour le WiFi\n"
             print_dialog_msgbox "${titre}" "${messages}" "Continuer"
             printf '%s\n' "${BGreen}Installation des outils pour le ${BYellow}WiFi${BGreen}...${Reset}"
@@ -143,7 +143,7 @@ source $(pwd)/ai-commons
             if [[ $retour = 1 ]]; then
                 messages="\n"
                 messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
-                messages+="    Erreur durant l'éxécution du script «pacstrap».\n"
+                messages+="    Erreur durant l'éxécution du script ${Byellow_dlg}pacstrap${Reset_dlg}.\n"
                 messages+="    ARRÊT immédiat.\n"
                 print_dialog_msgbox "${titre}" "${messages}" "OK"
                 exit 1
@@ -159,7 +159,7 @@ source $(pwd)/ai-commons
         local titre="GÉNÉRATION DU FICHIER «/etc/fstab» AVEC UUID"
         messages="\n"
         genfstab -U -p ${MOUNTPOINT} >> ${MOUNTPOINT}/etc/fstab
-        messages+="Visualiser le fichier «/etc/fstab» ?\n"
+        messages+="Visualiser le fichier ${Byellow_dlg}/etc/fstab${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Visualiser" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
@@ -205,10 +205,10 @@ source $(pwd)/ai-commons
         local messages=""        
         local titre="PARTIE 3 : INSTALLATION TERMINÉE"
         messages="\n"
-        messages+="Une copie de «AI» sera placé\n"
-        messages+="dans le répertoire /root du nouveau système.\n\n"
+        messages+="Une copie de ${Byellow_dlg}AI${Reset_dlg} sera placé\n"
+        messages+="dans le répertoire ${Byellow_dlg}/root${Reset_dlg} du nouveau système.\n\n"
         messages+="Copie des fichiers de configuration\n"
-        messages+="dans le répertoire /root du nouveau système.\n\n"
+        messages+="dans le répertoire ${Byellow_dlg}/root${Reset_dlg} du nouveau système.\n\n"
         print_dialog_msgbox "${titre}" "${messages}" "Copier"
         # COPY AI TO ROOT FOLDER IN THE NEW SYSTEM
         printf '%s\n' "${BGreen}Copie de ${BYellow}AI${BGreen} dans le répertoire ${BYellow}/root${BGreen} du nouveau système...${Reset}"
@@ -228,11 +228,11 @@ source $(pwd)/ai-commons
         messages="\n"
         # Si dans VirtualBox
         if [[ $IN_VIRTUAL_BOX = 1 ]]; then
-            messages+="Dans VirtualBox : choisir ÉTEINDRE,\n"
+            messages+="Dans ${Bwhite_dlg}VirtualBox${Reset_dlg} : choisir ÉTEINDRE,\n"
             messages+="Modifier l'ordre de démarrage dans Système,\n"
             messages+="Enlever ISO dans Stokage et relancer la VM.\n\n"
         else
-            messages+="Sur PC Réel : choisir REDÉMARRER,\n"
+            messages+="Sur ${Bwhite_dlg}PC Réel${Reset_dlg} : choisir REDÉMARRER,\n"
             messages+="Modifier l'ordre de démarrage dans UEFI/BIOS,\n"
             messages+="Enlever la clé USB ou le CD et redémarrer.\n\n"        
         fi
@@ -272,23 +272,25 @@ else
     setterm -blank 0
     titre="INSTALLATION PARTIE 1 HORS CHROOT"
     messages="\n"
+    messages+="${BRcyan_dlg}!!!${Reset_dlg} Infos :\n"
+    messages+="-----------\n"
     # Editeur par défaut
-    messages+="L'éditeur par défaut est : nano\n"
+    messages+="L'éditeur par défaut est : ${Bwhite_dlg}nano${Reset_dlg}\n"
     # UEFI ou BIOS
     check_is_uefi_or_bios
     if [[ $IS_UEFI = 1 ]]; then
-        messages+="Installation en mode     : UEFI\n"
+        messages+="Installation en mode     : ${Bwhite_dlg}UEFI${Reset_dlg}\n"
         source $(pwd)/ai-b-uefi-hc
     else
-        messages+="Installation en mode     : BIOS\n"
+        messages+="Installation en mode     : ${Bwhite_dlg}BIOS${Reset_dlg}\n"
         source $(pwd)/ai-b-bios-hc
     fi
     # Installation dans VirtualBox ou réelle
     check_is_in_virtualbox
     if [[ $IN_VIRTUAL_BOX = 1 ]]; then
-        messages+="Installation dans        : Oracle VM VirtualBox\n"
+        messages+="Installation dans        : ${Bwhite_dlg}Oracle VM VirtualBox${Reset_dlg}\n"
     else
-        messages+="Installation dans        : PC Réel\n"
+        messages+="Installation dans        : ${Bwhite_dlg}PC Réel${Reset_dlg}\n"
     fi    
     print_dialog_msgbox "${titre}" "${messages}" "Continuer"
     #
@@ -310,8 +312,8 @@ else
     write_variables_ali
     #
     messages+="Commandes à éxécuter dans l'ordre pour poursuivre l'installation :\n\n"
-    messages+="${Byellow_dlg}cd && arch-chroot /mnt /bin/bash => Chroot dans le nouveau système${Reset_dlg}\n"
-    messages+="${Byellow_dlg}cd /root/ai && ./ai-b            => Partie 2 de l'installation${Reset_dlg}\n"
+    messages+="${Bwhite_dlg}cd && arch-chroot /mnt /bin/bash => Chroot dans le nouveau système${Reset_dlg}\n"
+    messages+="${Bwhite_dlg}cd /root/ai && ./ai-b            => Partie 2 de l'installation${Reset_dlg}\n"
     print_dialog_msgbox "${titre}" "${messages}" "Continuer"
     #
     echo "ai-b_launched=1" > /root/ai-b.launched

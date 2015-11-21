@@ -19,17 +19,17 @@
             # sgdisk --zap-all /dev/sda
             local retour=9
             local messages=""
-            local titre="PARTITIONNEMENT : MISE À ZÉRO DU DISQUE «"${HDD_DEVICE}"»"
+            local titre="PARTITIONNEMENT : MISE À ZÉRO DU DISQUE «${HDD_DEVICE}»"
             messages="\n"
             messages+="${BRred_dlg}!!!${Reset_dlg} Si Multi Boot, NE PAS METTRE À ZÉRO le disque.\n"
             messages+="${BRred_dlg}!!!${Reset_dlg} TOUTES les données sur le disque sélectionné seront perdues.\n\n"
-            messages+="Confirmer la mise à zéro du disque «"${HDD_DEVICE}"»\n"
+            messages+="Confirmer la mise à zéro du disque ${Byellow_dlg}${HDD_DEVICE}${Reset_dlg}\n"
             print_dialog_yesno_no "${titre}" "${messages}" "Mettre à zéro" "Annuler"
             retour=$?
             if [[ $retour = 0 ]]; then
                 retour=9
                 messages="\n"
-                messages+="Confirmer une 2ème fois la mise à zéro du disque «"${HDD_DEVICE}"»\n"
+                messages+="Confirmer une 2ème fois la mise à zéro du disque ${Byellow_dlg}${HDD_DEVICE}${Reset_dlg}\n"
                 print_dialog_yesno_no "${titre}" "${messages}" "Mettre à zéro" "Annuler"
                 retour=$?
                 if [[ $retour = 0 ]]; then
@@ -44,9 +44,9 @@
             messages="\n"
             check_is_hdd_or_ssd "${HDD_DEVICE}"
             if [[ ${IS_HDD_OR_SSD} == "HDD" ]]; then
-                messages+="${BRcyan_dlg}!!!${Reset_dlg} Le Disque «"${HDD_DEVICE}"» est un HDD.\n"
+                messages+="${BRcyan_dlg}!!!${Reset_dlg} Le Disque ${Byellow_dlg}${HDD_DEVICE}${Reset_dlg} est un ${Bwhite_dlg}HDD${Reset_dlg}.\n"
             else
-                messages+="${BRcyan_dlg}!!!${Reset_dlg} Le Disque «"${HDD_DEVICE}"» est un SSD.\n"
+                messages+="${BRcyan_dlg}!!!${Reset_dlg} Le Disque ${Byellow_dlg}${HDD_DEVICE}${Reset_dlg} est un ${Bwhite_dlg}SSD${Reset_dlg}.\n"
             fi
             print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         }
@@ -63,11 +63,11 @@
                                     3>&1 1>&2 2>&3)
             messages="\n"
             if [[ $TYPE_STORAGE_PARTITION == "MSDOS" ]]; then
-                messages+="«cfdisk» sera lancé afin de créer les partitions sur «"${HDD_DEVICE}"»\n\n"
+                messages+="${Byellow_dlg}cfdisk${Reset_dlg} sera lancé afin de créer les partitions sur ${Byellow_dlg}${HDD_DEVICE}${Reset_dlg}\n\n"
             else
-                messages+="«cgdisk» sera lancé afin de créer les partitions sur «"${HDD_DEVICE}"»\n\n"
+                messages+="${Byellow_dlg}cgdisk${Reset_dlg} sera lancé afin de créer les partitions sur ${Byellow_dlg}${HDD_DEVICE}${Reset_dlg}\n\n"
                 messages+="${BRred_dlg}!!!${Reset_dlg} Si GRUB est prévu, une partition de 2 Mio de type EF02\n"
-                messages+="    doit être créée en 1er sur «"${HDD_DEVICE}"».\n"
+                messages+="    doit être créée en 1er sur ${Byellow_dlg}${HDD_DEVICE}${Reset_dlg}.\n"
             fi
             print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         }
@@ -138,8 +138,8 @@
         format_swap_partition() {
             titre="PARTITIONNEMENT : FORMATAGE DE LA PARTITION «SWAP»"
             messages="\n"
-            messages+="${BRcyan_dlg}!!!${Reset_dlg} Si Multi Boot, NE PAS FORMATER la partition «SWAP».\n\n"
-            messages+="Confirmer le formatage de la partition SWAP «"$1"»\n"
+            messages+="${BRcyan_dlg}!!!${Reset_dlg} Si Multi Boot, NE PAS FORMATER la partition ${Byellow_dlg}SWAP${Reset_dlg}.\n\n"
+            messages+="Confirmer le formatage de la partition SWAP ${Byellow_dlg}$1${Reset_dlg}\n"
             print_dialog_yesno_no "${titre}" "${messages}" "Formater" "Annuler"
             retour=$?
             if [[ $retour = 0 ]]; then
@@ -190,7 +190,7 @@
 # CHOIX PARTITION SWAP FACULTATIF
         titre="PARTITIONNEMENT : SÉLECTION PARTITION «SWAP»"
         messages="\n"
-        messages+="${BRcyan_dlg}!!!${Reset_dlg} LA PARTITION «SWAP» EST FACULTATIVE.\n\n"
+        messages+="${BRcyan_dlg}!!!${Reset_dlg} LA PARTITION ${Byellow_dlg}SWAP${Reset_dlg} EST FACULTATIVE.\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
         partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "${NUM_LINE_BIOS_BOOT_PART}d")
         L_SWAP=$(dialog --colors --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --cancel-label "Annuler" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
@@ -204,7 +204,7 @@
 # CHOIX PARTITION HOME FACULTATIF
         titre="PARTITIONNEMENT : SÉLECTION PARTITION «HOME»"
         messages="\n"
-        messages+="${BRcyan_dlg}!!!${Reset_dlg} LA PARTITION «HOME» EST FACULTATIVE.\n\n"
+        messages+="${BRcyan_dlg}!!!${Reset_dlg} LA PARTITION ${Byellow_dlg}HOME${Reset_dlg} EST FACULTATIVE.\n\n"
         messages+="${BRred_dlg}!!!${Reset_dlg} Toutes les données sur la partition choisie seront perdues.\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
         partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v $L_SWAP | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "${NUM_LINE_BIOS_BOOT_PART}d")

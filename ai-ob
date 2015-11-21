@@ -16,7 +16,7 @@
         local messages=""
         local titre=""
         # OPENBOX {{{
-        titre="INSTALLATION DE OPENBOX"
+        titre="INSTALLATION DE «OPENBOX»"
         messages="\n"
         messages+="Openbox est un gestionnaire de fenêtres très léger, simple et configurable.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
@@ -74,8 +74,8 @@
         pause_function
         # OPENBOX CUSTOMIZATION AUTO {{{
         messages="\n"
-        messages+="Customisation Personnelle Automatique pour «${USERNAME}».\n\n"
-        messages+="Customiser OpenBox pour «${USERNAME}» ?\n"
+        messages+="Customisation Personnelle Automatique pour ${Byellow_dlg}${USERNAME}${Reset_dlg}.\n\n"
+        messages+="Customiser OpenBox pour ${Byellow_dlg}${USERNAME}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Customiser" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
@@ -91,8 +91,8 @@
             fi
             retour=9
             messages="\n"
-            messages+="Customisation Personnelle Automatique pour «${USERNAME}».\n\n"
-            messages+="Autologin pour «${USERNAME}» sans Gestionnaire de Connexion ?\n"
+            messages+="Customisation Personnelle Automatique pour ${Byellow_dlg}${USERNAME}${Reset_dlg}.\n\n"
+            messages+="Autologin pour ${Byellow_dlg}${USERNAME}${Reset_dlg} sans Gestionnaire de Connexion ?\n"
             print_dialog_yesno "${titre}" "${messages}" "Autologin" "Continuer"
             retour=$?
             if [[ $retour = 0 ]]; then
@@ -358,16 +358,16 @@
         if [[ $IN_VIRTUAL_BOX -eq 1 ]]; then
             retour=9
             messages="\n"
-            messages+="Installation dans «Oracle VM VirtualBox».\n\n"
-            messages+="Monter automatiquement «VBox Shared Folder» pour «${USERNAME}» ?"
+            messages+="Installation dans ${Bwhite_dlg}Oracle VM VirtualBox${Reset_dlg}.\n\n"
+            messages+="Monter automatiquement ${Byellow_dlg}VBox Shared Folder${Reset_dlg} pour ${Byellow_dlg}${USERNAME}${Reset_dlg} ?"
             print_dialog_yesno "${titre}" "${messages}" "Monter" "Continuer"
             retour=$?
             if [[ $retour = 0 ]]; then
                 messages="\n"
-                messages+="Installation dans «Oracle VM VirtualBox».\n\n"
-                messages+="Choisir le PC Hôte «PC-John Windows 7» ou «PC-Jnd Arch Linux»"
+                messages+="Installation dans ${Bwhite_dlg}Oracle VM VirtualBox${Reset_dlg}.\n\n"
+                messages+="Choisir le PC Hôte ${Byellow_dlg}PC-John Windows${Reset_dlg} ou ${Byellow_dlg}PC-Jnd Arch Linux${Reset_dlg}"
                 REPLY=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 16 72 5 \
-                    "PC-John" "Windows 7" \
+                    "PC-John" "Windows" \
                     "PC-Jnd" "Arch Linux" \
                     3>&1 1>&2 2>&3)
                 case "$REPLY" in

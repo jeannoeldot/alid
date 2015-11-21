@@ -43,26 +43,26 @@
         fi
         DIR_EFI_ARCHLINUX="/boot/efi/EFI/${NAME_DIR_ARCHLINUX}"
         messages+="${BRcyan_dlg}!!!${Reset_dlg} Le repertoire d'installation de Arch Linux est :\n"
-        messages+="    "${DIR_EFI_ARCHLINUX}"\n\n"
+        messages+="    ${DIR_EFI_ARCHLINUX}\n\n"
         # INSCRIT NAME_DIR_ARCHLINUX DANS name_dir_archlinux.uefi pour ai-de
         echo "name_dir_archlinux=${NAME_DIR_ARCHLINUX}" > /root/name_dir_archlinux.uefi
         #
         # Nom du Manager de Boot
         if [[ $IN_VIRTUAL_BOX = 1 ]]; then
-            messages+="${BRcyan_dlg}!!!${Reset_dlg} Installation dans Oracle VM VirtualBox :\n"
+            messages+="${BRcyan_dlg}!!!${Reset_dlg} Installation dans ${BRwhite_dlg}Oracle VM VirtualBox${Reset_dlg} :\n"
             messages+="    Le nom du Manager de Boot est : boot${ARCHI_REFIND}.efi\n\n"
             MGR_EFI="boot"
             NAME_DIR_EFI="/boot/efi/EFI/BOOT"
             NAME_DIR_MGR_EFI="/EFI/BOOT/boot${ARCHI_REFIND}.efi"
         else
-            messages+="${BRcyan_dlg}!!!${Reset_dlg} Installation dans PC Reel :\n"
+            messages+="${BRcyan_dlg}!!!${Reset_dlg} Installation dans ${BRwhite_dlg}PC Reel${Reset_dlg} :\n"
             messages+="    Le nom du Manager de Boot est : refind_${ARCHI_REFIND}.efi\n\n"
             MGR_EFI="refind"
             NAME_DIR_EFI="/boot/efi/EFI/refind"
             NAME_DIR_MGR_EFI="/EFI/refind/refind_${ARCHI_REFIND}.efi"
         fi
         messages+="${BRcyan_dlg}!!!${Reset_dlg} Le repertoire d'installation du Manager de Boot est :\n"
-        messages+="    "${NAME_DIR_EFI}"\n"
+        messages+="    ${NAME_DIR_EFI}\n"
         # INSCRIT CHOIX NOM DANS name_dir_archlinux.uefi pour ai-de
         echo "name_mgr_efi=${MGR_EFI}" >> /root/name_dir_archlinux.uefi
         print_dialog_msgbox_h "${titre}" "${messages}" "Continuer" 20
@@ -72,7 +72,7 @@
         pacman -Syu refind-efi
         # Kernels
         messages="\n"
-        messages+="Copie des fichiers du kernel dans <${DIR_EFI_ARCHLINUX}> :\n"
+        messages+="Copie des fichiers du kernel dans ${Byellow_dlg}${DIR_EFI_ARCHLINUX}${Reset_dlg} :\n"
         messages+="- vmlinuz-linux --> vmlinuz-${NAME_DIR_ARCHLINUX}.efi\n"
         messages+="- initramfs-linux.img --> initramfs-${NAME_DIR_ARCHLINUX}.img\n"
         messages+="- initramfs-linux-fallback.img --> initramfs-${NAME_DIR_ARCHLINUX}-fallback.img\n"
@@ -137,7 +137,7 @@
         messages="\n"
         #
         if [[ $IS_MULTI_BOOT_UEFI = 0 ]]; then
-            messages+="Configuration de ${NAME_DIR_EFI}/refind.conf :\n"
+            messages+="Configuration de ${Byellow_dlg}${NAME_DIR_EFI}/refind.conf${Reset_dlg} :\n"
             messages+="- timeout --> timeout 2\n"
             messages+="- #scan_all_linux_kernels --> scan_all_linux_kernels false\n"
             messages+="- #fold_linux_kernels --> fold_linux_kernels false\n"
@@ -151,7 +151,7 @@
             fi
         else
             messages+="${BRcyan_dlg}!!!${Reset_dlg} MULTI BOOT UEFI :\n"
-            messages+="    Pas de configuration de ${NAME_DIR_EFI}/refind.conf.\n"
+            messages+="    Pas de configuration de ${Byellow_dlg}${NAME_DIR_EFI}/refind.conf${Reset_dlg}.\n"
         fi
         print_dialog_msgbox_h "${titre}" "${messages}" "Continuer" 20
         # rEFInd 0.8.3 :
@@ -178,7 +178,7 @@
             fi
         fi
         messages="\n"
-        messages+="Visualiser/Editer le fichier <refind.conf> avec <"${EDITOR}"> ?\n"
+        messages+="Visualiser/Editer le fichier ${Byellow_dlg}refind.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
@@ -186,7 +186,7 @@
         fi 
         #
         messages="\n"
-        messages+="Configuration de <${DIR_EFI_ARCHLINUX}/refind_linux.conf>.\n"
+        messages+="Configuration de ${Byellow_dlg}${DIR_EFI_ARCHLINUX}/refind_linux.conf${Reset_dlg}.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         partroot=$(echo $ROOT | sed 's/\/dev\///')
         partuuid=$(ls -l /dev/disk/by-partuuid | awk '/'$partroot'/ {print $9}')
@@ -208,7 +208,7 @@
             echo -e '"Fallback en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw add_efi_memmap force_addr=0xaddr systemd.unit=rescue.target initrd=EFI/'$NAME_DIR_ARCHLINUX'/intel-ucode.img initrd=EFI/'$NAME_DIR_ARCHLINUX'/initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
         fi
         messages="\n"
-        messages+="Visualiser/Editer le fichier <refind_linux.conf> avec <"${EDITOR}"> ?\n"
+        messages+="Visualiser/Editer le fichier ${Byellow_dlg}refind_linux.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
@@ -275,7 +275,7 @@
             systemctl enable intel_ucode_update.path
             pause_function
         else
-            messages+="${BRcyan_dlg}!!!${Reset_dlg} Installation dans VirtualBox :\n"
+            messages+="${BRcyan_dlg}!!!${Reset_dlg} Installation dans ${Bwhite_dlg}Oracle VM VirtualBox${Reset_dlg} :\n"
             messages+="    PAS d'activion des mises a jour du microcode.\n"
             print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         fi
@@ -283,7 +283,7 @@
         messages="\n"
         if [[ $IS_MULTI_BOOT_UEFI = 0 ]]; then
             messages+="- Installation d'un Shell UEFI.\n"
-            messages+="- Creation du script <archlinux.nsh> utilise par le Shell UEFI.\n"
+            messages+="- Creation du script ${Byellow_dlg}archlinux.nsh${Reset_dlg} utilise par le Shell UEFI.\n"
         else
             messages+="${BRcyan_dlg}!!!${Reset_dlg} MULTI BOOT UEFI : Pas d'installation d'un Shell UEFI.\n"
         fi
@@ -301,7 +301,7 @@
                 echo "\EFI\arch_1\vmlinuz-arch_1.efi root=PARTUUID=$partuuid rw rootfstype=$ROOT_FS_TYPE add_efi_memmap initrd=EFI/arch_1/initramfs-arch_1.img" >> /boot/efi/archlinux.nsh
             fi
             messages="\n"
-            messages+="Visualiser/Editer le script <archlinux.nsh> avec <"${EDITOR}"> ?\n"
+            messages+="Visualiser/Editer le script ${Byellow_dlg}archlinux.nsh${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
             print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
             retour=$?
             if [[ $retour = 0 ]]; then

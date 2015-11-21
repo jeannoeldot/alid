@@ -42,7 +42,7 @@ source $(pwd)/ai-commons
             local titre="LECTURE FICHIER <<variables.ali>>"
             messages="\n"
             messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
-            messages+="    Le fichier <variables.ali> n'existe pas.\n"
+            messages+="    Le fichier ${Byellow_dlg}variables.ali${Reset_dlg} n'existe pas.\n"
             messages+="    ARRET immediat.\n"
             print_dialog_msgbox "${titre}" "${messages}" "OK"
             exit 1
@@ -85,7 +85,7 @@ source $(pwd)/ai-commons
             messages+="Configurer le TRIM en se basant sur :\n"
             REPLY=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Selectionner" --menu "${messages}" 20 72 5 \
                     "DISCARD" "TRIM par option de montage." \
-                    "FSTRIM" "TRIM par service <fstrim>." \
+                    "FSTRIM" "TRIM par service fstrim." \
                     3>&1 1>&2 2>&3)
             case "$REPLY" in
                 "DISCARD")
@@ -112,7 +112,7 @@ source $(pwd)/ai-commons
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         #
         messages="\n"
-        messages+="Visualiser/Editer le fichier </etc/fstab> avec <"${EDITOR}"> ?\n"
+        messages+="Visualiser/Editer le fichier ${Byellow_dlg}/etc/fstab${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
@@ -131,12 +131,12 @@ source $(pwd)/ai-commons
 #        echo "FONT_MAP=8859-15_to_uni" >> /etc/vconsole.conf
         messages="\n"
         messages+="Definition du type de clavier dans les consoles virtuelles.\n\n"
-        messages+="Clavier : variable KEYMAP = "$KEYMAP"\n"
-        messages+="Police  : variable FONT   = lat9w-16\n"
+        messages+="Clavier : variable KEYMAP = ${Bwhite_dlg}$KEYMAP${Reset_dlg}\n"
+        messages+="Police  : variable FONT   = ${Bwhite_dlg}lat9w-16${Reset_dlg}\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         #
         messages="\n"
-        messages+="Visualiser/Editer le fichier </etc/vconsole.conf> avec <"${EDITOR}"> ?\n"
+        messages+="Visualiser/Editer le fichier ${Byellow_dlg}/etc/vconsole.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
@@ -150,8 +150,8 @@ source $(pwd)/ai-commons
         local messages=""
         local titre="CONFIGURATION DU FICHIER <</etc/pacman.conf>>"
         messages="\n"
-        messages+="Activation de l'option <color>.\n"
-        messages+="Activation de l'option <VerbosePkgLists>.\n"
+        messages+="Activation de l'option ${Bwhite_dlg}color${Reset_dlg}.\n"
+        messages+="Activation de l'option ${Bwhite_dlg}VerbosePkgLists${Reset_dlg}.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         sed -i "/^#Color/c\Color" /etc/pacman.conf
         sed -i "/^#VerbosePkgLists/c\VerbosePkgLists" /etc/pacman.conf
@@ -176,7 +176,7 @@ source $(pwd)/ai-commons
         echo "$L_HN" > /etc/hostname
         retour=9
         messages="\n"
-        messages+="Visualiser/Editer le fichier </etc/hostname> avec <"${EDITOR}"> ?\n"
+        messages+="Visualiser/Editer le fichier ${Byellow_dlg}/etc/hostname${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
@@ -191,8 +191,8 @@ source $(pwd)/ai-commons
         retour=9
         titre="MODIFICATION DU FICHIER <</etc/hosts>>"
         messages="\n"
-        messages+="Nom d'hote choisi : "${L_HN}"\n\n"
-        messages+="Visualiser le fichier </etc/hosts> ?\n"
+        messages+="Nom d'hote choisi : ${BRwhite_dlg}${L_HN}${Reset_dlg}\n\n"
+        messages+="Visualiser le fichier ${Byellow_dlg}/etc/hosts${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Visualiser" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
@@ -207,7 +207,7 @@ source $(pwd)/ai-commons
         local messages=""
         local titre="CONFIGURATION DU FICHIER <</etc/localtime>>"
         messages="\n"
-        messages+="Le fuseau horaire selectionne est : "${FR_ZONE}"/"${FR_SUBZONE}".\n\n"
+        messages+="Le fuseau horaire selectionne est : ${BRwhite_dlg}${FR_ZONE}/${FR_SUBZONE}${Reset_dlg}.\n\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         ZONE=${FR_ZONE}
         SUBZONE=${FR_SUBZONE}
@@ -221,7 +221,7 @@ source $(pwd)/ai-commons
         local messages=""
         local titre="CONFIGURATION DE L'HORLOGE MATERIELLE"
         messages="\n"
-        messages+="Le mode horloge materielle selectionne est : UTC.\n\n"
+        messages+="Le mode horloge materielle selectionne est : ${BRwhite_dlg}UTC${Reset_dlg}.\n\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         printf '%s\n' "${BGreen}Configuration de l'horloge materielle en ${BYellow}UTC${BGreen}...${Reset}"
         hwclock --systohc --utc
@@ -235,7 +235,7 @@ source $(pwd)/ai-commons
         local titre="CONFIGURATION DU FICHIER <</etc/locale.conf>>"
         messages="\n"
         messages+="Definition de la langue utilisee dans le systeme.\n\n"
-        messages+="La langue locale selectionnee est : "${FR_LOCALE}".\n"
+        messages+="La langue locale selectionnee est : ${BRwhite_dlg}${FR_LOCALE}${Reset_dlg}.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         LOCALE=${FR_LOCALE}
         LOCALE_8859="$LOCALE ISO-8859"
@@ -243,7 +243,7 @@ source $(pwd)/ai-commons
         echo "LANG=${LOCALE_UTF8}" > /etc/locale.conf
         echo "LC_COLLATE=C" >> /etc/locale.conf
         messages="\n"
-        messages+="Visualiser/Editer le fichier </etc/locale.conf> avec <"${EDITOR}"> ?\n"
+        messages+="Visualiser/Editer le fichier ${Byellow_dlg}/etc/locale.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
@@ -283,7 +283,7 @@ source $(pwd)/ai-commons
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         #
         messages="\n"
-        messages+="Visualiser/Editer le fichier </etc/mkinitcpio.conf> avec <"${EDITOR}"> ?\n"
+        messages+="Visualiser/Editer le fichier ${Byellow_dlg}/etc/mkinitcpio.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
         if [[ $retour = 0 ]]; then
@@ -301,8 +301,8 @@ source $(pwd)/ai-commons
         local messages=""
         local titre="CONFIGURATION DU RESEAU ETHERNET AVEC DHCPCD"
         messages="\n"
-        messages+="Le nom de l'interface reseau est : "${NAME_NET_WIRED}"\n\n"
-        messages+="Ajout de l'option <noarp> a etc/dhcpcd.conf.\n"
+        messages+="Le nom de l'interface reseau est : ${BRwhite_dlg}${NAME_NET_WIRED}${Reset_dlg}\n\n"
+        messages+="Ajout de l'option ${BRwhite_dlg}noarp${Reset_dlg} a ${Byellow_dlg}/etc/dhcpcd.conf${Reset_dlg}.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         #
         echo "noarp" >> /etc/dhcpcd.conf
@@ -324,18 +324,18 @@ source $(pwd)/ai-commons
         until [[ $retour = 0 ]];
         do
             messages="\n"
-            messages+="Entrer le mot de passe <root> :\n"
+            messages+="Entrer le mot de passe ${Byellow_dlg}root${Reset_dlg} :\n"
             messages+="${BRcyan_dlg}!!!${Reset_dlg} 8 caracteres minimum et sans espace.\n"
             messages_chk="\n"
-            messages_chk+="Confirmer le mot de passe <root> :\n"
+            messages_chk+="Confirmer le mot de passe ${Byellow_dlg}root${Reset_dlg} :\n"
             messages_chk+="${BRcyan_dlg}!!!${Reset_dlg} 8 caracteres minimum et sans espace.\n"
             L_MDP=$(dialog --colors --insecure --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --passwordbox "${messages}" 16 72 3>&1 1>&2 2>&3)
             L_MDP_CHK=$(dialog --colors --insecure --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --passwordbox "${messages_chk}" 16 72 3>&1 1>&2 2>&3)
             if [[ ${#L_MDP} -lt 8 || ${#L_MDP_CHK} -lt 8 || ${L_MDP} =~ " " || ${L_MDP_CHK} =~ " " || ${L_MDP} != ${L_MDP_CHK} ]]; then
                 messages="\n"
                 messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
-                messages+="    Mot de passe <root> errone :\n"
-                messages+="    Entrer de nouveau le mot de passe <root>."
+                messages+="    Mot de passe ${Byellow_dlg}root${Reset_dlg} errone.\n"
+                messages+="    Entrer de nouveau le mot de passe ${Byellow_dlg}root${Reset_dlg}."
                 print_dialog_msgbox "${titre}" "${messages}" "Recommencer"
                 retour=9
             else
@@ -366,10 +366,10 @@ source $(pwd)/ai-commons
     fi
     messages="\n"
     messages+="Configure le clavier et la police :\n\n"
-    messages+="Type de clavier  : "${TYPE_KEYBOARD}"\n"
-    messages+="Valeur de KEYMAP : "${KEYMAP}"\n"
+    messages+="Type de clavier  : ${Bwhite_dlg}${TYPE_KEYBOARD}${Reset_dlg}\n"
+    messages+="Valeur de KEYMAP : ${Bwhite_dlg}${KEYMAP}${Reset_dlg}\n"
 #     messages+="Police           : Lat2-Terminus16\n"
-    messages+="Police           : lat9w-16\n"
+    messages+="Police           : ${Bwhite_dlg}lat9w-16${Reset_dlg}\n"
     print_dialog_msgbox "${titre}" "${messages}" "Continuer"
     loadkeys $KEYMAP
 #    setfont Lat2-Terminus16
@@ -384,20 +384,22 @@ source $(pwd)/ai-commons
     #
     messages="\n"
     # Editeur par defaut
-    messages+="L'editeur par defaut est : nano\n"
+    messages+="${BRcyan_dlg}!!!${Reset_dlg} Infos :\n"
+    messages+="-----------\n"
+    messages+="L'editeur par defaut est : ${Bwhite_dlg}nano${Reset_dlg}\n"
     # UEFI ou BIOS
     if [[ $IS_UEFI = 1 ]]; then
-        messages+="Installation en mode     : UEFI\n"
+        messages+="Installation en mode     : ${Bwhite_dlg}UEFI${Reset_dlg}\n"
         source $(pwd)/ai-b-uefi-ic
     else
-        messages+="Installation en mode     : BIOS\n"
+        messages+="Installation en mode     : ${Bwhite_dlg}BIOS${Reset_dlg}\n"
         source $(pwd)/ai-b-bios-ic
     fi
     # Installation dans VirtualBox ou reelle
     if [[ $IN_VIRTUAL_BOX = 1 ]]; then
-        messages+="Installation dans        : Oracle VM VirtualBox\n"
+        messages+="Installation dans        : ${Bwhite_dlg}Oracle VM VirtualBox${Reset_dlg}\n"
     else
-        messages+="Installation dans        : PC Reel\n"
+        messages+="Installation dans        : ${Bwhite_dlg}PC Reel${Reset_dlg}\n"
     fi
     print_dialog_msgbox "${titre}" "${messages}" "Continuer"
     #
@@ -421,8 +423,8 @@ source $(pwd)/ai-commons
     titre="FIN INSTALLATION PARTIE 2 DANS CHROOT"
     messages="\n"
     messages+="Commandes a executer dans l'ordre pour poursuivre l'installation :\n\n"
-    messages+="${Byellow_dlg}exit                             => Quitte l'environnement Chroot${Reset_dlg}\n"
-    messages+="${Byellow_dlg}cd ai && ./ai-b                  => Partie 3 de l'installation${Reset_dlg}\n"
+    messages+="${Bwhite_dlg}exit                             => Quitte l'environnement Chroot${Reset_dlg}\n"
+    messages+="${Bwhite_dlg}cd ai && ./ai-b                  => Partie 3 de l'installation${Reset_dlg}\n"
     print_dialog_msgbox "${titre}" "${messages}" "Continuer"
     #
     exit 0
