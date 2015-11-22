@@ -164,10 +164,11 @@ source $(pwd)/ai-commons
         local titre="CONFIGURATION DU FICHIER <</etc/hostname>>"
         messages="\n"
         messages+="Entrer un nom d'hote pour identifier la machine :\n"
+        messages+="${BRcyan_dlg}!!!${Reset_dlg} Sans espace.\n"
         until [[ $retour = 0 ]];
             do
-                L_HN=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --inputbox "${messages}" 16 72 "myarch" 3>&1 1>&2 2>&3)
-                if [[ ${L_HN} == "" ]]; then
+                L_HN=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --inputbox "${messages}" 16 72 "myarch" 3>&1 1>&2 2>&3)
+                if [[ ${L_HN} =~ " " || ${L_HN} == "" ]]; then
                     retour=9
                 else
                     retour=0
@@ -184,7 +185,7 @@ source $(pwd)/ai-commons
         fi
         #
         # Lire valeur hostname ds L_HN
-        L_HN=$(cat /etc/hostname | awk '{print $1}')
+        L_HN=$(awk '{print $1}' /etc/hostname)
         # Ecrire la valeur hostname dans /etc/hosts
         sed -i "/127.0.0.1/s/$/ ${L_HN}/" /etc/hosts
         sed -i "/::1/s/$/ ${L_HN}/" /etc/hosts

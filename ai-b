@@ -59,7 +59,7 @@ source $(pwd)/ai-commons
         curl -so ${tmpfile} ${url}
         # Backup and replace current mirrorlist file (if new file is non-zero)
         if [[ -s ${tmpfile} ]]; then
-            date_Generated=$(cat "${tmpfile}" | awk '/Generated/ {print $4}')
+            date_Generated=$(awk '/Generated/ {print $4}' "${tmpfile}")
             if [[ ${date_Generated} == ${date_du_jour} ]]; then
                 sed -i "s/^#Server/Server/g" ${tmpfile}
                 sed -i "/^## Score/d" ${tmpfile}

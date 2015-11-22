@@ -11,8 +11,8 @@
 
 # CONSTANTES {{{
 # TITRE BOITES DE DIALOG dialog
-TITRE_BOX_W_DATE="21/11/2015"
-TITRE_BOX_W_VERSION="V 1.0.6"
+TITRE_BOX_W_DATE="22/11/2015"
+TITRE_BOX_W_VERSION="V 1.0.7"
 TITRE_BOX_W_TEXTE="INSTALLATION DE ARCH LINUX"
 TITRE_BOX_W="${TITRE_BOX_W_TEXTE} ${TITRE_BOX_W_VERSION} DU ${TITRE_BOX_W_DATE}"
 
@@ -194,7 +194,7 @@ Bblue_dlg="${Bold_dlg}${blue_dlg}"
 Bmagenta_dlg="${Bold_dlg}${magenta_dlg}"
 Bcyan_dlg="${Bold_dlg}${cyan_dlg}"
 Bwhite_dlg="${Bold_dlg}${white_dlg}"
-# Reverse
+# Bold Reverse
 BRred_dlg="${Bold_dlg}${red_dlg}${Reverse_dlg}"
 BRcyan_dlg="${Bold_dlg}${cyan_dlg}${Reverse_dlg}"
 BRwhite_dlg="${Bold_dlg}${white_dlg}${Reverse_dlg}"
