@@ -228,7 +228,7 @@ source $(pwd)/ai-commons
         messages="\n"
         # Si dans VirtualBox
         if [[ $IN_VIRTUAL_BOX = 1 ]]; then
-            messages+="Dans ${Bwhite_dlg}VirtualBox${Reset_dlg} : choisir ${Byellow_dlg}ÉTEINDRE${Reset_dlg},\n"
+            messages+="Dans ${Bwhite_dlg}Oracle VM VirtualBox${Reset_dlg} : choisir ${Byellow_dlg}ÉTEINDRE${Reset_dlg},\n"
             messages+="Modifier l'ordre de démarrage dans Système,\n"
             messages+="Enlever ISO dans Stokage et relancer la VM.\n\n"
         else

@@ -135,7 +135,7 @@ read_name_type_keyboard() { #{{{
 # check_is_cm_asus_z87c() { #{{{
 #     local z87c=$(journalctl -b | grep -E "DMI:")
 #     echo ${z87c} | tr "[:upper:]" "[:lower:]" | grep -q z87-c
-#     if [[ $? -eq 0 ]]; then
+#     if (( $? == 0 )); then
 #         IS_Z87C=1
 #     else
 #         IS_Z87C=0
@@ -145,7 +145,7 @@ read_name_type_keyboard() { #{{{
 check_is_in_virtualbox() { #{{{
     local vbox=$(journalctl -b | grep -E "DMI:")
     echo ${vbox} | tr "[:upper:]" "[:lower:]" | grep -q virtualbox
-    if [[ $? -eq 0 ]]; then
+    if (( $? == 0 )); then
         IN_VIRTUAL_BOX=1
     else
         IN_VIRTUAL_BOX=0
@@ -164,7 +164,7 @@ check_is_uefi_or_bios() { #{{{
 check_is_hdd_or_ssd() { #{{{
     local name_device=$(echo $1 | sed 's/\/dev\///')
     local type_device=$(cat /sys/block/$name_device/queue/rotational)
-    if [[ $type_device -eq 1 ]]; then
+    if [[ $type_device = 1 ]]; then
         # rotational = 1 ==> HDD
         IS_HDD_OR_SSD="HDD"
     else
