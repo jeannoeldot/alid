@@ -181,7 +181,7 @@
         messages+="Visualiser/Editer le fichier ${Byellow_dlg}refind.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             ${EDITOR} ${NAME_DIR_EFI}/refind.conf
         fi 
         #
@@ -211,7 +211,7 @@
         messages+="Visualiser/Editer le fichier ${Byellow_dlg}refind_linux.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             ${EDITOR} ${DIR_EFI_ARCHLINUX}/refind_linux.conf
         fi  
         #
@@ -243,7 +243,7 @@
             messages+="Visualiser les entrees dans NVRAM ?\n"
             print_dialog_yesno "${titre}" "${messages}" "Visualiser" "Continuer"
             retour=$?
-            if [[ $retour = 0 ]]; then
+            if (( retour == 0 )); then
                 efibootmgr -v > /tmp/.efibootmgr
                 printf '%s\n' "${BGreen}Visualisation des entrees dans ${BYellow}NVRAM${BGreen}...${Reset}"
                 cat /tmp/.efibootmgr
@@ -304,7 +304,7 @@
             messages+="Visualiser/Editer le script ${Byellow_dlg}archlinux.nsh${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
             print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
             retour=$?
-            if [[ $retour = 0 ]]; then
+            if (( retour == 0 )); then
                ${EDITOR} /boot/efi/archlinux.nsh
             fi  
         fi

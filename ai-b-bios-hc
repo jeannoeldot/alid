@@ -26,13 +26,13 @@
             messages+="Confirmer la mise à zéro du disque ${Byellow_dlg}${HDD_DEVICE}${Reset_dlg}\n"
             print_dialog_yesno_no "${titre}" "${messages}" "Mettre à zéro" "Annuler"
             retour=$?
-            if [[ $retour = 0 ]]; then
+            if (( retour == 0 )); then
                 retour=9
                 messages="\n"
                 messages+="Confirmer une 2ème fois la mise à zéro du disque ${Byellow_dlg}${HDD_DEVICE}${Reset_dlg}\n"
                 print_dialog_yesno_no "${titre}" "${messages}" "Mettre à zéro" "Annuler"
                 retour=$?
-                if [[ $retour = 0 ]]; then
+                if (( retour == 0 )); then
                     sgdisk --zap-all ${HDD_DEVICE}
                     sync
                 fi
@@ -142,7 +142,7 @@
             messages+="Confirmer le formatage de la partition SWAP ${Byellow_dlg}$1${Reset_dlg}\n"
             print_dialog_yesno_no "${titre}" "${messages}" "Formater" "Annuler"
             retour=$?
-            if [[ $retour = 0 ]]; then
+            if (( retour == 0 )); then
                 printf '%s\n' "${BGreen}Formatage de la partition SWAP ${BYellow}$1${BGreen}...${Reset}"
 #                umount_partition "$1"
                 mkswap $1
@@ -195,7 +195,7 @@
         partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "${NUM_LINE_BIOS_BOOT_PART}d")
         L_SWAP=$(dialog --colors --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --cancel-label "Annuler" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             format_swap_partition "$L_SWAP"
             CHOIX_PARTITIONS+=$(echo $L_SWAP)" = /swap.\n"
         else
@@ -210,7 +210,7 @@
         partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v $L_SWAP | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "${NUM_LINE_BIOS_BOOT_PART}d")
         L_HOME=$(dialog --colors --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --cancel-label "Annuler" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             format_partition "$L_HOME" "${MOUNTPOINT}/home"
             CHOIX_PARTITIONS+=$(echo $L_HOME)" = /home."
         else

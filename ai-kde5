@@ -70,7 +70,7 @@
         retour=9
         messages=" \n"
         messages+="PERSONNALISATION DE KDE5\n\n"
-        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        until (( retour == 0 )) || (( retour == 1 ));
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 18 72 4)
             options=("choqok" "(Client Twitter)" OFF
@@ -80,7 +80,7 @@
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
-            if [[ $retour = 0 ]]; then
+            if (( retour == 0 )); then
                 if [[ $REPLY == "" ]]; then
                     retour=9
                 fi
@@ -127,7 +127,7 @@
             messages+="Activer un drop-in pour ${Byellow_dlg}sddm.service${Reset_dlg} ?"
             print_dialog_yesno "${titre}" "${messages}" "Activer" "Continuer"
             retour=$?
-            if [[ $retour = 0 ]]; then
+            if (( retour == 0 )); then
                 printf '%s\n' "${BGreen}Activation d'un drop-in pour ${BYellow}sddm.service${BGreen}...${Reset}"
                 cp -v ai-fconfig/etc-udev-rules.d-99-systemd-dri-devices.rules /etc/udev/rules.d/99-systemd-dri-devices.rules
                 mkdir -p /etc/systemd/system/display-manager.service.d
@@ -146,7 +146,7 @@
             messages+="Monter automatiquement ${Byellow_dlg}VBox Shared Folder${Reset_dlg} pour ${Byellow_dlg}${USERNAME}${Reset_dlg} ?"
             print_dialog_yesno "${titre}" "${messages}" "Monter" "Continuer"
             retour=$?
-            if [[ $retour = 0 ]]; then
+            if (( retour == 0 )); then
                 messages="\n"
                 messages+="Installation dans ${Bwhite_dlg}Oracle VM VirtualBox${Reset_dlg}.\n\n"
                 messages+="Choisir le PC Hôte ${Byellow_dlg}PC-John Windows${Reset_dlg} ou ${Byellow_dlg}PC-Jnd Arch Linux${Reset_dlg}"
@@ -180,7 +180,7 @@
         local messages=""
         local titre="INSTALLATION D'APPLICATIONS ACCESSOIRES"
         messages=" \n"
-        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        until (( retour == 0 )) || (( retour == 1 ));
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 3)
             options=("cairo-dock" "(Cairo Dock)" OFF
@@ -189,7 +189,7 @@
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
-            if [[ $retour = 0 ]]; then
+            if (( retour == 0 )); then
                 if [[ $REPLY == "" ]]; then
                     retour=9
                 fi
@@ -222,7 +222,7 @@
         local messages=""
         local titre="INSTALLATION D'OUTILS SYSTÈME"
         messages=" \n"
-        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        until (( retour == 0 )) || (( retour == 1 ));
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 22 72 12)
             options=("gparted" "(Clone de Partition Magic)" ON
@@ -240,7 +240,7 @@
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
-            if [[ $retour = 0 ]]; then
+            if (( retour == 0 )); then
                 if [[ $REPLY == "" ]]; then
                     retour=9
                 fi
@@ -315,7 +315,7 @@
                     messages+="Installer cpupower ?"
                     print_dialog_yesno "${titre}" "${messages}" "Installer" "Continuer"
                     retour=$?
-                    if [[ $retour = 0 ]]; then
+                    if (( retour == 0 )); then
                         printf '%s\n' "${BGreen}Installation de ${BYellow}cpupower${BGreen}...${Reset}"
                         package_install "cpupower"
                         printf '%s\n' "${BGreen}Activation de ${BYellow}cpupower.service${BGreen}...${Reset}"
@@ -342,7 +342,7 @@
         local messages=""
         local titre="INSTALLATION D'APPLICATIONS DE DÉVELOPPEMENT"
         messages=" \n"
-        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        until (( retour == 0 )) || (( retour == 1 ));
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 7)
             options=("kdevelop" "(IDE C/C ++ pour KDE)" OFF
@@ -355,7 +355,7 @@
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
-            if [[ $retour = 0 ]]; then
+            if (( retour == 0 )); then
                 if [[ $REPLY == "" ]]; then
                     retour=9
                 fi
@@ -404,7 +404,7 @@
         local messages=""
         local titre="INSTALLATION D'APPLICATIONS DE BUREAUTIQUE"
         messages=" \n"
-        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        until (( retour == 0 )) || (( retour == 1 ));
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 2)
             options=("libreoffice" "(LibreOffice Still)" ON
@@ -412,7 +412,7 @@
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
-            if [[ $retour = 0 ]]; then
+            if (( retour == 0 )); then
                 if [[ $REPLY == "" ]]; then
                     retour=9
                 fi
@@ -445,7 +445,7 @@
         local messages=""
         local titre="INSTALLATION D'APPLICATIONS GRAPHIQUES"
         messages=" \n"
-        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        until (( retour == 0 )) || (( retour == 1 ));
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 3)
             options=("blender" "(Création graphique 3D)" ON
@@ -454,7 +454,7 @@
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
-            if [[ $retour = 0 ]]; then
+            if (( retour == 0 )); then
                 if [[ $REPLY == "" ]]; then
                     retour=9
                 fi
@@ -498,7 +498,7 @@
         local messages=""
         local titre="INSTALLATION D'APPLICATIONS INTERNET"
         messages=" \n"
-        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        until (( retour == 0 )) || (( retour == 1 ));
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 7)
             options=("chromium" "(Navigateur)" OFF
@@ -511,7 +511,7 @@
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
-            if [[ $retour = 0 ]]; then
+            if (( retour == 0 )); then
                 if [[ $REPLY == "" ]]; then
                     retour=9
                 fi
@@ -567,7 +567,7 @@
         local messages=""
         local titre="INSTALLATION D'APPLICATIONS AUDIO"
         messages=" \n"
-        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        until (( retour == 0 )) || (( retour == 1 ));
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 6)
             options=("amarok" "(Lecteur de musique pour KDE)" ON
@@ -579,7 +579,7 @@
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
-            if [[ $retour = 0 ]]; then
+            if (( retour == 0 )); then
                 if [[ $REPLY == "" ]]; then
                     retour=9
                 fi
@@ -630,7 +630,7 @@
         local messages=""
         local titre="INSTALLATION D'APPLICATIONS VIDÉO"
         messages=" \n"
-        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        until (( retour == 0 )) || (( retour == 1 ));
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 18 72 4)
             options=("vlc" "(Lecteur vidéo MPEG, VCD/DVD et DivX)" ON
@@ -640,7 +640,7 @@
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
-            if [[ $retour = 0 ]]; then
+            if (( retour == 0 )); then
                 if [[ $REPLY == "" ]]; then
                     retour=9
                 fi
@@ -685,14 +685,14 @@
         local messages=""
         local titre="INSTALLATION D'APPLICATIONS JEUX"
         messages=" \n"
-        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        until (( retour == 0 )) || (( retour == 1 ));
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 1)
             options=("pokerth" "(Poker Texas Hold'em)" ON
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
-            if [[ $retour = 0 ]]; then
+            if (( retour == 0 )); then
                 if [[ $REPLY == "" ]]; then
                     retour=9
                 fi

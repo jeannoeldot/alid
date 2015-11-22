@@ -115,7 +115,7 @@ source $(pwd)/ai-commons
         messages+="Visualiser/Editer le fichier ${Byellow_dlg}/etc/fstab${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             ${EDITOR} /etc/fstab
         fi
     }
@@ -139,7 +139,7 @@ source $(pwd)/ai-commons
         messages+="Visualiser/Editer le fichier ${Byellow_dlg}/etc/vconsole.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             ${EDITOR} /etc/vconsole.conf
         fi           
     }
@@ -165,7 +165,7 @@ source $(pwd)/ai-commons
         messages="\n"
         messages+="Entrer un nom d'hote pour identifier la machine :\n"
         messages+="${BRcyan_dlg}!!!${Reset_dlg} Sans espace.\n"
-        until [[ $retour = 0 ]];
+        until (( retour == 0 ));
             do
                 L_HN=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --inputbox "${messages}" 16 72 "myarch" 3>&1 1>&2 2>&3)
                 if [[ ${L_HN} =~ " " || ${L_HN} == "" ]]; then
@@ -180,7 +180,7 @@ source $(pwd)/ai-commons
         messages+="Visualiser/Editer le fichier ${Byellow_dlg}/etc/hostname${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             ${EDITOR} /etc/hostname
         fi
         #
@@ -196,7 +196,7 @@ source $(pwd)/ai-commons
         messages+="Visualiser le fichier ${Byellow_dlg}/etc/hosts${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Visualiser" "Continuer"
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             printf '%s\n' "${BGreen}Visualisation de ${BYellow}/etc/hosts${BGreen}...${Reset}"
             cat /etc/hosts
             pause_function
@@ -247,7 +247,7 @@ source $(pwd)/ai-commons
         messages+="Visualiser/Editer le fichier ${Byellow_dlg}/etc/locale.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             ${EDITOR} /etc/locale.conf
         fi
         #
@@ -287,7 +287,7 @@ source $(pwd)/ai-commons
         messages+="Visualiser/Editer le fichier ${Byellow_dlg}/etc/mkinitcpio.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             ${EDITOR} /etc/mkinitcpio.conf
         fi
         printf '%s\n' "${BGreen}Generation de ${BYellow}initramfs-linux.img${BGreen} et ${BYellow}initramfs-linux-fallback.img${BGreen}...${Reset}"
@@ -322,7 +322,7 @@ source $(pwd)/ai-commons
         local messages=""
         local messages_chk=""
         local titre="MOT DE PASSE ROOT"
-        until [[ $retour = 0 ]];
+        until (( retour == 0 ));
         do
             messages="\n"
             messages+="Entrer le mot de passe ${Byellow_dlg}root${Reset_dlg} :\n"

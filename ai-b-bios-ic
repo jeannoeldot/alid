@@ -67,7 +67,7 @@
                 messages+="Visualiser/Editer le fichier ${Byellow_dlg}grub.cfg${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
                 print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
                 retour=$?
-                if [[ $retour = 0 ]]; then
+                if (( retour == 0 )); then
                     ${EDITOR} /boot/grub/grub.cfg
                 fi           
                 ;;
@@ -94,7 +94,7 @@
                 messages+="Visualiser/Editer le fichier ${Byellow_dlg}syslinux.cfg${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
                 print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
                 retour=$?
-                if [[ $retour = 0 ]]; then
+                if (( retour == 0 )); then
                     ${EDITOR} /boot/syslinux/syslinux.cfg
                 fi           
                 ;;

@@ -138,7 +138,7 @@ source $(pwd)/ai-commons
         messages+="Visualiser/Éditer le fichier ${Byellow_dlg}/etc/pacman.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Éditer" "Continuer"
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             ${EDITOR} /etc/pacman.conf
         fi
     }
@@ -213,7 +213,7 @@ source $(pwd)/ai-commons
             titre="CRÉATION NOUVEL UTILISATEUR"
             messages="\n"
             messages+="${BRcyan_dlg}!!!${Reset_dlg} Le nom de l'utilisateur doit être en minuscule.\n"
-            until [[ $retour = 0 ]];
+            until (( retour == 0 ));
             do
                 RETRY=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --inputbox "${messages}" 16 72 "" 3>&1 1>&2 2>&3)
                 if [[ ${RETRY} == "" ]]; then
@@ -226,7 +226,7 @@ source $(pwd)/ai-commons
             useradd -m -g users -G wheel,sys -s /bin/bash ${USERNAME}
             retour=9
             titre="MOT DE PASSE UTILISATEUR"
-            until [[ $retour = 0 ]];
+            until (( retour == 0 ));
             do
                 messages="\n"
                 messages+="Entrer le mot de passe de l'utilisateur ${Byellow_dlg}${USERNAME}${Reset_dlg} :\n"
@@ -378,7 +378,7 @@ source $(pwd)/ai-commons
         messages+="Visualiser/Éditer le fichier ${Byellow_dlg}/etc/yaourtrc${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Éditer" "Continuer"
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             ${EDITOR} /etc/yaourtrc
         fi
         AUR_HELPER="yaourt"
@@ -408,7 +408,7 @@ source $(pwd)/ai-commons
             messages+="Systemd-timesyncd est un service qui permet de synchroniser l'horloge du système à travers le réseau.\n"
             print_dialog_yesno "${titre}" "${messages}" "Activer" "Continuer"
             retour=$?
-            if [[ $retour = 0 ]]; then
+            if (( retour == 0 )); then
                 printf '%s\n' "${BGreen}Configuration de ${BYellow}systemd-timesyncd${BGreen}...${Reset}"
                 mkdir -p /etc/systemd/timesyncd.conf.d
                 echo "# Reglages personnel de systemd-timesyncd." > /etc/systemd/timesyncd.conf.d/my_timesyncd_conf.conf
@@ -444,7 +444,7 @@ source $(pwd)/ai-commons
         messages+="${BRcyan_dlg}!!!${Reset_dlg} Peu utile car remplacé par ${Byellow_dlg}systemd-timer${Reset_dlg}.\n"
         print_dialog_yesno_no "${titre}" "${messages}" "Installer" "Continuer"
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             printf '%s\n' "${BGreen}Installation de ${BYellow}cronie${BGreen}...${Reset}"
             package_install "cronie"
             printf '%s\n' "${BGreen}Activation de ${BYellow}cronie.service${BGreen}...${Reset}"
@@ -492,7 +492,7 @@ source $(pwd)/ai-commons
         messages+="${BRcyan_dlg}!!!${Reset_dlg} Activer avahi est recommandé pour ${Byellow_dlg}CUPS${Reset_dlg}.\n"
         print_dialog_yesno_no "${titre}" "${messages}" "Activer" "Continuer"
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             printf '%s\n' "${BGreen}Activation de ${BYellow}avahi-daemon.service${BGreen}...${Reset}"
             is_package_installed "avahi" && systemctl enable avahi-daemon.service
             printf '%s\n' "${BGreen}Activation de ${BYellow}avahi-dnsconfd.service${BGreen}...${Reset}"
@@ -506,7 +506,7 @@ source $(pwd)/ai-commons
         messages+="${BRcyan_dlg}!!!${Reset_dlg} Activer acpid est recommandé pour un Ordinateur Portable.\n"
         print_dialog_yesno_no "${titre}" "${messages}" "Activer" "Continuer"
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             printf '%s\n' "${BGreen}Installation de ${BYellow}acpi acpid${BGreen}...${Reset}"
             package_install "acpi acpid"
             printf '%s\n' "${BGreen}Activation de ${BYellow}acpid.service${BGreen}...${Reset}"
@@ -528,7 +528,7 @@ source $(pwd)/ai-commons
         messages+="${BRcyan_dlg}!!!${Reset_dlg} Régler le volume.\n"
         print_dialog_yesno "${titre}" "${messages}" "Activer" "Continuer"
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             alsamixer
             titre="ALSA : TEST DU SON"
             messages="\n"
@@ -638,7 +638,7 @@ source $(pwd)/ai-commons
                 messages+="Installer le pilote vidéo propriétaire NVidia ?\n"
                 print_dialog_yesno "${titre}" "${messages}" "Installer" "Continuer"
                 retour=$?
-                if [[ $retour = 0 ]]; then
+                if (( retour == 0 )); then
                     L_XF86_DRIVERS=$(pacman -Qe | grep xf86-video | awk '{print $1}')
                     printf '%s\n' "${BGreen}Désinstallation de ${BYellow}$L_XF86_DRIVERS${BGreen}...${Reset}"
                     [[ -n $L_XF86_DRIVERS ]] && pacman -Rcsn $L_XF86_DRIVERS
@@ -672,7 +672,7 @@ source $(pwd)/ai-commons
                     messages+="Visualiser/Éditer le fichier ${Byellow_dlg}20-nvidia.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
                     print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
                     retour=$?
-                    if [[ $retour = 0 ]]; then
+                    if (( retour == 0 )); then
                         nano /etc/X11/xorg.conf.d/20-nvidia.conf
                     fi
                 else
@@ -724,7 +724,7 @@ source $(pwd)/ai-commons
         messages+="CUPS est le système d'impression opensource basé sur des normes et développé par Apple Inc pour OS®X et autres systèmes d'exploitation UNIX®-like.\n"
         print_dialog_yesno_no "${titre}" "${messages}" "Installer" "Continuer"
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             printf '%s\n' "${BGreen}Installation de ${BYellow}cups cups-filters ghostscript gsfonts${BGreen}...${Reset}"
             package_install "cups cups-filters ghostscript gsfonts"
             printf '%s\n' "${BGreen}Installation de ${BYellow}gutenprint foomatic-db foomatic-db-engine foomatic-db-nonfree foomatic-filters hplip splix cups-pdf${BGreen}...${Reset}"
@@ -756,7 +756,7 @@ source $(pwd)/ai-commons
         local messages=""
         local titre="INSTALLATION DE POLICES SUPPLÉMENTAIRES"
         messages=" \n"
-        until [[ $retour = 0 ]] || [[ $retour = 1 ]];
+        until (( retour == 0 )) || (( retour == 1 ));
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 18 72 4)
             options=("ttf-google-fonts-git" "(Polices TrueType de Google) - (AUR)" OFF
@@ -766,7 +766,7 @@ source $(pwd)/ai-commons
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
-            if [[ $retour = 0 ]]; then
+            if (( retour == 0 )); then
                 if [[ $REPLY == "" ]]; then
                     retour=9
                 fi
@@ -824,7 +824,7 @@ source $(pwd)/ai-commons
         messages+="Supprimer les paquets suivants : ${Byellow_dlg}${liste_pkg}${Reset_dlg} ?\n"
         print_dialog_yesno_no "${titre}" "${messages}" "Supprimer" "Continuer"
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             printf '%s\n' "${BGreen}Suppression des paquets ${BYellow}${liste_pkg}${BGreen}...${Reset}"
             pacman -Rsc $(pacman -Qqdt)
             pause_function
@@ -840,7 +840,7 @@ source $(pwd)/ai-commons
         messages+="Générer ou mettre à jour le cache de ${Byellow_dlg}man${Reset_dlg} (prend qque minutes) ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Générer" "Continuer"
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             printf '%s\n' "${BGreen}Génération ou mise à jour du cache de ${BYellow}man${BGreen}...${Reset}"
             /usr/bin/mandb --quiet
             pause_function
@@ -876,7 +876,7 @@ source $(pwd)/ai-commons
         messages+="Visualiser la liste des paquets non officiellement supportés ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Visualiser" "Continuer"
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             printf '%s\n' "${BGreen}Liste des paquets non officiellement supportés:${Reset}"
             pacman -Qm | awk '{print $1}' > /tmp/aur_pkglist.txt
             cat /tmp/aur_pkglist.txt
@@ -890,7 +890,7 @@ source $(pwd)/ai-commons
         messages+="Redémarrer le système ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Redémarrer" "Non"
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             reboot
         else
             exit 0

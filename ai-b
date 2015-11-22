@@ -74,13 +74,13 @@ source $(pwd)/ai-commons
             retour=1
         fi
         # Fin ou Erreur
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             messages="\n"
             messages+="Succès de la configuration du fichier ${Byellow_dlg}/etc/pacman.d/mirrorlist${Reset_dlg}.\n\n"
             messages+="Visualiser/Éditer le fichier ${Byellow_dlg}mirrorlist${Reset_dlg} avec ${Bwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
             print_dialog_yesno "${titre}" "${messages}" "Éditer" "Continuer"
             retour=$?
-            if [[ $retour = 0 ]]; then
+            if (( retour == 0 )); then
                 ${EDITOR} /etc/pacman.d/mirrorlist
             fi           
         else
@@ -122,7 +122,7 @@ source $(pwd)/ai-commons
         printf '%s\n' "${BGreen}Installation du ${BYellow}Système de Base${BGreen}...${Reset}"
         pacstrap ${MOUNTPOINT} ${liste_paquets}
         retour=$?
-        if [[ $retour = 1 ]]; then
+        if (( retour != 0 )); then
             messages="\n"
             messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
             messages+="    Erreur durant l'éxécution du script ${Byellow_dlg}pacstrap${Reset_dlg}.\n"
@@ -140,7 +140,7 @@ source $(pwd)/ai-commons
             printf '%s\n' "${BGreen}Installation des outils pour le ${BYellow}WiFi${BGreen}...${Reset}"
             pacstrap ${MOUNTPOINT} iw wireless_tools wpa_actiond wpa_supplicant dialog
             retour=$?
-            if [[ $retour = 1 ]]; then
+            if (( retour != 0 )); then
                 messages="\n"
                 messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
                 messages+="    Erreur durant l'éxécution du script ${Byellow_dlg}pacstrap${Reset_dlg}.\n"
@@ -162,7 +162,7 @@ source $(pwd)/ai-commons
         messages+="Visualiser le fichier ${Byellow_dlg}/etc/fstab${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Visualiser" "Continuer"
         retour=$?
-        if [[ $retour = 0 ]]; then
+        if (( retour == 0 )); then
             printf '%s\n' "${BGreen}Visualisation de ${BYellow}/etc/fstab${BGreen}...${Reset}"
             cat ${MOUNTPOINT}/etc/fstab
             pause_function
