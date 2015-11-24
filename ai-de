@@ -28,12 +28,12 @@ source $(pwd)/ai-commons
         messages+="Ne fonctionne qu'avec la langue ${Bwhite_dlg}FR (fr_FR)${Reset_dlg}\n"
         messages+="Peut être stoppé à tout moment avec ${Bwhite_dlg}CTRL+C${Reset_dlg}\n\n"
         messages+="Le type de clavier est de type : ${Bwhite_dlg}${TYPE_KEYBOARD}${Reset_dlg}\n\n"
-        if [[ $IN_VIRTUAL_BOX = 1 ]]; then
+        if (( $IN_VIRTUAL_BOX == 1 )); then
             messages+="Installation dans ${Bwhite_dlg}Oracle VM VirtualBox${Reset_dlg}\n"
         else
             messages+="Installation dans ${Bwhite_dlg}PC Réel${Reset_dlg}\n"
         fi
-        if [[ $IS_MULTI_BOOT_UEFI = 1 ]]; then
+        if (( $IS_MULTI_BOOT_UEFI == 1 )); then
             messages+="Installation en ${Bwhite_dlg}Multi Boot UEFI (${NAME_DIR_ARCHLINUX})${Reset_dlg}"
         fi
         print_dialog_msgbox_h "${titre}" "${messages}" "Continuer" 26
@@ -267,9 +267,9 @@ source $(pwd)/ai-commons
             messages+="- .config/fontconfig/fonts.conf\n\n"
             messages+="Création du répertoire ${Byellow_dlg}.compose-cache${Reset_dlg}\n\n"
             messages+="Création du répertoire ${Byellow_dlg}bin${Reset_dlg}\n\n"
-            if [[ $IS_UEFI = 1 ]]; then
+            if (( $IS_UEFI == 1 )); then
                 messages+="Copie des fichiers de configuration de ${Byellow_dlg}refind${Reset_dlg} :\n"
-                if [[ $IN_VIRTUAL_BOX = 0 ]]; then
+                if (( $IN_VIRTUAL_BOX == 0 )); then
                     messages+="- /boot/efi/EFI/refind/refind.conf\n"
                 else
                     messages+="- /boot/efi/EFI/BOOT/refind.conf\n"
@@ -297,9 +297,9 @@ source $(pwd)/ai-commons
             #
             printf '%s\n' "${BGreen}Copie des fichiers de configuration de ${BYellow}refind${BGreen} dans le répertoire /home de ${BYellow}${USERNAME}${BGreen}...${Reset}"
             # SI en UEFI : copie fichiers conf de refind
-            if [[ $IS_UEFI = 1 ]]; then
+            if (( $IS_UEFI == 1 )); then
                 mkdir -p /home/${USERNAME}/09-Fichiers-Conf/Refind-Fichiers-Conf
-                if [[ $IN_VIRTUAL_BOX = 0 ]]; then
+                if (( $IN_VIRTUAL_BOX == 0 )); then
                     cp -v /boot/efi/EFI/refind/refind.conf /home/${USERNAME}/09-Fichiers-Conf/Refind-Fichiers-Conf/refind.conf
                 else
                     cp -v /boot/efi/EFI/BOOT/refind.conf /home/${USERNAME}/09-Fichiers-Conf/Refind-Fichiers-Conf/refind.conf
@@ -402,7 +402,7 @@ source $(pwd)/ai-commons
         systemctl mask auditd.service plymouth-start.service plymouth-quit-wait.service syslog.service
         pause_function
         # Activation de Systemd-timesyncd
-        if [[ $IN_VIRTUAL_BOX = 0 ]]; then
+        if (( $IN_VIRTUAL_BOX == 0 )); then
             titre="SYSTEMD : ACTIVATION DE «SYSTEMD-TIMESYNCD»"
             messages="\n"
             messages+="Systemd-timesyncd est un service qui permet de synchroniser l'horloge du système à travers le réseau.\n"
@@ -599,7 +599,7 @@ source $(pwd)/ai-commons
         local titre=""
         titre="INSTALLATION DES PILOTES DE LA CARTE VIDÉO"
         messages="\n"
-        if [[ $IN_VIRTUAL_BOX = 1 ]]; then
+        if (( $IN_VIRTUAL_BOX == 1 )); then
             messages+="Installation dans ${BRwhite_dlg}Oracle VM Virtualbox${Reset_dlg}.\n\n"
             messages+="Installation de virtualbox-guest-utils.\n"
             print_dialog_msgbox "${titre}" "${messages}" "Installer"

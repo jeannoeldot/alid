@@ -80,7 +80,7 @@
                 print_dialog_msgbox "${titre}" "${messages}" "Continuer"
                 printf '%s\n' "${BGreen}Configuration de ${BYellow}syslinux.cfg${BGreen}...${Reset}"
                 cp -v /usr/lib/syslinux/bios/vesamenu.c32 /boot/syslinux/
-                if [[ $IN_VIRTUAL_BOX = 0 ]]; then
+                if (( $IN_VIRTUAL_BOX == 0 )); then
                     cp -v ai-fconfig/boot-syslinux-syslinux-intel-ucode.cfg /boot/syslinux/syslinux.cfg
                 else
                     cp -v ai-fconfig/boot-syslinux-syslinux.cfg /boot/syslinux/syslinux.cfg

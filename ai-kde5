@@ -139,7 +139,7 @@
         pause_function
         # VBOX SHARED FOLDER AUTO
         # SI INSTALLATION DANS VIRTUALBOX
-        if [[ $IN_VIRTUAL_BOX = 1 ]]; then
+        if (( $IN_VIRTUAL_BOX == 1 )); then
             retour=9
             messages="\n"
             messages+="Installation dans ${Bwhite_dlg}Oracle VM VirtualBox${Reset_dlg}.\n\n"
@@ -270,7 +270,7 @@
                     printf '%s\n' "${BGreen}Installation de ${BYellow}lm_sensors rrdtool${BGreen}...${Reset}"
                     package_install "lm_sensors rrdtool"
                     # SI PAS DANS VIRTUALBOX
-                    if [[ $IN_VIRTUAL_BOX = 0 ]]; then
+                    if (( $IN_VIRTUAL_BOX == 0 )); then
                         printf '%s\n' "${BGreen}LM_SENSORS - ${BYellow}sensors-detect${BGreen} : ${BYellow}Détections des capteurs${BGreen}...${Reset}"
                         pause_function
                         sensors-detect
@@ -466,7 +466,7 @@
                 "blender")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}blender${BGreen}...${Reset}"
                     package_install "blender"
-                    if [[ $IN_VIRTUAL_BOX = 0 ]]; then
+                    if (( $IN_VIRTUAL_BOX == 0 )); then
                         if is_package_installed "nvidia" ; then
                             printf '%s\n' "${BGreen}Installation de ${BYellow}cuda opencl-nvidia${BGreen}...${Reset}"
                             package_install "cuda opencl-nvidia"
@@ -484,7 +484,7 @@
                     printf '%s\n' "${BGreen}Installation de ${BYellow}inkscape${BGreen}...${Reset}"
                     package_install "inkscape"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}pstoedit python2-lxml python2-numpy texlive-core uniconvertor${BGreen}...${Reset}"
-                    package_install "pstoedit python2-lxml python2-numpy texlive-core uniconvertor"
+                    package_install "pstoedit python2-lxml python2-numpy texlive-core uniconvertor gvfs"
             esac
         done
         if [[ $REPLY != "" ]]; then

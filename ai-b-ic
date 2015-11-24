@@ -66,7 +66,7 @@ source $(pwd)/ai-commons
             fi
         fi
         #
-        if [[ ${IS_UEFI} = 1 ]]; then
+        if (( $IS_UEFI == 1 )); then
             if [[ ${IS_HDD_OR_SSD} == "SSD" ]]; then
                 local num_ligne_vfat=$(grep -n "vfat" "/etc/fstab" | cut -f1 -d:)
                 if [[ "${num_ligne_vfat}" != "" ]]; then
@@ -271,7 +271,7 @@ source $(pwd)/ai-commons
         # Commente la ligne HOOKS= originale
         sed -i "/^HOOKS=/i\#${contenu_hooks}" /etc/mkinitcpio.conf
         # Inscrit modifs
-        if [[ $IS_VAR_SEPARATE = 1 ]]; then
+        if (( $IS_VAR_SEPARATE == 1 )); then
             messages+="HOOKS : Ajout de shutdown car partition /var separee.\n\n"
             sed -i "/^HOOKS=/s/base udev/base systemd/g;/^HOOKS=/s/keyboard fsck/keyboard keymap fsck shutdown/g" /etc/mkinitcpio.conf
         else
@@ -389,7 +389,7 @@ source $(pwd)/ai-commons
     messages+="-----------\n"
     messages+="L'editeur par defaut est : ${Bwhite_dlg}nano${Reset_dlg}\n"
     # UEFI ou BIOS
-    if [[ $IS_UEFI = 1 ]]; then
+    if (( $IS_UEFI == 1 )); then
         messages+="Installation en mode     : ${Bwhite_dlg}UEFI${Reset_dlg}\n"
         source $(pwd)/ai-b-uefi-ic
     else
@@ -397,7 +397,7 @@ source $(pwd)/ai-commons
         source $(pwd)/ai-b-bios-ic
     fi
     # Installation dans VirtualBox ou reelle
-    if [[ $IN_VIRTUAL_BOX = 1 ]]; then
+    if (( $IN_VIRTUAL_BOX == 1 )); then
         messages+="Installation dans        : ${Bwhite_dlg}Oracle VM VirtualBox${Reset_dlg}\n"
     else
         messages+="Installation dans        : ${Bwhite_dlg}PC Reel${Reset_dlg}\n"

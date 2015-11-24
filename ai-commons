@@ -11,8 +11,8 @@
 
 # CONSTANTES {{{
 # TITRE BOITES DE DIALOG dialog
-TITRE_BOX_W_DATE="22/11/2015"
-TITRE_BOX_W_VERSION="V 1.0.7"
+TITRE_BOX_W_DATE="24/11/2015"
+TITRE_BOX_W_VERSION="V 1.0.8"
 TITRE_BOX_W_TEXTE="INSTALLATION DE ARCH LINUX"
 TITRE_BOX_W="${TITRE_BOX_W_TEXTE} ${TITRE_BOX_W_VERSION} DU ${TITRE_BOX_W_DATE}"
 
@@ -163,8 +163,8 @@ check_is_uefi_or_bios() { #{{{
 # $1 = HDD_DEVICE
 check_is_hdd_or_ssd() { #{{{
     local name_device=$(echo $1 | sed 's/\/dev\///')
-    local type_device=$(cat /sys/block/$name_device/queue/rotational)
-    if [[ $type_device = 1 ]]; then
+    local rotational=$(cat /sys/block/$name_device/queue/rotational)
+    if (( $rotational == 1 )); then
         # rotational = 1 ==> HDD
         IS_HDD_OR_SSD="HDD"
     else
