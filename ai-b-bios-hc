@@ -182,7 +182,8 @@
 # CHOIX PARTITION ROOT OBLIGATOIRE
         titre="PARTITIONNEMENT : SÉLECTION PARTITION «ROOT»"
         messages="\n"
-        messages+="${BRred_dlg}!!!${Reset_dlg} Toutes les données sur la partition choisie seront perdues.\n"
+        messages+="Sélectionner la partition ${Byellow_dlg}/root${Reset_dlg}\n\n"
+        messages+="${BRred_dlg}!!!${Reset_dlg} Toutes les données sur la partition sélectionnée seront perdues.\n"
         ROOT=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
         ROOT_DEVICE=$(echo $ROOT | sed 's/[0-9]//')
         format_partition "$ROOT" "${MOUNTPOINT}"
@@ -190,6 +191,7 @@
 # CHOIX PARTITION SWAP FACULTATIF
         titre="PARTITIONNEMENT : SÉLECTION PARTITION «SWAP»"
         messages="\n"
+        messages+="Sélectionner la partition ${Byellow_dlg}/swap${Reset_dlg}\n\n"
         messages+="${BRcyan_dlg}!!!${Reset_dlg} LA PARTITION ${Byellow_dlg}SWAP${Reset_dlg} EST FACULTATIVE.\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
         partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "${NUM_LINE_BIOS_BOOT_PART}d")
@@ -204,8 +206,9 @@
 # CHOIX PARTITION HOME FACULTATIF
         titre="PARTITIONNEMENT : SÉLECTION PARTITION «HOME»"
         messages="\n"
+        messages+="Sélectionner la partition ${Byellow_dlg}/home${Reset_dlg}\n\n"
         messages+="${BRcyan_dlg}!!!${Reset_dlg} LA PARTITION ${Byellow_dlg}HOME${Reset_dlg} EST FACULTATIVE.\n\n"
-        messages+="${BRred_dlg}!!!${Reset_dlg} Toutes les données sur la partition choisie seront perdues.\n\n"
+        messages+="${BRred_dlg}!!!${Reset_dlg} Toutes les données sur la partition sélectionnée seront perdues.\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
         partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v $L_SWAP | grep -v "Extended" | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/" | sed "${NUM_LINE_BIOS_BOOT_PART}d")
         L_HOME=$(dialog --colors --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --cancel-label "Annuler" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
