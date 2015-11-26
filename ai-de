@@ -212,17 +212,18 @@ source $(pwd)/ai-commons
             retour=9
             titre="CRÉATION NOUVEL UTILISATEUR"
             messages="\n"
-            messages+="${BRcyan_dlg}!!!${Reset_dlg} Le nom de l'utilisateur doit être en minuscule.\n"
+            messages+="${BRcyan_dlg}!!!${Reset_dlg} Le nom de l'utilisateur doit être en minuscule et sans espace.\n"
             until (( retour == 0 ));
             do
                 RETRY=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --inputbox "${messages}" 16 72 "" 3>&1 1>&2 2>&3)
-                if [[ ${RETRY} == "" ]]; then
+                if [[ ${RETRY} =~ " " || ${RETRY} == "" ]]; then
                     retour=9
                 else
                     retour=0
                 fi
             done
             USERNAME=$(echo ${RETRY} | tr '[:upper:]' '[:lower:]')
+            printf '%s\n' "${BGreen}Création de l'utilisateur ${BYellow}${USERNAME}${BGreen} :${Reset}"
             useradd -m -g users -G wheel,sys -s /bin/bash ${USERNAME}
             retour=9
             titre="MOT DE PASSE UTILISATEUR"
