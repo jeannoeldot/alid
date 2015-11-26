@@ -94,7 +94,7 @@ source $(pwd)/ai-commons
                     ;;
                 "FSTRIM")
                     messages_if+="${Byellow_dlg}SSD${Reset_dlg} : Options pour ${Byellow_dlg}ext4${Reset_dlg} : ${Bwhite_dlg}defaults,relatime${Reset_dlg}.\n"
-                    messages_if+="${Byellow_dlg}SSD + TRIM${Reset_dlg} : Activation de fstrim.timer.\n"
+                    messages_if+="${Byellow_dlg}SSD + TRIM${Reset_dlg} : Activation de ${Bwhite_dlg}fstrim.timer${Reset_dlg}.\n"
                     sed -i "s/rw,relatime,data=ordered/defaults,relatime/g" /etc/fstab
                     printf '%s\n' "${BGreen}Activation de ${BYellow}fstrim.timer${BGreen}...${Reset}"
                     systemctl enable fstrim.timer
