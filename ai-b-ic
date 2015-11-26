@@ -59,10 +59,10 @@ source $(pwd)/ai-commons
         if [[ ${TYPE_STORAGE_PARTITION} == "GPT" ]]; then
             local num_ligne_swap=$(grep -n "swap" "/etc/fstab" | cut -f1 -d:)
             if [[ "${num_ligne_swap}" != "" ]]; then
-                messages_if+="Type de partition GPT : Ligne swap commentee.\n\n"
+                messages_if+="Type de partition ${Byellow_dlg}GPT${Reset_dlg} : Ligne ${Bwhite_dlg}swap${Reset_dlg} commentee.\n\n"
                 sed -i "${num_ligne_swap}s/^UUID/#UUID/" /etc/fstab
             else
-                messages_if+="Aucune partition de swap.\n\n"
+                messages_if+="Aucune partition de ${Bwhite_dlg}swap${Reset_dlg}.\n\n"
             fi
         fi
         #
@@ -70,7 +70,7 @@ source $(pwd)/ai-commons
             if [[ ${IS_HDD_OR_SSD} == "SSD" ]]; then
                 local num_ligne_vfat=$(grep -n "vfat" "/etc/fstab" | cut -f1 -d:)
                 if [[ "${num_ligne_vfat}" != "" ]]; then
-                    messages_if+="UEFI et SSD : Options pour vfat : rw,relatime,discard.\n"
+                    messages_if+="${Byellow_dlg}SSD + UEFI${Reset_dlg} : Options pour ${Byellow_dlg}vfat${Reset_dlg} : ${Bwhite_dlg}rw,relatime,discard${Reset_dlg}.\n"
                     sed -i "${num_ligne_vfat}s/rw,relatime/rw,relatime,discard/" /etc/fstab
                 fi
             fi
@@ -80,21 +80,21 @@ source $(pwd)/ai-commons
             # rotational = 0 ==> SSD
             # https://wiki.archlinux.org/index.php/Solid_State_Drives#TRIM
             messages="\n"
-            messages+="Activation du Trim (option discard ou service fstrim).\n"
+            messages+="Activation du ${Byellow_dlg}TRIM${Reset_dlg} (option discard ou service fstrim).\n"
             messages+="------------------------------------------------------\n\n"
-            messages+="Configurer le TRIM en se basant sur :\n"
-            REPLY=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Selectionner" --menu "${messages}" 20 72 5 \
+            messages+="Configurer le ${Byellow_dlg}TRIM${Reset_dlg} en se basant sur :\n"
+            REPLY=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Selectionner" --menu "${messages}" 20 72 5 \
                     "DISCARD" "TRIM par option de montage." \
                     "FSTRIM" "TRIM par service fstrim." \
                     3>&1 1>&2 2>&3)
             case "$REPLY" in
                 "DISCARD")
-                    messages_if+="SSD + TRIM : Options pour ext4 : defaults,relatime,discard.\n"
+                    messages_if+="${Byellow_dlg}SSD + TRIM${Reset_dlg} : Options pour ${Byellow_dlg}ext4${Reset_dlg} : ${Bwhite_dlg}defaults,relatime,discard${Reset_dlg}.\n"
                     sed -i "s/rw,relatime,data=ordered/defaults,relatime,discard/g" /etc/fstab
                     ;;
                 "FSTRIM")
-                    messages_if+="SSD : Options pour ext4 : defaults,relatime.\n"
-                    messages_if+="SSD + TRIM : Activation de fstrim.timer.\n"
+                    messages_if+="${Byellow_dlg}SSD${Reset_dlg} : Options pour ${Byellow_dlg}ext4${Reset_dlg} : ${Bwhite_dlg}defaults,relatime${Reset_dlg}.\n"
+                    messages_if+="${Byellow_dlg}SSD + TRIM${Reset_dlg} : Activation de fstrim.timer.\n"
                     sed -i "s/rw,relatime,data=ordered/defaults,relatime/g" /etc/fstab
                     printf '%s\n' "${BGreen}Activation de ${BYellow}fstrim.timer${BGreen}...${Reset}"
                     systemctl enable fstrim.timer
@@ -103,7 +103,7 @@ source $(pwd)/ai-commons
             esac
         else
             # rotational = 1 ==> HDD
-            messages_if+="HDD : Options pour ext4 : defaults,relatime.\n"
+            messages_if+="${Byellow_dlg}HDD${Reset_dlg} : Options pour ${Byellow_dlg}ext4${Reset_dlg} : ${Bwhite_dlg}defaults,relatime${Reset_dlg}.\n"
             sed -i "s/rw,relatime,data=ordered/defaults,relatime/g" /etc/fstab
         fi
         #
@@ -264,22 +264,22 @@ source $(pwd)/ai-commons
         local titre="CONFIGURATION DU FICHIER <</etc/mkinitcpio.conf>>"
         messages="\n"
         # Remplace udev par systemd. Rajoute keymap
-        messages+="HOOKS : Remplacement de udev par systemd.\n"
-        messages+="        Ajout de keymap.\n"
+        messages+="${BRwhite_dlg}HOOKS${Reset_dlg} : Remplacement de ${Byellow_dlg}udev${Reset_dlg} par ${Byellow_dlg}systemd${Reset_dlg}.\n"
+        messages+="        Ajout de ${Byellow_dlg}keymap${Reset_dlg}.\n"
         # lecture ligne HOOKS=
         local contenu_hooks=$(sed -n "/^HOOKS=/p" /etc/mkinitcpio.conf)
         # Commente la ligne HOOKS= originale
         sed -i "/^HOOKS=/i\#${contenu_hooks}" /etc/mkinitcpio.conf
         # Inscrit modifs
-        if (( $IS_VAR_SEPARATE == 1 )); then
-            messages+="HOOKS : Ajout de shutdown car partition /var separee.\n\n"
-            sed -i "/^HOOKS=/s/base udev/base systemd/g;/^HOOKS=/s/keyboard fsck/keyboard keymap fsck shutdown/g" /etc/mkinitcpio.conf
-        else
+        if (( $IS_VAR_SEPARATE == 0 )); then
             messages+="\n"
             sed -i "/^HOOKS=/s/base udev/base systemd/g;/^HOOKS=/s/keyboard fsck/keyboard keymap fsck/g" /etc/mkinitcpio.conf
+        else
+            messages+="${BRwhite_dlg}HOOKS${Reset_dlg} : Ajout de ${Byellow_dlg}shutdown${Reset_dlg} car partition ${Byellow_dlg}/var${Reset_dlg} separee.\n\n"
+            sed -i "/^HOOKS=/s/base udev/base systemd/g;/^HOOKS=/s/keyboard fsck/keyboard keymap fsck shutdown/g" /etc/mkinitcpio.conf
         fi
         # COMPRESSION="cat" (PAS DE COMPRESSION)
-        messages+="COMPRESSION : Ajout de COMPRESSION=\"cat\" (PAS de Compression)\n"
+        messages+="${BRwhite_dlg}COMPRESSION${Reset_dlg} : Ajout de ${Byellow_dlg}COMPRESSION=\"cat\"${Reset_dlg} (PAS de Compression)\n"
         sed -i "/^#COMPRESSION=\"gzip\"/i\COMPRESSION=\"cat\"" /etc/mkinitcpio.conf
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         #
@@ -377,9 +377,9 @@ source $(pwd)/ai-commons
     setfont lat9w-16
     #
     messages="\n"
-    messages+="Mise a jour de la base de pacman.\n"
+    messages+="Mise a jour de la base de ${Byellow_dlg}pacman${Reset_dlg}.\n"
     print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-    printf '%s\n' "${BGreen}Mise a jour de la base de pacman...${Reset}"
+    printf '%s\n' "${BGreen}Mise a jour de la base de ${BYellow}pacman${BGreen}...${Reset}"
     pacman-db-upgrade
     pause_function
     #
