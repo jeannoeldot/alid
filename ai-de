@@ -215,7 +215,7 @@ source $(pwd)/ai-commons
             messages+="${BRcyan_dlg}!!!${Reset_dlg} Le nom de l'utilisateur doit être en minuscule et sans espace.\n"
             until (( retour == 0 ));
             do
-                RETRY=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --inputbox "${messages}" 16 72 "" 3>&1 1>&2 2>&3)
+                RETRY=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Valider" --inputbox "${messages}" 16 72 "jnd" 3>&1 1>&2 2>&3)
                 if [[ ${RETRY} =~ " " || ${RETRY} == "" ]]; then
                     retour=9
                 else

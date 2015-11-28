@@ -126,7 +126,7 @@
                 sed -i "/^#greeter-session=example-gtk-gnome/c\greeter-session=lightdm-gtk-greeter" /etc/lightdm/lightdm.conf
                 sed -i "/^#greeter-setup-script=/c\greeter-setup-script=/usr/bin/numlockx on" /etc/lightdm/lightdm.conf
                 printf '%s\n' "${BGreen}Configuration de ${BYellow}/etc/lightdm/lightdm-gtk-greeter.conf${BGreen}...${Reset}"
-                cp -vf ai-fconfig/ob-lightdm-skyzl1-1920x1080.jpg /usr/share/pixmaps/skyzl1-1920x1080.jpg
+                cp -vf ai-fconfig/ob-skyzl1-1920x1080.jpg /usr/share/pixmaps/skyzl1-1920x1080.jpg
                 sed -i "/^#background=/c\background=/usr/share/pixmaps/skyzl1-1920x1080.jpg" /etc/lightdm/lightdm-gtk-greeter.conf
                 printf '%s\n' "${BGreen}Activation de ${BYellow}lightdm.service${BGreen}...${Reset}"                
                 systemctl enable lightdm.service
@@ -155,7 +155,7 @@
             # user wallpaper
             printf '%s\n' "${BGreen}Mise en place du fond d'écran ${BYellow}skyzl1-1920x1080.jpg${BGreen}...${Reset}"
             mkdir -p /home/${USERNAME}/09-Configurations/OO-Images-bureau
-            cp -v ai-fconfig/ob-user-skyzl1-1920x1080.jpg /home/${USERNAME}/09-Configurations/OO-Images-bureau/skyzl1-1920x1080.jpg
+            cp -v ai-fconfig/ob-skyzl1-1920x1080.jpg /home/${USERNAME}/09-Configurations/OO-Images-bureau/skyzl1-1920x1080.jpg
             # user logo fbpanel
             printf '%s\n' "${BGreen}Mise en place du logo de ${BYellow}fbpanel${BGreen}...${Reset}"
             mkdir -p /home/${USERNAME}/09-Configurations/OO-Logo-fbpanel
