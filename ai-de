@@ -223,6 +223,7 @@ source $(pwd)/ai-commons
                 fi
             done
             USERNAME=$(echo ${RETRY} | tr '[:upper:]' '[:lower:]')
+            UPPER_CASE_USERNAME=$(echo ${USERNAME} | tr "[:lower:]" "[:upper:]")
             printf '%s\n' "${BGreen}Création de l'utilisateur ${BYellow}${USERNAME}${BGreen} :${Reset}"
             useradd -m -g users -G wheel,sys -s /bin/bash ${USERNAME}
             retour=9

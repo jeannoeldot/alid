@@ -3,7 +3,7 @@ INSTRUCTIONS INSTALLATION LOGO ARCHLINUX DANS FBPANEL
 
 $ sudo mv /usr/share/fbpanel/images/logo.png /usr/share/fbpanel/images/logo.png.backup
 
-$ sudo cp -v /home/jnd/09-Configurations/OO-Logo-fbpanel/archlinux-logo.png /usr/share/fbpanel/images/logo.png
+$ sudo cp -v /home/NAME-USER/09-Configurations/OO-Logo-fbpanel/archlinux-logo.png /usr/share/fbpanel/images/logo.png
 
 $ sudo chmod 644 /usr/share/fbpanel/images/logo.png
 

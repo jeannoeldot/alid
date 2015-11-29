@@ -52,7 +52,7 @@ numlockx &
 ##
 
 ## Conky
-#(sleep 2s && /home/jnd/00-Conky/conky_start.sh) &
+#(sleep 2s && /home/NAME-USER/00-Conky/conky_start.sh) &
 #
 ##
 

@@ -901,8 +901,12 @@ $ cd && cp -v /home/jnd/09-Fichiers-Conf/0-Save-Confs/home-jnd-.yasp.script.2013
  
 3-3) CONFIGS GIT
 ================
+ !!! VOIR : /home/jnd/09-Documentation/00-Cmd-CREATION-GIT-INSTALL-ALID.TXT
+ !!! VOIR : /home/jnd/09-Documentation/00-Cmd-CREATION-GIT-INSTALL-ALI-2.TXT
  !!! VOIR : /home/jnd/09-Documentation/00-Cmd-CREATION-GIT-INSTALLEUR.TXT
  OU
+ !!! VOIR : /home/jnd/02-git/00-Cmd-CREATION-GIT-INSTALL-ALID.TXT
+ !!! VOIR : /home/jnd/02-git/00-Cmd-CREATION-GIT-INSTALL-ALI-2.TXT
  !!! VOIR : /home/jnd/02-git/00-Cmd-CREATION-GIT-INSTALLEUR.TXT
  
 !!! ATTENTION DATE

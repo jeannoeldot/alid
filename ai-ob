@@ -82,7 +82,7 @@
             # system grub si existe
             if is_package_installed "grub-bios" ; then
                 printf '%s\n' "${BGreen}Customisation de ${BYellow}GRUB${BGreen}...${Reset}"
-                echo -e '\n# Customization for JND' >> /etc/default/grub
+                echo -e '\n# Customization for '${UPPER_CASE_USERNAME} >> /etc/default/grub
                 echo -e 'GRUB_COLOR_NORMAL="white/black"' >> /etc/default/grub
                 echo -e 'GRUB_COLOR_HIGHLIGHT="black/light-gray"' >> /etc/default/grub
                 echo -e 'GRUB_BACKGROUND="/boot/grub/arch-wallpaper-grub.jpg"' >> /etc/default/grub
@@ -161,6 +161,7 @@
             mkdir -p /home/${USERNAME}/09-Configurations/OO-Logo-fbpanel
             cp -v ai-fconfig/ob-user-fbpanel-archlinux-logo.png /home/${USERNAME}/09-Configurations/OO-Logo-fbpanel/archlinux-logo.png
             cp -v ai-fconfig/ob-user-fbpanel-installation-archlinux-logo.png.TXT /home/${USERNAME}/09-Configurations/OO-Logo-fbpanel/installation-archlinux-logo.png.TXT
+            sed -i "s/NAME-USER/${USERNAME}/g" /home/${USERNAME}/09-Configurations/OO-Logo-fbpanel/installation-archlinux-logo.png.TXT
             chown -R ${USERNAME}:users /home/${USERNAME}/09-Configurations
             # system logo fbpanel
             cp -v ai-fconfig/ob-user-fbpanel-archlinux-logo.png /usr/share/fbpanel/images/archlinux-logo.png
@@ -186,7 +187,9 @@
             printf '%s\n' "${BGreen}Configuration de ${BYellow}nitrogen${BGreen}...${Reset}"
             mkdir -p /home/${USERNAME}/.config/nitrogen
             cp -v ai-fconfig/ob-user-.config-nitrogen-bg-saved.cfg /home/${USERNAME}/.config/nitrogen/bg-saved.cfg
+            sed -i "s/NAME-USER/${USERNAME}/g" /home/${USERNAME}/.config/nitrogen/bg-saved.cfg
             cp -v ai-fconfig/ob-user-.config-nitrogen-nitrogen.cfg /home/${USERNAME}/.config/nitrogen/nitrogen.cfg
+            sed -i "s/NAME-USER/${USERNAME}/g" /home/${USERNAME}/.config/nitrogen/nitrogen.cfg
             # user terminator
             printf '%s\n' "${BGreen}Configuration de ${BYellow}terminator${BGreen}...${Reset}"
             mkdir -p /home/${USERNAME}/.config/terminator
@@ -206,9 +209,11 @@
             else
                 cp -v ai-fconfig/ob-user-.config-openbox-autostart-reel /home/${USERNAME}/.config/openbox/autostart
             fi
+            sed -i "s/NAME-USER/${USERNAME}/g"/home/${USERNAME}/.config/openbox/autostart
             cp -v ai-fconfig/ob-user-.config-openbox-environment /home/${USERNAME}/.config/openbox/environment
             cp -v ai-fconfig/ob-user-.config-openbox-rc.xml /home/${USERNAME}/.config/openbox/rc.xml
             cp -v ai-fconfig/ob-user-.config-openbox-menu.xml /home/${USERNAME}/.config/openbox/menu.xml
+            sed -i "s/NAME-USER/${USERNAME}/g" /home/${USERNAME}/.config/openbox/menu.xml
             chown -R ${USERNAME}:users /home/${USERNAME}/.config
             # user bin
 #           mkdir -p /home/${USERNAME}/bin
@@ -217,6 +222,7 @@
             printf '%s\n' "${BGreen}Mise en place et Configuration des scripts dans ${BYellow}/home/${USERNAME}/bin${BGreen}...${Reset}"
             cp -R ai-fconfig/ob-user-bin-openbox-logout /home/${USERNAME}/bin/openbox-logout
             cp -v ai-fconfig/ob-user-bin-ob-quitter /home/${USERNAME}/bin/ob-quitter
+            sed -i "s/NAME-USER/${USERNAME}/g" /home/${USERNAME}/bin/ob-quitter
             chmod +x /home/${USERNAME}/bin/openbox-logout/ob_logout.py
             chmod +x /home/${USERNAME}/bin/ob-quitter
             cp -v ai-fconfig/ob-user-bin-ob-terminator /home/${USERNAME}/bin/ob-terminator
@@ -225,16 +231,19 @@
             chmod +x /home/${USERNAME}/bin/ob-lxterminal
             if (( $IN_VIRTUAL_BOX == 0 )); then
                 cp -v ai-fconfig/ob-user-bin-ob-launcher_civ4 /home/${USERNAME}/bin/ob-launcher_civ4
+                sed -i "s/NAME-USER/${USERNAME}/g" /home/${USERNAME}/bin/ob-launcher_civ4
                 chmod +x /home/${USERNAME}/bin/ob-launcher_civ4
             fi
             chown -R ${USERNAME}:users /home/${USERNAME}/bin
             # user gtkrc-2.0
             printf '%s\n' "${BGreen}Configuration de ${BYellow}gtk-2${BGreen}...${Reset}"
             cp -v ai-fconfig/ob-user-.gtkrc-2.0 /home/${USERNAME}/.gtkrc-2.0
+            sed -i "s/NAME-USER/${USERNAME}/g" /home/${USERNAME}/.gtkrc-2.0
             chown -R ${USERNAME}:users /home/${USERNAME}/.gtkrc-2.0
             # user feh
             printf '%s\n' "${BGreen}Configuration de ${BYellow}feh${BGreen}...${Reset}"
             cp -v ai-fconfig/ob-user-.fehbg /home/${USERNAME}/.fehbg
+            sed -i "s/NAME-USER/${USERNAME}/g" /home/${USERNAME}/.fehbg
             chown -R ${USERNAME}:users /home/${USERNAME}/.fehbg
             #
             printf '%s\n' "${BGreen}Copie du fichier ${BYellow}00-CMD-UTILES-OB-CK.TXT${BGreen} dans le répertoire /home de ${BYellow}${USERNAME}${BGreen}...${Reset}"
