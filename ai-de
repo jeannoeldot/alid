@@ -103,10 +103,10 @@ source $(pwd)/ai-commons
         local titre="AJOUT REPOS À «/etc/pacman.conf»"
         messages="\n"
         if [[ $ARCHI == x86_64 ]]; then
-            messages+="ARCH = x86_64 : Ajout de Multilib.\n"
+            messages+="ARCH = ${Byellow_dlg}x86_64${Reset_dlg} : Ajout de ${BRwhite_dlg}Multilib${Reset_dlg}.\n"
         fi
-        messages+="Ajout de archlinuxfr.\n"
-        messages+="Ajout de Xyne.\n"
+        messages+="Ajout de ${BRwhite_dlg}archlinuxfr${Reset_dlg}.\n"
+        messages+="Ajout de ${BRwhite_dlg}Xyne${Reset_dlg}.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         # ENABLE MULTILIB REPOSITORY
         if [[ $ARCHI == x86_64 ]]; then
@@ -156,6 +156,7 @@ source $(pwd)/ai-commons
         messages+="Synchronise les nouveaux repos.\n"
         messages+="Met à jour le système.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+        printf '%s\n' "${BGreen}Synchronisation des nouveaux repos et mise à jour...${Reset}"
         pacman -Syyu
         pause_function
     }
