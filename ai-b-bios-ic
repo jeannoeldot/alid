@@ -32,7 +32,6 @@
             "SYSLINUX")
                 if [[ $TYPE_STORAGE_PARTITION == "GPT" ]]; then
                     printf '%s\n' "${BGreen}Installation de ${BYellow}syslinux${BGreen} et ${BYellow}gptfdisk${BGreen}...${Reset}"
-                pause_function
                     pacman -Syu syslinux gptfdisk
                 else
                     printf '%s\n' "${BGreen}Installation de ${BYellow}syslinux${BGreen}...${Reset}"
