@@ -1103,9 +1103,13 @@ OU Versions Qt5
 
 # pacman -Syu amaya
 
+!!! VOIR
+# pacman -Syu wimlib
 
 !!! VOIR
 # pacman -Syu ttf-win7-fonts
+OU
+# pacman -Syu ttf-win10-fonts
 
 
 9) INSTALLATION DE VIRTUAL-BOX
