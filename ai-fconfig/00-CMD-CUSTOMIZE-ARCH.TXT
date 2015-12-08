@@ -1148,7 +1148,7 @@ Onglet Général : Dossier par défaut des machines :
 # systemctl enable lm_sensors.service
 # systemctl status lm_sensors.service
 
-# pacman -Syu conky-lua
+# pacman -Syu conky-lua-nv-git
 
 !!! VOIR : /home/jnd/00-Conky/0-COMMANDES TEST CONKY.TXT
 
@@ -1438,6 +1438,10 @@ opensubdiv
 
 blender-addons-yafaray-git
 
+!!! VOIR Intallation de CONKY
+-----------------------------
+conky-lua-nv-git
+
 
 LM_SENSORS
 ===============
@@ -1459,6 +1463,8 @@ $ cd
 $ cp -v /0-DataLinux/00-ARCH_2-OB-CK/00-Conky.tar.xz /home/jnd/
 $ tar -xJf 00-Conky.tar.xz
 $ rm -f 00-Conky.tar.xz
+
+# pacman -Syu conky-lua-nv-git
 
 !!! VOIR : /home/jnd/00-Conky/Install-Conky.TXT
 !!! VOIR : /home/jnd/00-Conky/0-COMMANDES TEST CONKY.TXT
