@@ -157,6 +157,41 @@ source $(pwd)/ai-commons
         sed -i "/^#VerbosePkgLists/c\VerbosePkgLists" /etc/pacman.conf
     }
     #}}}
+    #CONFIGURE MAKEPKG.CONF {{{
+    configure_makepkg_conf() {
+        #ADD Nb Cores + 1 TO MAKEFLAGS TO MAKEPKG.CONF
+        local nb_core=$(LC_ALL=C lscpu | grep "^Core" | awk '{print $4}')
+        nb_core=$(( $nb_core + 1 ))
+        local retour=9
+        local messages=""
+        local titre="CONFIGURATION DU FICHIER <</etc/makepkg.conf>>"
+        messages="\n"
+        messages+="Modification des options de compilation.\n"
+        messages+="Options ${Bwhite_dlg}CFLAGS${Reset_dlg} et ${Bwhite_dlg}CXXFLAGS${Reset_dlg} :\n"
+        if (( $IN_VIRTUAL_BOX == 0 )); then
+            messages+="- Remplacement de ${Byellow_dlg}-march=x86-64 -mtune=generic${Reset_dlg} par ${Byellow_dlg}-march=native${Reset_dlg}.\n"
+        fi
+        messages+="- Ajout de ${Byellow_dlg}-fdiagnostics-color=always${Reset_dlg}.\n\n"
+        messages+="Nombre de Coeurs = $nb_core.\n"
+        messages+="Option ${Bwhite_dlg}#MAKEFLAGS${Reset_dlg} :\n"
+        messages+="- Devient ${Byellow_dlg}MAKEFLAGS=\"-j$nb_core\"${Reset_dlg}.\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+        if (( $IN_VIRTUAL_BOX == 0 )); then
+            sed -i "s/-march=x86-64 -mtune=generic/-march=native/g" /etc/makepkg.conf
+        fi
+        sed -i "s/-O2 -pipe/-O2 -pipe -fdiagnostics-color=always/g" /etc/makepkg.conf
+        sed -i "/^#MAKEFLAGS/c\MAKEFLAGS=\"-j$nb_core\"" /etc/makepkg.conf
+        #
+        retour=9
+        messages="\n"
+        messages+="Visualiser/Editer le fichier ${Byellow_dlg}/etc/makepkg.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
+        print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
+        retour=$?
+        if (( retour == 0 )); then
+            ${EDITOR} /etc/makepkg.conf
+        fi
+    }
+    #}}}    
     #CONFIGURE HOSTNAME {{{
     configure_hostname() {
         local retour=9
@@ -407,6 +442,7 @@ source $(pwd)/ai-commons
     configure_fstab
     configure_vconsole_conf
     configure_pacman_conf
+    configure_makepkg_conf
     configure_hostname
     configure_timezone
     configure_hardwareclock

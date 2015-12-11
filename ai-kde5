@@ -31,7 +31,7 @@
         package_install "oxygen-gtk2 oxygen-kde4"
         package_install "qtcurve-gtk2 qtcurve-qt4 qtcurve-qt5 breeze-kde4"
         # GTK theme matching Breeze
-        package_install "gtk-theme-orion"
+        package_install "breeze-gtk gtk-theme-orion"
         # KDE5 UTILS
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Utils${BGreen}...${Reset}"
         package_install "ark filelight kcalc kcharselect kdeutils-kdf kwalletmanager"
@@ -48,7 +48,7 @@
         package_install "ffmpegthumbs"
         # KDE5 SDK
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 SDK${BGreen}...${Reset}"
-        package_install "okteta kate dolphin-plugins kdesdk-kioslaves kompare kdesdk-poxml kdebindings-python2 kdebindings-python"
+        package_install "okteta kate dolphin-plugins kompare kdesdk-poxml kdebindings-python2 kdebindings-python"
         # FONTS TTF
         printf '%s\n' "${BGreen}Installation de ${BYellow}Polices TTF${BGreen}...${Reset}"
         package_install "ttf-bitstream-vera ttf-dejavu ttf-freefont ttf-liberation ttf-linux-libertine ttf-droid ttf-ubuntu-font-family ttf-oxygen"

@@ -120,21 +120,28 @@ OU :
 2) MAKEPKG.CONF : Edition fichier /etc/makepkg.conf
 ===================================================
 
+!!! FAIT EN AUTOMATIQUE SI INSTALLATION PAR MON SCRIPT AI-B
+===========================================================
+ 
 $ sudo cp /etc/makepkg.conf /etc/makepkg.conf.backup.moi
 
 $ sudo sed -i "s/-march=x86-64 -mtune=generic/-march=native/g" /etc/makepkg.conf
 
-# Ajout de  -fdiagnostics-color=always
+# Ajout de -fdiagnostics-color=always
 $ https://bbs.archlinux.org/viewtopic.php?id=189606
 ----------------------------------------------------
 CFLAGS="-march=native -O2 -pipe -fstack-protector-strong"
 $ sudo sed -i "s/-march=native -O2 -pipe/-march=native -O2 -pipe -fdiagnostics-color=always/g" /etc/makepkg.conf
 
-
 # lscpu  ==> nbre de processeurs
-# 5 = Nb Processeurs + 1
+# LC_ALL=C lscpu | grep "^Core" | awk '{print $4}'  ==> nbre de Cores
+# 5 = Nb Cores + 1
 -----------------------------
 $ sudo sed -i "/^#MAKEFLAGS/c\MAKEFLAGS=\"-j5\"" /etc/makepkg.conf
+
+
+!!! A FAIRE
+===========
 
 $ sudo sed -i "/^#PACKAGER/c\PACKAGER=\"Jean-Noel Dot <jeannoeldot@club-internet.fr>\"" /etc/makepkg.conf
 OU
@@ -159,12 +166,12 @@ $ cd /home/jnd/00-repolocal/
 $ wget https://dl.dropbox.com/s/u2jb3jbb7y6y07p/fapg-0.41-3-x86_64.pkg.tar.xz
 
 $ cd /home/jnd/bin/
-$ wget https://dl.dropbox.com/s/ngxv2da1y70thdn/maj-repolocal.sh
-$ chmod +x maj-repolocal.sh
+$ wget https://www.dropbox.com/s/mn8f3azts8ebhmz/maj-repolocal
+$ chmod +x maj-repolocal
 
-$ cd && maj-repolocal.sh
+$ cd && maj-repolocal
 
-$ sudo pacman -Syy
+$ sudo pacman -Syyu
 
 
 4) FSTAB : Edition fichier /etc/fstab
@@ -955,8 +962,7 @@ $ cd /home/jnd/00-repolocal/
 $ wget https://dl.dropbox.com/s/u2jb3jbb7y6y07p/fapg-0.41-3-x86_64.pkg.tar.xz
 
 $ cd /home/jnd/bin/
-$ wget https://dl.dropbox.com/s/ngxv2da1y70thdn/maj-repolocal.sh
-$ mv maj-repolocal.sh maj-repolocal
+$ wget https://www.dropbox.com/s/mn8f3azts8ebhmz/maj-repolocal
 $ chmod +x maj-repolocal
 
 $ cd && maj-repolocal
@@ -977,8 +983,7 @@ $ cd && mkdir ~/01-scripts && cd ~/01-scripts
   ----------
  COMMUNS
  =======
-$ wget https://dl.dropbox.com/s/ngxv2da1y70thdn/maj-repolocal.sh
-$ mv maj-repolocal.sh maj-repolocal
+$ wget https://www.dropbox.com/s/mn8f3azts8ebhmz/maj-repolocal
 $ chmod +x maj-repolocal
 $ cd
 $ ln -sfv ~/01-scripts/maj-repolocal ~/bin/maj-repolocal
