@@ -772,7 +772,8 @@ https://wiki.archlinux.org/index.php/Arch_Build_System
 98) VÉRIFICATION SIZE TMPFS
 ===========================
 $ sudo mount | grep tmpfs
-tmpfs on /tmp type tmpfs (rw,size=6291456k)
+SI tmpfs = 6G : tmpfs on /tmp type tmpfs (rw,size=6291456k)
+SI tmpfs = 8G : tmpfs on /tmp type tmpfs (rw,size=8388608k)
 
 
 99) NETTOYAGE SI OK
