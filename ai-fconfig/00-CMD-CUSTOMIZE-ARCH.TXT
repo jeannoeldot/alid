@@ -225,10 +225,28 @@ $ sudo sh -c "echo 'Options=mode=1777,strictatime,size=6G' >> /etc/systemd/syste
 
 FAIRE TEST SI OK ( PSD AVEC FIREFOX ... COMPILER BLENDER DANS /TMP )
 
+!!! SI 32 GiO RAM
+$ sudo mkdir /etc/systemd/system/tmp.mount.d
+$ sudo sh -c "echo '[Mount]' > /etc/systemd/system/tmp.mount.d/tmp_size.conf"
+$ sudo sh -c "echo 'Options=mode=1777,strictatime,size=8G' >> /etc/systemd/system/tmp.mount.d/tmp_size.conf"
+
+OU POUR BLENDER
+----------------
+!!! SI 32 GiO RAM
+$ sudo mkdir /etc/systemd/system/tmp.mount.d
+$ sudo sh -c "echo '[Mount]' > /etc/systemd/system/tmp.mount.d/tmp_size.conf"
+$ sudo sh -c "echo 'Options=mode=1777,strictatime,size=8G' >> /etc/systemd/system/tmp.mount.d/tmp_size.conf"
+
+==> tmpfs = 8G  mkpkg-tmpfs = 8G ou 16G si compilation blender
+==>                          16G ou  8G RAM disponible
+
+FAIRE TEST SI OK ( PSD AVEC FIREFOX ... COMPILER BLENDER DANS /TMP )
+
 POUR MODIFIER SIZE
 ==================
 
-$ sudo /etc/systemd/system/tmp.mount.d/tmp_size.conf
+$ sudo nano /etc/systemd/system/tmp.mount.d/tmp_size.conf
+
 
  4-2) FSTAB : 0-DataLinux SI EXISTE
  ==================================
@@ -721,7 +739,7 @@ VOIR : ARCH-KDE-DEBUG-DANS-JOURNAL.TXT dans ~/09-Documentation/
 
 $ sudo nano /usr/bin/startkde
 
-RAJOUTER LIGNES 12 À 14
+RAJOUTER LIGNES 12 À 14
 ------------------------
 QT_LOGGING_RULES="*.debug=false"
 export QT_LOGGING_RULES
@@ -747,8 +765,14 @@ https://wiki.archlinux.org/index.php/Arch_Build_System
 ==> ERROR: Download failed
 
 
-98) REBOOT
+95) REBOOT
 ===================
+
+
+98) VÉRIFICATION SIZE TMPFS
+===========================
+$ sudo mount | grep tmpfs
+tmpfs on /tmp type tmpfs (rw,size=6291456k)
 
 
 99) NETTOYAGE SI OK
@@ -1014,7 +1038,7 @@ SI INSTALLATION DE inkscape, gimp ou firefox
 --------------------------------------------
 $ xdg-mime default kde4-okularApplication_pdf.desktop application/pdf
 
-7-3) VÉRIFICATIONS DE $HOME/.local/share/applications/mimetypes.list ( KDE 5 )
+7-3) VÉRIFICATIONS DE $HOME/.local/share/applications/mimetypes.list ( KDE 5 )
 ==============================================================================
 Replace 'kde4-kwrite.desktop' with 'org.kde.kwrite.desktop'
 Replace 'kde4-kate.desktop' with 'org.kde.kate.desktop'
@@ -1040,7 +1064,7 @@ OU
 
 # pacman -Syu firefox-https-everywhere
 
-INSTALLATION DE freshplayerplugin ET chromium-pepper-flash POUR FIREFOX
+INSTALLATION DE freshplayerplugin ET chromium-pepper-flash POUR FIREFOX
 -----------------------------------------------------------------------
 # pacman -R flashplugin
 
@@ -1201,7 +1225,7 @@ Edition -> Préférences -> Sync -> Se connecter
 
 Menu Outils -> Modules Complémentaires
 Onglet Catalogue
-En HAUT - A DROITE : Rechercher : dictionnaires français
+En HAUT - A DROITE : Rechercher : dictionnaires français
 ==> Dictionnaires français 5.3 -> Installer
 
 https://addons.mozilla.org/fr/firefox/addon/dictionnaires-fran%C3%A7ais/?src=ss
@@ -1211,7 +1235,7 @@ https://addons.mozilla.org/firefox/downloads/latest/354872/addon-354872-latest.x
 
  11-3) OBTENIR 1080p DANS LE LECTEUR HTML5 YOUTUBE DANS FIREFOX
  ==============================================================
-VOIR : http://forum.pinguyos.com/Thread-Enable-Hardware-Acceleration-in-Firefox-Get-1080p-in-Youtube%E2%80%99s-HTML5-player
+VOIR : http://forum.pinguyos.com/Thread-Enable-Hardware-Acceleration-in-Firefox-Get-1080p-in-Youtube%E2%80%99s-HTML5-player
 
   about:config
  ------------
@@ -1229,7 +1253,7 @@ VOIR : http://forum.pinguyos.com/Thread-Enable-Hardware-Acceleration-in-Firefox
  media.fragmented-mp4.gmp.enable  => true
  media.fragmented-mp4.use-blank-decoder = FALSE
  
- !!! Hardware Acceleration ==> LAISSER A FALSE !!!
+ !!! Hardware Acceleration ==> LAISSER A FALSE !!!
  -------------------------------------------------
  layers.acceleration.force-enabled = FALSE
  layers.offmainthreadcomposition.enabled = FALSE
@@ -1298,14 +1322,14 @@ Menu K -> Système -> Outils de gestion de portefeuilles (KwalletManager)
 ====================
 Trop d'informations de débuggage par défaut dans le journal
 -----------------------------------------------------------
-VOIR : 27) KDE 5 / Plasma 5 : ENTRÉES DANS JOURNAL (Ligne 708)
+VOIR : 80) KDE 5 / Plasma 5 : ENTRÉES DANS JOURNAL (Ligne 708)
 
 VOIR : ARCH-KDE-DEBUG-DANS-JOURNAL.TXT dans ~/09-Documentation/
 
 
 40) INSTALLATION DE jre8-openjdk
 ================================
-VOIR : 00-INSTALLATION-JAVA-JRE7-ET-JRE8.TXT dans ~/09-Documentation/
+VOIR : 00-INSTALLATION-JAVA-JRE7-ET-JRE8.TXT dans ~/09-Documentation/
 
 # pacman -Syu jre8-openjdk
 # pacman -Syu java-openjfx
@@ -1342,7 +1366,7 @@ SI CURSEUR SOURIS TROP GRAND
 Voir : https://wiki.archlinux.org/index.php/Cursor#Using_X_resources
 
 
-SI PROBLÈME AFFICHAGE DANS CIVILIZATION 4 ET BTS
+SI PROBLÈME AFFICHAGE DANS CIVILIZATION 4 ET BTS
 ================================================
 
 https://wiki.archlinux.org/index.php/NVIDIA#Avoid_tearing_with_GeForce_500.2F600.2F700.2F900_series_cards
@@ -1413,7 +1437,7 @@ $ sudo sed -i "/^#Server = file/a\\\n[repolocal]\nSigLevel = Optional TrustAll\n
 
  00-repolocal
  ============
-SUR HUBIC
+SUR HUBIC
 ---------
 https://hubic.com/home/browser/#default/00-SAVE-ARCH-OB-CK/PAQUETS-AUR
 - ghnomix-icon-theme-1.3-1-any.pkg.tar.xz
@@ -1530,14 +1554,14 @@ SpaceFM , Firefox , Geany : semble OK
 
 INSTALLATION DE FRESHPLAYERPLUGIN ET CHROMIUM-PEPPER-FLASH
 ==========================================================
-SI FIREFOX INSTALLÉ
+SI FIREFOX INSTALLÉ
 --------------------
 
 https://aur.archlinux.org/packages/freshplayerplugin/
 
 https://aur.archlinux.org/packages/chromium-pepper-flash/
 
-1) SUPPRESSION flashplugin si installé
+1) SUPPRESSION flashplugin si installé
 ---------------------------------------
 $ pacman -Ss flashplugin
 extra/flashplugin 11.2.202.457-1 [installé]
