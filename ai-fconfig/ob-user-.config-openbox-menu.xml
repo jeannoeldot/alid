@@ -425,6 +425,14 @@
 </menu>
 
 <menu id="apps-development-menu" label="Développement">
+  <item label="BlueGriffon" icon="/usr/share/icons/hicolor/48x48/apps/bluegriffon.png">
+    <action name="Execute">
+      <command>bluegriffon</command>
+      <startupnotify>
+        <enabled>yes</enabled>
+      </startupnotify>
+    </action>
+  </item>
   <item label="Qt Creator" icon="/usr/share/icons/hicolor/64x64/apps/QtProject-qtcreator.png">
     <action name="Execute">
       <command>qtcreator</command>
