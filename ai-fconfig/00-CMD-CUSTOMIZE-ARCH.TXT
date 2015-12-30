@@ -1113,7 +1113,7 @@ $ psd preview  ou  psd parse
 $ cat ~/.mozilla/firefox/profiles.ini
 
 
-!!! opensubdiv
+!!! opensubdiv-git
 !!! opencollada-git
 !!! openimageio-git
 !!! openshadinglanguage-git
@@ -1127,11 +1127,8 @@ OU Versions Qt5
 
 # pacman -Syu jndqcbgrd-qt5
 
-# pacman -Syu konvertible
 # pacman -Syu pkgbrowser
 # pacman -Syu sysbench
-
-# pacman -Syu amaya
 
 !!! VOIR
 # pacman -Syu wimlib
@@ -1464,7 +1461,7 @@ blender-git
 opencollada-git
 openimageio-git
 openshadinglanguage-git
-opensubdiv
+opensubdiv-git
 
 blender-addons-yafaray-git
 
@@ -1633,6 +1630,10 @@ OU
 ====================================================================================================
 ANCIEN
 ==========================================================
+
+# pacman -Syu amaya
+
+# pacman -Syu konvertible
 
 - awoken-icons-2.5.2-1-any.pkg.tar.xz
 $ cp -v /0-DataLinux/00-ARCH_2-OB-CK/0-Fichiers-importants/awoken-icons-2.5.2-1-any.pkg.tar.xz /home/jnd/00-repolocal/
