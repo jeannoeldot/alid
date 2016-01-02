@@ -37,15 +37,12 @@
         package_install "ark filelight kcalc kcharselect kdeutils-kdf kwalletmanager"
         # KDE5 MULTIMEDIA
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Multimedia${BGreen}...${Reset}"
-        package_install "kdemultimedia-kscd kdemultimedia-audiocd-kio kio-extras"
-        # Remplace kdemultimedia-kmix : PAS de miniature dans Barre des Tâches
-        package_install "kmix"
+        package_install "kdemultimedia-kscd kdemultimedia-audiocd-kio kio-extras kmix ffmpegthumbs"
         package_install "libdvdcss libdvdread libdvdnav"
         # KDE5 GRAPHICS
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Graphiques${BGreen}...${Reset}"
         package_install "gwenview kdegraphics-kcolorchooser kdegraphics-kolourpaint spectacle kdegraphics-okular kdegraphics-svgpart kdegraphics-thumbnailers kdegraphics-mobipocket"
         package_install "kipi-plugins"
-        package_install "ffmpegthumbs"
         # KDE5 SDK
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 SDK${BGreen}...${Reset}"
         package_install "okteta kate dolphin-plugins kompare poxml kdebindings-python2 kdebindings-python"
