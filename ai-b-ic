@@ -80,8 +80,8 @@ source $(pwd)/ai-commons
             # rotational = 0 ==> SSD
             # https://wiki.archlinux.org/index.php/Solid_State_Drives#TRIM
             messages="\n"
-            messages+="Activation du ${Byellow_dlg}TRIM${Reset_dlg} (option discard ou service fstrim).\n"
-            messages+="------------------------------------------------------\n\n"
+            messages+="${Byellow_dlg}SSD${Reset_dlg} : Activation du ${Byellow_dlg}TRIM${Reset_dlg} (option discard ou service fstrim).\n"
+            messages+="------------------------------------------------------------\n\n"
             messages+="Configurer le ${Byellow_dlg}TRIM${Reset_dlg} en se basant sur :\n"
             REPLY=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Selectionner" --menu "${messages}" 20 72 5 \
                     "DISCARD" "TRIM par option de montage." \
@@ -161,7 +161,7 @@ source $(pwd)/ai-commons
     configure_makepkg_conf() {
         #ADD Nb Cores + 1 TO MAKEFLAGS TO MAKEPKG.CONF
         local nb_core=$(LC_ALL=C lscpu | grep "^Core" | awk '{print $4}')
-        nb_core=$(( $nb_core + 1 ))
+        local nb_core_mf=$(( $nb_core + 1 ))
         local retour=9
         local messages=""
         local titre="CONFIGURATION DU FICHIER <</etc/makepkg.conf>>"
@@ -174,13 +174,13 @@ source $(pwd)/ai-commons
         messages+="- Ajout de ${Byellow_dlg}-fdiagnostics-color=always${Reset_dlg}.\n\n"
         messages+="Nombre de Coeurs = $nb_core.\n"
         messages+="Option ${Bwhite_dlg}#MAKEFLAGS${Reset_dlg} :\n"
-        messages+="- Devient ${Byellow_dlg}MAKEFLAGS=\"-j$nb_core\"${Reset_dlg}.\n"
+        messages+="- Devient ${Byellow_dlg}MAKEFLAGS=\"-j$nb_core_mf\"${Reset_dlg}.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         if (( $IN_VIRTUAL_BOX == 0 )); then
             sed -i "s/-march=x86-64 -mtune=generic/-march=native/g" /etc/makepkg.conf
         fi
         sed -i "s/-O2 -pipe/-O2 -pipe -fdiagnostics-color=always/g" /etc/makepkg.conf
-        sed -i "/^#MAKEFLAGS/c\MAKEFLAGS=\"-j$nb_core\"" /etc/makepkg.conf
+        sed -i "/^#MAKEFLAGS/c\MAKEFLAGS=\"-j$nb_core_mf\"" /etc/makepkg.conf
         #
         retour=9
         messages="\n"
