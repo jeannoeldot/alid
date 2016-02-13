@@ -458,10 +458,10 @@ source $(pwd)/ai-commons
         titre="INSTALLATION D'OUTILS BASH"
         messages="\n"
         messages+="Installation de divers outils ${Byellow_dlg}BASH${Reset_dlg} :\n"
-        messages+="bc mlocate rsync bash-completion wget net-tools tree atool mc\n"
+        messages+="bc mlocate rsync bash-completion wget net-tools tree atool mc iptraf-ng\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de ${BYellow}bc mlocate rsync bash-completion wget net-tools tree atool mc${BGreen}...${Reset}"
-        package_install "bc mlocate rsync bash-completion wget net-tools tree atool mc"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}bc mlocate rsync bash-completion wget net-tools tree atool mc iptraf-ng${BGreen}...${Reset}"
+        package_install "bc mlocate rsync bash-completion wget net-tools tree atool mc iptraf-ng"
         pause_function
         #
         titre="INSTALLATION DE «D-BUS»"
@@ -662,8 +662,8 @@ source $(pwd)/ai-commons
                         messages+="Nom de la carte Vidéo NVidia détectée : ${Byellow_dlg}${L_NAME_CG_NVIDIA}${Reset_dlg}\n\n"
                         messages+="Installation de la dernière version des pilotes NVidia.\n"
                         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia nvidia-utils nvidia-libgl pangox-compat libva-vdpau-driver${BGreen}...${Reset}"
-                        package_install "nvidia nvidia-utils nvidia-libgl pangox-compat libva-vdpau-driver"
+                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia nvidia-utils nvidia-libgl nvidia-settings pangox-compat libva-vdpau-driver${BGreen}...${Reset}"
+                        package_install "nvidia nvidia-utils nvidia-libgl nvidia-settings pangox-compat libva-vdpau-driver"
                         #CONFIGURE NVidia IN XORG
                         printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia ${BYellow}20-nvidia.conf${BGreen}...${Reset}"
                         cp -v ai-fconfig/20-nvidia.conf /etc/X11/xorg.conf.d/20-nvidia.conf                    
