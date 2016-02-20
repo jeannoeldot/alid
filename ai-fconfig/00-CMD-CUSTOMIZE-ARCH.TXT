@@ -1067,6 +1067,9 @@ OU
 
 INSTALLATION DE freshplayerplugin ET chromium-pepper-flash POUR FIREFOX
 -----------------------------------------------------------------------
+!!! Arrêter Firefox
+!!! Vider Cache
+
 # pacman -R flashplugin
 
 $ rm -rf /home/jnd/.adobe
@@ -1113,6 +1116,7 @@ $ psd preview  ou  psd parse
 $ cat ~/.mozilla/firefox/profiles.ini
 
 
+!!! openvdb-git
 !!! opensubdiv-git
 !!! opencollada-git
 !!! openimageio-git
@@ -1455,13 +1459,14 @@ jndqaligne5-qt5 0.5.0-1
 jndqcbgrd-qt5 0.1.7-2
 jndqrami-qt5 0.2.1-1
 
-!!! VOIR Intallation de blender-git (+ dep osd, oc, oiio et osl)
-----------------------------------------------------------------
+!!! VOIR Intallation de blender-git (+ dep ovdb, osd, oc, oiio et osl)
+----------------------------------------------------------------------
 blender-git
 opencollada-git
 openimageio-git
 openshadinglanguage-git
 opensubdiv-git
+openvdb-git
 
 blender-addons-yafaray-git
 
@@ -1558,6 +1563,9 @@ SI FIREFOX INSTALLÉ
 https://aur.archlinux.org/packages/freshplayerplugin/
 
 https://aur.archlinux.org/packages/chromium-pepper-flash/
+
+!!! Arrêter Firefox
+!!! Vider Cache
 
 1) SUPPRESSION flashplugin si installé
 ---------------------------------------
