@@ -35,7 +35,7 @@ Server = http://repo-ck.com/$arch
 
 SI PROBLÈME AVEC pacman-key -r 5EE46C4C :
 -----------------------------------------
-VOIR : /home/jnd/09-Documentation/00-PROBLEME-AVEC-PACMAN-KEY-R-keyid.TXT
+VOIR : ~/09-Documentation/00-PROBLEME-AVEC-PACMAN-KEY-R-keyid.TXT
 
 # pacman -Syy
 
@@ -301,8 +301,8 @@ SERVICE INTEL_UCODE_UPDATE
 ==========================
 
 Déja créés. Voir :
-/home/jnd/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.path
-/home/jnd/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.service
+~/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.path
+~/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.service
 
 Voir : 00-Cmd-Customize-Arch.TXT -> 21) MICROCODE
 
@@ -403,7 +403,7 @@ SI VIRTUALBOX DÉJÀ INSTALLÉ
 
 Fichiers -> Paramètres 
 Onglet Général : Dossier par défaut des machines :
-  ==> /home/jnd/VirtualBox-VMs
+  ==> ~/VirtualBox-VMs
   
 
 VÉRIFICATIONS

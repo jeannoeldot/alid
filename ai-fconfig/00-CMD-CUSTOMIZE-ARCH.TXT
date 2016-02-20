@@ -158,14 +158,14 @@ $ sudo cp /etc/pacman.conf /etc/pacman.conf.backup.moi
 
 $ sudo sed -i "/^#Server = file/a\\\n[repolocal]\nSigLevel = Optional TrustAll\nServer = file:///home/jnd/00-repolocal" /etc/pacman.conf
 
-$ mkdir /home/jnd/00-repolocal
+$ mkdir ~/00-repolocal
 
 # Si DropBox !!! Vérifier lien
 ---------------------------------
-$ cd /home/jnd/00-repolocal/
+$ cd ~/00-repolocal/
 $ wget https://dl.dropbox.com/s/u2jb3jbb7y6y07p/fapg-0.41-3-x86_64.pkg.tar.xz
 
-$ cd /home/jnd/bin/
+$ cd ~/bin/
 $ wget https://www.dropbox.com/s/mn8f3azts8ebhmz/maj-repolocal
 $ chmod +x maj-repolocal
 
@@ -504,7 +504,7 @@ systemctl --state=failed
 systemctl list-unit-files
 systemd-analyze blame
 
-=> Comparer avec Fichiers dans /home/jnd/09-Fichiers-Conf/0-Systemd/
+=> Comparer avec Fichiers dans ~/09-Fichiers-Conf/0-Systemd/
 Liste-Services-Actifs.DERNIERE_DATE.TXT
 Liste-Units.DERNIERE_DATE.TXT
 
@@ -594,8 +594,8 @@ SERVICE INTEL_UCODE_UPDATE
 ==========================
 
 Déja créés. Voir :
-/home/jnd/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.path
-/home/jnd/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.service
+~/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.path
+~/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.service
 
 $ sudo cp -v /home/jnd/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.path \
 /etc/systemd/system/intel_ucode_update.path
@@ -903,7 +903,7 @@ $ cd && mkdir ~/90-BACKUP && mkdir ~/90-Partage && mkdir ~/99-A-IMPRIM && mkdir 
 !!! A VOIR !!!
 VirtualBox-VMs -> /0-DataLinux/VirtualBox-VMs
 
-$ ln -sf /0-DataLinux/00-3D /home/jnd/00-3D
+$ ln -sf /0-DataLinux/00-3D ~/00-3D
 
 
 2) FOND ECRAN
@@ -924,25 +924,25 @@ Détail du compte : Emplacements : Dossier ...
 
 !!! INUTILE : PLUS UTILISE
 !!! ATTENTION DATE
-$ cd && cp -v /home/jnd/09-Fichiers-Conf/0-Save-Confs/home-jnd-.yasp.script.2013-09-28 .yasp.script
+$ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.yasp.script.2013-09-28 .yasp.script
 
  3-2-1) NOTES
  ============
- !!! VOIR : /home/jnd/09-Fichiers-Conf/config-mes-kdeplasma/KDE-CONFIG-notes.TXT
+ !!! VOIR : ~/09-Fichiers-Conf/config-mes-kdeplasma/KDE-CONFIG-notes.TXT
 
  
 3-3) CONFIGS GIT
 ================
- !!! VOIR : /home/jnd/09-Documentation/00-Cmd-CREATION-GIT-INSTALL-ALID.TXT
- !!! VOIR : /home/jnd/09-Documentation/00-Cmd-CREATION-GIT-INSTALL-ALI-2.TXT
- !!! VOIR : /home/jnd/09-Documentation/00-Cmd-CREATION-GIT-INSTALLEUR.TXT
+ !!! VOIR : ~/09-Documentation/00-Cmd-CREATION-GIT-INSTALL-ALID.TXT
+ !!! VOIR : ~/09-Documentation/00-Cmd-CREATION-GIT-INSTALL-ALI-2.TXT
+ !!! VOIR : ~/09-Documentation/00-Cmd-CREATION-GIT-INSTALLEUR.TXT
  OU
- !!! VOIR : /home/jnd/02-git/00-Cmd-CREATION-GIT-INSTALL-ALID.TXT
- !!! VOIR : /home/jnd/02-git/00-Cmd-CREATION-GIT-INSTALL-ALI-2.TXT
- !!! VOIR : /home/jnd/02-git/00-Cmd-CREATION-GIT-INSTALLEUR.TXT
+ !!! VOIR : ~/02-git/00-Cmd-CREATION-GIT-INSTALL-ALID.TXT
+ !!! VOIR : ~/02-git/00-Cmd-CREATION-GIT-INSTALL-ALI-2.TXT
+ !!! VOIR : ~/02-git/00-Cmd-CREATION-GIT-INSTALLEUR.TXT
  
 !!! ATTENTION DATE
-$ cd && cp -v /home/jnd/09-Fichiers-Conf/0-Save-Confs/home-jnd-.gitconfig.2013-12-01 .gitconfig
+$ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.gitconfig.2013-12-01 .gitconfig
 
 
 3-4) CONFIGS TOP
@@ -962,7 +962,7 @@ Cela va écrire un fichier ~/.toprc.
 
 OU
 !!! ATTENTION DATE
-$ cd && cp -v /home/jnd/09-Fichiers-Conf/0-Save-Confs/home-jnd-.toprc.2013-12-01 .toprc
+$ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.toprc.2013-12-01 .toprc
 
 
 4) REPOLOCAL
@@ -971,9 +971,9 @@ $ cd && cp -v /home/jnd/09-Fichiers-Conf/0-Save-Confs/home-jnd-.toprc.2013-12-01
  =================================================
   !!! SI REPOLOCAL EXISTE DANS REP USER
   --------------------------------------
-$ mkdir /home/jnd/00-repolocal
+$ mkdir ~/00-repolocal
 
-$ mkdir /home/jnd/00-repolocal/pkg-OLD
+$ mkdir ~/00-repolocal/pkg-OLD
 
 $ sudo cp /etc/pacman.conf /etc/pacman.conf.backup.moi
 
@@ -983,10 +983,10 @@ $ sudo sed -i "/^#Server = file/a\\\n[repolocal]\nSigLevel = Optional TrustAll\n
   ----------
 # Si DropBox !!! Vérifier lien
 ---------------------------------
-$ cd /home/jnd/00-repolocal/
+$ cd ~/00-repolocal/
 $ wget https://dl.dropbox.com/s/u2jb3jbb7y6y07p/fapg-0.41-3-x86_64.pkg.tar.xz
 
-$ cd /home/jnd/bin/
+$ cd ~/bin/
 $ wget https://www.dropbox.com/s/mn8f3azts8ebhmz/maj-repolocal
 $ chmod +x maj-repolocal
 
@@ -1028,10 +1028,10 @@ $ cd && mkdir ~/05-builds && mkdir ~/05-builds/0-chroot
 7-1) RÉGLAGES KONSOLE, DOLPHIN, KATE, KWRITE, FAVORI FireFox
 ===========================================================
 !!! ATTENTION DATE
-$ cd && cp -v /home/jnd/09-Fichiers-Conf/kate-sessions/*.katesession /home/jnd/.local/share/kate/sessions/
+$ cd && cp -v ~/09-Fichiers-Conf/kate-sessions/*.katesession ~/.local/share/kate/sessions/
 
 NOTE :
-VOIR !!! /home/jnd/09-Fichiers-Conf/config-mes-kdeplasma/KDE-CONFIG-notes.TXT
+VOIR !!! ~/09-Fichiers-Conf/config-mes-kdeplasma/KDE-CONFIG-notes.TXT
 
 7-2) VISIONNEUR PDF PAR DÉFAUT DANS LES APPLICATIONS GTK SOUS KDE
 =================================================================
@@ -1072,10 +1072,10 @@ INSTALLATION DE freshplayerplugin ET chromium-pepper-flash POUR FIREFOX
 
 # pacman -R flashplugin
 
-$ rm -rf /home/jnd/.adobe
-$ rm -rf /home/jnd/.macromedia
+$ rm -rf ~/.adobe
+$ rm -rf ~/.macromedia
 
-!!! Vérifier /home/jnd/.mozilla/firefox/profiles.ini
+!!! Vérifier ~/.mozilla/firefox/profiles.ini
 $ cat ~/.mozilla/firefox/profiles.ini
 $ rm -i ~/.mozilla/firefox/mhnm9wic.default/pluginreg.dat
 
@@ -1165,11 +1165,11 @@ OU
 
 Fichiers -> Paramètres 
 Onglet Général : Dossier par défaut des machines :
-  ==> /home/jnd/VirtualBox-VMs
+  ==> ~/VirtualBox-VMs
   
 10) INSTALLATION DE CONKY-LUA
 =================================
-!!! VOIR : /home/jnd/00-Conky/Install-Conky.TXT
+!!! VOIR : ~/00-Conky/Install-Conky.TXT
 
 # systemctl stop lm_sensors.service
 # systemctl disable lm_sensors.service
@@ -1181,7 +1181,7 @@ Onglet Général : Dossier par défaut des machines :
 
 # pacman -Syu conky-lua-nv-git
 
-!!! VOIR : /home/jnd/00-Conky/0-COMMANDES TEST CONKY.TXT
+!!! VOIR : ~/00-Conky/0-COMMANDES TEST CONKY.TXT
 
 !!! ATTENTION SI VERSION CONKY = 1.10 : FORMAT FICHIER RC A CHANGÉ !!!
 
@@ -1216,7 +1216,7 @@ Edition -> Préférences -> Avancé -> Général -> Navigation
 
 
 Marque-pages -> Importation et sauvegarde -> Importer HTML
-/home/jnd/09-Fichiers-Conf/bookmarks-2013-12-01.html
+~/09-Fichiers-Conf/bookmarks-2013-12-01.html
 OU
 --
 Se synchroniser pour récupérer les bookmarks
@@ -1275,9 +1275,9 @@ https://addons.mozilla.org/fr/firefox/addon/bookmarks-checker/?src=dp-dl-othersb
 
 12) INSTALLATION DE WINE
 =================================
-!!! VOIR : /home/jnd/09-Documentation/20-Wine-Civ4/0-INSTALL/01-Installation-Wine-64.txt
+!!! VOIR : ~/09-Documentation/20-Wine-Civ4/0-INSTALL/01-Installation-Wine-64.txt
 
-!!! VOIR : /home/jnd/09-Documentation/20-Wine-Civ4/0-INSTALL/02-Installation-Civ4-Complete.txt
+!!! VOIR : ~/09-Documentation/20-Wine-Civ4/0-INSTALL/02-Installation-Civ4-Complete.txt
 
 
 13) BALOO KDE5
@@ -1300,9 +1300,9 @@ $ balooctl status
 14) DOLPHIN KDE5
 =================
 Emplacements :
-Voir : /home/jnd/09-Fichiers-Conf/KDE5-Dolphin/
-Voir : /home/jnd/.local/share/user-places.xbel.avec.mes.emplacements
-   ==> /home/jnd/.local/share/user-places.xbel
+Voir : ~/09-Fichiers-Conf/KDE5-Dolphin/
+Voir : ~/.local/share/user-places.xbel.avec.mes.emplacements
+   ==> ~/.local/share/user-places.xbel
 
 
 15) KWALLET KDE5
@@ -1380,7 +1380,7 @@ Option  "metamodes" "nvidia-auto-select +0+0 { ForceFullCompositionPipeline = On
 LIENS SYMBOLIQUES
 =====================
 
-$ ln -sf /0-DataLinux/00-3D /home/jnd/00-3D
+$ ln -sf /0-DataLinux/00-3D ~/00-3D
 ...
 ...
 
@@ -1427,9 +1427,9 @@ $ yaourt -Syua sysbench
 
 REPOLOCAL
 =============
-$ mkdir /home/jnd/00-repolocal
+$ mkdir ~/00-repolocal
 
-$ mkdir /home/jnd/00-repolocal/pkg-OLD
+$ mkdir ~/00-repolocal/pkg-OLD
 
  PACMAN.CONF : Edition fichier /etc/pacman.conf
  ==============================================
@@ -1445,7 +1445,7 @@ https://hubic.com/home/browser/#default/00-SAVE-ARCH-OB-CK/PAQUETS-AUR
 - ghnomix-icon-theme-1.3-1-any.pkg.tar.xz
 
 
-$ cp -v /0-DataLinux/00-ARCH_2-OB-CK/0-Fichiers-importants/ghnomix-icon-theme-1.3-1-any.pkg.tar.xz /home/jnd/00-repolocal/
+$ cp -v /0-DataLinux/00-ARCH_2-OB-CK/0-Fichiers-importants/ghnomix-icon-theme-1.3-1-any.pkg.tar.xz ~/00-repolocal/
 
 $ cd && maj-repolocal
 
@@ -1492,14 +1492,14 @@ INSTALLATION DE CONKY
 =================================
 
 $ cd
-$ cp -v /0-DataLinux/00-ARCH_2-OB-CK/00-Conky.tar.xz /home/jnd/
+$ cp -v /0-DataLinux/00-ARCH_2-OB-CK/00-Conky.tar.xz ~/
 $ tar -xJf 00-Conky.tar.xz
 $ rm -f 00-Conky.tar.xz
 
 # pacman -Syu conky-lua-nv-git
 
-!!! VOIR : /home/jnd/00-Conky/Install-Conky.TXT
-!!! VOIR : /home/jnd/00-Conky/0-COMMANDES TEST CONKY.TXT
+!!! VOIR : ~/00-Conky/Install-Conky.TXT
+!!! VOIR : ~/00-Conky/0-COMMANDES TEST CONKY.TXT
 
 !!! ATTENTION SI VERSION CONKY = 1.10 : FORMAT FICHIER RC A CHANGÉ !!!
 
@@ -1519,10 +1519,10 @@ $ yaourt -Syua compton-git
 https://github.com/chjj/compton/blob/master/compton.sample.conf
 	==> Raw
 	==> Clic Droit -> Enregistrer sous
-	==> /home/jnd/Téléchargements/compton.sample.conf
+	==> ~/Téléchargements/compton.sample.conf
 	
 	
-$ cp -v /home/jnd/Téléchargements/compton.sample.conf ~/.config/compton.conf
+$ cp -v ~/Téléchargements/compton.sample.conf ~/.config/compton.conf
 
 1) Modifier Opacity
 -------------------
@@ -1575,9 +1575,9 @@ extra/flashplugin 11.2.202.457-1 [installé]
 
 $ sudo pacman -R flashplugin
 
-$ rm -rf /home/jnd/.adobe
-$ rm -rf /home/jnd/.macromedia
-!!! Vérifier /home/jnd/.mozilla/firefox/profiles.ini
+$ rm -rf ~/.adobe
+$ rm -rf ~/.macromedia
+!!! Vérifier ~/.mozilla/firefox/profiles.ini
 $ cat ~/.mozilla/firefox/profiles.ini
 $ rm -i ~/.mozilla/firefox/ljs58rbs.default/pluginreg.dat
 
@@ -1625,9 +1625,9 @@ Menu Extensions -> Installer -> Fichier
 INSTALLATION DE LINUX-CK
 =================================
 
-!!! VOIR : /home/jnd/00-Cmd-INSTALLATION-LINUX-CK.TXT
+!!! VOIR : ~/00-Cmd-INSTALLATION-LINUX-CK.TXT
 OU
-!!! VOIR : /home/jnd/09-Documentation/00-Cmd-INSTALLATION-LINUX-CK.TXT
+!!! VOIR : ~/09-Documentation/00-Cmd-INSTALLATION-LINUX-CK.TXT
 OU
 !!! VOIR : /0-DataLinux/ARCH-OB-CK-INSTALLATION DE LINUX-CK.TXT
 

@@ -40,7 +40,7 @@ $ systemctl status intel_ucode_update.service
 
 LANCER CIV4 COMPLETE
 ========================
-VOIR /home/jnd/Bureau
+VOIR ~/Bureau
 =======================
 Clic Droit -> Ouvrir -> Exécuter
 
@@ -119,7 +119,7 @@ SI MAJ freshplayerplugin / chromium-pepper-flash
 $ yaourt -Syua chromium-pepper-flash
 $ yaourt -Syua freshplayerplugin
 
-!!! Vérifier /home/jnd/.mozilla/firefox/profiles.ini
+!!! Vérifier ~/.mozilla/firefox/profiles.ini
 $ cat ~/.mozilla/firefox/profiles.ini
 $ rm -i ~/.mozilla/firefox/ljs58rbs.default/pluginreg.dat
 
