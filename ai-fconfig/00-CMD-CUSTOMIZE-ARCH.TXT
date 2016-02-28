@@ -569,7 +569,7 @@ Warning: Unit file of hddtemp.service changed on disk, 'systemctl --system daemo
 $ nc localhost 7634
 |/dev/sda|M4-CT256M4SSD2|0|C||/dev/sdb|WDC WD5002AALX-00J37A0|35|C|
 
-$ sudo systemctl status hddtemp.service
+$ sudo systemctl --no-pager status hddtemp.service
 [sudo] password for jnd: 
 hddtemp.service - Hard drive temperature monitor daemon
    Loaded: loaded (/usr/lib/systemd/system/hddtemp.service; enabled)
@@ -619,7 +619,7 @@ $ sudo systemctl enable intel_ucode_update.path
 
 $ sudo systemctl start intel_ucode_update.path
 
-$ systemctl status intel_ucode_update.path
+$ systemctl --no-pager status intel_ucode_update.path
 
 !!! INUTILES SI intel_ucode_update.path ACTIF !!!
 =================================================
@@ -1177,7 +1177,7 @@ Onglet Général : Dossier par défaut des machines :
 # sensors-detect
 # systemctl start lm_sensors.service
 # systemctl enable lm_sensors.service
-# systemctl status lm_sensors.service
+# systemctl --no-pager status lm_sensors.service
 
 # pacman -Syu conky-lua-nv-git
 
@@ -1484,7 +1484,7 @@ LM_SENSORS
 # sensors-detect
 # systemctl start lm_sensors.service
 # systemctl enable lm_sensors.service
-# systemctl status lm_sensors.service
+# systemctl --no-pager status lm_sensors.service
 !!! TEST EN USER : sensors
 
 

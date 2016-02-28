@@ -21,14 +21,14 @@ SI problème avec linux-ck-haswell
 
 APRES MAJ LINUX
 ================
-$ systemctl status efistub_update.service
+$ systemctl --no-pager status efistub_update.service
 
-$ systemctl status efistub_ck_update.service
+$ systemctl --no-pager status efistub_ck_update.service
 
 
 APRES MAJ INTEL-UCODE
 =====================
-$ systemctl status intel_ucode_update.service
+$ systemctl --no-pager status intel_ucode_update.service
 
 
 * SI MAJ SYSTEMD ( ex 215 -> 216 )
@@ -189,6 +189,11 @@ MAJ DHCPCD ET /etc/dhcpcd.conf.pacnew
 !!! EN ROOT
 # mv -v /etc/dhcpcd.conf.pacnew /etc/dhcpcd.conf
 # echo "noarp" >> /etc/dhcpcd.conf
+
+
+MAJ PACMAN ET /etc/pacman.conf.pacnew et /etc/makepkg.conf.pacnew
+=================================================================
+$ maj-pacman
 
 
 MAJ GLIBC ET /etc/locale.gen.pacnew
