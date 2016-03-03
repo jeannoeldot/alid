@@ -1109,8 +1109,8 @@ $ profile-cleaner f
 $ systemctl --user start psd.service
 $ systemctl --user enable psd.service
 
-$ systemctl --user status psd.service
-$ systemctl --user status psd-resync.service
+$ systemctl --no-pager --user status psd.service
+$ systemctl --no-pager --user status psd-resync.service
 
 $ psd preview  ou  psd parse
 $ cat ~/.mozilla/firefox/profiles.ini
@@ -1412,8 +1412,8 @@ $ profile-cleaner f
 $ systemctl --user start psd.service
 $ systemctl --user enable psd.service
 
-$ systemctl --user status psd.service
-$ systemctl --user status psd-resync.service
+$ systemctl --no-pager --user status psd.service
+$ systemctl --no-pager --user status psd-resync.service
 
 $ psd preview ou psd parse
 $ cat ~/.mozilla/firefox/profiles.ini

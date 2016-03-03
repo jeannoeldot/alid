@@ -96,8 +96,8 @@ $ rm -i $HOME/.config/psd/psd.conf~
 
 $ systemctl --user start psd.service
 
-$ systemctl --user status psd.service
-$ systemctl --user status psd-resync.service
+$ systemctl --no-pager --user status psd.service
+$ systemctl --no-pager --user status psd-resync.service
 
 $ psd preview ou	 $ psd parse
 $ cat ~/.mozilla/firefox/profiles.ini
@@ -125,8 +125,8 @@ $ rm -i ~/.mozilla/firefox/ljs58rbs.default/pluginreg.dat
 
 $ systemctl --user start psd.service
 
-$ systemctl --user status psd.service
-$ systemctl --user status psd-resync.service
+$ systemctl --no-pager --user status psd.service
+$ systemctl --no-pager --user status psd-resync.service
 
 $ psd preview ou	 $ psd parse
 
@@ -154,14 +154,27 @@ $ profile-cleaner f
 $ systemctl --user start psd.service
 $ systemctl --user enable psd.service
 
-$ systemctl --user status psd.service
-$ systemctl --user status psd-resync.service
+$ systemctl --no-pager --user status psd.service
+$ systemctl --no-pager --user status psd-resync.service
 
 $ psd preview ou	 $ psd parse
 $ cat ~/.mozilla/firefox/profiles.ini
 
 $ sudo rm -i /etc/psd.conf.pacsave
 
+
+MAJ YAOURT ET /etc/yaourtrc.pacnew
+==================================
+!!! EN ROOT
+# mv /etc/yaourtrc.pacnew /etc/yaourtrc
+# sed -i "/^#VISUAL=/c\VISUAL=\"nano\"" /etc/yaourtrc
+!!! SI DANS VBOX OU SI TMP < 2000 MB
+# mount | grep tmpfs
+# sed -i "/^#TMPDIR=/c\TMPDIR=\"/home/${USERNAME}/yaourt_tmp\"" /etc/yaourtrc
+
+Vérifications :
+---------------
+# cat /etc/yaourtrc
 
 MAJ SUDO ET /ETC/SUDOERS.PACNEW
 ===============================
