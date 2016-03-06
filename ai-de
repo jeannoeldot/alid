@@ -606,8 +606,8 @@ source $(pwd)/ai-commons
             messages+="Installation dans ${BRwhite_dlg}Oracle VM Virtualbox${Reset_dlg}.\n\n"
             messages+="Installation de virtualbox-guest-utils.\n"
             print_dialog_msgbox "${titre}" "${messages}" "Installer"
-            printf '%s\n' "${BGreen}Installation de ${BYellow}virtualbox-guest-utils mesa-libgl${BGreen}...${Reset}"
-            package_install "virtualbox-guest-utils mesa-libgl"
+            printf '%s\n' "${BGreen}Installation de ${BYellow}virtualbox-guest-utils mesa-libgl linux-headers${BGreen}...${Reset}"
+            package_install "virtualbox-guest-utils mesa-libgl linux-headers"
             printf '%s\n' "${BGreen}Démarrage des modules ${BYellow}vboxguest vboxsf vboxvideo${BGreen}...${Reset}"
             echo "# Load vbox modules guest at boot" > /etc/modules-load.d/vbox_modules_guest.conf
             echo "vboxguest" >> /etc/modules-load.d/vbox_modules_guest.conf

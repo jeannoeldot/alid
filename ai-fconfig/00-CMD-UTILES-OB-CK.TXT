@@ -169,7 +169,7 @@ MAJ YAOURT ET /etc/yaourtrc.pacnew
 # mv /etc/yaourtrc.pacnew /etc/yaourtrc
 # sed -i "/^#VISUAL=/c\VISUAL=\"nano\"" /etc/yaourtrc
 !!! SI DANS VBOX OU SI TMP < 2000 MB
-# mount | grep tmpfs
+# df -h -BM | awk '/\/tmp/ {print $2}' | sed -e "s/M//"
 # sed -i "/^#TMPDIR=/c\TMPDIR=\"/home/${USERNAME}/yaourt_tmp\"" /etc/yaourtrc
 
 Vérifications :

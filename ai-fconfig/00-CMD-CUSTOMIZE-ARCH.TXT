@@ -1146,7 +1146,7 @@ OU
 9) INSTALLATION DE VIRTUAL-BOX
 =================================
 
-# pacman -Syu virtualbox virtualbox-host-modules virtualbox-guest-iso
+# pacman -Syu virtualbox virtualbox-host-dkms virtualbox-guest-iso linux-headers
 # modprobe vboxdrv
 # modprobe vboxnetflt
 
@@ -1639,6 +1639,30 @@ OU
 ANCIEN
 ==========================================================
 
+9) INSTALLATION DE VIRTUAL-BOX
+=================================
+
+# pacman -Syu virtualbox virtualbox-host-modules virtualbox-guest-iso
+# modprobe vboxdrv
+# modprobe vboxnetflt
+
+# echo '# Load Vbox modules at boot.' > /etc/modules-load.d/virtualbox.conf
+# echo 'vboxdrv' >> /etc/modules-load.d/virtualbox.conf
+# echo 'vboxnetflt' >> /etc/modules-load.d/virtualbox.conf
+
+# cat /etc/modules-load.d/virtualbox.conf
+
+# gpasswd -a jnd vboxusers
+
+# pacman -Syu virtualbox-extension
+
+!!! DANS VIRTUAL-BOX :
+!!! ATTENTION AU CHEMIN DE VirtualBox-VMs -> /0-DataLinux/VirtualBox-VMs
+
+Fichiers -> Paramètres 
+Onglet Général : Dossier par défaut des machines :
+  ==> ~/VirtualBox-VMs
+  
 # pacman -Syu amaya
 
 # pacman -Syu konvertible
