@@ -132,6 +132,8 @@ read_name_type_keyboard() { #{{{
     fi
 } #}}}
 # # TEST SI CM = ASUS All Series/Z87-C
+# OUI ==> IS_Z87C=1
+# NON ==> IS_Z87C=0
 # check_is_cm_asus_z87c() { #{{{
 #     local z87c=$(journalctl -b | grep -E "DMI:")
 #     echo ${z87c} | tr "[:upper:]" "[:lower:]" | grep -q z87-c
@@ -142,6 +144,8 @@ read_name_type_keyboard() { #{{{
 #     fi
 # } #}}}
 # DANS VIRTUALBOX OU NON
+# OUI ==> IN_VIRTUAL_BOX=1
+# NON ==> IN_VIRTUAL_BOX=0
 check_is_in_virtualbox() { #{{{
     local vbox=$(journalctl -b | grep -E "DMI:")
     echo ${vbox} | tr "[:upper:]" "[:lower:]" | grep -q virtualbox
@@ -152,6 +156,8 @@ check_is_in_virtualbox() { #{{{
     fi
 } #}}}
 # IS UEFI OR BIOS
+# UEFI ==> IS_UEFI=1
+# BIOS ==> IS_UEFI=0
 check_is_uefi_or_bios() { #{{{
     if [[ -d "/sys/firmware/efi" ]]; then
         IS_UEFI=1
