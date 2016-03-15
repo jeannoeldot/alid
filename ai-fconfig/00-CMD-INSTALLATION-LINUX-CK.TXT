@@ -342,18 +342,16 @@ ck-haswell linux-ck-haswell
 ck-haswell linux-ck-haswell-headers
 ck-haswell nvidia-304xx-ck-haswell
 ck-haswell nvidia-ck-haswell
+
+!!!! A VOIR : NE PAS INSTALLER
 ck-haswell virtualbox-ck-guest-modules-haswell
 ck-haswell virtualbox-ck-host-modules-haswell
 
-# pacman -Syu virtualbox virtualbox-ck-host-modules-haswell virtualbox-guest-iso
+# pacman -Syu linux-ck-haswell-headers virtualbox virtualbox-guest-iso
+
+!!! VOIR UTILITÉ
 # modprobe vboxdrv
 # modprobe vboxnetflt
-
-# echo '# Load Vbox modules at boot.' > /etc/modules-load.d/virtualbox.conf
-# echo 'vboxdrv' >> /etc/modules-load.d/virtualbox.conf
-# echo 'vboxnetflt' >> /etc/modules-load.d/virtualbox.conf
-
-# cat /etc/modules-load.d/virtualbox.conf
 
 # gpasswd -a jnd vboxusers
 
@@ -369,32 +367,25 @@ Onglet Général : Dossier par défaut des machines :
 INSTALLATION DE VIRTUALBOX CK DANS ARCH / ARCH_1_CK
 ===================================================
 # pacman -Sg ck-haswell
+
+!!!! A VOIR : NE PAS INSTALLER
 ck-haswell virtualbox-ck-guest-modules-haswell
 ck-haswell virtualbox-ck-host-modules-haswell
 
 SI VIRTUALBOX PAS DÉJÀ INSTALLÉ
 --------------------------------
-# pacman -Syu virtualbox virtualbox-ck-host-modules-haswell virtualbox-guest-iso
+# pacman -Syu linux-ck-haswell-headers virtualbox virtualbox-guest-iso
+
+!!! VOIR UTILITÉ
 # modprobe vboxdrv
 # modprobe vboxnetflt
-
-# echo '# Load Vbox modules at boot.' > /etc/modules-load.d/virtualbox.conf
-# echo 'vboxdrv' >> /etc/modules-load.d/virtualbox.conf
-# echo 'vboxnetflt' >> /etc/modules-load.d/virtualbox.conf
-
-# cat /etc/modules-load.d/virtualbox.conf
 
 # gpasswd -a jnd vboxusers
 
 
 SI VIRTUALBOX DÉJÀ INSTALLÉ
 --------------------------------
-# pacman -Syu virtualbox-ck-host-modules-haswell
-
-# modprobe vboxdrv
-# modprobe vboxnetflt
-
-!!! voir : 00-Cmd-Customize-Arch.TXT   9) INSTALLATION DE VIRTUAL-BOX
+!!! voir : 00-CMD-CUSTOMIZE-ARCH.TXT   9) INSTALLATION DE VIRTUAL-BOX
 
 # pacman -Syu virtualbox-extension
 
@@ -420,6 +411,41 @@ repo-ck virtualbox-ck-host-modules-haswell 4.3.26-4 [installé]
 ======================================================================================
 ANCIEN
 =======
+
+# pacman -Syu virtualbox virtualbox-ck-host-modules-haswell virtualbox-guest-iso
+# modprobe vboxdrv
+# modprobe vboxnetflt
+
+# echo '# Load Vbox modules at boot.' > /etc/modules-load.d/virtualbox.conf
+# echo 'vboxdrv' >> /etc/modules-load.d/virtualbox.conf
+# echo 'vboxnetflt' >> /etc/modules-load.d/virtualbox.conf
+
+# cat /etc/modules-load.d/virtualbox.conf
+
+# pacman -Sg ck-haswell
+ck-haswell virtualbox-ck-guest-modules-haswell
+ck-haswell virtualbox-ck-host-modules-haswell
+
+SI VIRTUALBOX PAS DÉJÀ INSTALLÉ
+--------------------------------
+# pacman -Syu virtualbox virtualbox-ck-host-modules-haswell virtualbox-guest-iso
+# modprobe vboxdrv
+# modprobe vboxnetflt
+
+# echo '# Load Vbox modules at boot.' > /etc/modules-load.d/virtualbox.conf
+# echo 'vboxdrv' >> /etc/modules-load.d/virtualbox.conf
+# echo 'vboxnetflt' >> /etc/modules-load.d/virtualbox.conf
+
+# cat /etc/modules-load.d/virtualbox.conf
+
+SI VIRTUALBOX DÉJÀ INSTALLÉ
+--------------------------------
+# pacman -Syu virtualbox-ck-host-modules-haswell
+
+# modprobe vboxdrv
+# modprobe vboxnetflt
+
+
 # pacman -S ck-haswell
 :: Il y a 7 membres dans le groupe ck-haswell :
 :: Dépôt repo-ck

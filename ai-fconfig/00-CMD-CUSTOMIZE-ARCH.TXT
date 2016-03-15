@@ -1146,15 +1146,11 @@ OU
 9) INSTALLATION DE VIRTUAL-BOX
 =================================
 
-# pacman -Syu virtualbox virtualbox-host-dkms virtualbox-guest-iso linux-headers
+# pacman -Syu linux-headers virtualbox virtualbox-host-dkms virtualbox-guest-iso
+
+!!! VOIR UTILITÉ
 # modprobe vboxdrv
 # modprobe vboxnetflt
-
-# echo '# Load Vbox modules at boot.' > /etc/modules-load.d/virtualbox.conf
-# echo 'vboxdrv' >> /etc/modules-load.d/virtualbox.conf
-# echo 'vboxnetflt' >> /etc/modules-load.d/virtualbox.conf
-
-# cat /etc/modules-load.d/virtualbox.conf
 
 # gpasswd -a jnd vboxusers
 
@@ -1640,6 +1636,14 @@ ANCIEN
 ==========================================================
 
 9) INSTALLATION DE VIRTUAL-BOX
+
+!!! INUTILE DEPUIS VERSION 5.0.16
+# echo '# Load Vbox modules at boot.' > /etc/modules-load.d/virtualbox.conf
+# echo 'vboxdrv' >> /etc/modules-load.d/virtualbox.conf
+# echo 'vboxnetflt' >> /etc/modules-load.d/virtualbox.conf
+
+# cat /etc/modules-load.d/virtualbox.conf
+
 =================================
 
 # pacman -Syu virtualbox virtualbox-host-modules virtualbox-guest-iso
