@@ -160,7 +160,7 @@ source $(pwd)/ai-commons
     #CONFIGURE MAKEPKG.CONF {{{
     configure_makepkg_conf() {
         #ADD Nb Cores + 1 TO MAKEFLAGS TO MAKEPKG.CONF
-        local nb_core=$(LC_ALL=C lscpu | grep "^Core" | awk '{print $4}')
+        local nb_core=$(LC_ALL=C lscpu | awk '/^Core/ {print $4}')
         local nb_core_mf=$(( $nb_core + 1 ))
         local retour=9
         local messages=""
