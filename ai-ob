@@ -251,10 +251,10 @@
             #
             chown -R ${USERNAME}:users /home/${USERNAME}
             printf '%s\n' "${BGreen}Installation de thèmes ${BYellow}GTK 3/2${BGreen}...${Reset}"
-            package_install "gtk-update-icon-cache"
-            aur_package_install "zukitwo-themes"
+            package_install "gtk-update-icon-cache gnome-themes-standard gtk-engines"
+            aur_package_install "zuki-themes-git"
             printf '%s\n' "${BGreen}Installation d'${BYellow}Icones${BGreen}...${Reset}"
-            aur_package_install "flatwoken-icons-git"
+            aur_package_install "elementary-xfce-icons-git"
             aur_package_install "awoken-icons"
             package_install "zenity"
             pause_function
@@ -279,7 +279,7 @@
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 22 72 12)
             options=("adwaita" "(Thèmes GTK) - (AUR)" ON
                     "faenza" "(Thèmes d'Icones)" ON
-                    "elementary-xfce" "(Thèmes d'Icones) - (AUR)" ON
+                    "flatwoken" "(Thèmes d'Icones) - (AUR)" ON
                     "compton-git" "(Compositeur pour X) - (AUR)" ON
                     "scrot" "(Capture d'écran pour X)" ON
                     "xfburn" "(Gravure)" ON
@@ -309,9 +309,9 @@
                     printf '%s\n' "${BGreen}Installation de ${BYellow}faenza-icon-theme faience-icon-theme${BGreen}...${Reset}"
                     package_install "faenza-icon-theme faience-icon-theme"
                     ;;
-                "elementary-xfce")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}elementary-xfce-icons-git${BGreen}...${Reset}"
-                    aur_package_install "elementary-xfce-icons-git"
+                "flatwoken")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}flatwoken-icons-git${BGreen}...${Reset}"
+                    aur_package_install "flatwoken-icons-git"
                     ;;
                 "compton-git")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}compton-git${BGreen}...${Reset}"

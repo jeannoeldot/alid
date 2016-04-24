@@ -7,7 +7,7 @@ Interface graphique avec dialog
 
 LICENSE         : GPL2 (Voir COPYING pour les détails).
 
-VERSION         : 1.2.0
+VERSION         : 1.2.1
 
 LANGUE          : uniquement FR (AZERTY ou BÉPO)
 
@@ -35,3 +35,8 @@ ai-commons      : script contenant les fonctions communes aux scripts.
 
 # RÉPERTOIRE DES FICHIERS DE CONFIGURATIONS
 ai-fconfig      : répertoire contenant mes fichiers de configurations.
+
+
+LIGNE DE COMMANDE
+
+wget https://github.com/jeannoeldot/alid/tarball/master -O - | tar xz && mv jeannoeldot-* ai
