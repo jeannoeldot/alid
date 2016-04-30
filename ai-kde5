@@ -658,8 +658,8 @@
         do
             case $choix in
                 "vlc")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}vlc libbluray libdvdcss libcdio opus vcdimager${BGreen}...${Reset}"
-                    package_install "vlc libbluray libdvdcss libcdio opus vcdimager"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}vlc qt4 flac libbluray libdvdcss libcdio opus vcdimager${BGreen}...${Reset}"
+                    package_install "vlc qt4 flac libbluray libdvdcss libcdio opus vcdimager"
                     if is_package_installed "nvidia" ; then
                         printf '%s\n' "${BGreen}Installation de ${BYellow}libva-vdpau-driver${BGreen}...${Reset}"
                         package_install "libva-vdpau-driver"

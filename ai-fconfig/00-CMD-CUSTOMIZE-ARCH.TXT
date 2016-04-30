@@ -1230,7 +1230,6 @@ https://addons.mozilla.org/fr/firefox/addon/dictionnaires-fran%C3%A7ais/?src=ss
 
 https://addons.mozilla.org/firefox/downloads/latest/354872/addon-354872-latest.xpi?src=ss
 
-
  11-3) OBTENIR 1080p DANS LE LECTEUR HTML5 YOUTUBE DANS FIREFOX
  ==============================================================
 VOIR : http://forum.pinguyos.com/Thread-Enable-Hardware-Acceleration-in-Firefox-Get-1080p-in-Youtube%E2%80%99s-HTML5-player
@@ -1261,12 +1260,10 @@ VOIR : http://forum.pinguyos.com/Thread-Enable-Hardware-Acceleration-in-Firefox-
 
 A vérifier en allant sur : https://www.youtube.com/html5
 
-
  11-9) INSTALLATION DE "Bookmarks Checker - check for bad links" DANS FIREFOX
  ============================================================================
   Extensions Bookmarks Checker - check for bad links 
 https://addons.mozilla.org/fr/firefox/addon/bookmarks-checker/?src=dp-dl-othersby
-
 
 
 12) INSTALLATION DE WINE
@@ -1323,6 +1320,18 @@ Trop d'informations de débuggage par défaut dans le journal
 VOIR : 80) KDE 5 / Plasma 5 : ENTRÉES DANS JOURNAL (Ligne 708)
 
 VOIR : ARCH-KDE-DEBUG-DANS-JOURNAL.TXT dans ~/09-Documentation/
+OU
+$ maj-startkde
+
+
+17) THEME Breeze et GTK 3.20
+================================
+ !!! Si breeze-gtk ne donne pas un affichage correct dans Firefox, ... :
+ # pacman -Syu gnome-breeze-git
+ 
+ ==> Configuration du Système -> Apparence des applications -> Style des applications GNOME(GTK) :
+ ==> Thème GTK2 : Breeze-gtk
+ ==> Thème GTK3 : Breeze-gtk
 
 
 40) INSTALLATION DE jre8-openjdk
