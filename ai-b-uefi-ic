@@ -177,13 +177,15 @@
                 #sed -i "/^#uefi_deep_legacy_scan/c\uefi_deep_legacy_scan true" ${NAME_DIR_EFI}/refind.conf
             fi
         fi
-        messages="\n"
-        messages+="Visualiser/Editer le fichier ${Byellow_dlg}refind.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
-        print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
-        retour=$?
-        if (( retour == 0 )); then
-            ${EDITOR} ${NAME_DIR_EFI}/refind.conf
-        fi 
+        if (( $IS_MULTI_BOOT_UEFI == 0 )); then
+            messages="\n"
+            messages+="Visualiser/Editer le fichier ${Byellow_dlg}refind.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
+            print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
+            retour=$?
+            if (( retour == 0 )); then
+                ${EDITOR} ${NAME_DIR_EFI}/refind.conf
+            fi
+        fi
         #
         messages="\n"
         messages+="Configuration de ${Byellow_dlg}${DIR_EFI_ARCHLINUX}/refind_linux.conf${Reset_dlg}.\n"
