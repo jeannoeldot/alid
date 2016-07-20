@@ -322,6 +322,7 @@ févr. 18 17:08:22 arch1kde baloo_file[5918]: KDE Baloo Filewatch service reache
 
 $ sudo sh -c "echo 'fs.inotify.max_user_watches = 20000' >> /etc/sysctl.d/90-inotify.conf"
 
+$ cat /etc/sysctl.d/90-inotify.conf
 
 5-3) Magic System Request Key : Création de /etc/sysctl.d/99-sysrq.conf
 =============================================================================================
@@ -979,6 +980,8 @@ $ sudo cp /etc/pacman.conf /etc/pacman.conf.backup.moi
 
 $ sudo sed -i "/^#Server = file/a\\\n[repolocal]\nSigLevel = Optional TrustAll\nServer = file:///home/jnd/00-repolocal" /etc/pacman.conf
 
+$ cat /etc/pacman.conf
+
   !!! VOIR
   ----------
 # Si DropBox !!! Vérifier lien
@@ -1052,6 +1055,8 @@ Replace 'kde4-gwenview.desktop' with 'gwenview.desktop'
 OU
 8) INSTALLATION DE MES PROGRAMMES
 =================================
+
+$ cd && maj-repolocal
 
  8-1) MODIF QT4 CONFIG
  =====================
@@ -1360,6 +1365,15 @@ Menu Aide -> A propos des plug-ins...
   Utilitaires : X Todo
 
 
+XX) QUAND FINI
+==============
+
+Document KDE5 : Customization Bureau : Vérifier :
+ - Page 2 : GTK3
+ - Page 3 : Recherche Baloo
+ - Page 4 : Emplacements
+ - Page 7 : Contenu Note
+ - Page 8 : Dolphin Panneau gauche
 
 =============================================================================
 =============================================================================
