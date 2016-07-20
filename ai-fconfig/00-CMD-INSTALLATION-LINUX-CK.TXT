@@ -334,8 +334,8 @@ PKGFILE
 # pkgfile --update
 
 
-INSTALLATION DE VIRTUALBOX CK DANS ARCH_2_CK
-============================================
+INSTALLATION DE VIRTUALBOX CK DANS ARCH_2_CK OpenBox
+====================================================
 # pacman -Sg ck-haswell
 ck-haswell broadcom-wl-ck-haswell
 ck-haswell linux-ck-haswell
@@ -347,7 +347,7 @@ ck-haswell nvidia-ck-haswell
 ck-haswell virtualbox-ck-guest-modules-haswell
 ck-haswell virtualbox-ck-host-modules-haswell
 
-# pacman -Syu linux-ck-haswell-headers virtualbox virtualbox-guest-iso
+# pacman -Syu linux-ck-haswell-headers virtualbox qt5-x11extras virtualbox-guest-iso
 
 !!! VOIR UTILITÉ
 # modprobe vboxdrv
@@ -364,8 +364,8 @@ Fichiers -> Paramètres
 Onglet Général : Dossier par défaut des machines :
 
 
-INSTALLATION DE VIRTUALBOX CK DANS ARCH / ARCH_1_CK
-===================================================
+INSTALLATION DE VIRTUALBOX CK DANS ARCH / ARCH_1_CK (KDE 5)
+===========================================================
 # pacman -Sg ck-haswell
 
 !!!! A VOIR : NE PAS INSTALLER
@@ -374,7 +374,7 @@ ck-haswell virtualbox-ck-host-modules-haswell
 
 SI VIRTUALBOX PAS DÉJÀ INSTALLÉ
 --------------------------------
-# pacman -Syu linux-ck-haswell-headers virtualbox virtualbox-guest-iso
+# pacman -Syu linux-ck-haswell-headers virtualbox qt5-x11extras virtualbox-guest-iso
 
 !!! VOIR UTILITÉ
 # modprobe vboxdrv

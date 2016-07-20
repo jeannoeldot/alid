@@ -31,11 +31,20 @@ APRES MAJ INTEL-UCODE
 $ systemctl --no-pager status intel_ucode_update.service
 
 
-* SI MAJ SYSTEMD ( ex 215 -> 216 )
+SI MAJ SYSTEMD ( ex 215 -> 216 )
 ==================================
 # mkinitcpio -p linux
 
 # mkinitcpio -p linux-ck
+
+
+NETTOYAGE CACHE ET PAQUETS
+==========================
+# pacman -Sc
+
+# pacman -Qdt
+
+# pacman -Qm
 
 
 LANCER CIV4 COMPLETE
