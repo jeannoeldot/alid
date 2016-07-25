@@ -1365,6 +1365,25 @@ Menu Aide -> A propos des plug-ins...
   Utilitaires : X Todo
 
 
+60) SCREEN TEARING
+==================
+Version Driver NVidia 367-35
+# VOIR 0-NVidia-CMD-CurrentMetaMode.TXT
+#      https://devtalk.nvidia.com/default/topic/950647/linux/black-screen-with-367-35/2
+
+Script:
+$HOME/01-scripts/Nvidia-settings-CurrentMetaMode/nvidia-settings-assign-CurrentMetaMode
+$HOME/bin/nvidia-settings-assign-CurrentMetaMode
+
+# Démarrage automatique
+------------------------
+KDE5
+-----
+Configuration du Système -> Démarrage et arrêt
+Démarrage automatique -> Fichier Bureau -> Ajouter un programme
+$HOME/bin/nvidia-settings-assign-CurrentMetaMode
+
+
 XX) QUAND FINI
 ==============
 
