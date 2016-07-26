@@ -1068,7 +1068,7 @@ $ cd && maj-repolocal
 
 # pacman -Syu mkpkg-tmpfs
 
-# pacman -Syu firefox-https-everywhere
+# pacman -Syu firefox-extension-https-everywhere
 
 INSTALLATION DE freshplayerplugin ET chromium-pepper-flash POUR FIREFOX
 -----------------------------------------------------------------------
