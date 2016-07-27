@@ -1208,12 +1208,12 @@ Edition -> Préférences -> Avancé -> Général -> Navigation
 
  about:config
  ------------
- network.http.pipelining  => true
- network.http.pipelining.maxrequests => 8
- network.http.proxy.pipelining => true
+ network.http.pipelining  false => true
+ network.http.pipelining.maxrequests 32 => 8
+ network.http.proxy.pipelining false => true
  
  Libérer la mémoire après fermeture d'un onglet :
- browser.sessionstore.max_tabs_undo => 0
+ browser.sessionstore.max_tabs_undo 10 => 0
 
 
 Marque-pages -> Importation et sauvegarde -> Importer HTML
@@ -1229,13 +1229,20 @@ Edition -> Préférences -> Sync -> Se connecter
 Menu Outils -> Modules Complémentaires
 Onglet Catalogue
 En HAUT - A DROITE : Rechercher : dictionnaires français
-==> Dictionnaires français 5.3 -> Installer
+==> Dictionnaires français 5.6.3 -> Installer
 
 https://addons.mozilla.org/fr/firefox/addon/dictionnaires-fran%C3%A7ais/?src=ss
 
 https://addons.mozilla.org/firefox/downloads/latest/354872/addon-354872-latest.xpi?src=ss
 
- 11-3) OBTENIR 1080p DANS LE LECTEUR HTML5 YOUTUBE DANS FIREFOX
+ 11-3) Passer outre à la signature des modules complémentaires
+ =============================================================
+( Adblock Plus )
+  about:config
+ ------------
+ xpinstall.signatures.required true ==> false
+ 
+ 11-4) OBTENIR 1080p DANS LE LECTEUR HTML5 YOUTUBE DANS FIREFOX
  ==============================================================
 VOIR : http://forum.pinguyos.com/Thread-Enable-Hardware-Acceleration-in-Firefox-Get-1080p-in-Youtube%E2%80%99s-HTML5-player
 
