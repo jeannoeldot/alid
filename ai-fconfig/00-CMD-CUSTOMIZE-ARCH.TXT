@@ -187,8 +187,10 @@ $ sudo cp /etc/fstab /etc/fstab.backup.moi
 # /dev/sda2
 #UUID=07e77477-5016-45ed-84e1-a64b3bb3579a      none            swap            defaults        0 0
 
-!!! VOIR :
-----------
+ 4-1-1) TMPFS : Créer ma conf ds /etc/systemd/system/tmp.mount.d/tmp_size.conf
+ =============================================================================
+
+# cat /usr/lib/systemd/system/tmp.mount
 systemd /usr/lib/systemd/system/tmp.mount  section "Options"
 [Mount]
 What=tmpfs
@@ -196,15 +198,21 @@ Where=/tmp
 Type=tmpfs
 Options=mode=1777,strictatime
 
+systemd : version 231 :
+[Mount]
+What=tmpfs
+Where=/tmp
+Type=tmpfs
+Options=mode=1777,strictatime,nosuid,nodev
+
+
 Example : Options=mode=1777,strictatime,size=768M
 Example : Options=mode=1777,strictatime,size=2G
+OU
+Example : Options=mode=1777,strictatime,nosuid,nodev,size=2G
 
- 4-1-1) TMPFS : Créer ma conf ds /etc/systemd/system/tmp.mount.d/tmp_size.conf
- =============================================================================
 voir : https://wiki.archlinux.org/index.php/User:Djgera#hddtemp
 voir 100)
-
-# cat /usr/lib/systemd/system/tmp.mount
 
 !!! SI 8 GiO RAM
 $ sudo mkdir /etc/systemd/system/tmp.mount.d
@@ -214,28 +222,28 @@ $ sudo sh -c "echo 'Options=mode=1777,strictatime,size=2G' >> /etc/systemd/syste
 !!! SI 16 GiO RAM
 $ sudo mkdir /etc/systemd/system/tmp.mount.d
 $ sudo sh -c "echo '[Mount]' > /etc/systemd/system/tmp.mount.d/tmp_size.conf"
-$ sudo sh -c "echo 'Options=mode=1777,strictatime,size=4G' >> /etc/systemd/system/tmp.mount.d/tmp_size.conf"
+$ sudo sh -c "echo 'Options=mode=1777,strictatime,nosuid,nodev,size=4G' >> /etc/systemd/system/tmp.mount.d/tmp_size.conf"
 
 OU POUR BLENDER
 ----------------
 !!! SI 16 GiO RAM
 $ sudo mkdir /etc/systemd/system/tmp.mount.d
 $ sudo sh -c "echo '[Mount]' > /etc/systemd/system/tmp.mount.d/tmp_size.conf"
-$ sudo sh -c "echo 'Options=mode=1777,strictatime,size=6G' >> /etc/systemd/system/tmp.mount.d/tmp_size.conf"
+$ sudo sh -c "echo 'Options=mode=1777,strictatime,nosuid,nodev,size=6G' >> /etc/systemd/system/tmp.mount.d/tmp_size.conf"
 
 FAIRE TEST SI OK ( PSD AVEC FIREFOX ... COMPILER BLENDER DANS /TMP )
 
 !!! SI 32 GiO RAM
 $ sudo mkdir /etc/systemd/system/tmp.mount.d
 $ sudo sh -c "echo '[Mount]' > /etc/systemd/system/tmp.mount.d/tmp_size.conf"
-$ sudo sh -c "echo 'Options=mode=1777,strictatime,size=8G' >> /etc/systemd/system/tmp.mount.d/tmp_size.conf"
+$ sudo sh -c "echo 'Options=mode=1777,strictatime,nosuid,nodev,size=8G' >> /etc/systemd/system/tmp.mount.d/tmp_size.conf"
 
 OU POUR BLENDER
 ----------------
 !!! SI 32 GiO RAM
 $ sudo mkdir /etc/systemd/system/tmp.mount.d
 $ sudo sh -c "echo '[Mount]' > /etc/systemd/system/tmp.mount.d/tmp_size.conf"
-$ sudo sh -c "echo 'Options=mode=1777,strictatime,size=8G' >> /etc/systemd/system/tmp.mount.d/tmp_size.conf"
+$ sudo sh -c "echo 'Options=mode=1777,strictatime,nosuid,nodev,size=8G' >> /etc/systemd/system/tmp.mount.d/tmp_size.conf"
 
 ==> tmpfs = 8G  mkpkg-tmpfs = 8G ou 16G si compilation blender
 ==>                          16G ou  8G RAM disponible
