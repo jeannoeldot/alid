@@ -34,14 +34,14 @@
         package_install "breeze-gtk"
         # KDE5 UTILS
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Utils${BGreen}...${Reset}"
-        package_install "ark filelight kcalc kcharselect kdeutils-kdf kwalletmanager"
+        package_install "ark filelight kcalc kcharselect kdf kwalletmanager"
         # KDE5 MULTIMEDIA
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Multimedia${BGreen}...${Reset}"
         package_install "kdemultimedia-kscd kdemultimedia-audiocd-kio kio-extras kmix ffmpegthumbs"
         package_install "libdvdcss libdvdread libdvdnav"
         # KDE5 GRAPHICS
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Graphiques${BGreen}...${Reset}"
-        package_install "gwenview kcolorchooser kdegraphics-kolourpaint spectacle kdegraphics-okular kdegraphics-svgpart kdegraphics-thumbnailers kdegraphics-mobipocket"
+        package_install "gwenview kcolorchooser kolourpaint spectacle kdegraphics-okular kdegraphics-svgpart kdegraphics-thumbnailers kdegraphics-mobipocket"
         package_install "kipi-plugins"
         # KDE5 SDK
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 SDK${BGreen}...${Reset}"
