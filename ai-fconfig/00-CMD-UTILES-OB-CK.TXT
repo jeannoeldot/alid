@@ -113,7 +113,7 @@ $ cat ~/.mozilla/firefox/profiles.ini
 
 
 MAJ firefox-extension-https-everywhere
-OU MAJ freshplayerplugin / chromium-pepper-flash
+OU MAJ freshplayerplugin / pepper-flash
 =========================================================
 
 !!! VIDER CACHE
@@ -123,9 +123,9 @@ $ profile-cleaner f
 
 $ systemctl --user stop psd.service psd-resync.service
 
-SI MAJ freshplayerplugin / chromium-pepper-flash
+SI MAJ freshplayerplugin / pepper-flash
 ------------------------------------------------
-$ yaourt -Syua chromium-pepper-flash
+$ yaourt -Syua pepper-flash
 $ yaourt -Syua freshplayerplugin
 
 !!! Vérifier ~/.mozilla/firefox/profiles.ini
