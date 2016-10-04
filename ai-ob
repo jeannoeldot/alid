@@ -364,7 +364,6 @@
         #
         printf '%s\n' "${BGreen}Configuration de ${BYellow}/etc/environment${BGreen}...${Reset}"
         echo "LANG=$LANGUAGE.utf8" >> /etc/environment
-        echo "FT2_SUBPIXEL_HINTING=1" >> /etc/environment
         # Abstraction for enumerating power devices, listening to device events and querying history and statistics
         printf '%s\n' "${BGreen}Activation de ${BYellow}upower.service${BGreen}...${Reset}"
         systemctl enable upower.service

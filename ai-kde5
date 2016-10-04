@@ -111,7 +111,6 @@
         #
         printf '%s\n' "${BGreen}Configuration de ${BYellow}/etc/environment${BGreen}...${Reset}"
         echo "LANG=$LANGUAGE.utf8" >> /etc/environment
-        echo "FT2_SUBPIXEL_HINTING=1" >> /etc/environment
         # Installe et Enable sddm.service
         printf '%s\n' "${BGreen}Installation de ${BYellow}sddm sddm-kcm${BGreen}...${Reset}"
         package_install "sddm sddm-kcm"
