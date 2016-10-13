@@ -68,7 +68,7 @@
             options=("choqok" "(Client Twitter)" OFF
                     "digikam" "(Gestion de photos)" ON
                     "k3b" "(Gravure)" ON
-                    "ksuperkey" "(Utilisation de la touche Super)" ON
+                    "ksuperkey" "(Utilisation de la touche Super)" OFF
                     "skrooge" "(Gestion de finances)" OFF
                     "systemd-kcm" "(Module de commande de systemd)" ON
                     )
