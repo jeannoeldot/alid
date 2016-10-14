@@ -802,6 +802,21 @@ source $(pwd)/ai-commons
         fi
     }
     #}}}
+    # 94 INSTALL OPTIONAL DEP FOR GTK3 SI INSTALLÉ {{{
+    install_optional_dep_for_gtk3() {
+        local messages=""
+        local titre=""
+        if is_package_installed "gtk3" ; then
+            titre="INSTALLATION DES DÉPENDANCES OPTIONNELLES POUR GTK3"
+            messages=" \n"
+            messages+="Installation de ${Byellow_dlg}gtk3-print-backends${Reset_dlg}: Print backends for GTK3.\n"
+            print_dialog_msgbox "${titre}" "${messages}" "Installer"
+            printf '%s\n' "${BGreen}Installation de ${BYellow}gtk3-print-backends${BGreen}...${Reset}"
+            package_install "gtk3-print-backends"
+            pause_function
+        fi
+    }
+    #}}}
     # 95 INSTALL OPTIONAL DEP FOR QT4 SI INSTALLÉ {{{
     install_optional_dep_for_qt4() {
         local messages=""
@@ -963,6 +978,7 @@ source $(pwd)/ai-commons
 #}}} FIN INSTALLATION DE OU WM
 
     install_fonts
+    install_optional_dep_for_gtk3
     install_optional_dep_for_qt4
 #     clean_orphan_packages             # APPEL SUPPRIMÉ
     update_mandb
