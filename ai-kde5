@@ -48,7 +48,7 @@
         package_install "okteta kate dolphin-plugins kompare poxml kdebindings-python2 kdebindings-python"
         # FONTS TTF
         printf '%s\n' "${BGreen}Installation de ${BYellow}Polices TTF${BGreen}...${Reset}"
-        package_install "ttf-bitstream-vera ttf-dejavu ttf-freefont ttf-liberation ttf-linux-libertine ttf-droid ttf-ubuntu-font-family ttf-oxygen"
+        package_install "ttf-bitstream-vera ttf-dejavu ttf-freefont ttf-liberation ttf-linux-libertine ttf-droid ttf-ubuntu-font-family"
         # LSB-RELEASE
         printf '%s\n' "${BGreen}Installation de ${BYellow}lsb-release${BGreen}...${Reset}"
         package_install "lsb-release"
