@@ -27,6 +27,11 @@ Ajouter au-début AVANT [core] :
 ================================
 
 [repo-ck]
+Server = https://mirror.archlinux.no/repo-ck/os/$arch
+Server = http://repo-ck.com/$arch
+Server = http://repo-ck.com/$arch
+Server = http://repo-ck.com/$arch
+Server = http://repo-ck.com/$arch
 Server = http://repo-ck.com/$arch
 
 # pacman-key -r 5EE46C4C
@@ -71,6 +76,7 @@ Change the pacman downloader to wget, which automatically resumes downloads.
 OU
 
 [repo-ck]
+Server = https://mirror.archlinux.no/repo-ck/os/$arch
 Server = http://repo-ck.com/$arch
 Server = http://repo-ck.com/$arch
 Server = http://repo-ck.com/$arch
