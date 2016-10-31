@@ -945,11 +945,21 @@ $ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.yasp.script.2013-09-28 .
  !!! VOIR : ~/09-Documentation/00-Cmd-CREATION-GIT-INSTALL-ALID.TXT
  !!! VOIR : ~/09-Documentation/00-Cmd-CREATION-GIT-INSTALL-ALI-2.TXT
  !!! VOIR : ~/09-Documentation/00-Cmd-CREATION-GIT-INSTALLEUR.TXT
+ !!! VOIR : ~/09-Documentation/0-CMD-GIT-01SCRIPTS.TXT
+ !!! VOIR : ~/09-Documentation/0-CMD-GIT-05BUILDS.TXT
+ !!! VOIR : ~/09-Documentation/0-CMD-GIT-JNDQALIGNE5.TXT
+ !!! VOIR : ~/09-Documentation/0-CMD-GIT-JNDQCBGRD.TXT
+ !!! VOIR : ~/09-Documentation/0-CMD-GIT-JNDQRAMI.TXT
  OU
  !!! VOIR : ~/02-git/00-Cmd-CREATION-GIT-INSTALL-ALID.TXT
  !!! VOIR : ~/02-git/00-Cmd-CREATION-GIT-INSTALL-ALI-2.TXT
  !!! VOIR : ~/02-git/00-Cmd-CREATION-GIT-INSTALLEUR.TXT
- 
+ !!! VOIR : ~/02-git/0-CMD-GIT-01SCRIPTS.TXT
+ !!! VOIR : ~/02-git/0-CMD-GIT-05BUILDS.TXT
+ !!! VOIR : ~/02-git/0-CMD-GIT-JNDQALIGNE5.TXT
+ !!! VOIR : ~/02-git/0-CMD-GIT-JNDQCBGRD.TXT
+ !!! VOIR : ~/02-git/0-CMD-GIT-JNDQRAMI.TXT
+
 !!! ATTENTION DATE
 $ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.gitconfig.2013-12-01 .gitconfig
 
@@ -1137,6 +1147,8 @@ $ cat ~/.mozilla/firefox/profiles.ini
 # pacman -Syu blender-git
 # pacman -Syu blender-addons-yafaray-git
 !!! TEST $ blender
+
+# pacman -Syu awesomebump-git
 
 # pacman -Syu jndqaligne5-qt4 jndqrami-qt4
 OU Versions Qt5
@@ -1524,6 +1536,8 @@ openvdb-git
 
 blender-addons-yafaray-git
 
+awesomebump-git
+
 !!! VOIR Intallation de CONKY
 -----------------------------
 conky-lua-nv-git
@@ -1560,6 +1574,8 @@ $ rm -f 00-Conky.tar.xz
 
 INSTALLATION DE COMPTON-GIT
 ============================
+!!! FAIT EN AUTOMATIQUE SI INSTALLATION PAR MON SCRIPT AI-DE
+=============================================================
 
 https://wiki.archlinux.org/index.php/Compton
 
