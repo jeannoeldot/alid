@@ -303,6 +303,104 @@ ExecStart=/usr/bin/cp -f /boot/initramfs-linux-ck-fallback.img /boot/efi/EFI/arc
 # systemctl status efistub_ck_update.path
 
 
+AU 20/10/2016 : MAJ linux-ck-haswell 4.8.9-2
+============================================
+==> CHANGEMENT DE NOM
+ vmlinuz-linux-ck --> vmlinuz-linux-ck-haswell
+ initramfs-linux-ck.img --> initramfs-linux-ck-haswell.img
+ initramfs-linux-ck-fallback.img --> initramfs-linux-ck-haswell-fallback.img
+
+# systemctl status efistub_ck_update.path
+
+# systemctl stop efistub_ck_update.path
+
+# ls -l /boot
+efi
+
+intel-ucode.img
+
+initramfs-linux.img
+initramfs-linux-fallback.img
+vmlinuz-linux
+
+initramfs-linux-ck-fallback.img
+initramfs-linux-ck.img
+
+initramfs-linux-ck-haswell.img
+initramfs-linux-ck-haswell-fallback.img
+vmlinuz-linux-ck-haswell
+
+INSTALLATION DANS ARCH / ARCH_1_CK
+====================================
+1) SUPPRESSION ANCIENS initramfs
+--------------------------------
+# rm -i /boot/initramfs-linux-ck-fallback.img
+# rm -i /boot/initramfs-linux-ck.img
+
+# ls -l /boot
+efi
+initramfs-linux-ck-haswell-fallback.img
+initramfs-linux-ck-haswell.img
+initramfs-linux-fallback.img
+initramfs-linux.img
+intel-ucode.img
+vmlinuz-linux
+vmlinuz-linux-ck-haswell
+
+1) COPIE NOUVEAUX FICHIERS vmlinuz-linux et initramfs
+-----------------------------------------------------
+# cp -v /boot/vmlinuz-linux-ck-haswell /boot/efi/EFI/arch_1_ck/vmlinuz-arch_1_ck.efi
+# cp -v /boot/initramfs-linux-ck-haswell.img /boot/efi/EFI/arch_1_ck/initramfs-arch_1_ck.img
+# cp -v /boot/initramfs-linux-ck-haswell-fallback.img /boot/efi/EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img
+
+# ls /boot/efi/EFI/arch_1_ck
+initramfs-arch_1_ck-fallback.img  initramfs-arch_1_ck.img  intel-ucode.img  refind_linux.conf  vmlinuz-arch_1_ck.efi
+
+3) MODIFICATION de efistub_ck_update.path et de efistub_ck_update.service
+-------------------------------------------------------------------------
+# nano -w /etc/systemd/system/efistub_ck_update.path
+
+[Unit]
+Description=Check update EFISTUB Linux-CK
+
+[Path]
+##PathChanged=/boot/vmlinuz-linux-ck-haswell
+##PathChanged=/boot/initramfs-linux-ck-haswell.img
+PathChanged=/boot/initramfs-linux-ck-haswell-fallback.img
+
+Unit=efistub_ck_update.service
+
+[Install]
+WantedBy=multi-user.target
+
+
+# nano -w /etc/systemd/system/efistub_ck_update.service
+
+[Unit]
+Description=Copy EFISTUB Linux-CK to UEFISYS Partition
+# Requires=boot-efi.mount
+
+[Service]
+Type=oneshot
+
+ExecStart=/usr/bin/cp -f /boot/vmlinuz-linux-ck-haswell /boot/efi/EFI/arch_1_ck/vmlinuz-arch_1_ck.efi
+ExecStart=/usr/bin/cp -f /boot/initramfs-linux-ck-haswell.img /boot/efi/EFI/arch_1_ck/initramfs-arch_1_ck.img
+ExecStart=/usr/bin/cp -f /boot/initramfs-linux-ck-haswell-fallback.img /boot/efi/EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img
+
+
+INSTALLATION DANS ARCH / ARCH_2_CK
+====================================
+
+
+
+# systemctl start efistub_ck_update.path
+Warning: efistub_ck_update.path changed on disk. Run 'systemctl daemon-reload' to reload units.
+
+# systemctl daemon-reload
+
+# systemctl status efistub_ck_update.path
+
+
 SERVICE INTEL_UCODE_UPDATE
 ==========================
 
