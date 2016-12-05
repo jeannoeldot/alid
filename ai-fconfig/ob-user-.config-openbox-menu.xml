@@ -166,7 +166,7 @@
 </menu>
 
 <menu id="apps-multimedia-menu" label="Multimédia">
-  <item label="Clementine" icon="/usr/share/icons/hicolor/64x64/apps/application-x-clementine.png">
+  <item label="Clementine" icon="/usr/share/icons/hicolor/64x64/apps/clementine.png">
     <action name="Execute">
       <command>clementine</command>
       <startupnotify>
@@ -263,6 +263,14 @@
   <item label="Blender" icon="/usr/share/icons/hicolor/48x48/apps/blender.png">
     <action name="Execute">
       <command>blender</command>
+      <startupnotify>
+        <enabled>yes</enabled>
+      </startupnotify>
+    </action>
+  </item>
+  <item label="AwesomeBump" icon="/usr/share/pixmaps/awesomebump.png">
+    <action name="Execute">
+      <command>awesomeBump</command>
       <startupnotify>
         <enabled>yes</enabled>
       </startupnotify>
@@ -379,7 +387,7 @@
       </startupnotify>
     </action>
   </item>
-  <item label="Civilization 4" icon="/home/NAME-USER/.local/share/icons/hicolor/48x48/apps/65DD_Civilization4.0.png">
+  <item label="Civilization 4" icon="/home/jnd/.local/share/icons/hicolor/48x48/apps/65DD_Civilization4.0.png">
     <action name="Execute">
       <command>ob-launcher_civ4 civ4</command>
       <startupnotify>
@@ -387,7 +395,7 @@
       </startupnotify>
     </action>
   </item>
-  <item label="Civilization 4 - Beyond the Sword" icon="/home/NAME-USER/.local/share/icons/hicolor/48x48/apps/44E2_Civ4BeyondSword.0.png">
+  <item label="Civilization 4 - Beyond the Sword" icon="/home/jnd/.local/share/icons/hicolor/48x48/apps/44E2_Civ4BeyondSword.0.png">
     <action name="Execute">
       <command>ob-launcher_civ4 civ4_bts</command>
       <startupnotify>
@@ -395,7 +403,7 @@
       </startupnotify>
     </action>
   </item>
-  <item label="Civilization 4 - Warlords" icon="/home/NAME-USER/.local/share/icons/hicolor/32x32/apps/0A98_Civ4Warlords.0.png">
+  <item label="Civilization 4 - Warlords" icon="/home/jnd/.local/share/icons/hicolor/32x32/apps/0A98_Civ4Warlords.0.png">
     <action name="Execute">
       <command>ob-launcher_civ4 civ4_w</command>
       <startupnotify>
@@ -403,7 +411,7 @@
       </startupnotify>
     </action>
   </item>
-  <item label="Civilization 4 Colonization" icon="/home/NAME-USER/.local/share/icons/hicolor/32x32/apps/2298_Colonization.0.png">
+  <item label="Civilization 4 Colonization" icon="/home/jnd/.local/share/icons/hicolor/32x32/apps/2298_Colonization.0.png">
     <action name="Execute">
       <command>ob-launcher_civ4 civ4_c</command>
       <startupnotify>
@@ -490,7 +498,7 @@
   </item>
   <item icon="/usr/share/icons/Faenza/actions/96/application-exit.png" label="Quitter...">
 	<action name="Execute">
-	  <command>/home/NAME-USER/bin/ob-quitter</command>
+	  <command>/home/jnd/bin/ob-quitter</command>
 	</action>
   </item>
 </menu>
