@@ -547,8 +547,8 @@ source $(pwd)/ai-commons
         messages="\n"
         messages+="Système de fichiers permettant d'organiser les données devant être conservées, ainsi que de gérer l'espace disponible sur le(s) périphérique(s) qui les contient.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de ${BYellow}ntfs-3g dosfstools exfat-utils fuse autofs${BGreen}...${Reset}"
-        package_install "ntfs-3g dosfstools exfat-utils fuse autofs"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}ntfs-3g dosfstools exfat-utils fuse2 autofs${BGreen}...${Reset}"
+        package_install "ntfs-3g dosfstools exfat-utils fuse2 autofs"
         pause_function
     }
     #}}}
