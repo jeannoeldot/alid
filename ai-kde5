@@ -489,8 +489,8 @@
                 "inkscape")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}inkscape${BGreen}...${Reset}"
                     package_install "inkscape"
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}pstoedit python2-lxml python2-numpy texlive-core uniconvertor${BGreen}...${Reset}"
-                    package_install "pstoedit python2-lxml python2-numpy texlive-core uniconvertor gvfs"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}pstoedit python2-lxml python2-numpy scour texlive-core uniconvertor${BGreen}...${Reset}"
+                    package_install "pstoedit python2-lxml python2-numpy texlive-core scour uniconvertor gvfs"
             esac
         done
         if [[ $REPLY != "" ]]; then
@@ -619,10 +619,6 @@
                     package_install "gst-plugins-base gst-plugins-base-libs gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav mpg123 flac"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gstreamer${BGreen}...${Reset}"
                     package_install "libcanberra-gstreamer"
-                    if is_package_installed "clementine" ; then
-                        printf '%s\n' "${BGreen}Installation de ${BYellow}gstreamer0.10${BGreen}...${Reset}"
-                        package_install "gstreamer0.10 gstreamer0.10-plugins"
-                    fi
             esac
         done
         if [[ $REPLY != "" ]]; then
