@@ -490,7 +490,7 @@
                     printf '%s\n' "${BGreen}Installation de ${BYellow}inkscape${BGreen}...${Reset}"
                     package_install "inkscape"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}pstoedit python2-lxml python2-numpy scour texlive-core uniconvertor${BGreen}...${Reset}"
-                    package_install "pstoedit python2-lxml python2-numpy texlive-core scour uniconvertor gvfs"
+                    package_install "pstoedit python2-lxml python2-numpy texlive-core python2-scour uniconvertor gvfs"
             esac
         done
         if [[ $REPLY != "" ]]; then

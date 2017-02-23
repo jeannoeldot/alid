@@ -9,9 +9,23 @@ MAJ SYSTEM ARCHLINUX
 $ su -
 # pacman -Syu   OU  # maj
 
+SI PROBLÈME DE CLEFS
+====================
+# pacman -S archlinux-keyring
+
+
 MAJ PAQUETS AUR
 ===============
 $ yaourt -Syua
+
+SI PROBLÈME DE CLEF PUBLIQUE INCONNUE PGP
+=========================================
+==> Vérification des signatures des fichiers sources grâce à gpg...
+    https-everywhere-5.2.11.xpi ... ÉCHEC (Clef publique inconnue EA9DBF9FB761A677)
+==> ERREUR : Une ou plusieurs signatures PGP n’ont pas pu être vérifiées.
+==> ERREUR : Makepkg n'a pas pu construire firefox-extension-https-everywhere.
+
+$ gpg --recv-keys EA9DBF9FB761A677
 
 
 SI problème avec linux-ck-haswell
@@ -36,6 +50,8 @@ SI MAJ SYSTEMD ( ex 215 -> 216 )
 # mkinitcpio -p linux
 
 # mkinitcpio -p linux-ck
+
+
 
 
 NETTOYAGE CACHE ET PAQUETS
