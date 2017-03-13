@@ -606,8 +606,8 @@ source $(pwd)/ai-commons
             messages+="Installation dans ${BRwhite_dlg}Oracle VM Virtualbox${Reset_dlg}.\n\n"
             messages+="Installation de virtualbox-guest-utils.\n"
             print_dialog_msgbox "${titre}" "${messages}" "Installer"
-            printf '%s\n' "${BGreen}Installation de ${BYellow}linux-headers virtualbox-guest-utils mesa-libgl${BGreen}...${Reset}"
-            package_install "linux-headers virtualbox-guest-utils mesa-libgl"
+            printf '%s\n' "${BGreen}Installation de ${BYellow}linux-headers virtualbox-guest-utils${BGreen}...${Reset}"
+            package_install "linux-headers virtualbox-guest-utils"
             printf '%s\n' "${BGreen}Démarrage des modules ${BYellow}vboxguest vboxsf vboxvideo${BGreen}...${Reset}"
 # !!! INUTILE DEPUIS VERSION 5.0.16 et virtualbox-host-dkms
 #             echo "# Load vbox modules guest at boot" > /etc/modules-load.d/vbox_modules_guest.conf
@@ -653,8 +653,8 @@ source $(pwd)/ai-commons
                         messages+="Nom de la carte NVidia détectée : ${Byellow_dlg}${L_NAME_CG_NVIDIA}${Reset_dlg}\n\n"
                         messages+="Installation de la branche 340xx des pilotes NVidia pour les GPUs G8x, G9x et GT2xx.\n"
                         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia-340xx nvidia-340xx-utils nvidia-340xx-libgl pangox-compat libva-vdpau-driver${BGreen}...${Reset}"
-                        package_install "nvidia-340xx nvidia-340xx-utils nvidia-340xx-libgl pangox-compat libva-vdpau-driver"
+                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia-340xx nvidia-340xx-utils pangox-compat libva-vdpau-driver${BGreen}...${Reset}"
+                        package_install "nvidia-340xx nvidia-340xx-utils pangox-compat libva-vdpau-driver"
                         #CONFIGURE NVidia IN XORG
                         printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia ${BYellow}20-nvidia.conf${BGreen}...${Reset}"
                         cp -v ai-fconfig/20-nvidia-340xx.conf /etc/X11/xorg.conf.d/20-nvidia.conf
@@ -664,8 +664,8 @@ source $(pwd)/ai-commons
                         messages+="Nom de la carte Vidéo NVidia détectée : ${Byellow_dlg}${L_NAME_CG_NVIDIA}${Reset_dlg}\n\n"
                         messages+="Installation de la dernière version des pilotes NVidia.\n"
                         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia nvidia-utils nvidia-libgl nvidia-settings pangox-compat libva-vdpau-driver${BGreen}...${Reset}"
-                        package_install "nvidia nvidia-utils nvidia-libgl nvidia-settings pangox-compat libva-vdpau-driver"
+                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia nvidia-utils nvidia-settings pangox-compat libva-vdpau-driver${BGreen}...${Reset}"
+                        package_install "nvidia nvidia-utils nvidia-settings pangox-compat libva-vdpau-driver"
                         #CONFIGURE NVidia IN XORG
                         printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia ${BYellow}20-nvidia.conf${BGreen}...${Reset}"
                         cp -v ai-fconfig/20-nvidia.conf /etc/X11/xorg.conf.d/20-nvidia.conf                    
@@ -685,8 +685,8 @@ source $(pwd)/ai-commons
                     messages+="Nom de la carte NVidia détectée : ${Byellow_dlg}${L_NAME_CG_NVIDIA}${Reset_dlg}\n\n"
                     messages+="Installation du pilote libre ${Byellow_dlg}nouveau${Reset_dlg}.\n"
                     print_dialog_msgbox "${titre}" "${messages}" "Installer"
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}mesa-libgl xf86-video-nouveau${BGreen}...${Reset}"
-                    package_install "mesa-libgl xf86-video-nouveau"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}xf86-video-nouveau${BGreen}...${Reset}"
+                    package_install "xf86-video-nouveau"
                     printf '%s\n' "${BGreen}Démarrage du module ${BYellow}nouveau${BGreen}...${Reset}"
                     add_module "nouveau"
                 fi
@@ -695,15 +695,15 @@ source $(pwd)/ai-commons
                 messages+="Carte Vidéo ${BRwhite_dlg}INTEL${Reset_dlg} détectée.\n\n"
                 messages+="Installation du pilote libre ${Byellow_dlg}intel${Reset_dlg}.\n"
                 print_dialog_msgbox "${titre}" "${messages}" "Installer"
-                printf '%s\n' "${BGreen}Installation de ${BYellow}mesa-libgl xf86-video-intel libva-intel-driver${BGreen}...${Reset}"
-                package_install "mesa-libgl xf86-video-intel libva-intel-driver"
+                printf '%s\n' "${BGreen}Installation de ${BYellow}xf86-video-intel libva-intel-driver${BGreen}...${Reset}"
+                package_install "xf86-video-intel libva-intel-driver"
             # test si ATI/AMD
             elif [[ -n $(echo ${_vga} | grep "advanced micro devices") || -f /sys/kernel/debug/dri/0/radeon_pm_info || -f /sys/kernel/debug/dri/0/radeon_sa_info ]]; then
                 messages+="Carte Vidéo ${BRwhite_dlg}ATI${Reset_dlg} détectée.\n\n"
                 messages+="Installation du pilote libre ${Byellow_dlg}ati${Reset_dlg}.\n"
                 print_dialog_msgbox "${titre}" "${messages}" "Installer"
-                printf '%s\n' "${BGreen}Installation de ${BYellow}mesa-libgl xf86-video-ati${BGreen}...${Reset}"
-                package_install "mesa-libgl xf86-video-ati"
+                printf '%s\n' "${BGreen}Installation de ${BYellow}xf86-video-ati${BGreen}...${Reset}"
+                package_install "xf86-video-ati"
                 printf '%s\n' "${BGreen}Démarrage des modules ${BYellow}radeon ati${BGreen}...${Reset}"
                 add_module "radeon"
                 add_module "ati"
@@ -712,8 +712,8 @@ source $(pwd)/ai-commons
                 messages+="Aucune Carte Vidéo détectée.\n\n"
                 messages+="Installation du pilote ${Byellow_dlg}Vesa${Reset_dlg} par défaut.\n"
                 print_dialog_msgbox "${titre}" "${messages}" "Installer"
-                printf '%s\n' "${BGreen}Installation de ${BYellow}mesa-libgl xf86-video-ati${BGreen}...${Reset}"
-                package_install "mesa-libgl xf86-video-vesa"
+                printf '%s\n' "${BGreen}Installation de ${BYellow}xf86-video-vesa${BGreen}...${Reset}"
+                package_install "xf86-video-vesa"
             fi
         fi
         pause_function
