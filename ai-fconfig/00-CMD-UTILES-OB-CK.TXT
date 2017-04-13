@@ -18,6 +18,11 @@ MAJ PAQUETS AUR
 ===============
 $ yaourt -Syua
 
+MAJ PAQUETS GIT AUR
+===================
+$ yaourt -Syua --devel
+
+
 SI PROBLÈME DE CLEF PUBLIQUE INCONNUE PGP
 =========================================
 ==> Vérification des signatures des fichiers sources grâce à gpg...

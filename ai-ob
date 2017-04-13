@@ -36,8 +36,8 @@
         printf '%s\n' "${BGreen}Installation de ${BYellow}leafpad, epdfview et imagemagick${BGreen}...${Reset}"
         package_install "leafpad epdfview imagemagick"
         #
-        printf '%s\n' "${BGreen}Installation de ${BYellow}spacefm, fbpanel, lxterminal et terminator${BGreen}...${Reset}"
-        package_install "spacefm fbpanel lxterminal terminator perl-file-mimeinfo"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}fbpanel, lxterminal et terminator${BGreen}...${Reset}"
+        package_install "fbpanel lxterminal terminator perl-file-mimeinfo"
         #
         printf '%s\n' "${BGreen}Installation de ${BYellow}viewnior, gmrun et volwheel${BGreen}...${Reset}"
         package_install "viewnior gmrun volwheel"
@@ -45,8 +45,11 @@
         printf '%s\n' "${BGreen}Installation des dépendances de ${BYellow}imagemagick${BGreen}...${Reset}"
         package_install "openexr libwmf librsvg libxml2 jasper libpng"
         #
+        printf '%s\n' "${BGreen}Compilation et Installation de ${BYellow}spacefm (AUR)${BGreen}...${Reset}"
+        aur_package_install "spacefm"
+        #
         printf '%s\n' "${BGreen}Installation des dépendances de ${BYellow}spacefm${BGreen}...${Reset}"
-        package_install "lsof eject wget gksu udevil udisks udisks2 gvfs-smb gvfs-afc gvfs-gphoto2 gvfs-mtp lxsession"
+        package_install "fuseiso gksu lsof udevil udisks2 util-linux wget gvfs-smb gvfs-afc gvfs-gphoto2 gvfs-mtp lxsession"
         # FONTS
         printf '%s\n' "${BGreen}Installation de ${BYellow}Polices TTF${BGreen}...${Reset}"
         package_install "ttf-bitstream-vera ttf-dejavu ttf-freefont ttf-liberation ttf-linux-libertine ttf-droid ttf-ubuntu-font-family"
@@ -352,8 +355,8 @@
                     package_install "rxvt-unicode"
                     ;;
                 "thunar")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}thunar tumbler polkit-gnome gvfs${BGreen}...${Reset}"
-                    package_install "thunar tumbler polkit-gnome gvfs"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}thunar thunar-archive-plugin thunar-volman tumbler polkit-gnome gvfs${BGreen}...${Reset}"
+                    package_install "thunar thunar-archive-plugin thunar-volman tumbler polkit-gnome gvfs"
                     ;;
                 "tint2-git")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}tint2-git${BGreen}...${Reset}"
@@ -619,8 +622,8 @@
                     package_install "devtools"
                     ;;
                 "gdb")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}valgrind gdb splint tidyhtml${BGreen}...${Reset}"
-                    package_install "valgrind gdb splint tidyhtml"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}valgrind gdb splint${BGreen}...${Reset}"
+                    package_install "valgrind gdb splint"
                     ;;
                 "git")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}git subversion${BGreen}...${Reset}"
@@ -690,7 +693,7 @@
         until (( retour == 0 )) || (( retour == 1 ));
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 3)
-            options=("blender" "(Création graphique 3D)" ON
+            options=("blender" "(Création graphique 3D)" OFF
                     "gimp" "(Programme de Manipulation d'Image)" ON
                     "inkscape" "(Éditeur de graphiques vectoriels)" ON
                     )
@@ -720,7 +723,7 @@
                     package_install "gimp libopenraw"
                     pacman -D --asdeps libopenraw
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gimp-plugin${BGreen}...${Reset}"
-                    package_install "webkitgtk2 potrace gimp-dbp gimp-plugin-fblur gimp-plugin-gmic gimp-plugin-lqr gimp-plugin-mathmap gimp-plugin-wavelet-decompose gimp-plugin-wavelet-denoise gimp-refocus gimp-ufraw"
+                    package_install "potrace gimp-dbp gimp-plugin-fblur gimp-plugin-gmic gimp-plugin-lqr gimp-plugin-mathmap gimp-plugin-wavelet-decompose gimp-plugin-wavelet-denoise gimp-refocus gimp-ufraw"
                     ;;
                 "inkscape")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}inkscape${BGreen}...${Reset}"
@@ -746,7 +749,7 @@
             options=("chromium" "(Navigateur)" OFF
                     "firefox" "(Navigateur)" ON
                     "transmission" "(Téléchargement Torrent)" ON
-                    "dropbox" "(Partage de fichiers)" OFF
+                    "dropbox" "(Partage de fichiers) - (AUR)" OFF
                     "thunderbird" "(Lecteur de Mail/News)" OFF
                     "liferea" "(Lecteur de nouvelles en ligne et weblogs)" OFF
                     "xchat" "(Client IRC)" OFF
@@ -766,15 +769,15 @@
                 "chromium")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}chromium icedtea-web${BGreen}...${Reset}"
                     package_install "chromium icedtea-web"
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}chromium-pepper-flash${BGreen}...${Reset}"
-                    aur_package_install "chromium-pepper-flash"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}pepper-flash${BGreen}...${Reset}"
+                    aur_package_install "pepper-flash"
                     ;;
                 "firefox")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}firefox firefox-adblock-plus icedtea-web${BGreen}...${Reset}"
                     package_install "firefox firefox-i18n-$LANGUAGE_FF firefox-adblock-plus icedtea-web"
                     aur_package_install "firefox-extension-https-everywhere"
                     aur_package_install "freshplayerplugin"
-                    aur_package_install "chromium-pepper-flash"
+                    aur_package_install "pepper-flash"
                     printf '%s\n' "${BGreen}Configuration de ${BYellow}fbpanel${BGreen}...${Reset}"
                     sed -i "s/chromium/firefox/g" /home/${USERNAME}/.config/fbpanel/default
                     ;;
@@ -784,9 +787,9 @@
                     ;;
                 "dropbox")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}dropbox${BGreen}...${Reset}"
-                    package_install "dropbox"
-                    printf '%s\n' "${BGreen}Activation de ${BYellow}dropboxd.service${BGreen}...${Reset}"
-                    systemctl enable dropboxd.service
+                    aur_package_install "dropbox"
+                    printf '%s\n' "${BGreen}Activation de ${BYellow}dropbox.service${BGreen}...${Reset}"
+                    systemctl enable dropbox.service
                     ;;
                 "thunderbird")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}thunderbird${BGreen}...${Reset}"

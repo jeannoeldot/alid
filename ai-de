@@ -468,9 +468,8 @@ source $(pwd)/ai-commons
         messages="\n"
         messages+="D-Bus est un système de bus de messages qui fournit un mécanisme facilitant la communication inter-processus.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de ${BYellow}dbus python2-dbus${BGreen}...${Reset}"
-        package_install "dbus python2-dbus"
-        pacman -D --asdeps python2-dbus
+        printf '%s\n' "${BGreen}Installation de ${BYellow}dbus${BGreen}...${Reset}"
+        package_install "dbus"
         pause_function
         #
         titre="INSTALLATION DES OUTILS DE (DÉ)COMPRESSION"
@@ -565,8 +564,8 @@ source $(pwd)/ai-commons
         package_install "xorg-server xorg-server-utils xorg-xinit xorg-utils xorg-xkill xorg-twm xorg-xclock xterm"
 #         printf '%s\n' "${BGreen}Installation de ${BYellow}xf86-input-synaptics xf86-input-mouse xf86-input-keyboard${BGreen}...${Reset}"
 #         package_install "xf86-input-synaptics xf86-input-mouse xf86-input-keyboard"
-        printf '%s\n' "${BGreen}Installation de ${BYellow}mesa gamin${BGreen}...${Reset}"
-        package_install "mesa gamin"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}mesa${BGreen}...${Reset}"
+        package_install "mesa"
         pause_function
         #CONFIGURE AZERTY OR BEPO KEYBOARD IN XORG
         titre="CONFIGURATION DU TYPE DE CLAVIER"
@@ -590,8 +589,8 @@ source $(pwd)/ai-commons
         messages="\n"
         messages+="${Byellow_dlg}Fontconfig${Reset_dlg} est une bibliothèque conçue pour fournir une liste des polices disponibles aux applications, et pour configurer la façon dont les polices seront rendues.\n\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de ${BYellow}cairo fontconfig freetype2 libxft${BGreen}...${Reset}"
-        package_install "cairo fontconfig freetype2 libxft"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}cairo fontconfig freetype2${BGreen}...${Reset}"
+        package_install "cairo fontconfig freetype2"
         pause_function
     }
     #}}}
@@ -730,10 +729,10 @@ source $(pwd)/ai-commons
         print_dialog_yesno_no "${titre}" "${messages}" "Installer" "Continuer"
         retour=$?
         if (( retour == 0 )); then
-            printf '%s\n' "${BGreen}Installation de ${BYellow}cups cups-filters ghostscript gsfonts${BGreen}...${Reset}"
-            package_install "cups cups-filters ghostscript gsfonts"
-            printf '%s\n' "${BGreen}Installation de ${BYellow}gutenprint foomatic-db foomatic-db-engine foomatic-db-nonfree foomatic-filters hplip splix cups-pdf${BGreen}...${Reset}"
-            package_install "gutenprint foomatic-db foomatic-db-engine foomatic-db-nonfree foomatic-filters hplip splix cups-pdf"
+            printf '%s\n' "${BGreen}Installation de ${BYellow}cups ghostscript gsfonts${BGreen}...${Reset}"
+            package_install "cups ghostscript gsfonts"
+            printf '%s\n' "${BGreen}Installation de ${BYellow}gutenprint foomatic-db-gutenprint-ppds foomatic-db foomatic-db-engine foomatic-db-nonfree foomatic-db-ppds cups-pdf${BGreen}...${Reset}"
+            package_install "gutenprint foomatic-db-gutenprint-ppds foomatic-db foomatic-db-engine foomatic-db-nonfree foomatic-db-ppds cups-pdf"
             printf '%s\n' "${BGreen}Activation de ${BYellow}org.cups.cupsd.service${BGreen}...${Reset}"
             systemctl enable org.cups.cupsd.service
             local status=$(systemctl status avahi-daemon.service | awk '/Active/ {print $2}')
