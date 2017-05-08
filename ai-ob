@@ -320,6 +320,9 @@
                     printf '%s\n' "${BGreen}Installation de ${BYellow}compton-git${BGreen}...${Reset}"
                     aur_package_install "compton-git"
                     if is_package_installed "compton-git" ; then
+                        printf '%s\n' "${BGreen}Installation de dépendances optionelles pour ${BYellow}compton-git${BGreen}...${Reset}"
+                        package_install "xorg-xprop xorg-xwininfo"
+                        pacman -D --asdeps xorg-xprop xorg-xwininfo
                         printf '%s\n' "${BGreen}Configuration de ${BYellow}compton-git${BGreen}...${Reset}"
                         sed -i "s/#compton/compton/g" /home/${USERNAME}/.config/openbox/autostart
                         if (( $IN_VIRTUAL_BOX == 1 )); then
@@ -506,6 +509,9 @@
                 "htop")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}htop iotop lshw hwinfo dmidecode ncdu dfc expac pkgfile i7z inxi${BGreen}...${Reset}"
                     package_install "htop iotop lshw hwinfo dmidecode ncdu dfc expac pkgfile i7z inxi"
+                    printf '%s\n' "${BGreen}Installation de dépendances optionelles pour ${BYellow}inxi${BGreen}...${Reset}"
+                    package_install "xorg-xdpyinfo xorg-xprop xorg-xrandr"
+                    pacman -D --asdeps xorg-xdpyinfo xorg-xprop xorg-xrandr
                     printf '%s\n' "${BGreen}Installation de ${BYellow}lsof strace${BGreen}...${Reset}"
                     package_install "lsof strace"
                     ;;
