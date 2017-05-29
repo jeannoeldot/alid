@@ -755,23 +755,15 @@ export QT_LOGGING_RULES
 
 --------------------
 
-90) INSTALLATION DE ABS
+90) INSTALLATION DE ASP
 ========================
 
 https://wiki.archlinux.org/index.php/VCS_PKGBUILD_Guidelines#Subversion
 https://wiki.archlinux.org/index.php/Arch_Build_System
 
-# pacman -Syyu abs
+https://github.com/falconindy/asp/blob/master/man/asp.1.txt
 
-# abs
-==> /var/abs
-
-==> Downloading tarballs...
-    ==> core...
-    ==> extra...
-    ==> community...
-    ==> multilib...
-==> ERROR: Download failed
+# pacman -Syyu asp
 
 
 95) REBOOT
