@@ -128,14 +128,14 @@ source $(pwd)/ai-commons
             echo -e '\n[xyne-x86_64]' >> /etc/pacman.conf
             echo -e 'SigLevel = Required' >> /etc/pacman.conf
             echo -e '# Temporarily broken due to host error.' >> /etc/pacman.conf            
-            echo -e '#Server = http://xyne.archlinux.ca/repos/xyne' >> /etc/pacman.conf
+            echo -e '#Server = https://xyne.archlinux.ca/repos/xyne' >> /etc/pacman.conf
             echo -e '# Workaround' >> /etc/pacman.conf
             echo -e 'Server = https://xyne.archlinux.ca/bin/repo.php?file=' >> /etc/pacman.conf
         else
             echo -e '\n[xyne-i686]' >> /etc/pacman.conf
             echo -e 'SigLevel = Required' >> /etc/pacman.conf
             echo -e '# Temporarily broken due to host error.' >> /etc/pacman.conf            
-            echo -e '#Server = http://xyne.archlinux.ca/repos/xyne' >> /etc/pacman.conf
+            echo -e '#Server = https://xyne.archlinux.ca/repos/xyne' >> /etc/pacman.conf
             echo -e '# Workaround' >> /etc/pacman.conf
             echo -e 'Server = https://xyne.archlinux.ca/bin/repo.php?file=' >> /etc/pacman.conf
         fi
