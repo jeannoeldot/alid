@@ -525,14 +525,14 @@
         do
             case $choix in
                 "chromium")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}chromium icedtea-web${BGreen}...${Reset}"
-                    package_install "chromium icedtea-web"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}chromium${BGreen}...${Reset}"
+                    package_install "chromium"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}pepper-flash${BGreen}...${Reset}"
                     aur_package_install "pepper-flash"
                     ;;
                 "firefox")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}firefox firefox-adblock-plus icedtea-web${BGreen}...${Reset}"
-                    package_install "firefox firefox-i18n-$LANGUAGE_FF firefox-adblock-plus icedtea-web"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}firefox firefox-adblock-plus pulseaudio${BGreen}...${Reset}"
+                    package_install "firefox firefox-i18n-$LANGUAGE_FF firefox-adblock-plus pulseaudio"
 #                    aur_package_install "firefox-extension-https-everywhere"
 #                    aur_package_install "freshplayerplugin"
 #                    aur_package_install "pepper-flash"
