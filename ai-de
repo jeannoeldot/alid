@@ -807,7 +807,7 @@ source $(pwd)/ai-commons
         fi
     }
     #}}}
-    # 94 INSTALL OPTIONAL DEP FOR GTK3 SI INSTALLÉ {{{
+    # 91 INSTALL OPTIONAL DEP FOR GTK3 SI INSTALLÉ {{{
     install_optional_dep_for_gtk3() {
         local messages=""
         local titre=""
@@ -822,7 +822,7 @@ source $(pwd)/ai-commons
         fi
     }
     #}}}
-    # 95 INSTALL OPTIONAL DEP FOR QT4 SI INSTALLÉ {{{
+    # 92 INSTALL OPTIONAL DEP FOR QT4 SI INSTALLÉ {{{
     install_optional_dep_for_qt4() {
         local messages=""
         local titre=""
@@ -835,6 +835,23 @@ source $(pwd)/ai-commons
             printf '%s\n' "${BGreen}Installation de ${BYellow}sni-qt icu${BGreen}...${Reset}"
             package_install "sni-qt icu"
             pacman -D --asdeps sni-qt
+            pause_function
+        fi
+    }
+    #}}}
+    # 93 INSTALL OPTIONAL DEP FOR PULSEAUDIO SI INSTALLÉ {{{
+    install_optional_dep_for_pulseaudio() {
+        local messages=""
+        local titre=""
+        if is_package_installed "pulseaudio" ; then
+            titre="INSTALLATION DES DÉPENDANCES OPTIONNELLES POUR PULSEAUDIO"
+            messages=" \n"
+            messages+="Installation de ${Byellow_dlg}pulseaudio-alsa${Reset_dlg}: ALSA Configuration for PulseAudio.\n"
+            messages+="Installation de ${Byellow_dlg}pavucontrol${Reset_dlg}: PulseAudio Volume Control.\n"
+            print_dialog_msgbox "${titre}" "${messages}" "Installer"
+            printf '%s\n' "${BGreen}Installation de ${BYellow}pulseaudio-alsa pavucontrol${BGreen}...${Reset}"
+            package_install "pulseaudio-alsa pavucontrol"
+            pacman -D --asdeps pulseaudio-alsa
             pause_function
         fi
     }
@@ -985,6 +1002,7 @@ source $(pwd)/ai-commons
     install_fonts
     install_optional_dep_for_gtk3
     install_optional_dep_for_qt4
+    install_optional_dep_for_pulseaudio
 #     clean_orphan_packages             # APPEL SUPPRIMÉ
     update_mandb
     clean_cache_pacman
