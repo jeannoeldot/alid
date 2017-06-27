@@ -729,7 +729,7 @@
                     package_install "gimp libopenraw"
                     pacman -D --asdeps libopenraw
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gimp-plugin${BGreen}...${Reset}"
-                    package_install "potrace gimp-dbp gimp-plugin-fblur gimp-plugin-gmic gimp-plugin-lqr gimp-plugin-mathmap gimp-plugin-wavelet-decompose gimp-plugin-wavelet-denoise gimp-refocus gimp-ufraw"
+                    package_install "potrace gimp-dbp gimp-plugin-fblur gimp-plugin-gmic gimp-plugin-lqr gimp-plugin-wavelet-decompose gimp-plugin-wavelet-denoise gimp-refocus gimp-ufraw"
                     ;;
                 "inkscape")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}inkscape${BGreen}...${Reset}"
