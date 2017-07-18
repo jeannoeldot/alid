@@ -134,8 +134,7 @@ $ cat ~/.mozilla/firefox/profiles.ini
 
 
 MAJ firefox-extension-https-everywhere
-OU MAJ freshplayerplugin / pepper-flash
-=========================================================
+======================================
 
 !!! VIDER CACHE
 !!! ARRETER FIREFOX
@@ -144,14 +143,7 @@ $ profile-cleaner f
 
 $ systemctl --user stop psd.service psd-resync.service
 
-SI MAJ freshplayerplugin / pepper-flash
-------------------------------------------------
-$ yaourt -Syua pepper-flash
-$ yaourt -Syua freshplayerplugin
-
-!!! Vérifier ~/.mozilla/firefox/profiles.ini
-$ cat ~/.mozilla/firefox/profiles.ini
-$ rm -i ~/.mozilla/firefox/ljs58rbs.default/pluginreg.dat
+$ yaourt -Syua firefox-extension-https-everywhere
 
 $ systemctl --user start psd.service
 
@@ -161,6 +153,38 @@ $ systemctl --no-pager --user status psd-resync.service
 $ psd preview ou	 $ psd parse
 
 
+1) MAJ flashplugin
+==================
+
+!!! EN USER
+!!! VIDER CACHE
+!!! ARRETER FIREFOX
+
+$ profile-cleaner f
+
+$ systemctl --user stop psd.service
+
+!!! Vérifier $HOME/.mozilla/firefox/profiles.ini
+$ cat ~/.mozilla/firefox/profiles.ini
+$ rm -i ~/.mozilla/firefox/idy48li7.default/pluginreg.dat
+
+
+EN ROOT
+========
+# cd
+# maj
+OU
+# pacman -Syu
+
+
+!!! EN USER
+============
+
+$ systemctl --user start psd.service
+
+$ psd preview
+
+ 
 1 ERE MAJ PSD.SERVICE 5.75-1 -> 6.03-1
 ======================================
 CREEER FICHIER $HOME/.config/psd/psd.conf
@@ -277,6 +301,16 @@ $ coredumpctl
 
 ANCIENS
 ===========
+OU MAJ freshplayerplugin / pepper-flash
+SI MAJ freshplayerplugin / pepper-flash
+------------------------------------------------
+$ yaourt -Syua pepper-flash
+$ yaourt -Syua freshplayerplugin
+
+!!! Vérifier ~/.mozilla/firefox/profiles.ini
+$ cat ~/.mozilla/firefox/profiles.ini
+$ rm -i ~/.mozilla/firefox/ljs58rbs.default/pluginreg.dat
+
 MAJ SUDO ET /ETC/SUDOERS.PACNEW
 ===============================
 !!! EN ROOT

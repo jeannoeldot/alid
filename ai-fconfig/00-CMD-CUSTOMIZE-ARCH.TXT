@@ -1080,27 +1080,6 @@ $ cd && maj-repolocal
 
 # pacman -Syu firefox-extension-https-everywhere
 
-INSTALLATION DE freshplayerplugin ET pepper-flash POUR FIREFOX
------------------------------------------------------------------------
-!!! Arrêter Firefox
-!!! Vider Cache
-
-# pacman -R flashplugin
-
-$ rm -rf ~/.adobe
-$ rm -rf ~/.macromedia
-
-!!! Vérifier ~/.mozilla/firefox/profiles.ini
-$ cat ~/.mozilla/firefox/profiles.ini
-$ rm -i ~/.mozilla/firefox/mhnm9wic.default/pluginreg.dat
-
-# pacman -Syu freshplayerplugin pepper-flash
-
-VÉRIFICATION dans firefox : about:addons
-
-Shockwave Flash 17.0.0.169
-                17.0 r0
-
 
 
 !!! VOIR https://wiki.archlinux.org/index.php/Profile-sync-daemon
@@ -1617,46 +1596,6 @@ LXTerminal : semble OK
 SpaceFM , Firefox , Geany : semble OK
 
 
-INSTALLATION DE FRESHPLAYERPLUGIN ET PEPPER-FLASH
-==========================================================
-SI FIREFOX INSTALLÉ
---------------------
-
-https://aur.archlinux.org/packages/freshplayerplugin/
-
-https://aur.archlinux.org/packages/pepper-flash/
-
-!!! Arrêter Firefox
-!!! Vider Cache
-
-1) SUPPRESSION flashplugin si installé
----------------------------------------
-$ pacman -Ss flashplugin
-extra/flashplugin 11.2.202.457-1 [installé]
-    Adobe Flash Player
-
-$ sudo pacman -R flashplugin
-
-$ rm -rf ~/.adobe
-$ rm -rf ~/.macromedia
-!!! Vérifier ~/.mozilla/firefox/profiles.ini
-$ cat ~/.mozilla/firefox/profiles.ini
-$ rm -i ~/.mozilla/firefox/ljs58rbs.default/pluginreg.dat
-
-2) INSTALLATION freshplayerplugin et pepper-flash
-----------------------------------------------------------
-
-$ yaourt -Syua freshplayerplugin
-
-$ yaourt -Syua pepper-flash
-
-3) VÉRIFICATION
-----------------
-Dans firefox : about:addons
-
-Shockwave Flash 17.0.0.169
-                17.0 r0
-
 
 
 INSTALLATION CORBEILLE DANS SPACEFM
@@ -1700,6 +1639,68 @@ OU
 ====================================================================================================
 ANCIEN
 ==========================================================
+
+!!! INUTILE flashplugin ds community
+INSTALLATION DE freshplayerplugin ET pepper-flash POUR FIREFOX
+-----------------------------------------------------------------------
+!!! Arrêter Firefox
+!!! Vider Cache
+
+# pacman -R flashplugin
+
+$ rm -rf ~/.adobe
+$ rm -rf ~/.macromedia
+
+!!! Vérifier ~/.mozilla/firefox/profiles.ini
+$ cat ~/.mozilla/firefox/profiles.ini
+$ rm -i ~/.mozilla/firefox/mhnm9wic.default/pluginreg.dat
+
+# pacman -Syu freshplayerplugin pepper-flash
+
+VÉRIFICATION dans firefox : about:addons
+
+Shockwave Flash 17.0.0.169
+                17.0 r0
+
+INSTALLATION DE FRESHPLAYERPLUGIN ET PEPPER-FLASH
+==========================================================
+SI FIREFOX INSTALLÉ
+--------------------
+
+https://aur.archlinux.org/packages/freshplayerplugin/
+
+https://aur.archlinux.org/packages/pepper-flash/
+
+!!! Arrêter Firefox
+!!! Vider Cache
+
+1) SUPPRESSION flashplugin si installé
+---------------------------------------
+$ pacman -Ss flashplugin
+extra/flashplugin 11.2.202.457-1 [installé]
+    Adobe Flash Player
+
+$ sudo pacman -R flashplugin
+
+$ rm -rf ~/.adobe
+$ rm -rf ~/.macromedia
+!!! Vérifier ~/.mozilla/firefox/profiles.ini
+$ cat ~/.mozilla/firefox/profiles.ini
+$ rm -i ~/.mozilla/firefox/ljs58rbs.default/pluginreg.dat
+
+2) INSTALLATION freshplayerplugin et pepper-flash
+----------------------------------------------------------
+
+$ yaourt -Syua freshplayerplugin
+
+$ yaourt -Syua pepper-flash
+
+3) VÉRIFICATION
+----------------
+Dans firefox : about:addons
+
+Shockwave Flash 17.0.0.169
+                17.0 r0
 
 9) INSTALLATION DE VIRTUAL-BOX
 
