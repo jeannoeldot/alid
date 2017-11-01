@@ -96,6 +96,14 @@ source $(pwd)/ai-commons
     #}}}
     #INSTALL BASE SYSTEM {{{
     install_base_system() {
+        local messages=""
+        local titre="INSTALLATION DU SYSTÈME DE BASE"
+        messages="\n"
+        messages+="Initialisation de ${Byellow_dlg}PGP keyring${Reset_dlg} de l'ISO\n"
+        messages+="en installant archlinux-keyring.\n\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}archlinux-keyring${BGreen}...${Reset}"
+        pacman -Sy archlinux-keyring
         local retour=9
         local liste_paquets=""
         local messages=""
