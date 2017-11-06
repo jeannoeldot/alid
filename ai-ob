@@ -775,7 +775,7 @@
                     ;;
                 "firefox")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}firefox pulseaudio${BGreen}...${Reset}"
-                    package_install "firefox firefox-i18n-$LANGUAGE_FF fpulseaudio"
+                    package_install "firefox firefox-i18n-$LANGUAGE_FF pulseaudio"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}flashplugin firefox-adblock-plus${BGreen}...${Reset}"
                     package_install "flashplugin firefox-adblock-plus"
                     aur_package_install "firefox-extension-https-everywhere"

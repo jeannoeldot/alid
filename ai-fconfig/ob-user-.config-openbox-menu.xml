@@ -387,7 +387,7 @@
       </startupnotify>
     </action>
   </item>
-  <item label="Civilization 4" icon="/home/NAME-USER/.local/share/icons/hicolor/48x48/apps/65DD_Civilization4.0.png">
+  <item label="Civilization 4" icon="/home/jnd/.local/share/icons/hicolor/48x48/apps/65DD_Civilization4.0.png">
     <action name="Execute">
       <command>ob-launcher_civ4 civ4</command>
       <startupnotify>
@@ -395,7 +395,7 @@
       </startupnotify>
     </action>
   </item>
-  <item label="Civilization 4 - Beyond the Sword" icon="/home/NAME-USER/.local/share/icons/hicolor/48x48/apps/44E2_Civ4BeyondSword.0.png">
+  <item label="Civilization 4 - Beyond the Sword" icon="/home/jnd/.local/share/icons/hicolor/48x48/apps/44E2_Civ4BeyondSword.0.png">
     <action name="Execute">
       <command>ob-launcher_civ4 civ4_bts</command>
       <startupnotify>
@@ -403,7 +403,7 @@
       </startupnotify>
     </action>
   </item>
-  <item label="Civilization 4 - Warlords" icon="/home/NAME-USER/.local/share/icons/hicolor/32x32/apps/0A98_Civ4Warlords.0.png">
+  <item label="Civilization 4 - Warlords" icon="/home/jnd/.local/share/icons/hicolor/32x32/apps/0A98_Civ4Warlords.0.png">
     <action name="Execute">
       <command>ob-launcher_civ4 civ4_w</command>
       <startupnotify>
@@ -411,7 +411,7 @@
       </startupnotify>
     </action>
   </item>
-  <item label="Civilization 4 Colonization" icon="/home/NAME-USER/.local/share/icons/hicolor/32x32/apps/2298_Colonization.0.png">
+  <item label="Civilization 4 Colonization" icon="/home/jnd/.local/share/icons/hicolor/32x32/apps/2298_Colonization.0.png">
     <action name="Execute">
       <command>ob-launcher_civ4 civ4_c</command>
       <startupnotify>
@@ -482,6 +482,11 @@
   <menu icon="/usr/share/icons/Faenza/places/96/folder.png" id="apps-fileman-menu"/>
   <separator label="Configuration" />
   <menu icon="/usr/share/icons/Faenza/categories/96/configuration_section.png" id="system-menu"/>
+  <item icon="/usr/share/icons/elementary-xfce/apps/96/preferences-desktop-sound.svg" label="Contrôle du volume">
+    <action name="Execute">
+	  <command>pavucontrol</command>
+	</action>
+  </item>
   <item icon="/usr/share/icons/Faenza/actions/96/view-refresh.png" label="Reconfigure Openbox">
     <action name="Reconfigure" />
   </item>
@@ -498,7 +503,7 @@
   </item>
   <item icon="/usr/share/icons/Faenza/actions/96/application-exit.png" label="Quitter...">
 	<action name="Execute">
-	  <command>/home/NAME-USER/bin/ob-quitter</command>
+	  <command>/home/jnd/bin/ob-quitter</command>
 	</action>
   </item>
 </menu>
