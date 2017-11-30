@@ -1003,7 +1003,7 @@ source $(pwd)/ai-commons
 #}}} FIN INSTALLATION DE OU WM
 
     install_fonts
-    install_optional_dep_for_gtk3
+#    install_optional_dep_for_gtk3      # gtk3-print-backends inclus dans GTK3
     install_optional_dep_for_qt4
     install_optional_dep_for_pulseaudio
 #     clean_orphan_packages             # APPEL SUPPRIMÉ
