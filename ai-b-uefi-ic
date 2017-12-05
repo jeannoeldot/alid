@@ -142,12 +142,13 @@
             messages+="- #scan_all_linux_kernels --> scan_all_linux_kernels false\n"
             messages+="- #fold_linux_kernels --> fold_linux_kernels false\n"
             if (( $IN_VIRTUAL_BOX == 1 )); then
-                messages+="- #showtools --> showtools shell,about,shutdown,reboot\n"
+                messages+="- #showtools --> showtools shell,about,hidden_tags,shutdown,reboot\n"
                 messages+="- #dont_scan_files  --> dont_scan_files ...\n"
             else
-                messages+="- #showtools --> showtools shell,about,shutdown,reboot,firmware\n"
+                messages+="- #showtools --> showtools shell,about,hidden_tags,shutdown,reboot,firmware\n"
                 messages+="- #dont_scan_files  --> dont_scan_files ...\n"
                 messages+="- #resolution --> resolution 1024 768\n"
+                messages+="- #enable_mouse --> enable_mouse\n"
             fi
         else
             messages+="${BRcyan_dlg}!!!${Reset_dlg} MULTI BOOT UEFI :\n"
@@ -165,12 +166,13 @@
             sed -i "/^#scan_all_linux_kernels/c\scan_all_linux_kernels false" ${NAME_DIR_EFI}/refind.conf
             sed -i "/^#fold_linux_kernels/c\fold_linux_kernels false" ${NAME_DIR_EFI}/refind.conf
             if (( $IN_VIRTUAL_BOX == 1 )); then
-                sed -i "/^#showtools/c\showtools shell,about,shutdown,reboot" ${NAME_DIR_EFI}/refind.conf
+                sed -i "/^#showtools/c\showtools shell,about,hidden_tags,shutdown,reboot" ${NAME_DIR_EFI}/refind.conf
                 sed -i "/^#dont_scan_files/c\dont_scan_files fallback.efi,shim.efi,shim-fedora.efi,gcdx64.efi,MokManager.efi" ${NAME_DIR_EFI}/refind.conf
             else
-                sed -i "/^#showtools/c\showtools shell,about,shutdown,reboot,firmware" ${NAME_DIR_EFI}/refind.conf
+                sed -i "/^#showtools/c\showtools shell,about,hidden_tags,shutdown,reboot,firmware" ${NAME_DIR_EFI}/refind.conf
                 sed -i "/^#dont_scan_files/c\dont_scan_files BOOTX64.EFI,fallback.efi,shim.efi,shim-fedora.efi,gcdx64.efi,MokManager.efi" ${NAME_DIR_EFI}/refind.conf
                 sed -i "/^#resolution 1024 768/c\resolution 1024 768" ${NAME_DIR_EFI}/refind.conf
+                sed -i "/^#enable_mouse/c\enable_mouse" ${NAME_DIR_EFI}/refind.conf
                 # PAS OK : RAJOUTES ENTRÉES DS NVRAM => PLUS DE BOOT !!!
                 #sed -i "/^#scanfor/c\scanfor internal,hdbios,external,optical,manual" ${NAME_DIR_EFI}/refind.conf
                 # NE SEMBLE PAS OBLIGATOIRE ( PAR DEFAUT )
