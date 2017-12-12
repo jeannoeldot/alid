@@ -222,7 +222,12 @@ source $(pwd)/ai-commons
         # Lire valeur hostname ds L_HN
         L_HN=$(awk '{print $1}' /etc/hostname)
         # Ecrire la valeur hostname dans /etc/hosts
-        sed -i "/^::1/a127.0.1.1	${L_HN}.localdomain	${L_HN}" /etc/hosts
+        # OLD filesystem-2017.03-2
+        #sed -i "/^::1/a127.0.1.1	${L_HN}.localdomain	${L_HN}" /etc/hosts
+        # NEW filesystem-2017.10-2 : /etc/hosts vide !?
+        echo -e '#127.0.0.1	localhost.localdomain	localhost' >> /etc/hosts
+        echo -e '#::1		localhost.localdomain	localhost' >> /etc/hosts
+        echo -e '127.0.1.1	'${L_HN}'.localdomain	'${L_HN} >> /etc/hosts
         retour=9
         titre="MODIFICATION DU FICHIER <</etc/hosts>>"
         messages="\n"
