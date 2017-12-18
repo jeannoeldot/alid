@@ -37,7 +37,7 @@
         package_install "ark filelight kcalc kcharselect kdf kwalletmanager"
         # KDE5 MULTIMEDIA
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Multimedia${BGreen}...${Reset}"
-        package_install "kdemultimedia-kscd audiocd-kio kio-extras kmix ffmpegthumbs"
+        package_install "audiocd-kio kio-extras kmix ffmpegthumbs"
         package_install "libdvdcss libdvdread libdvdnav"
         # KDE5 GRAPHICS
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Graphiques${BGreen}...${Reset}"
@@ -504,10 +504,11 @@
         messages=" \n"
         until (( retour == 0 )) || (( retour == 1 ));
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 7)
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 8)
             options=("chromium" "(Navigateur)" OFF
                     "firefox" "(Navigateur)" ON
                     "transmission" "(Téléchargement Torrent)" ON
+                    "kget" "(Gestionnaire de téléchargements)" OFF
                     "dropbox" "(Partage de fichiers) - (AUR)" OFF
                     "thunderbird" "(Lecteur de Mail/News)" OFF
                     "konversation" "(Client IRC)" OFF
@@ -540,6 +541,10 @@
                 "transmission")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}transmission-qt${BGreen}...${Reset}"
                     package_install "transmission-qt"
+                    ;;
+                "kget")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}kget${BGreen}...${Reset}"
+                    package_install "kget"
                     ;;
                 "dropbox")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}dropbox${BGreen}...${Reset}"
