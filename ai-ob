@@ -172,10 +172,16 @@
             mv -f -v /usr/share/fbpanel/images/logo.png /usr/share/fbpanel/images/logo.png.backup
             cp -v /usr/share/fbpanel/images/archlinux-logo.png /usr/share/fbpanel/images/logo.png
             chmod 644 /usr/share/fbpanel/images/logo.png
-            cp -v ai-fconfig/etc-systemd-system-fbpanel_update.path /etc/systemd/system/fbpanel_update.path
-            cp -v ai-fconfig/etc-systemd-system-fbpanel_update.service /etc/systemd/system/fbpanel_update.service
-            printf '%s\n' "${BGreen}Activation de ${BYellow}fbpanel_update.path${BGreen}...${Reset}"
-            systemctl enable fbpanel_update.path
+#             # systemd service / path
+#             cp -v ai-fconfig/etc-systemd-system-fbpanel_update.path /etc/systemd/system/fbpanel_update.path
+#             cp -v ai-fconfig/etc-systemd-system-fbpanel_update.service /etc/systemd/system/fbpanel_update.service
+#             printf '%s\n' "${BGreen}Activation de ${BYellow}fbpanel_update.path${BGreen}...${Reset}"
+#             systemctl enable fbpanel_update.path
+            # Hooks
+            mkdir -p /etc/pacman.d/hooks
+            cp -v ai-fconfig/etc-pacman.d-hooks-fbpanel-install.hook /etc/pacman.d/hooks/fbpanel-install.hook
+            mkdir -p /etc/pacman.d/scripts
+            cp -v ai-fconfig/etc-pacman.d-scripts-fbpanel-maj-logo /etc/pacman.d/scripts/fbpanel-maj-logo
             # user fbpanel
             printf '%s\n' "${BGreen}Configuration de ${BYellow}fbpanel${BGreen}...${Reset}"
             mkdir -p /home/${USERNAME}/.config/fbpanel
