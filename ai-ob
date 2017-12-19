@@ -218,7 +218,7 @@
             else
                 cp -v ai-fconfig/ob-user-.config-openbox-autostart-reel /home/${USERNAME}/.config/openbox/autostart
             fi
-            sed -i "s/NAME-USER/${USERNAME}/g"/home/${USERNAME}/.config/openbox/autostart
+            sed -i "s/NAME-USER/${USERNAME}/g" /home/${USERNAME}/.config/openbox/autostart
             cp -v ai-fconfig/ob-user-.config-openbox-environment /home/${USERNAME}/.config/openbox/environment
             cp -v ai-fconfig/ob-user-.config-openbox-rc.xml /home/${USERNAME}/.config/openbox/rc.xml
             cp -v ai-fconfig/ob-user-.config-openbox-menu.xml /home/${USERNAME}/.config/openbox/menu.xml
