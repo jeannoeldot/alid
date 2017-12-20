@@ -45,11 +45,11 @@
         printf '%s\n' "${BGreen}Installation des dépendances de ${BYellow}imagemagick${BGreen}...${Reset}"
         package_install "openexr libwmf librsvg libxml2 jasper libpng"
         #
-        printf '%s\n' "${BGreen}Compilation et Installation de ${BYellow}spacefm (AUR)${BGreen}...${Reset}"
-        aur_package_install "spacefm"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}pcmanfm${BGreen}...${Reset}"
+        package_install "pcmanfm"
         #
-        printf '%s\n' "${BGreen}Installation des dépendances de ${BYellow}spacefm${BGreen}...${Reset}"
-        package_install "fuseiso gksu lsof udevil udisks2 util-linux wget gvfs-smb gvfs-afc gvfs-gphoto2 gvfs-mtp lxsession"
+        printf '%s\n' "${BGreen}Installation des dépendances de ${BYellow}pcmanfm${BGreen}...${Reset}"
+        package_install "gvfs gvfs-afc gvfs-gphoto2 gvfs-mtp gvfs-nfs gvfs-smb"
         # FONTS
         printf '%s\n' "${BGreen}Installation de ${BYellow}Polices TTF${BGreen}...${Reset}"
         package_install "ttf-bitstream-vera ttf-dejavu ttf-freefont ttf-liberation ttf-linux-libertine ttf-droid ttf-ubuntu-font-family"
@@ -261,11 +261,9 @@
             chown -R ${USERNAME}:users /home/${USERNAME}
             printf '%s\n' "${BGreen}Installation de thèmes ${BYellow}GTK 3/2${BGreen}...${Reset}"
             package_install "gtk-update-icon-cache gnome-themes-standard gtk-engines"
-            aur_package_install "zuki-themes-git"
+            package_install "arc-gtk-theme gtk-engine-murrine"
             printf '%s\n' "${BGreen}Installation d'${BYellow}Icones${BGreen}...${Reset}"
-            aur_package_install "elementary-xfce-icons-git"
-            aur_package_install "awoken-icons"
-            package_install "zenity"
+            package_install "arc-icon-theme elementary-icon-theme"
             pause_function
         else
             #create a xinitrc file in home user directory
@@ -285,19 +283,16 @@
         messages+="PERSONNALISATION DE OPENBOX :\n\n"
         until (( retour == 0 )) || (( retour == 1 ));
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 22 72 12)
-            options=("adwaita" "(Thèmes GTK) - (AUR)" ON
-                    "faenza" "(Thèmes d'Icones)" ON
-                    "flatwoken" "(Thèmes d'Icones) - (AUR)" ON
-                    "compton-git" "(Compositeur pour X) - (AUR)" ON
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 22 72 9)
+            options=("faenza" "(Thèmes d'Icones)" ON
+                    "compton" "(Compositeur pour X)" ON
                     "scrot" "(Capture d'écran pour X)" ON
                     "xfburn" "(Gravure)" ON
                     "xarchiver" "(Archivers)" ON
                     "xorg-xcalc" "(Calculatrice)" ON
-                    "pcmanfm" "(Gestionnaire de Fichiers)" OFF
                     "rxvt-unicode" "(Émulateur de Terminal)" OFF
                     "thunar" "(Gestionnaire de Fichiers)" OFF
-                    "tint2-git" "(Panneau/Barre des tâches) - (AUR)" OFF
+                    "tint2" "(Panneau/Barre des tâches)" OFF
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
@@ -310,26 +305,18 @@
         for choix in $REPLY
         do
             case $choix in
-                "adwaita")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}adwaita-x-dark-and-light-theme${BGreen}...${Reset}"
-                    aur_package_install "adwaita-x-dark-and-light-theme"
-                    ;;
                 "faenza")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}faenza-icon-theme faience-icon-theme${BGreen}...${Reset}"
                     package_install "faenza-icon-theme faience-icon-theme"
                     ;;
-                "flatwoken")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}flatwoken-icons-git${BGreen}...${Reset}"
-                    aur_package_install "flatwoken-icons-git"
-                    ;;
-                "compton-git")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}compton-git${BGreen}...${Reset}"
-                    aur_package_install "compton-git"
-                    if is_package_installed "compton-git" ; then
-                        printf '%s\n' "${BGreen}Installation de dépendances optionelles pour ${BYellow}compton-git${BGreen}...${Reset}"
+                "compton")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}compton${BGreen}...${Reset}"
+                    package_install "compton"
+                    if is_package_installed "compton" ; then
+                        printf '%s\n' "${BGreen}Installation de dépendances optionelles pour ${BYellow}compton${BGreen}...${Reset}"
                         package_install "xorg-xprop xorg-xwininfo"
                         pacman -D --asdeps xorg-xprop xorg-xwininfo
-                        printf '%s\n' "${BGreen}Configuration de ${BYellow}compton-git${BGreen}...${Reset}"
+                        printf '%s\n' "${BGreen}Configuration de ${BYellow}compton${BGreen}...${Reset}"
                         sed -i "s/#compton/compton/g" /home/${USERNAME}/.config/openbox/autostart
                         if (( $IN_VIRTUAL_BOX == 1 )); then
                             cp -v ai-fconfig/ob-user-.config-compton.conf-vbox /home/${USERNAME}/.config/compton.conf
@@ -367,9 +354,9 @@
                     printf '%s\n' "${BGreen}Installation de ${BYellow}thunar thunar-archive-plugin thunar-volman tumbler polkit-gnome gvfs${BGreen}...${Reset}"
                     package_install "thunar thunar-archive-plugin thunar-volman tumbler polkit-gnome gvfs"
                     ;;
-                "tint2-git")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}tint2-git${BGreen}...${Reset}"
-                    aur_package_install "tint2-git"
+                "tint2")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}tint2${BGreen}...${Reset}"
+                    package_install "tint2"
                     package_install "orage"
             esac
         done
@@ -429,7 +416,7 @@
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 18 72 4)
             options=("cairo-dock" "(Cairo Dock)" OFF
-                    "conky-lua-nv" "(Moniteur Système pour X) - (AUR)" OFF
+                    "conky" "(Moniteur Système pour X)" OFF
                     "docky" "(Docky Dock)" OFF
                     "plank" "(Plank Dock)" OFF
                     )
@@ -448,9 +435,9 @@
                     printf '%s\n' "${BGreen}Installation de ${BYellow}cairo-dock cairo-dock-plugins${BGreen}...${Reset}"
                     package_install "cairo-dock cairo-dock-plugins"
                     ;;
-                "conky-lua-nv")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}conky-lua-nv${BGreen}...${Reset}"
-                    aur_package_install "conky-lua-nv"
+                "conky")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}conky${BGreen}...${Reset}"
+                    package_install "conky"
                     ;;
                 "docky")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}docky${BGreen}...${Reset}"
@@ -784,7 +771,7 @@
                     package_install "firefox firefox-i18n-$LANGUAGE_FF pulseaudio"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}flashplugin firefox-adblock-plus${BGreen}...${Reset}"
                     package_install "flashplugin firefox-adblock-plus"
-                    aur_package_install "firefox-extension-https-everywhere"
+#                    aur_package_install "firefox-extension-https-everywhere"
                     printf '%s\n' "${BGreen}Configuration de ${BYellow}fbpanel${BGreen}...${Reset}"
                     sed -i "s/chromium/firefox/g" /home/${USERNAME}/.config/fbpanel/default
                     ;;

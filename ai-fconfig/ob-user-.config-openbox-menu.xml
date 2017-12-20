@@ -3,7 +3,7 @@
 <openbox_menu xmlns="http://openbox.org/3.4/menu">
 <showIcons>yes</showIcons>
 <menu id="apps-accessories-menu" label="Accessoires">
-  <item label="Calculator" icon="/usr/share/icons/hicolor/48x48/apps/accessories-calculator.png">
+  <item label="Calculator" icon="/usr/share/icons/elementary/apps/48/accessories-calculator.svg">
     <action name="Execute">
       <command>xcalc</command>
       <startupnotify>
@@ -233,6 +233,14 @@
 </menu>
 
 <menu id="apps-fileman-menu" label="Gestionnaires de Fichiers">
+  <item label="PCMan File Manager" icon="/usr/share/icons/elementary/apps/48/system-file-manager.svg">
+    <action name="Execute">
+      <command>pcmanfm</command>
+      <startupnotify>
+        <enabled>yes</enabled>
+      </startupnotify>
+    </action>
+  </item>
   <item label="SpaceFM" icon="/usr/share/icons/hicolor/48x48/apps/spacefm.png">
     <action name="Execute">
       <command>spacefm</command>
@@ -244,14 +252,6 @@
   <item label="Thunar">
     <action name="Execute">
       <command>Thunar</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="PCMan File Manager">
-    <action name="Execute">
-      <command>pcmanfm</command>
       <startupnotify>
         <enabled>yes</enabled>
       </startupnotify>
@@ -469,39 +469,39 @@
 
 <menu id="root-menu" label="Openbox 3">
   <separator label="Applications" />
-  <menu icon="/usr/share/icons/Faenza/categories/96/applications-accessories.png" id="apps-accessories-menu"/>
-  <menu icon="/usr/share/icons/Faenza/categories/96/applications-publishing.png" id="apps-editors-menu"/>
-  <menu icon="/usr/share/icons/Faenza/categories/96/applications-graphics.png" id="apps-graphics-menu"/>
-  <menu icon="/usr/share/icons/Faenza/categories/96/applications-development.png" id="apps-development-menu"/>
-  <menu icon="/usr/share/icons/Faenza/categories/96/applications-internet.png" id="apps-net-menu"/>
-  <menu icon="/usr/share/icons/Faenza/categories/96/applications-office.png" id="apps-office-menu"/>
-  <menu icon="/usr/share/icons/Faenza/categories/96/applications-multimedia.png" id="apps-multimedia-menu"/>
-  <menu icon="/usr/share/icons/Faenza/categories/96/applications-games.png" id="apps-games-menu"/>
-  <menu icon="/usr/share/icons/Faenza/apps/96/virtualbox.png" id="apps-virtualisation-menu"/>
-  <menu icon="/usr/share/icons/Faenza/apps/96/utilities-terminal.png" id="apps-term-menu"/>
-  <menu icon="/usr/share/icons/Faenza/places/96/folder.png" id="apps-fileman-menu"/>
+  <menu icon="/usr/share/icons/elementary/categories/48/applications-accessories.svg" id="apps-accessories-menu"/>
+  <menu icon="/usr/share/icons/elementary/apps/48/accessories-text-editor.svg" id="apps-editors-menu"/>
+  <menu icon="/usr/share/icons/elementary/categories/48/applications-graphics.svg" id="apps-graphics-menu"/>
+  <menu icon="/usr/share/icons/elementary/categories/48/applications-development.svg" id="apps-development-menu"/>
+  <menu icon="/usr/share/icons/elementary/categories/48/applications-internet.svg" id="apps-net-menu"/>
+  <menu icon="/usr/share/icons/elementary/categories/48/applications-office.svg" id="apps-office-menu"/>
+  <menu icon="/usr/share/icons/elementary/categories/48/applications-multimedia.svg" id="apps-multimedia-menu"/>
+  <menu icon="/usr/share/icons/elementary/categories/48/applications-games.svg" id="apps-games-menu"/>
+  <menu icon="/usr/share/icons/hicolor/96x96/categories/virtualbox.png" id="apps-virtualisation-menu"/>
+  <menu icon="/usr/share/icons/elementary/apps/48/utilities-terminal.svg" id="apps-term-menu"/>
+  <menu icon="/usr/share/icons/elementary/places/48/folder.svg" id="apps-fileman-menu"/>
   <separator label="Configuration" />
-  <menu icon="/usr/share/icons/Faenza/categories/96/configuration_section.png" id="system-menu"/>
-  <item icon="/usr/share/icons/elementary-xfce/apps/96/preferences-desktop-sound.svg" label="Contrôle du volume">
+  <menu icon="/usr/share/icons/Adwaita/48x48/categories/preferences-desktop.png" id="system-menu"/>
+  <item icon="/usr/share/icons/elementary/categories/48/preferences-desktop-sound.svg" label="Contrôle du volume">
     <action name="Execute">
 	  <command>pavucontrol</command>
 	</action>
   </item>
-  <item icon="/usr/share/icons/Faenza/actions/96/view-refresh.png" label="Reconfigure Openbox">
+  <item icon="/usr/share/icons/elementary/actions/48/view-refresh.svg" label="Reconfigure Openbox">
     <action name="Reconfigure" />
   </item>
   <separator label="Ordinateur" />
-  <item icon="/usr/share/icons/Faenza/actions/96/down.png" label="Déconnexion...">
+  <item icon="/usr/share/icons/elementary/actions/48/system-log-out.svg" label="Déconnexion...">
     <action name="Exit">
       <prompt>yes</prompt>
     </action>
   </item>
-  <item icon="/usr/share/icons/Faenza/apps/96/gnome-session-suspend.png" label="Mise en veille en RAM">
+  <item icon="/usr/share/icons/elementary/actions/48/system-lock-screen.svg" label="Mise en veille en RAM">
 	<action name="Execute">
 	  <command>systemctl suspend</command>
 	</action>
   </item>
-  <item icon="/usr/share/icons/Faenza/actions/96/application-exit.png" label="Quitter...">
+  <item icon="/usr/share/icons/elementary/actions/48/system-shutdown.svg" label="Quitter...">
 	<action name="Execute">
 	  <command>/home/NAME-USER/bin/ob-quitter</command>
 	</action>

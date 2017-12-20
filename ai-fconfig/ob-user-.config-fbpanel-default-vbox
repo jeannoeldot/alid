@@ -195,10 +195,15 @@ Plugin {
 Plugin {
     type = launchbar
     config {
-        button {
-            image = /usr/share/icons/hicolor/48x48/apps/spacefm.png
+#        button {
+#            image = /usr/share/icons/hicolor/48x48/apps/spacefm.png
+#            tooltip = File Manager
+#            action = spacefm
+#        }
+         button {
+            image = /usr/share/icons/elementary/apps/48/system-file-manager.svg
             tooltip = File Manager
-            action = spacefm
+            action = pcmanfm
         }
         button {
             image = /usr/share/icons/hicolor/48x48/apps/geany.png
