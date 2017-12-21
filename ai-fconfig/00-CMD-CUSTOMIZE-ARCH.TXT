@@ -260,19 +260,18 @@ $ sudo nano /etc/systemd/system/tmp.mount.d/tmp_size.conf
  ==================================
 
 $ sudo blkid | grep "DataLinux"
-
-/dev/sdb5: UUID="c9acc104-7509-4639-a16a-8e81d0253259" TYPE="ext4" LABEL="DataLinux"
+/dev/sdb1: UUID="2faacbde-ad80-451f-b27d-1e932306ea76" TYPE="ext4" PARTLABEL="DataLinux" PARTUUID="b3471266-9ae4-4005-b78d-2c1b25847914"
 
 
 # !!! Vérifier sdXY
 --------------------
-$ sudo sh -c "echo -e '# Montage sdb5 DataLinux' >> /etc/fstab"
+$ sudo sh -c "echo -e '# Montage sdb1 DataLinux' >> /etc/fstab"
 
 # !!! Vérifier UUID
 --------------------
-$ sudo sh -c "echo -e 'UUID=c9acc104-7509-4639-a16a-8e81d0253259 /0-DataLinux ext4 rw,relatime,data=ordered 0 2' >> /etc/fstab"
+$ sudo sh -c "echo -e 'UUID=2faacbde-ad80-451f-b27d-1e932306ea76 /0-DataLinux ext4 rw,relatime,data=ordered 0 2' >> /etc/fstab"
 OU
-$ sudo sh -c "echo -e 'UUID=c9acc104-7509-4639-a16a-8e81d0253259 /0-DataLinux ext4 defaults,relatime 0 2' >> /etc/fstab"
+$ sudo sh -c "echo -e 'UUID=2faacbde-ad80-451f-b27d-1e932306ea76 /0-DataLinux ext4 defaults,relatime 0 2' >> /etc/fstab"
 
 # Vérifications
 ----------------
@@ -285,12 +284,17 @@ $ sudo mkdir /0-DataLinux
 $ sudo chown -R jnd:users /0-DataLinux
 
 $ sudo ls -la /
+drwxr-xr-x   2 jnd  users  4096  2 déc.   2013 0-DataLinux
 
 $ sudo mount -a
 
 # Vérifications
 ----------------
 $ findmnt
+─/0-DataLinux                        /dev/sdb1  ext4       rw,relatime,data=ordered
+
+$ sudo ls -la /
+$ sudo chown -R jnd:users /0-DataLinux
 
  4-3) PARTITION /BOOT/EFI : VFAT : RAJOUTER DISCARD
  ===================================================
@@ -1639,6 +1643,15 @@ OU
 ====================================================================================================
 ANCIEN
 ==========================================================
+
+/dev/sdb5: UUID="c9acc104-7509-4639-a16a-8e81d0253259" TYPE="ext4" LABEL="DataLinux"
+
+$ sudo sh -c "echo -e '# Montage sdb5 DataLinux' >> /etc/fstab"
+
+$ sudo sh -c "echo -e 'UUID=c9acc104-7509-4639-a16a-8e81d0253259 /0-DataLinux ext4 rw,relatime,data=ordered 0 2' >> /etc/fstab"
+OU
+$ sudo sh -c "echo -e 'UUID=c9acc104-7509-4639-a16a-8e81d0253259 /0-DataLinux ext4 defaults,relatime 0 2' >> /etc/fstab"
+
 
 !!! INUTILE flashplugin ds community
 INSTALLATION DE freshplayerplugin ET pepper-flash POUR FIREFOX

@@ -999,7 +999,7 @@ source $(pwd)/ai-commons
     install_internet_apps
     install_audio_apps
     install_video_apps
-    install_games
+#    install_games                    # 1 jeu : pokerth : suppr dépot community
 #}}} FIN INSTALLATION DE OU WM
 
     install_fonts

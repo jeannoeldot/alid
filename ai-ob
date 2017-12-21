@@ -155,6 +155,7 @@
             printf '%s\n' "${BGreen}Mise en place d'icones...${Reset}"
             cp -v ai-fconfig/accessories-calculator.png /usr/share/icons/hicolor/48x48/apps/
             cp -v ai-fconfig/xterm.png /usr/share/icons/hicolor/48x48/apps/
+            cp -v ai-fconfig/virtualbox.png /usr/share/icons/hicolor/96x96/categories/
             # user wallpaper
             printf '%s\n' "${BGreen}Mise en place du fond d'écran ${BYellow}skyzl1-1920x1080.jpg${BGreen}...${Reset}"
             mkdir -p /home/${USERNAME}/09-Configurations/OO-Images-bureau
