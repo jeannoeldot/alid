@@ -45,8 +45,8 @@
         printf '%s\n' "${BGreen}Installation des dépendances de ${BYellow}imagemagick${BGreen}...${Reset}"
         package_install "openexr libwmf librsvg libxml2 jasper libpng"
         #
-        printf '%s\n' "${BGreen}Installation de ${BYellow}pcmanfm${BGreen}...${Reset}"
-        package_install "pcmanfm"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}pcmanfm-gtk3${BGreen}...${Reset}"
+        package_install "pcmanfm-gtk3"
         #
         printf '%s\n' "${BGreen}Installation des dépendances de ${BYellow}pcmanfm${BGreen}...${Reset}"
         package_install "gvfs gvfs-afc gvfs-gphoto2 gvfs-mtp gvfs-nfs gvfs-smb"

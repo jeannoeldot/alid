@@ -1142,6 +1142,8 @@ OU Versions Qt5
 OU
 # pacman -Syu ttf-win10-fonts
 
+# pacman -Syu pokerth
+
 
 9) INSTALLATION DE VIRTUAL-BOX
 =================================
