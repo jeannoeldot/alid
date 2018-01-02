@@ -1196,19 +1196,26 @@ Menu
 ----
 Affichage -> Panneau latéral -> X Marque-pages
 
-Edition -> Préférences -> Général
+Édition -> Préférences
+----------------------
+Général
+-------
+Démarrage
+ v Afficher votre page d’accueil
+
+Onglets
+ v Ouvrir un nouvel onglet au lieu d’une nouvelle fenêtre
+ v Lors de l’ouverture d’un lien dans un nouvel onglet, basculer vers celui-ci immédiatement
+
+Téléchargements
  v Toujours demander où enregistrer les fichiers
  
-Edition -> Préférences -> Avancé -> Général -> Navigation
+Navigation
  v Utiliser le défilement automatique
  v Utiliser le défilement doux
 
- about:config
- ------------
- network.http.pipelining  false => true
- network.http.pipelining.maxrequests 32 => 8
- network.http.proxy.pipelining false => true
- 
+about:config
+------------
  Libérer la mémoire après fermeture d'un onglet :
  browser.sessionstore.max_tabs_undo 10 => 0
 
@@ -1225,12 +1232,12 @@ Edition -> Préférences -> Sync -> Se connecter
 
 Menu Outils -> Modules Complémentaires
 Onglet Catalogue
-En HAUT - A DROITE : Rechercher : dictionnaires français
-==> Dictionnaires français 5.6.3 -> Installer
+En BAS : Découvrez davantage de modules
+En HAUT - A DROITE : Find add-ons : dictionnaires français
+==> French spelling dictionary by OR. Version 6.2
+    + Add to Firefox
 
-https://addons.mozilla.org/fr/firefox/addon/dictionnaires-fran%C3%A7ais/?src=ss
-
-https://addons.mozilla.org/firefox/downloads/latest/354872/addon-354872-latest.xpi?src=ss
+https://addons.mozilla.org/firefox/downloads/file/794277/dictionnaire_francais-6.2.xpi?src=dp-btn-primary
 
  11-3) Passer outre à la signature des modules complémentaires
  =============================================================

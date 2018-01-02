@@ -221,9 +221,9 @@ Plugin {
             action = ob-lxterminal
         }
 	    button {
-            image = /usr/share/icons/hicolor/48x48/apps/firefox.png
+            image = /usr/share/icons/hicolor/48x48/apps/chromium.png
             tooltip = Web Browser
-            action = firefox
+            action = chromium
     	}
     }
 }
@@ -239,7 +239,7 @@ Plugin {
 Plugin {
     type = wincmd
     config {
-        icon = gnome-fs-desktop
+        icon = /usr/share/icons/Adwaita/48x48/devices/video-display.png
         tooltip = Left click to iconify all windows. Middle click to shade them.
     }
 }
