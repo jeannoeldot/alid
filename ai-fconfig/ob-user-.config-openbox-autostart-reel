@@ -25,9 +25,6 @@
 #
 
 ## Compositing
-##xcompmgr -c &
-##xcompmgr -c -C -t-5 -l-5 -r4.2 -o.55 &
-#xcompmgr -c -t-5 -l-5 -r4.2 -o.55 &
 #
 #compton --config ~/.config/compton.conf -b &
 #
@@ -37,10 +34,7 @@ sh ~/.fehbg &
 #
 
 ## Barre des taches et Tray
-## fbpanel
-fbpanel &
-#
-volwheel &
+tint2 &
 ##
 
 ## Active Numlock au Boot
@@ -57,8 +51,18 @@ numlockx &
 ##
 
 ##################################################
+##xcompmgr -c &
+##xcompmgr -c -C -t-5 -l-5 -r4.2 -o.55 &
+#xcompmgr -c -t-5 -l-5 -r4.2 -o.55 &
 #nitrogen --restore &
 #wicd-gtk --tray &
+
+## Barre des taches et Tray
+## fbpanel
+#fbpanel &
+#
+#volwheel &
+##
 
 ## tint2(-svn)
 #tint2 &

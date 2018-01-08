@@ -91,8 +91,8 @@
                     package_install "digikam"
                     ;;
                 "k3b")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}k3b cdrdao dvd+rw-tools vcdimager transcode emovix cdparanoia${BGreen}...${Reset}"
-                    package_install "k3b cdrdao dvd+rw-tools vcdimager transcode emovix cdparanoia"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}k3b cdrdao dvd+rw-tools vcdimager transcode cdparanoia${BGreen}...${Reset}"
+                    package_install "k3b cdrdao dvd+rw-tools vcdimager transcode cdparanoia"
                     ;;
                 "skrooge")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}skrooge${BGreen}...${Reset}"
@@ -487,8 +487,8 @@
                 "inkscape")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}inkscape${BGreen}...${Reset}"
                     package_install "inkscape"
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}pstoedit python2-lxml python2-numpy scour texlive-core uniconvertor${BGreen}...${Reset}"
-                    package_install "pstoedit python2-lxml python2-numpy texlive-core python2-scour uniconvertor gvfs"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gvfs pstoedit python2-lxml python2-numpy python2-scour texlive-core${BGreen}...${Reset}"
+                    package_install "gvfs pstoedit python2-lxml python2-numpy python2-scour texlive-core"
             esac
         done
         if [[ $REPLY != "" ]]; then

@@ -27,20 +27,20 @@
         printf '%s\n' "${BGreen}Installation de ${BYellow}xdg-user-dirs${BGreen}...${Reset}"
         package_install "xdg-user-dirs python2-xdg"
         #
-        printf '%s\n' "${BGreen}Installation de ${BYellow}numlockx, idesk, nitrogen et feh${BGreen}...${Reset}"
-        package_install "numlockx idesk nitrogen feh"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}numlockx, nitrogen et feh${BGreen}...${Reset}"
+        package_install "numlockx nitrogen feh"
         #
-        printf '%s\n' "${BGreen}Installation de ${BYellow}lxappearance${BGreen}...${Reset}"
-        package_install "lxappearance lxappearance-obconf"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}lxappearance-gtk3${BGreen}...${Reset}"
+        package_install "lxappearance-gtk3 lxappearance-obconf-gtk3"
         #
         printf '%s\n' "${BGreen}Installation de ${BYellow}leafpad, epdfview et imagemagick${BGreen}...${Reset}"
         package_install "leafpad epdfview imagemagick"
         #
-        printf '%s\n' "${BGreen}Installation de ${BYellow}fbpanel, lxterminal et terminator${BGreen}...${Reset}"
-        package_install "fbpanel lxterminal terminator perl-file-mimeinfo"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}tint2, lxterminal-gtk3 et terminator${BGreen}...${Reset}"
+        package_install "tint2 orage lxterminal-gtk3 terminator perl-file-mimeinfo"
         #
-        printf '%s\n' "${BGreen}Installation de ${BYellow}viewnior, gmrun et volwheel${BGreen}...${Reset}"
-        package_install "viewnior gmrun volwheel"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}viewnior et gmrun${BGreen}...${Reset}"
+        package_install "viewnior gmrun"
         #
         printf '%s\n' "${BGreen}Installation des dépendances de ${BYellow}imagemagick${BGreen}...${Reset}"
         package_install "openexr libwmf librsvg libxml2 jasper libpng"
@@ -160,38 +160,13 @@
             printf '%s\n' "${BGreen}Mise en place du fond d'écran ${BYellow}skyzl1-1920x1080.jpg${BGreen}...${Reset}"
             mkdir -p /home/${USERNAME}/09-Configurations/OO-Images-bureau
             cp -v ai-fconfig/ob-skyzl1-1920x1080.jpg /home/${USERNAME}/09-Configurations/OO-Images-bureau/skyzl1-1920x1080.jpg
-            # user logo fbpanel
-            printf '%s\n' "${BGreen}Mise en place du logo de ${BYellow}fbpanel${BGreen}...${Reset}"
-            mkdir -p /home/${USERNAME}/09-Configurations/OO-Logo-fbpanel
-            cp -v ai-fconfig/ob-user-fbpanel-archlinux-logo.png /home/${USERNAME}/09-Configurations/OO-Logo-fbpanel/archlinux-logo.png
-            cp -v ai-fconfig/ob-user-fbpanel-installation-archlinux-logo.png.TXT /home/${USERNAME}/09-Configurations/OO-Logo-fbpanel/installation-archlinux-logo.png.TXT
-            sed -i "s/NAME-USER/${USERNAME}/g" /home/${USERNAME}/09-Configurations/OO-Logo-fbpanel/installation-archlinux-logo.png.TXT
-            chown -R ${USERNAME}:users /home/${USERNAME}/09-Configurations
-            # system logo fbpanel
-            cp -v ai-fconfig/ob-user-fbpanel-archlinux-logo.png /usr/share/fbpanel/images/archlinux-logo.png
-            chmod 644 /usr/share/fbpanel/images/archlinux-logo.png
-            mv -f -v /usr/share/fbpanel/images/logo.png /usr/share/fbpanel/images/logo.png.backup
-            cp -v /usr/share/fbpanel/images/archlinux-logo.png /usr/share/fbpanel/images/logo.png
-            chmod 644 /usr/share/fbpanel/images/logo.png
-#             # systemd service / path
-#             cp -v ai-fconfig/etc-systemd-system-fbpanel_update.path /etc/systemd/system/fbpanel_update.path
-#             cp -v ai-fconfig/etc-systemd-system-fbpanel_update.service /etc/systemd/system/fbpanel_update.service
-#             printf '%s\n' "${BGreen}Activation de ${BYellow}fbpanel_update.path${BGreen}...${Reset}"
-#             systemctl enable fbpanel_update.path
-            # Hooks
-            mkdir -p /etc/pacman.d/hooks
-            cp -v ai-fconfig/etc-pacman.d-hooks-fbpanel-install.hook /etc/pacman.d/hooks/fbpanel-install.hook
-            mkdir -p /etc/pacman.d/scripts
-            cp -v ai-fconfig/etc-pacman.d-scripts-fbpanel-maj-logo /etc/pacman.d/scripts/fbpanel-maj-logo
-            # user fbpanel
-            printf '%s\n' "${BGreen}Configuration de ${BYellow}fbpanel${BGreen}...${Reset}"
-            mkdir -p /home/${USERNAME}/.config/fbpanel
+            # user tint2
+            printf '%s\n' "${BGreen}Configuration de ${BYellow}tint2${BGreen}...${Reset}"
+            mkdir -p /home/${USERNAME}/.config/tint2
             if (( $IN_VIRTUAL_BOX == 1 )); then
-                cp -v ai-fconfig/ob-user-.config-fbpanel-default-vbox /home/${USERNAME}/.config/fbpanel/default
-                local name_net_wired=$(ip link | awk '/enp/ {print $2}' | sed -e "s/://")
-                sed -i "s/interface = eth0/interface = ${name_net_wired}/g" /home/${USERNAME}/.config/fbpanel/default
+                cp -v ai-fconfig/ob-user-.config-tint2-tint2rc-vbox /home/${USERNAME}/.config/tint2/tint2rc
             else
-                cp -v ai-fconfig/ob-user-.config-fbpanel-default-reel /home/${USERNAME}/.config/fbpanel/default
+                cp -v ai-fconfig/ob-user-.config-tint2-tint2rc-reel /home/${USERNAME}/.config/tint2/tint2rc
             fi
             # user nitrogen
             printf '%s\n' "${BGreen}Configuration de ${BYellow}nitrogen${BGreen}...${Reset}"
@@ -208,6 +183,8 @@
             printf '%s\n' "${BGreen}Configuration de ${BYellow}lxterminal${BGreen}...${Reset}"
             mkdir -p /home/${USERNAME}/.config/lxterminal
             cp -v ai-fconfig/ob-user-.config-lxterminal-lxterminal.conf /home/${USERNAME}/.config/lxterminal/lxterminal.conf
+            mkdir -p /home/${USERNAME}/.local/share/applications
+            cp -v ai-fconfig/ob-user-.local-share-applications-lxterminal.desktop /home/${USERNAME}/.local/share/applications/lxterminal.desktop
             # user gtk-3.0
             printf '%s\n' "${BGreen}Configuration de ${BYellow}gtk-3${BGreen}...${Reset}"
             mkdir -p /home/${USERNAME}/.config/gtk-3.0
@@ -225,6 +202,7 @@
             cp -v ai-fconfig/ob-user-.config-openbox-menu.xml /home/${USERNAME}/.config/openbox/menu.xml
             sed -i "s/NAME-USER/${USERNAME}/g" /home/${USERNAME}/.config/openbox/menu.xml
             chown -R ${USERNAME}:users /home/${USERNAME}/.config
+            chown -R ${USERNAME}:users /home/${USERNAME}/.local
             # user bin
 #           mkdir -p /home/${USERNAME}/bin
             printf '%s\n' "${BGreen}Installation des dépendances de ${BYellow}openbox-logout${BGreen}...${Reset}"
@@ -284,7 +262,7 @@
         messages+="PERSONNALISATION DE OPENBOX :\n\n"
         until (( retour == 0 )) || (( retour == 1 ));
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 22 72 9)
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 22 72 8)
             options=("faenza" "(Thèmes d'Icones)" ON
                     "compton" "(Compositeur pour X)" ON
                     "scrot" "(Capture d'écran pour X)" ON
@@ -293,7 +271,6 @@
                     "xorg-xcalc" "(Calculatrice)" ON
                     "rxvt-unicode" "(Émulateur de Terminal)" OFF
                     "thunar" "(Gestionnaire de Fichiers)" OFF
-                    "tint2" "(Panneau/Barre des tâches)" OFF
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
@@ -354,11 +331,6 @@
                 "thunar")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}thunar thunar-archive-plugin thunar-volman tumbler polkit-gnome gvfs${BGreen}...${Reset}"
                     package_install "thunar thunar-archive-plugin thunar-volman tumbler polkit-gnome gvfs"
-                    ;;
-                "tint2")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}tint2${BGreen}...${Reset}"
-                    package_install "tint2"
-                    package_install "orage"
             esac
         done
         #
@@ -723,8 +695,8 @@
                 "inkscape")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}inkscape${BGreen}...${Reset}"
                     package_install "inkscape"
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}pstoedit python2-lxml python2-numpy scour texlive-core uniconvertor${BGreen}...${Reset}"
-                    package_install "pstoedit python2-lxml python2-numpy python2-scour texlive-core uniconvertor gvfs"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gvfs pstoedit python2-lxml python2-numpy scour texlive-core${BGreen}...${Reset}"
+                    package_install "gvfs pstoedit python2-lxml python2-numpy python2-scour texlive-core"
             esac
         done
         if [[ $REPLY != "" ]]; then
@@ -766,6 +738,8 @@
                     package_install "chromium"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}pepper-flash${BGreen}...${Reset}"
                     package_install "pepper-flash"
+                    printf '%s\n' "${BGreen}Configuration de ${BYellow}tint2${BGreen}...${Reset}"
+                    sed -i "s/BROWSER/chromium/g" /home/${USERNAME}/.config/tint2/tint2rc
                     ;;
                 "firefox")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}firefox pulseaudio${BGreen}...${Reset}"
@@ -773,8 +747,8 @@
                     printf '%s\n' "${BGreen}Installation de ${BYellow}flashplugin firefox-adblock-plus${BGreen}...${Reset}"
                     package_install "flashplugin firefox-adblock-plus"
 #                    aur_package_install "firefox-extension-https-everywhere"
-                    printf '%s\n' "${BGreen}Configuration de ${BYellow}fbpanel${BGreen}...${Reset}"
-                    sed -i "s/chromium/firefox/g" /home/${USERNAME}/.config/fbpanel/default
+                    printf '%s\n' "${BGreen}Configuration de ${BYellow}tint2${BGreen}...${Reset}"
+                    sed -i "s/BROWSER/firefox/g" /home/${USERNAME}/.config/tint2/tint2rc
                     ;;
                 "transmission")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}transmission-gtk${BGreen}...${Reset}"

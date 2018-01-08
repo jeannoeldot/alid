@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=LXTerminal
+Name[fr]=LXTerminal
+GenericName=Terminal
+GenericName[fr]=Terminal
+Comment=Use the command line
+Comment[fr]=Utiliser la ligne de commande
+TryExec=lxterminal
+Exec=ob-lxterminal
+Icon=lxterminal
+Type=Application
+Categories=GTK;System;TerminalEmulator;
+Keywords=console;command line;execute;
+Keywords[fr]=console; ligne de commande; exécuter

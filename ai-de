@@ -852,9 +852,6 @@ source $(pwd)/ai-commons
             printf '%s\n' "${BGreen}Installation de ${BYellow}pulseaudio-alsa pavucontrol${BGreen}...${Reset}"
             package_install "pulseaudio-alsa pavucontrol"
             pacman -D --asdeps pulseaudio-alsa
-            if (( $OPENBOX == 1 )); then
-                sed -i "s/^volwheel/#volwheel/g" /home/${USERNAME}/.config/openbox/autostart
-            fi
             pause_function
         fi
     }
