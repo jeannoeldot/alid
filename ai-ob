@@ -222,6 +222,12 @@
                 sed -i "s/NAME-USER/${USERNAME}/g" /home/${USERNAME}/bin/ob-launcher_civ4
                 chmod +x /home/${USERNAME}/bin/ob-launcher_civ4
             fi
+            if (( $IN_VIRTUAL_BOX == 1 )); then
+                printf '%s\n' "${BGreen}Installation des dépendances de ${BYellow}phwmon.py${BGreen}...${Reset}"
+                package_install "pygtk python2-psutil"
+                cp -v ai-fconfig/ob-user-bin-phwmon.py /home/${USERNAME}/bin/phwmon.py
+                chmod +x /home/${USERNAME}/bin/phwmon.py
+            fi
             chown -R ${USERNAME}:users /home/${USERNAME}/bin
             # user gtkrc-2.0
             printf '%s\n' "${BGreen}Configuration de ${BYellow}gtk-2${BGreen}...${Reset}"
