@@ -91,8 +91,8 @@
                     package_install "digikam"
                     ;;
                 "k3b")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}k3b cdrdao dvd+rw-tools vcdimager transcode cdparanoia${BGreen}...${Reset}"
-                    package_install "k3b cdrdao dvd+rw-tools vcdimager transcode cdparanoia"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}k3b cdrdao dvd+rw-tools vcdimager transcode emovix cdparanoia${BGreen}...${Reset}"
+                    package_install "k3b cdrdao dvd+rw-tools vcdimager transcode emovix cdparanoia"
                     ;;
                 "skrooge")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}skrooge${BGreen}...${Reset}"
