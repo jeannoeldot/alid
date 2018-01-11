@@ -1082,8 +1082,6 @@ $ cd && maj-repolocal
 
 # pacman -Syu mkpkg-tmpfs
 
-# pacman -Syu firefox-extension-https-everywhere
-
 
 
 !!! VOIR https://wiki.archlinux.org/index.php/Profile-sync-daemon
@@ -1652,6 +1650,8 @@ OU
 ====================================================================================================
 ANCIEN
 ==========================================================
+
+# pacman -Syu firefox-extension-https-everywhere
 
 /dev/sdb5: UUID="c9acc104-7509-4639-a16a-8e81d0253259" TYPE="ext4" LABEL="DataLinux"
 

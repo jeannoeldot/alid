@@ -534,9 +534,8 @@
                 "firefox")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}firefox pulseaudio${BGreen}...${Reset}"
                     package_install "firefox firefox-i18n-$LANGUAGE_FF pulseaudio"
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}flashplugin firefox-adblock-plus${BGreen}...${Reset}"
-                    package_install "flashplugin firefox-adblock-plus"
-#                    aur_package_install "firefox-extension-https-everywhere"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}flashplugin, firefox-adblock-plus et firefox-extension-https-everywhere${BGreen}...${Reset}"
+                    package_install "flashplugin firefox-adblock-plus firefox-extension-https-everywhere"
                     ;;
                 "transmission")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}transmission-qt${BGreen}...${Reset}"

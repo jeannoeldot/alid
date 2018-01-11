@@ -136,14 +136,24 @@ $ cat ~/.mozilla/firefox/profiles.ini
 MAJ firefox-extension-https-everywhere
 ======================================
 
+!!! EN USER
+============
 !!! VIDER CACHE
 !!! ARRETER FIREFOX
 
 $ profile-cleaner f
 
-$ systemctl --user stop psd.service psd-resync.service
+$ systemctl --user stop psd.service
 
-$ yaourt -Syua firefox-extension-https-everywhere
+!!! EN ROOT
+===========
+# cd
+# maj
+OU
+# pacman -Syu
+
+!!! EN USER
+============
 
 $ systemctl --user start psd.service
 
@@ -157,6 +167,7 @@ $ psd preview ou	 $ psd parse
 ==================
 
 !!! EN USER
+============
 !!! VIDER CACHE
 !!! ARRETER FIREFOX
 
@@ -168,19 +179,20 @@ $ systemctl --user stop psd.service
 $ cat ~/.mozilla/firefox/profiles.ini
 $ rm -i ~/.mozilla/firefox/idy48li7.default/pluginreg.dat
 
-
-EN ROOT
-========
+!!! EN ROOT
+===========
 # cd
 # maj
 OU
 # pacman -Syu
 
-
 !!! EN USER
 ============
 
 $ systemctl --user start psd.service
+
+$ systemctl --no-pager --user status psd.service
+$ systemctl --no-pager --user status psd-resync.service
 
 $ psd preview
 
