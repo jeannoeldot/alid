@@ -102,43 +102,29 @@ source $(pwd)/ai-commons
         local messages=""
         local titre="AJOUT REPOS À «/etc/pacman.conf»"
         messages="\n"
-        if [[ $ARCHI == x86_64 ]]; then
-            messages+="ARCH = ${Byellow_dlg}x86_64${Reset_dlg} : Ajout de ${BRwhite_dlg}Multilib${Reset_dlg}.\n"
-        fi
+        messages+="Ajout de ${BRwhite_dlg}Multilib${Reset_dlg}.\n"
         messages+="Ajout de ${BRwhite_dlg}archlinuxfr${Reset_dlg}.\n"
         messages+="Ajout de ${BRwhite_dlg}Xyne${Reset_dlg}.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         # ENABLE MULTILIB REPOSITORY
-        if [[ $ARCHI == x86_64 ]]; then
-            multilib=$(grep -n "\[multilib\]" /etc/pacman.conf | cut -f1 -d:)
-            if $multilib &> /dev/null; then
-                echo -e "\n[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
-            else
-                sed -i "${multilib}s/^#//" /etc/pacman.conf
-                multilib=$(( $multilib + 1 ))
-                sed -i "${multilib}s/^#//" /etc/pacman.conf
-            fi
+        multilib=$(grep -n "\[multilib\]" /etc/pacman.conf | cut -f1 -d:)
+        if $multilib &> /dev/null; then
+            echo -e "\n[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+        else
+            sed -i "${multilib}s/^#//" /etc/pacman.conf
+            multilib=$(( $multilib + 1 ))
+            sed -i "${multilib}s/^#//" /etc/pacman.conf
         fi
         # archlinuxf
         echo -e '\n[archlinuxfr]' >> /etc/pacman.conf
         echo -e 'SigLevel = Never' >> /etc/pacman.conf
         echo -e 'Server = http://repo.archlinux.fr/$arch' >> /etc/pacman.conf
         # Xyne : http://xyne.archlinux.ca/projects/
-        if [[ $ARCHI == x86_64 ]]; then
-            echo -e '\n[xyne-x86_64]' >> /etc/pacman.conf
-            echo -e 'SigLevel = Required' >> /etc/pacman.conf
-            echo -e '# Temporarily broken due to host error.' >> /etc/pacman.conf            
-            echo -e '#Server = https://xyne.archlinux.ca/repos/xyne' >> /etc/pacman.conf
-            echo -e '# Workaround' >> /etc/pacman.conf
-            echo -e 'Server = https://xyne.archlinux.ca/bin/repo.php?file=' >> /etc/pacman.conf
-        else
-            echo -e '\n[xyne-i686]' >> /etc/pacman.conf
-            echo -e 'SigLevel = Required' >> /etc/pacman.conf
-            echo -e '# Temporarily broken due to host error.' >> /etc/pacman.conf            
-            echo -e '#Server = https://xyne.archlinux.ca/repos/xyne' >> /etc/pacman.conf
-            echo -e '# Workaround' >> /etc/pacman.conf
-            echo -e 'Server = https://xyne.archlinux.ca/bin/repo.php?file=' >> /etc/pacman.conf
-        fi
+        echo -e '\n[xyne-x86_64]' >> /etc/pacman.conf
+        echo -e 'SigLevel = Required' >> /etc/pacman.conf
+        echo -e 'Server = https://xyne.archlinux.ca/repos/xyne' >> /etc/pacman.conf
+        echo -e '# Workaround' >> /etc/pacman.conf
+        echo -e '#Server = https://xyne.archlinux.ca/bin/repo.php?file=' >> /etc/pacman.conf
         #
         messages="\n"
         messages+="Visualiser/Éditer le fichier ${Byellow_dlg}/etc/pacman.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"

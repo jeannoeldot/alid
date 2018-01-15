@@ -17,11 +17,7 @@
         local titre="PROCESSUS DE BOOT : INSTALLATION DE rEFInd"
         messages="\n"
         # Achitecture du PC
-        if [[ $ARCHI == i686 ]]; then
-            ARCHI_REFIND="ia32"
-        else
-            ARCHI_REFIND="x64"
-        fi
+        ARCHI_REFIND="x64"
         #
         # Determine le nom du rep d'installation de arch
         if [[ -d /boot/efi/EFI ]]; then
