@@ -1338,16 +1338,6 @@ OU
 $ maj-startkde
 
 
-17) THEME Breeze et GTK 3.20
-================================
- !!! Si breeze-gtk ne donne pas un affichage correct dans Firefox, ... :
- # pacman -Syu gnome-breeze-git
- 
- ==> Configuration du Système -> Apparence des applications -> Style des applications GNOME(GTK) :
- ==> Thème GTK2 : Breeze-gtk
- ==> Thème GTK3 : Breeze-gtk
-
-
 40) INSTALLATION DE jre8-openjdk
 ================================
 VOIR : 00-INSTALLATION-JAVA-JRE7-ET-JRE8.TXT dans ~/09-Documentation/
@@ -1650,6 +1640,16 @@ OU
 ====================================================================================================
 ANCIEN
 ==========================================================
+
+17) THEME Breeze et GTK 3.20
+================================
+ !!! Si breeze-gtk ne donne pas un affichage correct dans Firefox, ... :
+ # pacman -Syu gnome-breeze-git
+ 
+ ==> Configuration du Système -> Apparence des applications -> Style des applications GNOME(GTK) :
+ ==> Thème GTK2 : Breeze-gtk
+ ==> Thème GTK3 : Breeze-gtk
+
 
 # pacman -Syu firefox-extension-https-everywhere
 

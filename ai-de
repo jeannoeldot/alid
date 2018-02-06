@@ -274,6 +274,7 @@ source $(pwd)/ai-commons
             messages+="Copie des fichiers utiles ${Byellow_dlg}00-CMD-....TXT${Reset_dlg} :\n"
             messages+="- 00-CMD-CUSTOMIZE-ARCH.TXT\n"
             messages+="- 00-CMD-INSTALLATION-LINUX-CK.TXT\n"
+            messages+="- 00-CMD-INSTALLATION-LINUX-LTS.TXT\n"
             print_dialog_msgbox_h "${titre}" "${messages}" "Continuer" 26
             #
             printf '%s\n' "${BGreen}Copie des fichiers de configuration de ${BYellow}bash${BGreen} dans le répertoire /home de ${BYellow}${USERNAME}${BGreen}...${Reset}"
@@ -305,6 +306,7 @@ source $(pwd)/ai-commons
             printf '%s\n' "${BGreen}Copie des fichiers utiles ${BYellow}00-CMD-....TXT${BGreen} dans le répertoire /home de ${BYellow}${USERNAME}${BGreen}...${Reset}"
             cp -v ai-fconfig/00-CMD-CUSTOMIZE-ARCH.TXT /home/${USERNAME}/00-CMD-CUSTOMIZE-ARCH.TXT
             cp -v ai-fconfig/00-CMD-INSTALLATION-LINUX-CK.TXT /home/${USERNAME}/00-CMD-INSTALLATION-LINUX-CK.TXT
+            cp -v ai-fconfig/00-CMD-INSTALLATION-LINUX-LTS.TXT /home/${USERNAME}/00-CMD-INSTALLATION-LINUX-LTS.TXT
             pause_function
         } #}}}
         #CONFIGURE SUDO TIMESTAMP_TIMEOUT {{{

@@ -1,0 +1,194 @@
+INSTALLATION DE LINUX-LTS
+=========================
+
+$ pacman -Ss lts
+core/linux-lts 4.14.17-1
+    The Linux-lts kernel and modules
+core/linux-lts-docs 4.14.17-1
+    Kernel hackers manual - HTML documentation that comes with the Linux-lts kernel
+core/linux-lts-headers 4.14.17-1
+    Header files and scripts for building modules for Linux-lts kernel
+...
+extra/nvidia-lts 1:387.34-1
+    NVIDIA drivers for linux-lts
+
+$ pacman -Ss virtualbox
+community/virtualbox 5.2.6-2 [installé]
+    Powerful x86 virtualization for enterprise as well as home use
+community/virtualbox-guest-iso 5.2.7-1 [installé]
+    The official VirtualBox Guest Additions ISO image
+!!!
+community/virtualbox-host-dkms 5.2.6-2 [installé]
+    VirtualBox Host kernel modules sources
+repolocal/virtualbox-extension 5.2.6-1 [installé]
+    Oracle VM VirtualBox Extension Pack
+
+
+# pacman -Syu linux-lts linux-lts-headers nvidia-lts
+
+
+INSTALLATION DE EFISTUB
+=========================
+
+# ls /boot
+efi  
+initramfs-linux-fallback.img  initramfs-linux.img  vmlinuz-linux
+intel-ucode.img
+
+initramfs-linux-lts.img
+initramfs-linux-lts-fallback.img
+vmlinuz-linux-lts
+
+
+INSTALLATION DANS ARCH_1 / ARCH_1_LTS
+=====================================
+# ls /boot/efi/EFI/arch_1
+initramfs-arch_1-fallback.img
+initramfs-arch_1.img
+vmlinuz-arch_1.efi
+intel-ucode.img
+refind_linux.conf  
+
+!!! Créé par mon script ai-b
+# mkdir -p /boot/efi/EFI/arch_1_lts
+# cp -v /boot/initramfs-linux-lts-fallback.img /boot/efi/EFI/arch_1_lts/initramfs-arch_1_lts-fallback.img
+# cp -v /boot/initramfs-linux-lts.img /boot/efi/EFI/arch_1_lts/initramfs-arch_1_lts.img
+# cp -v /boot/vmlinuz-linux-lts /boot/efi/EFI/arch_1_lts/vmlinuz-arch_1_lts.efi
+# cp -v /boot/efi/EFI/arch_1/refind_linux.conf /boot/efi/EFI/arch_1_lts/
+# cp -v /boot/intel-ucode.img /boot/efi/EFI/arch_1_lts/
+
+# ls /boot/efi/EFI/arch_1_lts
+initramfs-arch_1_lts-fallback.img
+initramfs-arch_1_lts.img
+intel-ucode.img
+refind_linux.conf
+vmlinuz-arch_1_lts.efi
+
+
+MODIFICATIONS DE refind_linux.conf
+==================================
+# nano -w /boot/efi/EFI/arch_1_lts/refind_linux.conf
+
+==> DEVIENT :
+## This file should be present in the same directory as the EFISTUB kernel and initramfs files
+## More info at http://www.rodsbooks.com/refind/linux.html , http://www.rodsbooks.com/efi-bootloaders/efistub.html
+"Boot en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target quiet initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts.img"
+"Boot en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target quiet initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts.img"
+"Boot en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts.img"
+"Fallback en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts-fallback.img"
+"Fallback en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts-fallback.img"
+"Fallback en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts-fallback.img"
+
+
+INSTALLATION DANS ARCH_2 / ARCH_2_LTS
+=====================================
+
+
+ICONES
+========
+!!! Installées par mon script ai-b
+
+
+SERVICE EFISTUB_UPDATE
+=========================
+
+# ls /etc/systemd/system | grep efistub
+efistub_ck_update.path
+efistub_ck_update.service
+efistub_update.path
+efistub_update.service
+
+# cp -v /etc/systemd/system/efistub_update.path /etc/systemd/system/efistub_lts_update.path
+# cp -v /etc/systemd/system/efistub_update.service /etc/systemd/system/efistub_lts_update.service
+
+# ls /etc/systemd/system | grep efistub
+efistub_ck_update.path
+efistub_ck_update.service
+efistub_lts_update.path
+efistub_lts_update.service
+efistub_update.path
+efistub_update.service
+
+Modfifications de efistub_lts_update.path et de efistub_lts_update.service
+==========================================================================
+# nano -w /etc/systemd/system/efistub_lts_update.path
+
+[Unit]
+Description=Check update EFISTUB Linux-LTS
+
+[Path]
+##PathChanged=/boot/vmlinuz-linux-lts
+##PathChanged=/boot/initramfs-linux-lts.img
+PathChanged=/boot/initramfs-linux-lts-fallback.img
+
+Unit=efistub_lts_update.service
+
+[Install]
+WantedBy=multi-user.target
+
+
+Installation dans ARCH_1 / ARCH_1_LTS
+=====================================
+# nano -w /etc/systemd/system/efistub_lts_update.service
+
+[Unit]
+Description=Copy EFISTUB Linux-LTS to UEFISYS Partition
+# Requires=boot-efi.mount
+
+[Service]
+Type=oneshot
+
+ExecStart=/usr/bin/cp -f /boot/vmlinuz-linux-lts /boot/efi/EFI/arch_1_lts/vmlinuz-arch_1_lts.efi
+ExecStart=/usr/bin/cp -f /boot/initramfs-linux-lts.img /boot/efi/EFI/arch_1_lts/initramfs-arch_1_lts.img
+ExecStart=/usr/bin/cp -f /boot/initramfs-linux-lts-fallback.img /boot/efi/EFI/arch_1_lts/initramfs-arch_1_lts-fallback.img
+
+
+Installation dans ARCH_2 / ARCH_2_LTS
+=====================================
+
+
+
+
+Activation EFISTUB_LTS_UPDATE.PATH
+===================================
+# systemctl enable efistub_lts_update.path
+# systemctl start efistub_lts_update.path
+
+# systemctl --no-pager status efistub_lts_update.path
+
+
+SERVICE INTEL_UCODE_UPDATE
+==========================
+
+Déja créés. Voir :
+~/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.path
+~/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.service
+
+Voir : 00-Cmd-Customize-Arch.TXT -> 21) MICROCODE
+
+SI intel_ucode_update.path ACTIF !!!
+====================================
+# systemctl stop intel_ucode_update.path
+
+# nano /etc/systemd/system/intel_ucode_update.service
+Rajouter ligne:
+ExecStart=/usr/bin/cp -f /boot/intel-ucode.img /boot/efi/EFI/arch_1_lts/intel-ucode.img
+
+# systemctl daemon-reload
+# systemctl --no-pager status intel_ucode_update.path
+
+
+REBOOTER
+=========
+
+VÉRIFICATIONS
+=============
+# systemctl list-units | grep efistub
+efistub_lts_update.path   loaded active waiting
+    Check update EFISTUB Linux-LTS
+efistub_ck_update.path    loaded active waiting
+    Check update EFISTUB Linux-CK
+efistub_update.path       loaded active waiting
+    Check update EFISTUB Linux-ARCH
+
+# systemctl list-units | grep intel_ucode
