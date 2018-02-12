@@ -358,13 +358,30 @@ $ sudo sh -c "echo 'w /sys/devices/system/cpu/cpufreq/ondemand/up_threshold - - 
 
 7) BLACKLIST
 =============
-# lsmod | grep pcspkr
+$ lsmod | grep pcspkr
  7-0) pcspkr : création de /etc/modprobe.d/pcspkr_blacklist.conf
  ===============================================================
 $ sudo sh -c "echo '# Do not load the 'pcspkr' module on boot.' > /etc/modprobe.d/pcspkr_blacklist.conf"
 $ sudo sh -c "echo 'blacklist pcspkr' >> /etc/modprobe.d/pcspkr_blacklist.conf"
 
+7-1) Bruit audible lors de l'activation/désactivation de la carte son
+=====================================================================
+https://wiki.archlinux.org/index.php/Advanced_Linux_Sound_Architecture/Troubleshooting#Pops_when_starting_and_stopping_playback
+$ lsmod | grep snd_hda_intel
+$ modinfo snd_hda_intel
+...
+parm:           power_save:Automatic power-saving timeout (in second, 0 = disable). (xint)
+parm:           power_save_controller:Reset controller in power save mode. (bool)
+...
 
+ 7-1) snd_hda_intel : création de /etc/modprobe.d/snd_hda_intel.conf
+ ===================================================================
+$ sudo sh -c "echo '# disable the power saving mode.' > /etc/modprobe.d/snd_hda_intel.conf"
+$ sudo sh -c "echo 'options snd_hda_intel power_save=0 power_save_controller=N' >> /etc/modprobe.d/snd_hda_intel.conf"
+
+
+ 7-4) wmi
+ ========
 $ lsmod | grep wmi
 eeepc_wmi               4616  0 
 asus_wmi               16306  1 eeepc_wmi
@@ -374,7 +391,7 @@ mxm_wmi                 1467  0
 wmi                     8347  2 mxm_wmi,asus_wmi
 video                  11380  1 asus_wmi
 
- 7-1) eeepc_wmi , asus-wmi , rfkill , sparse-keymap , mxm_wmi , video , wmi : 
+ 7-4-1) eeepc_wmi , asus-wmi , rfkill , sparse-keymap , mxm_wmi , video , wmi : 
  création de /etc/modprobe.d/asus_wmi_blacklist.conf
  =============================================================================
 $ sudo sh -c "echo '# Do not load ACPI-WMI Mapping Driver on boot.' > /etc/modprobe.d/asus_wmi_blacklist.conf"
@@ -386,15 +403,15 @@ $ sudo sh -c "echo 'blacklist mxm_wmi' >> /etc/modprobe.d/asus_wmi_blacklist.con
 $ sudo sh -c "echo 'blacklist video' >> /etc/modprobe.d/asus_wmi_blacklist.conf"
 $ sudo sh -c "echo 'blacklist wmi' >> /etc/modprobe.d/asus_wmi_blacklist.conf"
 
-!!! ANCIENNE C-M P5Q-PRO
+7-5)!!! ANCIENNE C-M P5Q-PRO
 # lsmod | grep intel
- 7-2) intel_agp et intel_gtt : création de /etc/modprobe.d/intel_agp_blacklist.conf
+ 7-5-2) intel_agp et intel_gtt : création de /etc/modprobe.d/intel_agp_blacklist.conf
  ===================================================================================
 $ sudo sh -c "echo '# Do not load the intel_agp and intel_gtt module on boot.' > /etc/modprobe.d/intel_agp_blacklist.conf"
 $ sudo sh -c "echo 'blacklist intel_agp' >> /etc/modprobe.d/intel_agp_blacklist.conf"
 $ sudo sh -c "echo 'blacklist intel_gtt' >> /etc/modprobe.d/intel_agp_blacklist.conf"
 
- 7-3) kvm et kvm_intel : création de /etc/modprobe.d/kvm_intel_blacklist.conf
+ 7-5-3) kvm et kvm_intel : création de /etc/modprobe.d/kvm_intel_blacklist.conf
  =============================================================================
 $ sudo sh -c "echo '# Do not load the kvm_intel and kvm module on boot.' > /etc/modprobe.d/kvm_intel_blacklist.conf"
 $ sudo sh -c "echo 'blacklist kvm_intel' >> /etc/modprobe.d/kvm_intel_blacklist.conf"

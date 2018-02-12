@@ -519,9 +519,10 @@ source $(pwd)/ai-commons
         pause_function
         titre="ALSA : ACTIVATION DES CANAUX"
         messages="\n"
-        messages+="${BRcyan_dlg}!!!${Reset_dlg} Activer les canaux PCM, Master et Front.\n"
+        messages+="${BRcyan_dlg}!!!${Reset_dlg} Activer les canaux PCM, Master, Front et Line.\n"
         messages+="    Touche [M] : MM --> 00\n"
         messages+="${BRcyan_dlg}!!!${Reset_dlg} Régler le volume.\n"
+        messages+="${BRcyan_dlg}!!! Line${Reset_dlg} Valeur = 1.\n"
         print_dialog_yesno "${titre}" "${messages}" "Activer" "Continuer"
         retour=$?
         if (( retour == 0 )); then
