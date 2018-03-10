@@ -451,10 +451,11 @@
         messages=" \n"
         until (( retour == 0 )) || (( retour == 1 ));
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 3)
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 4)
             options=("blender" "(Création graphique 3D)" OFF
-                    "gimp" "(Programme de Manipulation d'Image)" ON
+                    "gimp" "(Programme de Manipulation d'Image)" OFF
                     "inkscape" "(Éditeur de graphiques vectoriels)" ON
+                    "krita" "(Modifier et peindre des images)" ON
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
@@ -489,6 +490,12 @@
                     package_install "inkscape"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gvfs pstoedit python2-lxml python2-numpy python2-scour texlive-core${BGreen}...${Reset}"
                     package_install "gvfs pstoedit python2-lxml python2-numpy python2-scour texlive-core"
+                    ;;
+                "krita")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}krita${BGreen}...${Reset}"
+                    package_install "krita"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}ffmpeg krita-plugin-gmic opencolorio poppler-qt5${BGreen}...${Reset}"
+                    package_install "ffmpeg krita-plugin-gmic opencolorio poppler-qt5"
             esac
         done
         if [[ $REPLY != "" ]]; then
@@ -654,8 +661,8 @@
         do
             case $choix in
                 "vlc")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}vlc qt4 flac libbluray libdvdcss libcdio opus vcdimager${BGreen}...${Reset}"
-                    package_install "vlc qt4 flac libbluray libdvdcss libcdio opus vcdimager"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}vlc flac libbluray libdvdcss libcdio opus vcdimager${BGreen}...${Reset}"
+                    package_install "vlc flac libbluray libdvdcss libcdio opus vcdimager"
                     if is_package_installed "nvidia" ; then
                         printf '%s\n' "${BGreen}Installation de ${BYellow}libva-vdpau-driver${BGreen}...${Reset}"
                         package_install "libva-vdpau-driver"

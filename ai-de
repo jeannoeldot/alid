@@ -724,10 +724,10 @@ source $(pwd)/ai-commons
         print_dialog_yesno_no "${titre}" "${messages}" "Installer" "Continuer"
         retour=$?
         if (( retour == 0 )); then
-            printf '%s\n' "${BGreen}Installation de ${BYellow}cups ghostscript gsfonts${BGreen}...${Reset}"
-            package_install "cups ghostscript gsfonts"
-            printf '%s\n' "${BGreen}Installation de ${BYellow}gutenprint foomatic-db-gutenprint-ppds foomatic-db foomatic-db-engine foomatic-db-nonfree foomatic-db-ppds cups-pdf${BGreen}...${Reset}"
-            package_install "gutenprint foomatic-db-gutenprint-ppds foomatic-db foomatic-db-engine foomatic-db-nonfree foomatic-db-ppds cups-pdf"
+            printf '%s\n' "${BGreen}Installation de ${BYellow}cups cups-filters ghostscript gsfonts${BGreen}...${Reset}"
+            package_install "cups cups-filters ghostscript gsfonts"
+            printf '%s\n' "${BGreen}Installation de ${BYellow}gutenprint foomatic-db-gutenprint-ppds foomatic-db foomatic-db-engine foomatic-db-nonfree foomatic-db-ppds foomatic-db-nonfree-ppds cups-pdf${BGreen}...${Reset}"
+            package_install "gutenprint foomatic-db-gutenprint-ppds foomatic-db foomatic-db-engine foomatic-db-nonfree foomatic-db-ppds foomatic-db-nonfree-ppds cups-pdf"
             printf '%s\n' "${BGreen}Activation de ${BYellow}org.cups.cupsd.service${BGreen}...${Reset}"
             systemctl enable org.cups.cupsd.service
             local status=$(systemctl status avahi-daemon.service | awk '/Active/ {print $2}')
