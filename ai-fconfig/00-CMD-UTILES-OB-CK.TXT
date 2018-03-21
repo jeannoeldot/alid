@@ -134,38 +134,11 @@ $ psd preview ou	 $ psd parse
 $ cat ~/.mozilla/firefox/profiles.ini
 
 
-MAJ firefox-extension-https-everywhere
-======================================
-
-!!! EN USER
-============
-!!! VIDER CACHE
-!!! ARRETER FIREFOX
-
-$ profile-cleaner f
-
-$ systemctl --user stop psd.service
-
-!!! EN ROOT
-===========
-# cd
-# maj
-OU
-# pacman -Syu
-
-!!! EN USER
-============
-
-$ systemctl --user start psd.service
-
-$ systemctl --no-pager --user status psd.service
-$ systemctl --no-pager --user status psd-resync.service
-
-$ psd preview ou	 $ psd parse
-
-
-1) MAJ flashplugin
+MAJ FIREFOX-ADDONS
 ==================
+- firefox-extension-https-everywhere
+- firefox-adblock-plus
+- flashplugin
 
 !!! EN USER
 ============
@@ -179,6 +152,8 @@ $ systemctl --user stop psd.service
 !!! Vérifier $HOME/.mozilla/firefox/profiles.ini
 $ cat ~/.mozilla/firefox/profiles.ini
 $ rm -i ~/.mozilla/firefox/idy48li7.default/pluginreg.dat
+$ rm -i ~/.mozilla/firefox/idy48li7.default/extensions.json
+
 
 !!! EN ROOT
 ===========
@@ -195,41 +170,9 @@ $ systemctl --user start psd.service
 $ systemctl --no-pager --user status psd.service
 $ systemctl --no-pager --user status psd-resync.service
 
-$ psd preview
+$ psd preview ou	 $ psd parse
 
  
-1 ERE MAJ PSD.SERVICE 5.75-1 -> 6.03-1
-======================================
-CREEER FICHIER $HOME/.config/psd/psd.conf
-==========================================
-$ sudo systemctl stop psd.service psd-resync.service
-$ sudo systemctl disable psd.service psd-resync.service
-
-$ systemctl --user start psd.service
-$ systemctl --user stop psd.service
-
-$ geany $HOME/.config/psd/psd.conf &
-19  #USE_OVERLAYFS="no"   ==>  A LAISSER
-52  #BROWSERS=""          ==>  BROWSERS="firefox"
-63  #VOLATILE="/tmp"      ==>  A LAISSER
-71  #USE_BACKUPS="yes"    ==>  A LAISSER
-
-$ rm -i $HOME/.config/psd/psd.conf~
-
-$ profile-cleaner f
-
-$ systemctl --user start psd.service
-$ systemctl --user enable psd.service
-
-$ systemctl --no-pager --user status psd.service
-$ systemctl --no-pager --user status psd-resync.service
-
-$ psd preview ou	 $ psd parse
-$ cat ~/.mozilla/firefox/profiles.ini
-
-$ sudo rm -i /etc/psd.conf.pacsave
-
-
 MAJ YAOURT ET /etc/yaourtrc.pacnew
 ==================================
 !!! EN ROOT
@@ -311,9 +254,45 @@ $ coredumpctl
 
 
 
-
+==========================================================================
 ANCIENS
 ===========
+
+1 ERE MAJ PSD.SERVICE 5.75-1 -> 6.03-1
+======================================
+CREEER FICHIER $HOME/.config/psd/psd.conf
+==========================================
+$ sudo systemctl stop psd.service psd-resync.service
+$ sudo systemctl disable psd.service psd-resync.service
+
+$ systemctl --user start psd.service
+$ systemctl --user stop psd.service
+
+$ geany $HOME/.config/psd/psd.conf &
+19  #USE_OVERLAYFS="no"   ==>  A LAISSER
+52  #BROWSERS=""          ==>  BROWSERS="firefox"
+63  #VOLATILE="/tmp"      ==>  A LAISSER
+71  #USE_BACKUPS="yes"    ==>  A LAISSER
+
+$ rm -i $HOME/.config/psd/psd.conf~
+
+$ profile-cleaner f
+
+$ systemctl --user start psd.service
+$ systemctl --user enable psd.service
+
+$ systemctl --no-pager --user status psd.service
+$ systemctl --no-pager --user status psd-resync.service
+
+$ psd preview ou	 $ psd parse
+$ cat ~/.mozilla/firefox/profiles.ini
+
+$ sudo rm -i /etc/psd.conf.pacsave
+
+
+
+
+
 OU MAJ freshplayerplugin / pepper-flash
 SI MAJ freshplayerplugin / pepper-flash
 ------------------------------------------------
