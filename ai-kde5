@@ -106,6 +106,10 @@
         #
         printf '%s\n' "${BGreen}Configuration de ${BYellow}/etc/environment${BGreen}...${Reset}"
         echo "LANG=$LANGUAGE.utf8" >> /etc/environment
+        # https://wiki.archlinux.org/index.php/qt#Disable.2FChange_Qt_journal_logging_behaviour
+        # Disable/Change Qt journal logging behaviour
+        echo "# Completely disable Qt journal logging" >> /etc/environment
+        echo "QT_LOGGING_RULES='*=false'" >> /etc/environment
         # Installe et Enable sddm.service
         printf '%s\n' "${BGreen}Installation de ${BYellow}sddm sddm-kcm${BGreen}...${Reset}"
         package_install "sddm sddm-kcm"

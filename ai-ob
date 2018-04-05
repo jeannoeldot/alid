@@ -36,8 +36,8 @@
         printf '%s\n' "${BGreen}Installation de ${BYellow}leafpad, epdfview et imagemagick${BGreen}...${Reset}"
         package_install "leafpad epdfview imagemagick"
         #
-        printf '%s\n' "${BGreen}Installation de ${BYellow}tint2, lxterminal-gtk3 et terminator${BGreen}...${Reset}"
-        package_install "tint2 orage lxterminal-gtk3 terminator perl-file-mimeinfo"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}tint2, lxterminal et terminator${BGreen}...${Reset}"
+        package_install "tint2 orage lxterminal terminator perl-file-mimeinfo"
         #
         printf '%s\n' "${BGreen}Installation de ${BYellow}viewnior et gmrun${BGreen}...${Reset}"
         package_install "viewnior gmrun"
@@ -245,7 +245,7 @@
             #
             chown -R ${USERNAME}:users /home/${USERNAME}
             printf '%s\n' "${BGreen}Installation de thèmes ${BYellow}GTK 3/2${BGreen}...${Reset}"
-            package_install "gtk-update-icon-cache gnome-themes-standard gtk-engines"
+            package_install "gtk-update-icon-cache gnome-themes-extra gtk-engines"
             package_install "arc-gtk-theme gtk-engine-murrine"
             printf '%s\n' "${BGreen}Installation d'${BYellow}Icones${BGreen}...${Reset}"
             package_install "arc-icon-theme elementary-icon-theme"
