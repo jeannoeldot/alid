@@ -336,6 +336,19 @@ source $(pwd)/ai-commons
     #}}}
     # ai-b-bios-ic ou ai-b-uefi-ic
     #}}}
+    #ENTROPY {{{
+    configure_entropy() {
+        local messages=""
+        local titre="ACTIVATION DE L'ENTROPIE AVEC HAVEGED"
+        messages="\n"
+        messages+="Activation de l'entropie avec ${BRwhite_dlg}haveged${Reset_dlg}\n\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+        # Enable haveged.service
+        printf '%s\n' "${BGreen}Activation du service ${BYellow}haveged.service${BGreen}...${Reset}"
+        systemctl enable haveged.service
+        pause_function
+    }
+    #}}}
     #NETWORK {{{
     configure_network() {
         local messages=""
@@ -456,6 +469,7 @@ source $(pwd)/ai-commons
     install_bootloader
     configure_bootloader
     #
+    configure_entropy
     configure_network
     set_root_password
     # INSCRIT CHOIX CLAVIER DANS variables_pour_ai_de.txt pour ai-de

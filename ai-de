@@ -469,10 +469,10 @@ source $(pwd)/ai-commons
         titre="INSTALLATION DES OUTILS DE (DÉ)COMPRESSION"
         messages="\n"
         messages+="Installation de divers outils de (dé)compression :\n"
-        messages+="zip unzip unrar p7zip\n"
+        messages+="zip unzip unrar p7zip unarchiver\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de ${BYellow}zip unzip unrar p7zip${BGreen}...${Reset}"
-        package_install "zip unzip unrar p7zip"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}zip unzip unrar p7zip unarchiver${BGreen}...${Reset}"
+        package_install "zip unzip unrar p7zip unarchiver"
 #        aur_package_install "rar"
         pause_function
         #
@@ -724,8 +724,8 @@ source $(pwd)/ai-commons
         print_dialog_yesno_no "${titre}" "${messages}" "Installer" "Continuer"
         retour=$?
         if (( retour == 0 )); then
-            printf '%s\n' "${BGreen}Installation de ${BYellow}cups cups-filters ghostscript gsfonts${BGreen}...${Reset}"
-            package_install "cups cups-filters ghostscript gsfonts"
+            printf '%s\n' "${BGreen}Installation de ${BYellow}cups ghostscript gsfonts${BGreen}...${Reset}"
+            package_install "cups ghostscript gsfonts"
             printf '%s\n' "${BGreen}Installation de ${BYellow}gutenprint foomatic-db-gutenprint-ppds foomatic-db foomatic-db-engine foomatic-db-nonfree foomatic-db-ppds foomatic-db-nonfree-ppds cups-pdf${BGreen}...${Reset}"
             package_install "gutenprint foomatic-db-gutenprint-ppds foomatic-db foomatic-db-engine foomatic-db-nonfree foomatic-db-ppds foomatic-db-nonfree-ppds cups-pdf"
             printf '%s\n' "${BGreen}Activation de ${BYellow}org.cups.cupsd.service${BGreen}...${Reset}"

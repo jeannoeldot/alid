@@ -11,3 +11,5 @@
 # https://www.fdn.fr/actions/dns/
 nameserver 80.67.169.12
 nameserver 80.67.169.40
+# https://1.1.1.1
+nameserver 1.0.0.1
