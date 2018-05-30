@@ -517,7 +517,7 @@
                     "firefox" "(Navigateur)" ON
                     "transmission" "(Téléchargement Torrent)" ON
                     "kget" "(Gestionnaire de téléchargements)" OFF
-7                    "thunderbird" "(Lecteur de Mail/News)" OFF
+                    "thunderbird" "(Lecteur de Mail/News)" OFF
                     "konversation" "(Client IRC)" OFF
                     "quassel" "(Client IRC)" OFF
                     )
