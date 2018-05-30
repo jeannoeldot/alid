@@ -103,7 +103,6 @@ source $(pwd)/ai-commons
         local titre="AJOUT REPOS À «/etc/pacman.conf»"
         messages="\n"
         messages+="Ajout de ${BRwhite_dlg}Multilib${Reset_dlg}.\n"
-        messages+="Ajout de ${BRwhite_dlg}archlinuxfr${Reset_dlg}.\n"
         messages+="Ajout de ${BRwhite_dlg}Xyne${Reset_dlg}.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         # ENABLE MULTILIB REPOSITORY
@@ -115,10 +114,6 @@ source $(pwd)/ai-commons
             multilib=$(( $multilib + 1 ))
             sed -i "${multilib}s/^#//" /etc/pacman.conf
         fi
-        # archlinuxf
-        echo -e '\n[archlinuxfr]' >> /etc/pacman.conf
-        echo -e 'SigLevel = Never' >> /etc/pacman.conf
-        echo -e 'Server = http://repo.archlinux.fr/$arch' >> /etc/pacman.conf
         # Xyne : http://xyne.archlinux.ca/projects/
         echo -e '\n[xyne-x86_64]' >> /etc/pacman.conf
         echo -e 'SigLevel = Required' >> /etc/pacman.conf
@@ -327,60 +322,6 @@ source $(pwd)/ai-commons
         chown -R ${USERNAME}:users /home/${USERNAME}
     }
     #}}}
-    # 10 AUR HELPER {{{
-    choose_aurhelper() {
-        local retour=9
-        local messages=""
-        local titre=""
-        titre="INSTALLATION DE «YAOURT»"
-        messages="\n"
-        messages+="Yaourt (Yet AnOther User Repository Tool) est un programme en ligne de commande qui interface les fonctions de ${Byellow_dlg}pacman${Reset_dlg} et ${Byellow_dlg}makepkg${Reset_dlg} pour la gestion des paquets.\n\n"
-        messages+="${BRred_dlg}!!!${Reset_dlg} Yaourt n'est pas officiellement supporté par les développeurs d'Arch.\n"
-        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-        printf '%s\n' "${BGreen}Installation de ${BYellow}base-devel namcap yaourt git subversion${BGreen}...${Reset}"
-        package_install "base-devel namcap yaourt git subversion"
-        pause_function
-        if ! is_package_installed "yaourt" ; then
-            pacman -Syyuu
-            package_install "base-devel namcap yaourt git subversion"
-            pause_function
-            if ! is_package_installed "yaourt" ; then
-                messages="\n"
-                messages+="${BRred_dlg}/!\ ERREUR${Reset_dlg}\n"
-                messages+="    Installation de ${Byellow_dlg}Yaourt${Reset_dlg} impossible.\n"
-                messages+="    ARRET immediat.\n"
-                print_dialog_msgbox "${titre}" "${messages}" "OK"
-                exit 1
-            fi
-        fi
-        # Modif /etc/yaourtrc
-        titre="CONFIGURATION DE «YAOURT»"
-        messages="\n"
-        messages+="Option #VISUAL : VISUAL=\"nano\"\n"
-        local taille_tmp_en_ram=$(df -h -BM | awk '/\/tmp/ {print $2}' | sed -e "s/M//")
-        if (( taille_tmp_en_ram < 2000 )); then
-            messages+="Option #TMPDIR : TMPDIR=\"/home/${USERNAME}/yaourt_tmp\"\n"
-        fi
-        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-        # Modif TMPDIR si taille /tmp < 2000M
-        if (( taille_tmp_en_ram < 2000 )); then
-            mkdir -p /home/${USERNAME}/yaourt_tmp
-            chown -R ${USERNAME}:users /home/${USERNAME}/yaourt_tmp
-            sed -i "/^#TMPDIR=/c\TMPDIR=\"/home/${USERNAME}/yaourt_tmp\"" /etc/yaourtrc
-        fi
-        # Modif VISUA="nano" par défaut
-        sed -i "/^#VISUAL=/c\VISUAL=\"nano\"" /etc/yaourtrc
-        #
-        messages="\n"
-        messages+="Visualiser/Éditer le fichier ${Byellow_dlg}/etc/yaourtrc${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
-        print_dialog_yesno "${titre}" "${messages}" "Éditer" "Continuer"
-        retour=$?
-        if (( retour == 0 )); then
-            ${EDITOR} /etc/yaourtrc
-        fi
-        AUR_HELPER="yaourt"
-    }
-    #}}}
     # 11 BASIC SETUP {{{
     install_basic_setup() {
         local retour=9
@@ -473,7 +414,6 @@ source $(pwd)/ai-commons
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
         printf '%s\n' "${BGreen}Installation de ${BYellow}zip unzip unrar p7zip unarchiver${BGreen}...${Reset}"
         package_install "zip unzip unrar p7zip unarchiver"
-#        aur_package_install "rar"
         pause_function
         #
         titre="INSTALLATION DE «AVAHI»"
@@ -757,9 +697,8 @@ source $(pwd)/ai-commons
         messages=" \n"
         until (( retour == 0 )) || (( retour == 1 ));
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 18 72 4)
-            options=("ttf-google-fonts-git" "(Polices TrueType de Google) - (AUR)" OFF
-                    "ttf-inconsolata" "(Police Monospace)" OFF
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 18 72 34)
+            options=("ttf-inconsolata" "(Police Monospace)" OFF
                     "noto-fonts" "(Polices TTF Google Noto)" OFF
                     "noto-fonts-emoji" "(Polices TTF emoji Google Noto)" OFF
                     )
@@ -774,10 +713,6 @@ source $(pwd)/ai-commons
         for choix in $REPLY
         do
             case $choix in
-                "ttf-google-fonts-git")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}ttf-google-fonts-git${BGreen}...${Reset}"
-                    aur_package_install "ttf-google-fonts-git"
-                    ;;
                 "ttf-inconsolata")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}ttf-inconsolata${BGreen}...${Reset}"
                     package_install "ttf-inconsolata"
@@ -887,7 +822,8 @@ source $(pwd)/ai-commons
         print_dialog_msgbox "${titre}" "${messages}" "Nettoyer"
         printf '%s\n' "${BGreen}Nettoyage du répertoire ${BYellow}/var/cache/pacman/pkg${BGreen}...${Reset}"
         pacman -Sc
-        pacman-optimize
+# SUPPRIMÉ SUITE MAJ PACMAN 5.1.0
+#        pacman-optimize
         if is_package_installed "pkgfile" ; then
             printf '%s\n' "${BGreen}Génération ou mise à jour du cache de ${BYellow}pkgfile${BGreen}...${Reset}"
             pkgfile --update
@@ -951,7 +887,6 @@ source $(pwd)/ai-commons
     language_selector
     configure_sudo
     select_user
-    choose_aurhelper
     install_basic_setup
     install_xorg
     configure_font_presets

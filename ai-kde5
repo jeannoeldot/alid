@@ -261,8 +261,8 @@
                     package_install "grsync"
                     ;;
                 "htop")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}htop iotop lshw hwinfo dmidecode ncdu dfc expac pkgfile i7z${BGreen}...${Reset}"
-                    package_install "htop iotop lshw hwinfo dmidecode ncdu dfc expac pkgfile i7z"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}htop iotop lshw hwinfo dmidecode ncdu dfc expac pkgfile pacman-contrib i7z${BGreen}...${Reset}"
+                    package_install "htop iotop lshw hwinfo dmidecode ncdu dfc expac pkgfile pacman-contrib i7z"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}lsof strace${BGreen}...${Reset}"
                     package_install "lsof strace"
                     ;;
@@ -484,7 +484,7 @@
                     package_install "gimp libopenraw"
                     pacman -D --asdeps libopenraw
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gimp-plugin${BGreen}...${Reset}"
-                    package_install "potrace gimp-dbp gimp-plugin-fblur gimp-plugin-gmic gimp-plugin-lqr gimp-plugin-wavelet-decompose gimp-plugin-wavelet-denoise gimp-refocus gimp-ufraw"
+                    package_install "potrace gimp-dbp gimp-plugin-fblur gimp-plugin-gmic gimp-plugin-lqr gimp-plugin-wavelet-denoise gimp-refocus gimp-nufraw"
                     ;;
                 "inkscape")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}inkscape${BGreen}...${Reset}"
@@ -512,13 +512,12 @@
         messages=" \n"
         until (( retour == 0 )) || (( retour == 1 ));
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 8)
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 7)
             options=("chromium" "(Navigateur)" OFF
                     "firefox" "(Navigateur)" ON
                     "transmission" "(Téléchargement Torrent)" ON
                     "kget" "(Gestionnaire de téléchargements)" OFF
-                    "dropbox" "(Partage de fichiers) - (AUR)" OFF
-                    "thunderbird" "(Lecteur de Mail/News)" OFF
+7                    "thunderbird" "(Lecteur de Mail/News)" OFF
                     "konversation" "(Client IRC)" OFF
                     "quassel" "(Client IRC)" OFF
                     )
@@ -552,12 +551,6 @@
                 "kget")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}kget${BGreen}...${Reset}"
                     package_install "kget"
-                    ;;
-                "dropbox")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}dropbox${BGreen}...${Reset}"
-                    aur_package_install "dropbox"
-                    printf '%s\n' "${BGreen}Activation de ${BYellow}dropbox.service${BGreen}...${Reset}"
-                    systemctl enable dropbox.service
                     ;;
                 "thunderbird")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}thunderbird${BGreen}...${Reset}"
