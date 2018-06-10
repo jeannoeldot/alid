@@ -1444,42 +1444,6 @@ SI 05-builds N'EXISTE PAS
 ==============================
 $ cd && mkdir ~/05-builds && mkdir ~/05-builds/0-chroot
 
-$ yaourt -Syua turbostat
-!!! => ERREUR
-
-https://wiki.archlinux.org/index.php/Profile-sync-daemon
-$ yaourt -Syua profile-sync-daemon
-
-CREEER FICHIER $HOME/.config/psd/psd.conf
-==========================================
-$ systemctl --user start psd.service
-$ systemctl --user stop psd.service
-
-$ geany $HOME/.config/psd/psd.conf &
-15  #USE_OVERLAYFS="no"   ==>  A LAISSER
-48  #BROWSERS=""          ==>  BROWSERS="firefox"
-56  #USE_BACKUPS="yes"    ==>  A LAISSER
-
-$ rm -i $HOME/.config/psd/psd.conf~
-
-$ profile-cleaner f
-
-$ systemctl --user start psd.service
-$ systemctl --user enable psd.service
-
-$ systemctl --no-pager --user status psd.service
-$ systemctl --no-pager --user status psd-resync.service
-
-$ psd preview ou psd parse
-$ cat ~/.mozilla/firefox/profiles.ini
-
-
-$ yaourt -Syua profile-cleaner
-$ profile-cleaner f
-
-$ yaourt -Syua sysbench
-
-
 REPOLOCAL
 =============
 $ mkdir ~/00-repolocal
@@ -1507,6 +1471,43 @@ $ cd && maj-repolocal
 $ sudo pacman -Syyu
 
 $ sudo pacman -Syu ghnomix-icon-theme
+
+!!! INSTALLATION DE profile-sync-daemon ET profile-cleaner
+----------------------------------------------------------
+$ sudo pacman -Syu profile-cleaner
+$ profile-cleaner f
+
+https://wiki.archlinux.org/index.php/Profile-sync-daemon
+$ sudo pacman -Syu profile-sync-daemon
+
+CREEER FICHIER $HOME/.config/psd/psd.conf
+==========================================
+$ systemctl --user start psd.service
+$ systemctl --user stop psd.service
+
+$ geany $HOME/.config/psd/psd.conf &
+15  #USE_OVERLAYFS="no"   ==>  A LAISSER
+48  #BROWSERS=""          ==>  BROWSERS="firefox"
+56  #USE_BACKUPS="yes"    ==>  A LAISSER
+
+$ rm -i $HOME/.config/psd/psd.conf~
+
+$ profile-cleaner f
+
+$ systemctl --user start psd.service
+$ systemctl --user enable psd.service
+
+$ systemctl --no-pager --user status psd.service
+$ systemctl --no-pager --user status psd-resync.service
+
+$ psd preview ou psd parse
+$ cat ~/.mozilla/firefox/profiles.ini
+
+
+!!! VOIR Intallation de sysbench
+--------------------------------
+$ sudo pacman -Syu sysbench
+
 
 !!! VOIR Intallation de mes paquets
 -----------------------------------
@@ -1573,7 +1574,7 @@ https://aur.archlinux.org/packages/compton/
 https://github.com/chjj/compton/blob/master/compton.sample.conf
 https://github.com/chjj/compton/blob/master/man/compton.1.asciidoc
 
-$ yaourt -Syua compton-git
+compton-git
 
 https://github.com/chjj/compton/blob/master/compton.sample.conf
 	==> Raw

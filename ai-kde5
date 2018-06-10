@@ -64,12 +64,11 @@
         messages+="PERSONNALISATION DE KDE5\n\n"
         until (( retour == 0 )) || (( retour == 1 ));
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 5)
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 4)
             options=("choqok" "(Client Twitter)" OFF
                     "digikam" "(Gestion de photos)" ON
                     "k3b" "(Gravure)" ON
                     "skrooge" "(Gestion de finances)" OFF
-                    "systemd-kcm" "(Module de commande de systemd)" ON
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
@@ -97,10 +96,6 @@
                 "skrooge")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}skrooge${BGreen}...${Reset}"
                     package_install "skrooge"
-                    ;;
-                "systemd-kcm")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}systemd-kcm${BGreen}...${Reset}"
-                    package_install "systemd-kcm"
             esac
         done
         #

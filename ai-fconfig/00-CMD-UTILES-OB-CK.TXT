@@ -14,15 +14,6 @@ SI PROBLÈME DE CLEFS
 # pacman -S archlinux-keyring
 
 
-MAJ PAQUETS AUR
-===============
-$ yaourt -Syua
-
-MAJ PAQUETS GIT AUR
-===================
-$ yaourt -Syua --devel
-
-
 SI PROBLÈME DE CLEF PUBLIQUE INCONNUE PGP
 =========================================
 ==> Vérification des signatures des fichiers sources grâce à gpg...
@@ -151,8 +142,8 @@ $ systemctl --user stop psd.service
 
 !!! Vérifier $HOME/.mozilla/firefox/profiles.ini
 $ cat ~/.mozilla/firefox/profiles.ini
-$ rm -i ~/.mozilla/firefox/idy48li7.default/pluginreg.dat
-$ rm -i ~/.mozilla/firefox/idy48li7.default/extensions.json
+$ rm -i ~/.mozilla/firefox/ljs58rbs.default/pluginreg.dat
+$ rm -i ~/.mozilla/firefox/ljs58rbs.default/extensions.json
 
 
 !!! EN ROOT
@@ -173,19 +164,6 @@ $ systemctl --no-pager --user status psd-resync.service
 $ psd preview ou	 $ psd parse
 
  
-MAJ YAOURT ET /etc/yaourtrc.pacnew
-==================================
-!!! EN ROOT
-# mv /etc/yaourtrc.pacnew /etc/yaourtrc
-# sed -i "/^#VISUAL=/c\VISUAL=\"nano\"" /etc/yaourtrc
-!!! SI DANS VBOX OU SI TMP < 2000 MB
-# df -h -BM | awk '/\/tmp/ {print $2}' | sed -e "s/M//"
-# sed -i "/^#TMPDIR=/c\TMPDIR=\"/home/${USERNAME}/yaourt_tmp\"" /etc/yaourtrc
-
-Vérifications :
----------------
-# cat /etc/yaourtrc
-
 MAJ SUDO ET /ETC/SUDOERS.PACNEW
 ===============================
 !!! EN ROOT
@@ -257,6 +235,30 @@ $ coredumpctl
 ==========================================================================
 ANCIENS
 ===========
+
+
+MAJ PAQUETS AUR
+===============
+$ yaourt -Syua
+
+MAJ PAQUETS GIT AUR
+===================
+$ yaourt -Syua --devel
+
+
+MAJ YAOURT ET /etc/yaourtrc.pacnew
+==================================
+!!! EN ROOT
+# mv /etc/yaourtrc.pacnew /etc/yaourtrc
+# sed -i "/^#VISUAL=/c\VISUAL=\"nano\"" /etc/yaourtrc
+!!! SI DANS VBOX OU SI TMP < 2000 MB
+# df -h -BM | awk '/\/tmp/ {print $2}' | sed -e "s/M//"
+# sed -i "/^#TMPDIR=/c\TMPDIR=\"/home/${USERNAME}/yaourt_tmp\"" /etc/yaourtrc
+
+Vérifications :
+---------------
+# cat /etc/yaourtrc
+
 
 1 ERE MAJ PSD.SERVICE 5.75-1 -> 6.03-1
 ======================================

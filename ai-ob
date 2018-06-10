@@ -290,8 +290,8 @@
         do
             case $choix in
                 "faenza")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}faenza-icon-theme faience-icon-theme${BGreen}...${Reset}"
-                    package_install "faenza-icon-theme faience-icon-theme"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}faenza-icon-theme${BGreen}...${Reset}"
+                    package_install "faenza-icon-theme"
                     ;;
                 "compton")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}compton${BGreen}...${Reset}"
