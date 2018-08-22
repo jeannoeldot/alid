@@ -23,11 +23,13 @@
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         # KDE5 BASE
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Base${BGreen}...${Reset}"
-        package_install "plasma kf5 kf5-aids kde-l10n-$LANGUAGE_KDE5"
+        package_install "plasma kf5 kf5-aids"
         package_install "konsole kwrite dolphin"
+        package_install "appmenu-gtk-module packagekit-qt5"
+        pacman -D --asdeps appmenu-gtk-module packagekit-qt5
         # KDE5 LOOK
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Look${BGreen}...${Reset}"
-        package_install "oxygen-icons oxygen-icons-svg"
+        package_install "oxygen-icons-svg"
         package_install "oxygen-gtk2 oxygen-kde4"
         package_install "qtcurve-gtk2 qtcurve-qt4 qtcurve-qt5 breeze-kde4"
         # GTK theme matching Breeze
