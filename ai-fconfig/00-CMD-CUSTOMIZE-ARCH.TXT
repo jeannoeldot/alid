@@ -320,22 +320,6 @@ $ sudo sh -c "echo '# Reduce swapping from RAM' > /etc/sysctl.d/swappiness.conf"
 $ sudo sh -c "echo 'vm.swappiness=1' >> /etc/sysctl.d/swappiness.conf"
 $ sudo sh -c "echo 'vm.vfs_cache_pressure=50' >> /etc/sysctl.d/swappiness.conf"
 
-5-2) BALOO : Création de /etc/sysctl.d/90-inotify.conf
-=============================================================================================
-https://wiki.archlinux.org/index.php/KDE#Inotify_folder_watch_limit
-
-$ sudo sh -c "echo '# Increase inotify watch limit' > /etc/sysctl.d/90-inotify.conf"
-$ sudo sh -c "echo 'fs.inotify.max_user_watches = 10000' >> /etc/sysctl.d/90-inotify.conf"
-
-OU SI
------
-$ journalctl -b | grep baloo
-févr. 18 17:08:22 arch1kde baloo_file[5918]: KDE Baloo Filewatch service reached the inotify folder watch limit. File changes may be ignored.
-
-$ sudo sh -c "echo 'fs.inotify.max_user_watches = 20000' >> /etc/sysctl.d/90-inotify.conf"
-
-$ cat /etc/sysctl.d/90-inotify.conf
-
 5-3) Magic System Request Key : Création de /etc/sysctl.d/99-sysrq.conf
 =============================================================================================
 https://wiki.archlinux.fr/Sysrq
@@ -1658,6 +1642,22 @@ OU
 ====================================================================================================
 ANCIEN
 ==========================================================
+
+5-2) BALOO : Création de /etc/sysctl.d/90-inotify.conf
+=============================================================================================
+https://wiki.archlinux.org/index.php/KDE#Inotify_folder_watch_limit
+
+$ sudo sh -c "echo '# Increase inotify watch limit' > /etc/sysctl.d/90-inotify.conf"
+$ sudo sh -c "echo 'fs.inotify.max_user_watches = 10000' >> /etc/sysctl.d/90-inotify.conf"
+
+OU SI
+-----
+$ journalctl -b | grep baloo
+févr. 18 17:08:22 arch1kde baloo_file[5918]: KDE Baloo Filewatch service reached the inotify folder watch limit. File changes may be ignored.
+
+$ sudo sh -c "echo 'fs.inotify.max_user_watches = 20000' >> /etc/sysctl.d/90-inotify.conf"
+
+$ cat /etc/sysctl.d/90-inotify.conf
 
 17) THEME Breeze et GTK 3.20
 ================================
