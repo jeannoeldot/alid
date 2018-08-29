@@ -576,7 +576,7 @@
         until (( retour == 0 )) || (( retour == 1 ));
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 6)
-            options=("amarok" "(Lecteur de musique pour KDE)" ON
+            options=("juk" "(Jukebox, taggeur et gestionnaire de musique)" ON
                     "clementine" "(Lecteur de musique)" ON
                     "soundkonverter" "(Convertisseur audio)" ON
                     "audacity" "(Manipulateur d'ondes audio numériques)" ON
@@ -594,9 +594,9 @@
         for choix in $REPLY
         do
             case $choix in
-                "amarok")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}amarok${BGreen}...${Reset}"
-                    package_install "amarok"
+                "juk")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}juk${BGreen}...${Reset}"
+                    package_install "juk"
                     ;;
                 "clementine")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}clementine${BGreen}...${Reset}"
