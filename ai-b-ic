@@ -349,6 +349,22 @@ source $(pwd)/ai-commons
         pause_function
     }
     #}}}
+    #IO SCHEDULER {{{
+    # SUITE MAJ LINUX 4.19
+    # https://wiki.archlinux.org/index.php/Improving_performance#Input/output_schedulers
+    configure_io_scheduler() {
+        local messages=""
+        local titre="CONFIGURATION DE L'IO SCHEDULER"
+        messages="\n"
+        messages+="Activation d'une regle ${BRwhite_dlg}UDEV${Reset_dlg}\n\n"
+        messages+="Option ${BRwhite_dlg}mq-deadline${Reset_dlg} pour SSD.\n"
+        messages+="Option ${BRwhite_dlg}bfq${Reset_dlg} pour HDD.\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+        printf '%s\n' "${BGreen}Creation du fichier ${BYellow}/etc/udev/rules.d/60-ioschedulers.rules${BGreen}...${Reset}"
+        cp -v ai-fconfig/etc-udev-rules.d-60-ioschedulers.rules /etc/udev/rules.d/60-ioschedulers.rules
+        pause_function
+    }
+    #}}}
     #NETWORK {{{
     configure_network() {
         local messages=""
@@ -470,6 +486,7 @@ source $(pwd)/ai-commons
     configure_bootloader
     #
     configure_entropy
+    configure_io_scheduler
     configure_network
     set_root_password
     # INSCRIT CHOIX CLAVIER DANS variables_pour_ai_de.txt pour ai-de

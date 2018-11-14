@@ -82,6 +82,8 @@ $ maj-mirrorlist
 
 $ maj-repolocal
 
+$ systemctl list-unit-files --state=enabled
+
 
 ARRÊTER L'ÉCONOMISEUR D'ÉCRAN
 =============================

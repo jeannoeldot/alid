@@ -1113,6 +1113,7 @@ $ psd preview  ou  psd parse
 $ cat ~/.mozilla/firefox/profiles.ini
 
 
+!!! alembic.git
 !!! openvdb-git
 !!! opensubdiv-git
 !!! opencollada-git
@@ -1131,7 +1132,6 @@ OU Versions Qt5
 # pacman -Syu jndqcbgrd-qt5
 
 # pacman -Syu pkgbrowser
-# pacman -Syu sysbench
 
 !!! VOIR
 # pacman -Syu wimlib
@@ -1199,9 +1199,6 @@ Affichage -> Panneau latéral -> X Marque-pages
 ----------------------
 Général
 -------
-Démarrage
- v Afficher votre page d’accueil
-
 Onglets
  v Ouvrir un nouvel onglet au lieu d’une nouvelle fenêtre
  v Lors de l’ouverture d’un lien dans un nouvel onglet, basculer vers celui-ci immédiatement
@@ -1212,6 +1209,11 @@ Téléchargements
 Navigation
  v Utiliser le défilement automatique
  v Utiliser le défilement doux
+
+Accueil
+-------
+Accueil
+ v Page d’accueil de Firefox
 
 about:config
 ------------
@@ -1224,7 +1226,7 @@ Marque-pages -> Importation et sauvegarde -> Importer HTML
 OU
 --
 Se synchroniser pour récupérer les bookmarks
-Edition -> Préférences -> Sync -> Se connecter
+Edition -> Préférences -> Compte Firefox -> Se connecter
 
  11-2) INSTALLATION DE "Dictionnaires français" DANS FIREFOX
  ===========================================================
@@ -1233,10 +1235,11 @@ Menu Outils -> Modules Complémentaires
 Onglet Catalogue
 En BAS : Découvrez davantage de modules
 En HAUT - A DROITE : Find add-ons : dictionnaires français
-==> French spelling dictionary by OR. Version 6.2
+                               OU : French spelling dictionary
+==> French spelling dictionary by OR. Version 6.3
     + Add to Firefox
 
-https://addons.mozilla.org/firefox/downloads/file/794277/dictionnaire_francais-6.2.xpi?src=dp-btn-primary
+https://addons.mozilla.org/firefox/downloads/file/950814/dictionnaire_francais-6.3.xpi?src=dp-btn-primary
 
  11-3) Passer outre à la signature des modules complémentaires
  =============================================================
@@ -1253,18 +1256,11 @@ VOIR : http://forum.pinguyos.com/Thread-Enable-Hardware-Acceleration-in-Firefox-
  ------------
  media.mediasource.enabled  => true
  media.mediasource.webm.enabled  => true
- media.mediasource.whitelist = TRUE
-
- 
+  
  Activer MSE et H.264
  --------------------
- media.mediasource.mp4.enabled = TRUE
- media.fragmented-mp4.enabled = TRUE
- media.fragmented-mp4.exposed  => true
- media.fragmented-mp4.ffmpeg.enabled  => true
- media.fragmented-mp4.gmp.enable  => true
- media.fragmented-mp4.use-blank-decoder = FALSE
- 
+ media.mediasource.mp4.enabled = true
+  
  !!! Hardware Acceleration ==> LAISSER A FALSE !!!
  -------------------------------------------------
  layers.acceleration.force-enabled = FALSE
@@ -1488,25 +1484,21 @@ $ psd preview ou psd parse
 $ cat ~/.mozilla/firefox/profiles.ini
 
 
-!!! VOIR Intallation de sysbench
---------------------------------
-$ sudo pacman -Syu sysbench
-
-
 !!! VOIR Intallation de mes paquets
 -----------------------------------
 jndqaligne5-qt5 0.5.0-1
 jndqcbgrd-qt5 0.1.7-2
 jndqrami-qt5 0.2.1-1
 
-!!! VOIR Intallation de blender-git (+ dep ovdb, osd, oc, oiio et osl)
-----------------------------------------------------------------------
+!!! VOIR Intallation de blender-git (+ dep alembic, ovdb, osd, oc, oiio et osl)
+-------------------------------------------------------------------------------
 blender-git
 opencollada-git
 openimageio-git
 openshadinglanguage-git
 opensubdiv-git
 openvdb-git
+alembic.git
 
 blender-addons-yafaray-git
 
@@ -1642,6 +1634,40 @@ OU
 ====================================================================================================
 ANCIEN
 ==========================================================
+
+11-4) OBTENIR 1080p DANS LE LECTEUR HTML5 YOUTUBE DANS FIREFOX
+ ==============================================================
+VOIR : http://forum.pinguyos.com/Thread-Enable-Hardware-Acceleration-in-Firefox-Get-1080p-in-Youtube%E2%80%99s-HTML5-player
+
+  about:config
+ ------------
+ media.mediasource.enabled  => true
+ media.mediasource.webm.enabled  => true
+ media.mediasource.whitelist = TRUE
+
+ 
+ Activer MSE et H.264
+ --------------------
+ media.mediasource.mp4.enabled = TRUE
+ media.fragmented-mp4.enabled = TRUE
+ media.fragmented-mp4.exposed  => true
+ media.fragmented-mp4.ffmpeg.enabled  => true
+ media.fragmented-mp4.gmp.enable  => true
+ media.fragmented-mp4.use-blank-decoder = FALSE
+ 
+ !!! Hardware Acceleration ==> LAISSER A FALSE !!!
+ -------------------------------------------------
+ layers.acceleration.force-enabled = FALSE
+ layers.offmainthreadcomposition.enabled = FALSE
+ layers.acceleration.disabled = FALSE
+ layers.acceleration.draw-fps = FALSE
+
+
+!!! VOIR Intallation de sysbench
+--------------------------------
+# pacman -Syu sysbench
+$ sudo pacman -Syu sysbench
+
 
 5-2) BALOO : Création de /etc/sysctl.d/90-inotify.conf
 =============================================================================================
