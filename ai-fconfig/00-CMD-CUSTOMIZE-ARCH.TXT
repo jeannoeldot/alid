@@ -1113,6 +1113,7 @@ $ psd preview  ou  psd parse
 $ cat ~/.mozilla/firefox/profiles.ini
 
 
+!!! embree-git
 !!! alembic.git
 !!! openvdb-git
 !!! opensubdiv-git
@@ -1499,6 +1500,7 @@ openshadinglanguage-git
 opensubdiv-git
 openvdb-git
 alembic.git
+embree-git
 
 blender-addons-yafaray-git
 

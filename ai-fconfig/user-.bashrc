@@ -51,3 +51,12 @@ alias grep='grep --color=auto'
 #
 alias maj='su -c "pacman -Syu" -'
 
+
+### FUNCTIONS
+cherche-dep() {
+  if [[ -n "$1" ]]; then
+    pacsift --depends="$1" | grep repolocal
+  else
+    echo "Utilisation: cherche-dep nom_dépendance"
+  fi
+}
