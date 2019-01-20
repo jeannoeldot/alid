@@ -135,6 +135,18 @@ source $(pwd)/ai-commons
         echo "ai-de_launched=1" > /root/ai-de.launched
     }
     #}}}
+    
+    # X INITIALISER 0-DataLinux {{{
+    initialise_cache_pacman() {
+        local messages=""
+        local titre="INITIALISATION CACHE PACMAN"
+        messages="\n"
+        messages+="${BRred_dlg}/!\/!\ À FAIRE...${Reset_dlg}\n"
+        messages+="CHANGER DE TTY. SUIVRE DOC\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+    }
+    #}}}
+    
     # 6 SYSTEM UPDATE {{{
     system_upgrade() {
         local messages=""
@@ -396,7 +408,7 @@ source $(pwd)/ai-commons
         messages+="bc mlocate rsync bash-completion wget net-tools tree atool mc iptraf-ng\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
         printf '%s\n' "${BGreen}Installation de ${BYellow}bc mlocate rsync bash-completion wget net-tools tree atool mc iptraf-ng${BGreen}...${Reset}"
-        package_install "bc mlocate rsync bash-completion wget net-tools tree atool mc iptraf-ng"
+        package_install "bc mlocate rsync bash-completion wget net-tools tree atool mc iptraf-ng lsd"
         pause_function
         #
         titre="INSTALLATION DE «D-BUS»"
@@ -883,6 +895,9 @@ source $(pwd)/ai-commons
     check_already_launched
     add_custom_repositories
     set_launched
+    
+    initialise_cache_pacman
+    
     system_upgrade
     language_selector
     configure_sudo
