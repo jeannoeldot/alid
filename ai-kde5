@@ -229,7 +229,7 @@
                     "hddtemp" "(Température HDD)" ON
                     "gsmartcontrol" "(S.M.A.R.T.)" ON
                     "hdparm" "(Ajustement paramètres HDD)" ON
-                    "pacnew_scripts" "(Scripts pour fichiers .pacnew)" ON
+                    "pacnew_scripts" "(Scripts pour fichiers .pacnew)" OFF
                     "mesa-demos" "(Démos et outils Mesa)" ON
                     "qt5ct" "(Configuration de Qt5)" ON
                     "cpupower" "(Économie d'énergie du processeur)" OFF
@@ -391,8 +391,8 @@
                     package_install "cmake"
                     ;;
                 "clang")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}clang${BGreen}...${Reset}"
-                    package_install "clang"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}clang llvm${BGreen}...${Reset}"
+                    package_install "clang llvm"
             esac
         done
         if [[ $REPLY != "" ]]; then

@@ -8,7 +8,9 @@ LISTE DES COMMANDES A AFFECTUER POUR PERSONNALISER KDE OU OPENBOX
 ===========================================
 $ systemctl list-units
 
-efistub_update.path  loaded active waiting   Check update EFISTUB  Linux-ARCH
+efistub_update.path     loaded active waiting   Check update EFISTUB  Linux-ARCH
+
+intel_ucode_update.path loaded active waiting   Check update Microde intel
 
 !!! SUPPRIMÉ
 refind_update.path  loaded active waiting   Check update rEFInd
@@ -146,6 +148,8 @@ $ sudo sed -i "/^#MAKEFLAGS/c\MAKEFLAGS=\"-j5\"" /etc/makepkg.conf
 $ sudo sed -i "/^#PACKAGER/c\PACKAGER=\"Jean-Noel Dot <jeannoeldot@club-internet.fr>\"" /etc/makepkg.conf
 OU
 $ sudo sed -i "/^#PACKAGER/c\PACKAGER=\"Jean-Noel Dot <jean.noel.dot@sfr.fr>\"" /etc/makepkg.conf
+OU
+$ sudo sed -i "/^#PACKAGER/c\PACKAGER=\"Name <name@fai.com>\"" /etc/makepkg.conf
 
 
 3) PACMAN.CONF : Edition fichier /etc/pacman.conf
@@ -723,7 +727,7 @@ Section "Device"
    Identifier   "GeForce GTX 980"
    Driver       "nvidia"
    Option       "NoLogo"        "True"
-#   Option       "CoolBits"      "8"
+#   Option       "CoolBits"      "31"
    Option       "TripleBuffer"  "True"
 EndSection
 
@@ -751,6 +755,12 @@ https://git.reviewboard.kde.org/r/121903/diff/1/?file=338977#1
 
 VOIR : ARCH-KDE-DEBUG-DANS-JOURNAL.TXT dans ~/09-Documentation/
 
+  FAIT EN AUTO PAR SCRIPT AI-DE
+  =============================
+  
+$ cat /etc/environment
+
+!!! INUTILE
 $ sudo nano /usr/bin/startkde
 
 RAJOUTER LIGNES 12 À 14
@@ -958,7 +968,7 @@ $ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.yasp.script.2013-09-28 .
  !!! VOIR : ~/02-git/0-CMD-GIT-JNDQRAMI.TXT
 
 !!! ATTENTION DATE
-$ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.gitconfig.2013-12-01 .gitconfig
+$ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.gitconfig.2019-01-31 .gitconfig
 
 
 3-4) CONFIGS TOP
@@ -978,7 +988,7 @@ Cela va écrire un fichier ~/.toprc.
 
 OU
 !!! ATTENTION DATE
-$ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.toprc.2013-12-01 .toprc
+$ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.toprc.2019-01-31 .toprc
 
 
 4) REPOLOCAL
@@ -1071,6 +1081,26 @@ OU
 8) INSTALLATION DE MES PROGRAMMES
 =================================
 
+8-0) SI PAS INSTALLÉ PAR AI
+===========================
+# LC_ALL=C pacman -Syu pacnew_scripts
+
+8-1) MODIFIER FICHIERS MAKEPKG.CONF
+===================================
+/home/jnd/05-builds/0-copie-fichiers-chroot/
+makepkg.conf = /etc/makepkg.conf
+
+MAKEFLAGS="-j9" I7 4700K : 4+4+1
+MAKEFLAGS="-j13" I7 8700K : 6+6+1
+
+PACKAGER="Name <name@fai.com>"
+
+makepkg.conf.fast
+makepkg.conf.fast.conky
+makepkg.conf.fast.original
+makepkg.conf.generic
+makepkg.conf.native
+
 $ cd && maj-repolocal
 
  8-1) MODIF QT4 CONFIG
@@ -1081,12 +1111,12 @@ $ cd && maj-repolocal
  =====================
  $ modif-qt5-conf
 
-# pacman -Syu mkpkg-tmpfs
+# LC_ALL=C pacman -Syu mkpkg-tmpfs
 
 
 
 !!! VOIR https://wiki.archlinux.org/index.php/Profile-sync-daemon
-# pacman -Syu profile-sync-daemon profile-cleaner
+# LC_ALL=C pacman -Syu profile-sync-daemon profile-cleaner
 !!! EN USER
 ============
 CREEER FICHIER $HOME/.config/psd/psd.conf
@@ -1096,8 +1126,8 @@ $ systemctl --user stop psd.service
 
 $ kwrite $HOME/.config/psd/psd.conf &
 15  #USE_OVERLAYFS="no"   ==>  A LAISSER
-48  #BROWSERS=""          ==>  BROWSERS="firefox"
-56  #USE_BACKUPS="yes"    ==>  A LAISSER
+51  #BROWSERS=""          ==>  BROWSERS="firefox"
+59  #USE_BACKUPS="yes"    ==>  A LAISSER
 
 $ rm -i $HOME/.config/psd/psd.conf~
 
@@ -1120,35 +1150,35 @@ $ cat ~/.mozilla/firefox/profiles.ini
 !!! opencollada-git
 !!! openimageio-git
 !!! openshadinglanguage-git
-# pacman -Syu blender-git
-# pacman -Syu blender-addons-yafaray-git
+# LC_ALL=C pacman -Syu blender-git
+# LC_ALL=C pacman -Syu blender-addons-yafaray-git
 !!! TEST $ blender
 
-# pacman -Syu awesomebump-git
+# LC_ALL=C pacman -Syu awesomebump-git
 
-# pacman -Syu jndqaligne5-qt4 jndqrami-qt4
+# LC_ALL=C pacman -Syu jndqaligne5-qt4 jndqrami-qt4
 OU Versions Qt5
-# pacman -Syu jndqaligne5-qt5 jndqrami-qt5
+# LC_ALL=C pacman -Syu jndqaligne5-qt5 jndqrami-qt5
 
-# pacman -Syu jndqcbgrd-qt5
+# LC_ALL=C pacman -Syu jndqcbgrd-qt5
 
-# pacman -Syu pkgbrowser
-
-!!! VOIR
-# pacman -Syu wimlib
+# LC_ALL=C pacman -Syu pkgbrowser
 
 !!! VOIR
-# pacman -Syu ttf-win7-fonts
+# LC_ALL=C pacman -Syu wimlib
+
+!!! VOIR
+# LC_ALL=C pacman -Syu ttf-win7-fonts
 OU
-# pacman -Syu ttf-win10-fonts
+# LC_ALL=C pacman -Syu ttf-win10-fonts
 
-# pacman -Syu pokerth
+# LC_ALL=C pacman -Syu pokerth
 
 
 9) INSTALLATION DE VIRTUAL-BOX
 =================================
 
-# pacman -Syu linux-headers virtualbox qt5-x11extras virtualbox-host-dkms virtualbox-guest-iso
+# LC_ALL=C pacman -Syu linux-headers virtualbox qt5-x11extras virtualbox-host-dkms virtualbox-guest-iso
 
 !!! VOIR UTILITÉ
 # modprobe vboxdrv
@@ -1156,7 +1186,7 @@ OU
 
 # gpasswd -a jnd vboxusers
 
-# pacman -Syu virtualbox-extension
+# LC_ALL=C pacman -Syu virtualbox-extension
 
 !!! DANS VIRTUAL-BOX :
 !!! ATTENTION AU CHEMIN DE VirtualBox-VMs -> /0-DataLinux/VirtualBox-VMs
@@ -1171,13 +1201,13 @@ Onglet Général : Dossier par défaut des machines :
 
 # systemctl stop lm_sensors.service
 # systemctl disable lm_sensors.service
-# pacman -Syu lm_sensors
+# LC_ALL=C pacman -Syu lm_sensors
 # sensors-detect
 # systemctl start lm_sensors.service
 # systemctl enable lm_sensors.service
 # systemctl --no-pager status lm_sensors.service
 
-# pacman -Syu conky-lua-nv-git
+# LC_ALL=C pacman -Syu conky-lua-nv-git
 
 !!! VOIR : ~/00-Conky/0-COMMANDES TEST CONKY.TXT
 
@@ -1223,7 +1253,7 @@ about:config
 
 
 Marque-pages -> Importation et sauvegarde -> Importer HTML
-~/09-Fichiers-Conf/bookmarks-2013-12-01.html
+~/09-Fichiers-Conf/bookmarks-2019-01-31.html
 OU
 --
 Se synchroniser pour récupérer les bookmarks
@@ -1242,6 +1272,7 @@ En HAUT - A DROITE : Find add-ons : dictionnaires français
 
 https://addons.mozilla.org/firefox/downloads/file/950814/dictionnaire_francais-6.3.xpi?src=dp-btn-primary
 
+!!! INUTILE
  11-3) Passer outre à la signature des modules complémentaires
  =============================================================
 ( Adblock Plus )
@@ -1249,6 +1280,7 @@ https://addons.mozilla.org/firefox/downloads/file/950814/dictionnaire_francais-6
  ------------
  xpinstall.signatures.required true ==> false
  
+!!! INUTILE
  11-4) OBTENIR 1080p DANS LE LECTEUR HTML5 YOUTUBE DANS FIREFOX
  ==============================================================
 VOIR : http://forum.pinguyos.com/Thread-Enable-Hardware-Acceleration-in-Firefox-Get-1080p-in-Youtube%E2%80%99s-HTML5-player
@@ -1336,12 +1368,13 @@ OU
 $ maj-startkde
 
 
+!!!!!!!!!!
 40) INSTALLATION DE jre8-openjdk
 ================================
 VOIR : 00-INSTALLATION-JAVA-JRE7-ET-JRE8.TXT dans ~/09-Documentation/
 
-# pacman -Syu jre8-openjdk
-# pacman -Syu java-openjfx
+# LC_ALL=C pacman -Syu jre8-openjdk
+# LC_ALL=C pacman -Syu java-openjfx
 # archlinux-java status
 # archlinux-java set java-8-openjdk/jre
 # archlinux-java status
@@ -1451,15 +1484,15 @@ $ cd && maj-repolocal
 
 $ sudo pacman -Syyu
 
-$ sudo pacman -Syu ghnomix-icon-theme
+$ sudo LC_ALL=C pacman -Syu ghnomix-icon-theme
 
 !!! INSTALLATION DE profile-sync-daemon ET profile-cleaner
 ----------------------------------------------------------
-$ sudo pacman -Syu profile-cleaner
+$ sudo LC_ALL=C pacman -Syu profile-cleaner
 $ profile-cleaner f
 
 https://wiki.archlinux.org/index.php/Profile-sync-daemon
-$ sudo pacman -Syu profile-sync-daemon
+$ sudo LC_ALL=C pacman -Syu profile-sync-daemon
 
 CREEER FICHIER $HOME/.config/psd/psd.conf
 ==========================================
@@ -1516,7 +1549,7 @@ LM_SENSORS
 
 # systemctl stop lm_sensors.service
 # systemctl disable lm_sensors.service
-# pacman -Syu lm_sensors
+# LC_ALL=C pacman -Syu lm_sensors
 # sensors-detect
 # systemctl start lm_sensors.service
 # systemctl enable lm_sensors.service
@@ -1532,7 +1565,7 @@ $ cp -v /0-DataLinux/00-ARCH_2-OB-CK/00-Conky.tar.xz ~/
 $ tar -xJf 00-Conky.tar.xz
 $ rm -f 00-Conky.tar.xz
 
-# pacman -Syu conky-lua-nv-git
+# LC_ALL=C pacman -Syu conky-lua-nv-git
 
 !!! VOIR : ~/00-Conky/Install-Conky.TXT
 !!! VOIR : ~/00-Conky/0-COMMANDES TEST CONKY.TXT
@@ -1667,8 +1700,8 @@ VOIR : http://forum.pinguyos.com/Thread-Enable-Hardware-Acceleration-in-Firefox-
 
 !!! VOIR Intallation de sysbench
 --------------------------------
-# pacman -Syu sysbench
-$ sudo pacman -Syu sysbench
+# LC_ALL=C pacman -Syu sysbench
+$ sudo LC_ALL=C pacman -Syu sysbench
 
 
 5-2) BALOO : Création de /etc/sysctl.d/90-inotify.conf
@@ -1690,14 +1723,14 @@ $ cat /etc/sysctl.d/90-inotify.conf
 17) THEME Breeze et GTK 3.20
 ================================
  !!! Si breeze-gtk ne donne pas un affichage correct dans Firefox, ... :
- # pacman -Syu gnome-breeze-git
+ # LC_ALL=C pacman -Syu gnome-breeze-git
  
  ==> Configuration du Système -> Apparence des applications -> Style des applications GNOME(GTK) :
  ==> Thème GTK2 : Breeze-gtk
  ==> Thème GTK3 : Breeze-gtk
 
 
-# pacman -Syu firefox-extension-https-everywhere
+# LC_ALL=C pacman -Syu firefox-extension-https-everywhere
 
 /dev/sdb5: UUID="c9acc104-7509-4639-a16a-8e81d0253259" TYPE="ext4" LABEL="DataLinux"
 
@@ -1723,7 +1756,7 @@ $ rm -rf ~/.macromedia
 $ cat ~/.mozilla/firefox/profiles.ini
 $ rm -i ~/.mozilla/firefox/mhnm9wic.default/pluginreg.dat
 
-# pacman -Syu freshplayerplugin pepper-flash
+# LC_ALL=C pacman -Syu freshplayerplugin pepper-flash
 
 VÉRIFICATION dans firefox : about:addons
 
@@ -1781,7 +1814,7 @@ Shockwave Flash 17.0.0.169
 
 =================================
 
-# pacman -Syu virtualbox virtualbox-host-modules virtualbox-guest-iso
+# LC_ALL=C pacman -Syu virtualbox virtualbox-host-modules virtualbox-guest-iso
 # modprobe vboxdrv
 # modprobe vboxnetflt
 
@@ -1793,7 +1826,7 @@ Shockwave Flash 17.0.0.169
 
 # gpasswd -a jnd vboxusers
 
-# pacman -Syu virtualbox-extension
+# LC_ALL=C pacman -Syu virtualbox-extension
 
 !!! DANS VIRTUAL-BOX :
 !!! ATTENTION AU CHEMIN DE VirtualBox-VMs -> /0-DataLinux/VirtualBox-VMs
@@ -1802,14 +1835,14 @@ Fichiers -> Paramètres
 Onglet Général : Dossier par défaut des machines :
   ==> ~/VirtualBox-VMs
   
-# pacman -Syu amaya
+# LC_ALL=C pacman -Syu amaya
 
-# pacman -Syu konvertible
+# LC_ALL=C pacman -Syu konvertible
 
 - awoken-icons-2.5.2-1-any.pkg.tar.xz
 $ cp -v /0-DataLinux/00-ARCH_2-OB-CK/0-Fichiers-importants/awoken-icons-2.5.2-1-any.pkg.tar.xz /home/jnd/00-repolocal/
 
-$ sudo pacman -Syu awoken-icons
+$ sudo LC_ALL=C pacman -Syu awoken-icons
 
 !!!! INUTILE DEPUIS VERSION PSD = 5.73-1
 # modprobe overlay
@@ -1840,7 +1873,7 @@ $ sudo sed -i "/^#EnableLinuxHWVideoDecode=1/c\EnableLinuxHWVideoDecode=0" /etc/
 $ sudo pacman -U /home/jnd/00-repolocal/ghnomix-icon-theme-1.3-1-any.pkg.tar.xz
 
 !!! INUTILE : SUR community
-# pacman -Syu i7z-git
+# LC_ALL=C pacman -Syu i7z-git
 !!! TEST # i7z
 
 $ yaourt -Syua i7z-git
@@ -1868,7 +1901,7 @@ $ sudo sh -c "echo 'fs.inotify.max_user_watches = 524288' >> /etc/sysctl.d/nepom
 
 23/10/2014 : linux 3.17.1
 ==> FAIRE :
-# pacman -Syu intel-ucode
+# LC_ALL=C pacman -Syu intel-ucode
 
 AU REBOOT
 ----------
@@ -1964,7 +1997,7 @@ $ cat /sys/block/sda/queue/scheduler   #where X is the device in question
 !!! INUTILE : SUR ARCHLINUXFR
 # pacman -S dfc
 
-!!! INUTILE DEPUIS LE 22/01/2014 # pacman -Syu lm_sensors-svn
+!!! INUTILE DEPUIS LE 22/01/2014 # LC_ALL=C pacman -Syu lm_sensors-svn
 !!! INUTILE DEPUIS LE 22/01/2014
 1) COMPILER lm_sensors-svn
 $ cp -v /0-DataLinux/00-ARCH_2-OB-CK/lm_sensors-svn.tar.xz /home/jnd/05-builds/
