@@ -23,6 +23,11 @@ efistub_update.path  loaded active waiting   Check update EFISTUB  Linux-ARCH
  A)) ROOT
 ========================
 
+00) INTALLATION DE BASE-DEVEL
+=============================
+# LC_ALL=C pacman -Syu --needed base-devel
+
+
 0) THEME GRUB SI BOOT EN MOSE BIOS
 ==================================
 
@@ -1178,7 +1183,7 @@ OU
 9) INSTALLATION DE VIRTUAL-BOX
 =================================
 
-# LC_ALL=C pacman -Syu linux-headers virtualbox qt5-x11extras virtualbox-host-dkms virtualbox-guest-iso
+# LC_ALL=C pacman -Syu --needed linux-headers virtualbox qt5-x11extras virtualbox-host-dkms virtualbox-guest-iso
 
 !!! VOIR UTILITÉ
 # modprobe vboxdrv
@@ -1383,6 +1388,9 @@ VOIR : 00-INSTALLATION-JAVA-JRE7-ET-JRE8.TXT dans ~/09-Documentation/
 50) Qt Creator
 ===============
 
+Menu Aide -> A propos des plug-ins...
+  Utilitaires : X Todo
+
 Menu Outils -> Options -> C++ -> Qt Class Generation
   O
   O
@@ -1390,9 +1398,6 @@ Menu Outils -> Options -> C++ -> Qt Class Generation
 
 Menu Outils -> Options -> TODO
   !!! Voir
-
-Menu Aide -> A propos des plug-ins...
-  Utilitaires : X Todo
 
 
 60) SCREEN TEARING

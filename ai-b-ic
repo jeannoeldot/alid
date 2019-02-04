@@ -66,15 +66,6 @@ source $(pwd)/ai-commons
             fi
         fi
         #
-        if (( $IS_UEFI == 1 )); then
-            if [[ ${IS_HDD_OR_SSD} == "SSD" ]]; then
-                local num_ligne_vfat=$(grep -n "vfat" "/etc/fstab" | cut -f1 -d:)
-                if [[ "${num_ligne_vfat}" != "" ]]; then
-                    messages_if+="${Byellow_dlg}SSD + UEFI${Reset_dlg} : Options pour ${Byellow_dlg}vfat${Reset_dlg} : ${Bwhite_dlg}rw,relatime,discard${Reset_dlg}.\n"
-                    sed -i "${num_ligne_vfat}s/rw,relatime/rw,relatime,discard/" /etc/fstab
-                fi
-            fi
-        fi
         #
         if [[ ${IS_HDD_OR_SSD} == "SSD" ]]; then
             # rotational = 0 ==> SSD
@@ -89,6 +80,13 @@ source $(pwd)/ai-commons
                     3>&1 1>&2 2>&3)
             case "$REPLY" in
                 "DISCARD")
+                    if (( $IS_UEFI == 1 )); then
+                      local num_ligne_vfat=$(grep -n "vfat" "/etc/fstab" | cut -f1 -d:)
+                        if [[ "${num_ligne_vfat}" != "" ]]; then
+                          messages_if+="${Byellow_dlg}SSD + UEFI${Reset_dlg} : Options pour ${Byellow_dlg}vfat${Reset_dlg} : ${Bwhite_dlg}rw,relatime,discard${Reset_dlg}.\n"
+                          sed -i "${num_ligne_vfat}s/rw,relatime/rw,relatime,discard/" /etc/fstab
+                        fi
+                    fi
                     messages_if+="${Byellow_dlg}SSD + TRIM${Reset_dlg} : Options pour ${Byellow_dlg}ext4${Reset_dlg} : ${Bwhite_dlg}defaults,relatime,discard${Reset_dlg}.\n"
                     sed -i "s/rw,relatime,data=ordered/defaults,relatime,discard/g" /etc/fstab
                     ;;

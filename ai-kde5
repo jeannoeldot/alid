@@ -451,7 +451,7 @@
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 4)
             options=("blender" "(Création graphique 3D)" OFF
-                    "gimp" "(Programme de Manipulation d'Image)" OFF
+                    "gimp" "(Programme de Manipulation d'Image)" ON
                     "inkscape" "(Éditeur de graphiques vectoriels)" ON
                     "krita" "(Modifier et peindre des images)" ON
                     )
@@ -486,14 +486,14 @@
                 "inkscape")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}inkscape${BGreen}...${Reset}"
                     package_install "inkscape"
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}gvfs pstoedit python2-lxml python2-numpy python2-scour texlive-core${BGreen}...${Reset}"
-                    package_install "gvfs pstoedit python2-lxml python2-numpy python2-scour texlive-core"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gvfs pstoedit python2-lxml python2-numpy python2-scour${BGreen}...${Reset}"
+                    package_install "gvfs pstoedit python2-lxml python2-numpy python2-scour"
                     ;;
                 "krita")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}krita${BGreen}...${Reset}"
                     package_install "krita"
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}ffmpeg krita-plugin-gmic opencolorio poppler-qt5${BGreen}...${Reset}"
-                    package_install "ffmpeg krita-plugin-gmic opencolorio poppler-qt5"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}ffmpeg krita-plugin-gmic libheif opencolorio poppler-qt5 python-pyqt5${BGreen}...${Reset}"
+                    package_install "ffmpeg krita-plugin-gmic libheif opencolorio poppler-qt5 python-pyqt5"
             esac
         done
         if [[ $REPLY != "" ]]; then

@@ -698,8 +698,8 @@
                 "inkscape")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}inkscape${BGreen}...${Reset}"
                     package_install "inkscape"
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}gvfs pstoedit python2-lxml python2-numpy scour texlive-core${BGreen}...${Reset}"
-                    package_install "gvfs pstoedit python2-lxml python2-numpy python2-scour texlive-core"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gvfs pstoedit python2-lxml python2-numpy scour${BGreen}...${Reset}"
+                    package_install "gvfs pstoedit python2-lxml python2-numpy python2-scour"
             esac
         done
         if [[ $REPLY != "" ]]; then
