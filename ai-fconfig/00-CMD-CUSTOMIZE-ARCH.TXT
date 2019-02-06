@@ -916,7 +916,9 @@ $ cd && mkdir ~/90-BACKUP && mkdir ~/90-Partage && mkdir ~/99-A-IMPRIM && mkdir 
  1-3 LIENS SYMBOLIQUES
  ======================
 
+!!! A VOIR !!!
 00-3D -> /0-DataLinux/00-3D
+
 05-Photos -> /0-DataLinux/05-Photos
 10-Musiques -> /0-DataLinux/10-Musiques
 10-Videos -> /0-DataLinux/10-Videos
@@ -1059,7 +1061,7 @@ $ cd && mkdir ~/05-builds && mkdir ~/05-builds/0-chroot
 
 
 7-1) RÉGLAGES KONSOLE, DOLPHIN, KATE, KWRITE, FAVORI FireFox
-===========================================================
+============================================================
 !!! ATTENTION DATE
 $ cd && cp -v ~/09-Fichiers-Conf/kate-sessions/*.katesession ~/.local/share/kate/sessions/
 
@@ -1378,8 +1380,8 @@ $ maj-startkde
 ================================
 VOIR : 00-INSTALLATION-JAVA-JRE7-ET-JRE8.TXT dans ~/09-Documentation/
 
-# LC_ALL=C pacman -Syu jre8-openjdk
-# LC_ALL=C pacman -Syu java-openjfx
+# LC_ALL=C pacman -Syu --needed jre8-openjdk
+# LC_ALL=C pacman -Syu --needed java-openjfx
 # archlinux-java status
 # archlinux-java set java-8-openjdk/jre
 # archlinux-java status

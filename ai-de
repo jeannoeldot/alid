@@ -896,7 +896,7 @@ source $(pwd)/ai-commons
     add_custom_repositories
     set_launched
     
-    initialise_cache_pacman
+#    initialise_cache_pacman
     
     system_upgrade
     language_selector
