@@ -23,11 +23,6 @@ efistub_update.path  loaded active waiting   Check update EFISTUB  Linux-ARCH
  A)) ROOT
 ========================
 
-00) INTALLATION DE BASE-DEVEL
-=============================
-# LC_ALL=C pacman -Syu --needed base-devel
-
-
 0) THEME GRUB SI BOOT EN MOSE BIOS
 ==================================
 
@@ -1676,6 +1671,11 @@ OU
 ====================================================================================================
 ANCIEN
 ==========================================================
+
+00) INTALLATION DE BASE-DEVEL
+=============================
+# LC_ALL=C pacman -Syu --needed base-devel
+
 
 11-4) OBTENIR 1080p DANS LE LECTEUR HTML5 YOUTUBE DANS FIREFOX
  ==============================================================

@@ -342,10 +342,10 @@
         until (( retour == 0 )) || (( retour == 1 ));
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 8)
-            options=("kdevelop" "(IDE C/C ++ pour KDE)" OFF
+            options=("devtools" "(Outils pour les mainteneurs de paquets)" ON
+                    "kdevelop" "(IDE C/C ++ pour KDE)" OFF
                     "qtcreator" "(IDE léger et multi-plateforme - Qt5)" ON
                     "bluegriffon" "(Éditeur Web WYSIWYG)" ON
-                    "devtools" "(Outils pour les mainteneurs de paquets)" ON
                     "gdb" "(Débogueur GNU)" ON
                     "git" "(Système de contrôle de version - VCS)" ON
                     "cmake" "(Système de compilation multi-plateforme)" ON
@@ -362,6 +362,10 @@
         for choix in $REPLY
         do
             case $choix in
+                "devtools")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}devtools${BGreen}...${Reset}"
+                    package_install "base-devel devtools"
+                    ;;
                 "kdevelop")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}kdevelop${BGreen}...${Reset}"
                     package_install "kdevelop"
@@ -373,10 +377,6 @@
                 "bluegriffon")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}bluegriffon${BGreen}...${Reset}"
                     package_install "bluegriffon"
-                    ;;
-                "devtools")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}devtools${BGreen}...${Reset}"
-                    package_install "devtools"
                     ;;
                 "gdb")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}valgrind gdb splint${BGreen}...${Reset}"
