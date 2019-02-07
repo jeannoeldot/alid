@@ -778,7 +778,7 @@ https://wiki.archlinux.org/index.php/Arch_Build_System
 
 https://github.com/falconindy/asp/blob/master/man/asp.1.txt
 
-# pacman -Syyu asp
+# pacman -Syu asp
 
 
 95) REBOOT
@@ -913,6 +913,8 @@ $ cd && mkdir ~/90-BACKUP && mkdir ~/90-Partage && mkdir ~/99-A-IMPRIM && mkdir 
 
 !!! A VOIR !!!
 00-3D -> /0-DataLinux/00-3D
+!!!
+$ cd && cp -R /0-DataLinux/00-3D .
 
 05-Photos -> /0-DataLinux/05-Photos
 10-Musiques -> /0-DataLinux/10-Musiques
@@ -1022,7 +1024,7 @@ $ chmod +x maj-repolocal
 
 $ cd && maj-repolocal
 
-$ sudo pacman -Syyu
+$ sudo pacman -Syu
 
 
 
@@ -1083,17 +1085,17 @@ OU
 8) INSTALLATION DE MES PROGRAMMES
 =================================
 
-8-0) SI PAS INSTALLÉ PAR AI
-===========================
-# LC_ALL=C pacman -Syu pacnew_scripts
-
 8-1) MODIFIER FICHIERS MAKEPKG.CONF
 ===================================
 /home/jnd/05-builds/0-copie-fichiers-chroot/
 makepkg.conf = /etc/makepkg.conf
 
 MAKEFLAGS="-j9" I7 4700K : 4+4+1
+/!\ /!\ /!\
+/!\ SI -j13 : CONSO RAM
 MAKEFLAGS="-j13" I7 8700K : 6+6+1
+MAKEFLAGS="-j7" I7 8700K : 6+1
+
 
 PACKAGER="Name <name@fai.com>"
 
@@ -1103,13 +1105,34 @@ makepkg.conf.fast.original
 makepkg.conf.generic
 makepkg.conf.native
 
+
+8-2) COPIER PKG DE /0-DataLinux/00-repolocal/ DANS /home/jnd/00-repolocal/
+==========================================================================
+ profile-sync-daemon
+ profile-cleaner
+
+ mkpkg-tmpfs
+
+ robin-map-git
+ 
+ ttf-win10-fonts
+ 
+ virtualbox-extension
+
 $ cd && maj-repolocal
 
- 8-1) MODIF QT4 CONFIG
+
+8-3) SI PAS INSTALLÉ PAR AI
+===========================
+# LC_ALL=C pacman -Syu --needed pacnew_scripts
+
+
+
+ 8-8) MODIF QT4 CONFIG
  =====================
  $ modif-qt4-conf
 
- 8-1) MODIF QT5 CONFIG
+ 8-9) MODIF QT5 CONFIG
  =====================
  $ modif-qt5-conf
 
@@ -1305,6 +1328,17 @@ VOIR : http://forum.pinguyos.com/Thread-Enable-Hardware-Acceleration-in-Firefox-
 
 
 A vérifier en allant sur : https://www.youtube.com/html5
+
+ 11-5) VOIR OUVERTURE NOUVEL ONGLET
+ ==================================
+SUPPRIMER Icones dans Sites les plus visités
+
+CLIC SUR ROUE DENTÉE
+ v Recherche web
+ v Sites les plus visités
+   Éléments-clés
+   Brèves
+ 
 
  11-9) INSTALLATION DE "Bookmarks Checker - check for bad links" DANS FIREFOX
  ============================================================================

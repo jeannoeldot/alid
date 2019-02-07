@@ -349,7 +349,7 @@
                     "gdb" "(Débogueur GNU)" ON
                     "git" "(Système de contrôle de version - VCS)" ON
                     "cmake" "(Système de compilation multi-plateforme)" ON
-                    "clang" "(C interface pour LLVM)" OFF
+                    "clang" "(C interface pour LLVM)" ON
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
@@ -392,7 +392,7 @@
                     ;;
                 "clang")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}clang llvm${BGreen}...${Reset}"
-                    package_install "clang llvm"
+                    package_install "clang llvm boost"
             esac
         done
         if [[ $REPLY != "" ]]; then
