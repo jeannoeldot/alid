@@ -179,8 +179,9 @@
         messages=" \n"
         until (( retour == 0 )) || (( retour == 1 ));
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 3)
-            options=("cairo-dock" "(Cairo Dock)" OFF
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 4)
+            options=("latte-dock" "(Dock pour Plasma)" OFF
+                    "cairo-dock" "(Cairo Dock)" OFF
                     "conky" "(Moniteur Système pour X)" OFF
                     "docky" "(Docky Dock)" OFF
                     )
@@ -195,6 +196,10 @@
         for choix in $REPLY
         do
             case $choix in
+                "latte-dock")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}latte-dock${BGreen}...${Reset}"
+                    package_install "latte-dock"
+                    ;;
                 "cairo-dock")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}cairo-dock cairo-dock-plugins${BGreen}...${Reset}"
                     package_install "cairo-dock cairo-dock-plugins"
@@ -363,8 +368,8 @@
         do
             case $choix in
                 "devtools")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}devtools${BGreen}...${Reset}"
-                    package_install "base-devel devtools"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}base-devel devtools boost doxygen${BGreen}...${Reset}"
+                    package_install "base-devel devtools boost doxygen"
                     ;;
                 "kdevelop")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}kdevelop${BGreen}...${Reset}"
@@ -392,7 +397,7 @@
                     ;;
                 "clang")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}clang llvm${BGreen}...${Reset}"
-                    package_install "clang llvm boost"
+                    package_install "clang llvm"
             esac
         done
         if [[ $REPLY != "" ]]; then
@@ -477,9 +482,8 @@
                     fi
                     ;;
                 "gimp")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}gimp libopenraw${BGreen}...${Reset}"
-                    package_install "gimp libopenraw"
-                    pacman -D --asdeps libopenraw
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gimp${BGreen}...${Reset}"
+                    package_install "gimp"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gimp-plugin${BGreen}...${Reset}"
                     package_install "potrace gimp-dbp gimp-plugin-fblur gimp-plugin-gmic gimp-plugin-lqr gimp-plugin-wavelet-denoise gimp-refocus gimp-nufraw"
                     ;;

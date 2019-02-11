@@ -22,7 +22,9 @@ BOLDBLANC="\[\e[1;37m\]"
 #
 #PS1="$BOLDVERT╔\u$COLOR_OFF $BOLDBLEU\w$COLOR_OFF\n$BOLDVERT╚═> \$$COLOR_OFF$BOLDBLANC "
 #
-PS1="$BOLDVERT┌\u$COLOR_OFF $BOLDBLEU( \w )$COLOR_OFF\n$BOLDVERT└─> \$$COLOR_OFF$BOLDBLANC "
+#PS1="$BOLDVERT┌\u$COLOR_OFF $BOLDBLEU( \w )$COLOR_OFF\n$BOLDVERT└─> \$$COLOR_OFF$BOLDBLANC "
+#
+PS1="$BOLDVERT\u$COLOR_OFF $BOLDBLEU( \w )$COLOR_OFF\n$BOLDVERT==> \$$COLOR_OFF$BOLDBLANC "
 
 
 ### BASH OPTIONS
@@ -49,7 +51,7 @@ export HISTIGNORE='&:ls:ll:la:cd:exit:clear:history'
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 #
-alias maj='su -c "pacman -Syu" -'
+alias maj='su -c "LC_ALL=C pacman -Syu" -'
 
 
 ### FUNCTIONS

@@ -576,8 +576,8 @@
         do
             case $choix in
                 "devtools")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}devtools${BGreen}...${Reset}"
-                    package_install "base-devel devtools"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}base-devel devtools boost doxygen${BGreen}...${Reset}"
+                    package_install "base-devel devtools boost doxygen"
                     ;;
                 "geany")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}geany${BGreen}...${Reset}"
@@ -689,9 +689,8 @@
                     fi
                     ;;
                 "gimp")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}gimp libopenraw${BGreen}...${Reset}"
-                    package_install "gimp libopenraw"
-                    pacman -D --asdeps libopenraw
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gimp${BGreen}...${Reset}"
+                    package_install "gimp"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gimp-plugin${BGreen}...${Reset}"
                     package_install "potrace gimp-dbp gimp-plugin-fblur gimp-plugin-gmic gimp-plugin-lqr gimp-plugin-wavelet-denoise gimp-refocus gimp-nufraw"
                     ;;
