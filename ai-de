@@ -405,10 +405,10 @@ source $(pwd)/ai-commons
         titre="INSTALLATION D'OUTILS BASH"
         messages="\n"
         messages+="Installation de divers outils ${Byellow_dlg}BASH${Reset_dlg} :\n"
-        messages+="bc mlocate rsync bash-completion wget net-tools tree atool mc iptraf-ng\n"
+        messages+="bc mlocate rsync bash-completion wget net-tools ethtool tree atool mc iptraf-ng lsd\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de ${BYellow}bc mlocate rsync bash-completion wget net-tools tree atool mc iptraf-ng${BGreen}...${Reset}"
-        package_install "bc mlocate rsync bash-completion wget net-tools tree atool mc iptraf-ng lsd"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}bc mlocate rsync bash-completion wget net-tools ethtool tree atool mc iptraf-ng lsd${BGreen}...${Reset}"
+        package_install "bc mlocate rsync bash-completion wget net-tools ethtool tree atool mc iptraf-ng lsd"
         pause_function
         #
         titre="INSTALLATION DE «D-BUS»"
@@ -422,10 +422,10 @@ source $(pwd)/ai-commons
         titre="INSTALLATION DES OUTILS DE (DÉ)COMPRESSION"
         messages="\n"
         messages+="Installation de divers outils de (dé)compression :\n"
-        messages+="zip unzip unrar p7zip unarchiver\n"
+        messages+="zip unzip unrar p7zip unarchiver unace\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de ${BYellow}zip unzip unrar p7zip unarchiver${BGreen}...${Reset}"
-        package_install "zip unzip unrar p7zip unarchiver"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}zip unzip unrar p7zip unarchiver unace${BGreen}...${Reset}"
+        package_install "zip unzip unrar p7zip unarchiver unace"
         pause_function
         #
         titre="INSTALLATION DE «AVAHI»"
