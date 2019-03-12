@@ -375,17 +375,17 @@ source $(pwd)/ai-commons
         messages="\n"
         messages+="Ajout de ${Byellow_dlg}${USERNAME}${Reset_dlg} au groupe ${Byellow_dlg}systemd-journal${Reset_dlg}.\n\n"
         messages+="Configuration de systemd-journal :\n"
-        messages+="- Option MaxUse = 50M.\n"
-        messages+="- Option MaxFileSize = 10M.\n"
+        messages+="- Option MaxUse = 100M.\n"
+        messages+="- Option MaxFileSize = 20M.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         printf '%s\n' "${BGreen}Ajout de ${BYellow}${USERNAME}${BGreen} au groupe ${BYellow}systemd-journal${BGreen}...${Reset}"
         gpasswd -a ${USERNAME} systemd-journal
-        printf '%s\n' "${BGreen}Configuration de ${BYellow}systemd-journal${BGreen} : ${BYellow}MaxUse=50M${BGreen} et ${BYellow}MaxFileSize=10M${BGreen}...${Reset}"
+        printf '%s\n' "${BGreen}Configuration de ${BYellow}systemd-journal${BGreen} : ${BYellow}MaxUse=100M${BGreen} et ${BYellow}MaxFileSize=20M${BGreen}...${Reset}"
         mkdir -p /etc/systemd/journald.conf.d
         echo "# Reglages personnel de systemd-journal." > /etc/systemd/journald.conf.d/my_journald_conf.conf
         echo "[Journal]" >> /etc/systemd/journald.conf.d/my_journald_conf.conf
-        echo "SystemMaxUse=50M" >> /etc/systemd/journald.conf.d/my_journald_conf.conf
-        echo "SystemMaxFileSize=10M" >> /etc/systemd/journald.conf.d/my_journald_conf.conf
+        echo "SystemMaxUse=100M" >> /etc/systemd/journald.conf.d/my_journald_conf.conf
+        echo "SystemMaxFileSize=20M" >> /etc/systemd/journald.conf.d/my_journald_conf.conf
         pause_function
         # Installation de cronie. Remplacé par systemd-timer
         titre="INSTALLATION ET ACTIVATION DE «CRONIE»"
