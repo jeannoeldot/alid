@@ -180,6 +180,7 @@ source $(pwd)/ai-commons
     # ECRITURE DES VARIABLES {{{
     write_variables_ali() {
         touch ${MOUNTPOINT}/root/variables.ali
+        echo "IS_CPU_RDRAND=${IS_CPU_RDRAND}" >> ${MOUNTPOINT}/root/variables.ali
         echo "TYPE_KEYBOARD=${TYPE_KEYBOARD}" >> ${MOUNTPOINT}/root/variables.ali
         local name_net_wired=$(ip link | awk '/eno|enp|ens/ {print $2}' | sed -e "s/://")
         echo "NAME_NET_WIRED=${name_net_wired}" >> ${MOUNTPOINT}/root/variables.ali
@@ -301,6 +302,8 @@ else
         messages+="Installation dans        : ${Bwhite_dlg}PC Réel${Reset_dlg}\n"
     fi    
     print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+    #
+    check_is_cpu_rdrand
     #
     configure_keymap
     # ai-b-bios-hc ou ai-b-uefi-hc

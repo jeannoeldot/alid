@@ -15,6 +15,8 @@ source $(pwd)/ai-commons
     read_variables_ali_b1() {
         #/root/variables.ali
         if [[ -f "/root/variables.ali" ]]; then
+            eval $(grep '^IS_CPU_RDRAND=' "/root/variables.ali")
+            IS_CPU_RDRAND="${IS_CPU_RDRAND}"
             eval $(grep '^TYPE_KEYBOARD=' "/root/variables.ali")
             TYPE_KEYBOARD="${TYPE_KEYBOARD}"
             eval $(grep '^NAME_NET_WIRED=' "/root/variables.ali")
@@ -337,13 +339,19 @@ source $(pwd)/ai-commons
     #ENTROPY {{{
     configure_entropy() {
         local messages=""
-        local titre="ACTIVATION DE L'ENTROPIE AVEC HAVEGED"
+        local titre="ACTIVATION DE L'ENTROPIE"
         messages="\n"
-        messages+="Activation de l'entropie avec ${BRwhite_dlg}haveged${Reset_dlg}\n\n"
+        if (( $IN_VIRTUAL_BOX == 1 )) || (( $IS_CPU_RDRAND == 0 )); then
+            messages+="Activation de l'entropie avec ${BRwhite_dlg}haveged${Reset_dlg}\n\n"
+        else
+            messages+="Activation de l'entropie avec ${BRwhite_dlg}random.trust_cpu=on${Reset_dlg}\n\n"
+        fi
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-        # Enable haveged.service
-        printf '%s\n' "${BGreen}Activation du service ${BYellow}haveged.service${BGreen}...${Reset}"
-        systemctl enable haveged.service
+        # Enable haveged.service SI dans VIRTUAL_BOX ou SI IS_CPU_RDRAND = 0
+        if (( $IN_VIRTUAL_BOX == 1 )) || (( $IS_CPU_RDRAND == 0 )); then
+            printf '%s\n' "${BGreen}Activation du service ${BYellow}haveged.service${BGreen}...${Reset}"
+            systemctl enable haveged.service
+        fi
         pause_function
     }
     #}}}
