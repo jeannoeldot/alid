@@ -56,6 +56,7 @@ alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 #
 alias maj='su -c "LC_ALL=C pacman -Syu" -'
+alias pacsc='su -c "LC_ALL=C pacman -Sc" -'
 
 
 ### FUNCTIONS

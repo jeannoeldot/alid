@@ -24,3 +24,4 @@ alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 #
 alias maj='LC_ALL=C pacman -Syu'
+alias pacsc='LC_ALL=C pacman -Sc'
