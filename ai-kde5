@@ -368,8 +368,8 @@
         do
             case $choix in
                 "devtools")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}base-devel devtools boost doxygen${BGreen}...${Reset}"
-                    package_install "base-devel devtools boost doxygen"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}base-devel devtools namcap boost doxygen${BGreen}...${Reset}"
+                    package_install "base-devel devtools namcap boost doxygen"
                     ;;
                 "kdevelop")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}kdevelop${BGreen}...${Reset}"

@@ -344,12 +344,13 @@ source $(pwd)/ai-commons
         messages="\n"
         messages+="Services non utilisés :\n"
         messages+="- auditd.service\n"
+        messages+="- lvm2-monitor.service\n"
         messages+="- plymouth-start.service\n"
         messages+="- plymouth-quit-wait.service\n"
         messages+="- syslog.service\n"
         print_dialog_msgbox "${titre}" "${messages}" "Masquer"
         printf '%s\n' "${BGreen}Masque les services non utilisés...${Reset}"
-        systemctl mask auditd.service plymouth-start.service plymouth-quit-wait.service syslog.service
+        systemctl mask auditd.service lvm2-monitor.service plymouth-start.service plymouth-quit-wait.service syslog.service
         pause_function
         # Activation de Systemd-timesyncd
         if (( $IN_VIRTUAL_BOX == 0 )); then
