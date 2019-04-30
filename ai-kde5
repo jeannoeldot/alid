@@ -31,7 +31,7 @@
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Look${BGreen}...${Reset}"
         package_install "oxygen-icons-svg"
         package_install "oxygen-gtk2"
-        package_install "qtcurve-gtk2 qtcurve-qt4 qtcurve-qt5"
+        package_install "qtcurve-gtk2 qtcurve-qt5"
         # GTK theme matching Breeze
         package_install "breeze-gtk"
         # KDE5 UTILS

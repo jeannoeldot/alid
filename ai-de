@@ -759,23 +759,23 @@ source $(pwd)/ai-commons
         fi
     }
     #}}}
-    # 92 INSTALL OPTIONAL DEP FOR QT4 SI INSTALLÉ {{{
-    install_optional_dep_for_qt4() {
-        local messages=""
-        local titre=""
-        if is_package_installed "qt4" ; then
-            titre="INSTALLATION DES DÉPENDANCES OPTIONNELLES POUR QT4"
-            messages=" \n"
-            messages+="Installation de ${Byellow_dlg}sni-qt${Reset_dlg}: StatusNotifierItem (AppIndicators) support.\n"
-            messages+="Installation de ${Byellow_dlg}icu${Reset_dlg}.\n"
-            print_dialog_msgbox "${titre}" "${messages}" "Installer"
-            printf '%s\n' "${BGreen}Installation de ${BYellow}sni-qt icu${BGreen}...${Reset}"
-            package_install "sni-qt icu"
-            pacman -D --asdeps sni-qt
-            pause_function
-        fi
-    }
-    #}}}
+#    # 92 INSTALL OPTIONAL DEP FOR QT4 SI INSTALLÉ {{{
+#    install_optional_dep_for_qt4() {
+#        local messages=""
+#        local titre=""
+#        if is_package_installed "qt4" ; then
+#            titre="INSTALLATION DES DÉPENDANCES OPTIONNELLES POUR QT4"
+#            messages=" \n"
+#            messages+="Installation de ${Byellow_dlg}sni-qt${Reset_dlg}: StatusNotifierItem (AppIndicators) support.\n"
+#            messages+="Installation de ${Byellow_dlg}icu${Reset_dlg}.\n"
+#            print_dialog_msgbox "${titre}" "${messages}" "Installer"
+#            printf '%s\n' "${BGreen}Installation de ${BYellow}sni-qt icu${BGreen}...${Reset}"
+#            package_install "sni-qt icu"
+#            pacman -D --asdeps sni-qt
+#            pause_function
+#        fi
+#    }
+#    #}}}
     # 93 INSTALL OPTIONAL DEP FOR PULSEAUDIO SI INSTALLÉ {{{
     install_optional_dep_for_pulseaudio() {
         local messages=""
@@ -941,7 +941,7 @@ source $(pwd)/ai-commons
 
     install_fonts
 #    install_optional_dep_for_gtk3      # gtk3-print-backends inclus dans GTK3
-    install_optional_dep_for_qt4
+#    install_optional_dep_for_qt4       # drop qt4
     install_optional_dep_for_pulseaudio
 #     clean_orphan_packages             # APPEL SUPPRIMÉ
     update_mandb
