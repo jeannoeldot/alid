@@ -22,7 +22,7 @@
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         #
         printf '%s\n' "${BGreen}Installation de ${BYellow}OPENBOX Base${BGreen}...${Reset}"
-        package_install "openbox obconf obmenu menumaker openbox-themes xcursor-themes"
+        package_install "openbox obconf menumaker openbox-themes xcursor-themes"
         #
         printf '%s\n' "${BGreen}Installation de ${BYellow}xdg-user-dirs${BGreen}...${Reset}"
         package_install "xdg-user-dirs python2-xdg"
