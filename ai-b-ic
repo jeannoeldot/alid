@@ -81,30 +81,40 @@ source $(pwd)/ai-commons
                     "FSTRIM" "TRIM par service fstrim." \
                     3>&1 1>&2 2>&3)
             case "$REPLY" in
+#                 "DISCARD")
+#                     if (( $IS_UEFI == 1 )); then
+#                       local num_ligne_vfat=$(grep -n "vfat" "/etc/fstab" | cut -f1 -d:)
+#                         if [[ "${num_ligne_vfat}" != "" ]]; then
+#                           messages_if+="${Byellow_dlg}SSD + UEFI${Reset_dlg} : Options pour ${Byellow_dlg}vfat${Reset_dlg} : ${Bwhite_dlg}rw,relatime,discard${Reset_dlg}.\n"
+#                           sed -i "${num_ligne_vfat}s/rw,relatime/rw,relatime,discard/" /etc/fstab
+#                         fi
+#                     fi
+#                     messages_if+="${Byellow_dlg}SSD + TRIM${Reset_dlg} : Options pour ${Byellow_dlg}ext4${Reset_dlg} : ${Bwhite_dlg}defaults,relatime,discard${Reset_dlg}.\n"
+#                     sed -i "s/rw,relatime,data=ordered/defaults,relatime,discard/g" /etc/fstab
+#                     ;;
+#                 "FSTRIM")
+#                     messages_if+="${Byellow_dlg}SSD${Reset_dlg} : Options pour ${Byellow_dlg}ext4${Reset_dlg} : ${Bwhite_dlg}defaults,relatime${Reset_dlg}.\n"
+#                     messages_if+="${Byellow_dlg}SSD + TRIM${Reset_dlg} : Activation de ${Bwhite_dlg}fstrim.timer${Reset_dlg}.\n"
+#                     sed -i "s/rw,relatime,data=ordered/defaults,relatime/g" /etc/fstab
+#                     printf '%s\n' "${BGreen}Activation de ${BYellow}fstrim.timer${BGreen}...${Reset}"
+#                     systemctl enable fstrim.timer
+#                     pause_function
+#                     ;;
                 "DISCARD")
-                    if (( $IS_UEFI == 1 )); then
-                      local num_ligne_vfat=$(grep -n "vfat" "/etc/fstab" | cut -f1 -d:)
-                        if [[ "${num_ligne_vfat}" != "" ]]; then
-                          messages_if+="${Byellow_dlg}SSD + UEFI${Reset_dlg} : Options pour ${Byellow_dlg}vfat${Reset_dlg} : ${Bwhite_dlg}rw,relatime,discard${Reset_dlg}.\n"
-                          sed -i "${num_ligne_vfat}s/rw,relatime/rw,relatime,discard/" /etc/fstab
-                        fi
-                    fi
-                    messages_if+="${Byellow_dlg}SSD + TRIM${Reset_dlg} : Options pour ${Byellow_dlg}ext4${Reset_dlg} : ${Bwhite_dlg}defaults,relatime,discard${Reset_dlg}.\n"
-                    sed -i "s/rw,relatime,data=ordered/defaults,relatime,discard/g" /etc/fstab
+                    messages_if+="${Byellow_dlg}SSD + TRIM${Reset_dlg} : Options : ${Bwhite_dlg}rw,relatime,discard${Reset_dlg}.\n"
+                    sed -i "s/rw,relatime/rw,relatime,discard/g" /etc/fstab
                     ;;
                 "FSTRIM")
-                    messages_if+="${Byellow_dlg}SSD${Reset_dlg} : Options pour ${Byellow_dlg}ext4${Reset_dlg} : ${Bwhite_dlg}defaults,relatime${Reset_dlg}.\n"
                     messages_if+="${Byellow_dlg}SSD + TRIM${Reset_dlg} : Activation de ${Bwhite_dlg}fstrim.timer${Reset_dlg}.\n"
-                    sed -i "s/rw,relatime,data=ordered/defaults,relatime/g" /etc/fstab
                     printf '%s\n' "${BGreen}Activation de ${BYellow}fstrim.timer${BGreen}...${Reset}"
                     systemctl enable fstrim.timer
                     pause_function
                     ;;
             esac
-        else
-            # rotational = 1 ==> HDD
-            messages_if+="${Byellow_dlg}HDD${Reset_dlg} : Options pour ${Byellow_dlg}ext4${Reset_dlg} : ${Bwhite_dlg}defaults,relatime${Reset_dlg}.\n"
-            sed -i "s/rw,relatime,data=ordered/defaults,relatime/g" /etc/fstab
+#         else
+#             rotational = 1 ==> HDD
+#             messages_if+="${Byellow_dlg}HDD${Reset_dlg} : Options pour ${Byellow_dlg}ext4${Reset_dlg} : ${Bwhite_dlg}defaults,relatime${Reset_dlg}.\n"
+#             sed -i "s/rw,relatime,data=ordered/defaults,relatime/g" /etc/fstab
         fi
         #
         messages="\n"
