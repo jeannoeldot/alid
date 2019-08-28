@@ -112,7 +112,7 @@ source $(pwd)/ai-commons
                     ;;
             esac
 #         else
-#             rotational = 1 ==> HDD
+#             # rotational = 1 ==> HDD
 #             messages_if+="${Byellow_dlg}HDD${Reset_dlg} : Options pour ${Byellow_dlg}ext4${Reset_dlg} : ${Bwhite_dlg}defaults,relatime${Reset_dlg}.\n"
 #             sed -i "s/rw,relatime,data=ordered/defaults,relatime/g" /etc/fstab
         fi
@@ -237,6 +237,8 @@ source $(pwd)/ai-commons
         # NEW filesystem-2017.10-2 : /etc/hosts vide !?
         echo -e '#127.0.0.1	localhost.localdomain	localhost' >> /etc/hosts
         echo -e '#::1		localhost.localdomain	localhost' >> /etc/hosts
+        echo -e '127.0.0.1	localhost' >> /etc/hosts
+        echo -e '::1		localhost' >> /etc/hosts
         echo -e '127.0.1.1	'${L_HN}'.localdomain	'${L_HN} >> /etc/hosts
         retour=9
         titre="MODIFICATION DU FICHIER <</etc/hosts>>"
