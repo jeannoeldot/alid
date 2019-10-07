@@ -112,10 +112,12 @@ source $(pwd)/ai-commons
         messages+="En utilisant le script ${Byellow_dlg}pacstrap${Reset_dlg}, seront installés :\n"
         if (( $IS_UEFI == 1 )); then
             messages+="le système de base, haveged, gptfdisk, wget"
-            liste_paquets="base haveged dialog lz4 gptfdisk elinks wget"
+            liste_paquets="base dhcpcd e2fsprogs gawk less linux linux-firmware man-db man-pages nano usbutils which"
+            liste_paquets+=" haveged dialog lz4 gptfdisk elinks wget"
         else
             messages+="le système de base, haveged, wget"
-            liste_paquets="base haveged dialog lz4 elinks wget"
+            liste_paquets="base dhcpcd e2fsprogs gawk less linux linux-firmware man-db man-pages nano usbutils which"
+            liste_paquets+=" haveged dialog lz4 elinks wget"
         fi
         # Intel Microcode
         if (( $IN_VIRTUAL_BOX == 0 )); then
