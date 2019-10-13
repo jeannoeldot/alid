@@ -589,7 +589,7 @@
                     ;;
                 "bluegriffon")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}bluegriffon${BGreen}...${Reset}"
-                    package_install "bluegriffon"
+                    package_install "bluegriffon bluegriffon-i18n-$LANGUAGE_FF"
                     ;;
                 "gdb")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}valgrind gdb splint${BGreen}...${Reset}"

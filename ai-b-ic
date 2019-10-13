@@ -107,6 +107,8 @@ source $(pwd)/ai-commons
                 "FSTRIM")
                     messages_if+="${Byellow_dlg}SSD + TRIM${Reset_dlg} : Activation de ${Bwhite_dlg}fstrim.timer${Reset_dlg}.\n"
                     printf '%s\n' "${BGreen}Activation de ${BYellow}fstrim.timer${BGreen}...${Reset}"
+                    # FIX pour util-linux 2.34-3
+                    sed -i "s/ProtectHome=yes/ProtectHome=read-only/" /usr/lib/systemd/system/fstrim.service
                     systemctl enable fstrim.timer
                     pause_function
                     ;;

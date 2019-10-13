@@ -1405,15 +1405,17 @@ $ maj-startkde
 
 
 !!!!!!!!!!
-40) INSTALLATION DE jre8-openjdk
+/!\/!\/!\ À VOIR
+40) INSTALLATION DE jre-openjdk
 ================================
-VOIR : 00-INSTALLATION-JAVA-JRE7-ET-JRE8.TXT dans ~/09-Documentation/
+VOIR : 00-INSTALLATION-JAVA-JRE-OPENJDK.TXT dans ~/09-Documentation/
 
-# LC_ALL=C pacman -Syu --needed jre8-openjdk
+# LC_ALL=C pacman -Syu --needed jre-openjdk
 # LC_ALL=C pacman -Syu --needed java-openjfx
 # archlinux-java status
-# archlinux-java set java-8-openjdk/jre
+# archlinux-java set java-13-openjdk/jre
 # archlinux-java status
+
 
 
 50) Qt Creator
