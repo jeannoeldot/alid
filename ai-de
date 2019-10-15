@@ -837,12 +837,13 @@ source $(pwd)/ai-commons
         pacman -Sc
 # SUPPRIMÉ SUITE MAJ PACMAN 5.1.0
 #        pacman-optimize
-        if is_package_installed "pkgfile" ; then
-            printf '%s\n' "${BGreen}Génération ou mise à jour du cache de ${BYellow}pkgfile${BGreen}...${Reset}"
-            pkgfile --update
-            printf '%s\n' "${BGreen}Activation du service ${BYellow}pkgfile-update.timer${BGreen}...${Reset}"
-            systemctl enable pkgfile-update.timer
-        fi
+# Commenté suite à maj pkgfile 20-2.
+#         if is_package_installed "pkgfile" ; then
+#             printf '%s\n' "${BGreen}Génération ou mise à jour du cache de ${BYellow}pkgfile${BGreen}...${Reset}"
+#             pkgfile --update
+#             printf '%s\n' "${BGreen}Activation du service ${BYellow}pkgfile-update.timer${BGreen}...${Reset}"
+#             systemctl enable pkgfile-update.timer
+#         fi
         pause_function
     }
     #}}}
