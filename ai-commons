@@ -11,8 +11,8 @@
 
 # CONSTANTES {{{
 # TITRE BOITES DE DIALOG dialog
-TITRE_BOX_W_DATE="15/10/2019"
-TITRE_BOX_W_VERSION="V 1.8.9"
+TITRE_BOX_W_DATE="14/12/2019"
+TITRE_BOX_W_VERSION="V 1.9.0"
 TITRE_BOX_W_TEXTE="INSTALLATION DE ARCH LINUX"
 TITRE_BOX_W="${TITRE_BOX_W_TEXTE} ${TITRE_BOX_W_VERSION} DU ${TITRE_BOX_W_DATE}"
 
@@ -144,18 +144,18 @@ read_name_type_keyboard() { #{{{
 #         IS_Z87C=0
 #     fi
 # } #}}}
-# DRAPEAUX CPU = RDRAND OU NON
-# OUI ==> IS_CPU_RDRAND=1
-# NON ==> IS_CPU_RDRAND=0
-check_is_cpu_rdrand() { #{{{
-    local cpu_rdrand=$(lscpu | grep -E "rdrand")
-    echo ${cpu_rdrand} | tr "[:upper:]" "[:lower:]" | grep -q rdrand
-    if (( $? == 0 )); then
-        IS_CPU_RDRAND=1
-    else
-        IS_CPU_RDRAND=0
-    fi
-} #}}}
+# # DRAPEAUX CPU = RDRAND OU NON
+# # OUI ==> IS_CPU_RDRAND=1
+# # NON ==> IS_CPU_RDRAND=0
+# check_is_cpu_rdrand() { #{{{
+#     local cpu_rdrand=$(lscpu | grep -E "rdrand")
+#     echo ${cpu_rdrand} | tr "[:upper:]" "[:lower:]" | grep -q rdrand
+#     if (( $? == 0 )); then
+#         IS_CPU_RDRAND=1
+#     else
+#         IS_CPU_RDRAND=0
+#     fi
+# } #}}}
 # DANS VIRTUALBOX OU NON
 # OUI ==> IN_VIRTUAL_BOX=1
 # NON ==> IN_VIRTUAL_BOX=0
