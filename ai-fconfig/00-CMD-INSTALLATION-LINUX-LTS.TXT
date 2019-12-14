@@ -72,12 +72,12 @@ MODIFICATIONS DE refind_linux.conf
 ==> DEVIENT :
 ## This file should be present in the same directory as the EFISTUB kernel and initramfs files
 ## More info at http://www.rodsbooks.com/refind/linux.html , http://www.rodsbooks.com/efi-bootloaders/efistub.html
-"Boot en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target quiet initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts.img"
-"Boot en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target quiet initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts.img"
-"Boot en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts.img"
-"Fallback en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts-fallback.img"
-"Fallback en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts-fallback.img"
-"Fallback en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts-fallback.img"
+"Boot en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=graphical.target quiet initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts.img"
+"Boot en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=multi-user.target quiet initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts.img"
+"Boot en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=rescue.target initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts.img"
+"Fallback en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=graphical.target initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts-fallback.img"
+"Fallback en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=multi-user.target initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts-fallback.img"
+"Fallback en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=rescue.target initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts-fallback.img"
 
 
 INSTALLATION DANS ARCH_2 / ARCH_2_LTS

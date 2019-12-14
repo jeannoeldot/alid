@@ -117,16 +117,16 @@ MODIFICATIONS DE refind_linux.conf : AJOUT DE elevator=bfq
 
 ## This file should be present in the same directory as the EFISTUB kernel and initramfs files
 ## More info at http://www.rodsbooks.com/refind/linux.html , http://www.rodsbooks.com/efi-bootloaders/efistub.html
-"Boot en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target quiet"
-"Boot en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target quiet"
-"Boot en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target"
+"Boot en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=graphical.target quiet"
+"Boot en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=multi-user.target quiet"
+"Boot en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=rescue.target"
 
 ==> DEVIENT :
 ## This file should be present in the same directory as the EFISTUB kernel and initramfs files
 ## More info at http://www.rodsbooks.com/refind/linux.html , http://www.rodsbooks.com/efi-bootloaders/efistub.html
-"Boot en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq quiet"
-"Boot en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target elevator=bfq quiet"
-"Boot en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target"
+"Boot en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=graphical.target elevator=bfq quiet"
+"Boot en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=multi-user.target elevator=bfq quiet"
+"Boot en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=rescue.target"
 
 16/10/2014
 ==========
@@ -137,12 +137,12 @@ MODIFICATIONS DE refind_linux.conf : AJOUT DE initrd + FALLBACK
 ==> DEVIENT :
 ## This file should be present in the same directory as the EFISTUB kernel and initramfs files
 ## More info at http://www.rodsbooks.com/refind/linux.html , http://www.rodsbooks.com/efi-bootloaders/efistub.html
-"Boot en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq quiet initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
-"Boot en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target elevator=bfq quiet initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
-"Boot en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
-"Fallback en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
-"Fallback en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target elevator=bfq initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
-"Fallback en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
+"Boot en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=graphical.target elevator=bfq quiet initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
+"Boot en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=multi-user.target elevator=bfq quiet initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
+"Boot en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=rescue.target initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
+"Fallback en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=graphical.target elevator=bfq initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
+"Fallback en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=multi-user.target elevator=bfq initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
+"Fallback en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=rescue.target initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
 
 19/10/2014
 ==========
@@ -153,12 +153,12 @@ MODIFICATIONS DE refind_linux.conf : AJOUT DE initrd=EFI/arch_1_ck/intel-ucode.i
 ==> DEVIENT :
 ## This file should be present in the same directory as the EFISTUB kernel and initramfs files
 ## More info at http://www.rodsbooks.com/refind/linux.html , http://www.rodsbooks.com/efi-bootloaders/efistub.html
-"Boot en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq quiet initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
-"Boot en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target elevator=bfq quiet initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
-"Boot en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
-"Fallback en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
-"Fallback en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target elevator=bfq initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
-"Fallback en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
+"Boot en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=graphical.target elevator=bfq quiet initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
+"Boot en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=multi-user.target elevator=bfq quiet initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
+"Boot en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=rescue.target initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
+"Fallback en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=graphical.target elevator=bfq initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
+"Fallback en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=multi-user.target elevator=bfq initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
+"Fallback en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=rescue.target initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
 
 
 06/11/2017
@@ -170,12 +170,12 @@ MODIFICATIONS DE refind_linux.conf : SUPPRESSION DE elevator=bfq
 ==> DEVIENT :
 ## This file should be present in the same directory as the EFISTUB kernel and initramfs files
 ## More info at http://www.rodsbooks.com/refind/linux.html , http://www.rodsbooks.com/efi-bootloaders/efistub.html
-"Boot en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target quiet initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
-"Boot en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target quiet initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
-"Boot en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
-"Fallback en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
-"Fallback en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
-"Fallback en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
+"Boot en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=graphical.target quiet initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
+"Boot en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=multi-user.target quiet initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
+"Boot en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=rescue.target initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img"
+"Fallback en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=graphical.target initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
+"Fallback en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=multi-user.target initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
+"Fallback en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=rescue.target initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck-fallback.img"
 
 
 INSTALLATION DANS ARCH_2 / ARCH_2_CK
@@ -198,16 +198,16 @@ MODIFICATIONS DE refind_linux.conf : AJOUT DE elevator=bfq
 
 ## This file should be present in the same directory as the EFISTUB kernel and initramfs files
 ## More info at http://www.rodsbooks.com/refind/linux.html , http://www.rodsbooks.com/efi-bootloaders/efistub.html
-"Boot en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target quiet"
-"Boot en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target quiet"
-"Boot en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target"
+"Boot en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=graphical.target quiet"
+"Boot en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=multi-user.target quiet"
+"Boot en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=rescue.target"
 
 ==> DEVIENT :
 ## This file should be present in the same directory as the EFISTUB kernel and initramfs files
 ## More info at http://www.rodsbooks.com/refind/linux.html , http://www.rodsbooks.com/efi-bootloaders/efistub.html
-"Boot en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq quiet"
-"Boot en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target elevator=bfq quiet"
-"Boot en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target"
+"Boot en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=graphical.target elevator=bfq quiet"
+"Boot en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=multi-user.target elevator=bfq quiet"
+"Boot en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=rescue.target"
 
 16/10/2014
 ==========
@@ -218,12 +218,12 @@ MODIFICATIONS DE refind_linux.conf : AJOUT DE initrd + FALLBACK
 ==> DEVIENT :
 ## This file should be present in the same directory as the EFISTUB kernel and initramfs files
 ## More info at http://www.rodsbooks.com/refind/linux.html , http://www.rodsbooks.com/efi-bootloaders/efistub.html
-"Boot en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq quiet initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
-"Boot en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target elevator=bfq quiet initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
-"Boot en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
-"Fallback en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
-"Fallback en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target elevator=bfq initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
-"Fallback en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
+"Boot en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=graphical.target elevator=bfq quiet initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
+"Boot en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=multi-user.target elevator=bfq quiet initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
+"Boot en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=rescue.target initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
+"Fallback en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=graphical.target elevator=bfq initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
+"Fallback en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=multi-user.target elevator=bfq initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
+"Fallback en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=rescue.target initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
 
 19/10/2014
 ==========
@@ -234,12 +234,12 @@ MODIFICATIONS DE refind_linux.conf : AJOUT DE initrd=EFI/arch_2_ck/intel-ucode.i
 ==> DEVIENT :
 ## This file should be present in the same directory as the EFISTUB kernel and initramfs files
 ## More info at http://www.rodsbooks.com/refind/linux.html , http://www.rodsbooks.com/efi-bootloaders/efistub.html
-"Boot en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq quiet initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
-"Boot en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target elevator=bfq quiet initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
-"Boot en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
-"Fallback en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target elevator=bfq initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
-"Fallback en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target elevator=bfq initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
-"Fallback en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
+"Boot en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=graphical.target elevator=bfq quiet initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
+"Boot en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=multi-user.target elevator=bfq quiet initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
+"Boot en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=rescue.target initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
+"Fallback en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=graphical.target elevator=bfq initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
+"Fallback en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=multi-user.target elevator=bfq initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
+"Fallback en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=rescue.target initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
 
 
 06/11/2017
@@ -251,12 +251,12 @@ MODIFICATIONS DE refind_linux.conf : SUPPRESSION DE elevator=bfq
 ==> DEVIENT :
 ## This file should be present in the same directory as the EFISTUB kernel and initramfs files
 ## More info at http://www.rodsbooks.com/refind/linux.html , http://www.rodsbooks.com/efi-bootloaders/efistub.html
-"Boot en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target quiet initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
-"Boot en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target quiet initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
-"Boot en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
-"Fallback en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=graphical.target initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
-"Fallback en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=multi-user.target initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
-"Fallback en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw add_efi_memmap systemd.unit=rescue.target initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
+"Boot en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=graphical.target quiet initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
+"Boot en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=multi-user.target quiet initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
+"Boot en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=rescue.target initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img"
+"Fallback en mode Graphique"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=graphical.target initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
+"Fallback en mode Terminal"    "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=multi-user.target initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
+"Fallback en mode Depannage"   "root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=rescue.target initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck-fallback.img"
 
 ICONES
 ========
