@@ -105,11 +105,12 @@ source $(pwd)/ai-commons
                 "FSTRIM")
                     messages_if+="${Byellow_dlg}SSD + TRIM${Reset_dlg} : Activation de ${Bwhite_dlg}fstrim.timer${Reset_dlg}.\n"
                     printf '%s\n' "${BGreen}Activation de ${BYellow}fstrim.timer${BGreen}...${Reset}"
-                    # FIX pour util-linux 2.34-3. GitHub: issues #824
-                    mkdir -p /etc/systemd/system/fstrim.service.d
-                    echo "# Reglages personnel de fstrim.service." > /etc/systemd/system/fstrim.service.d/override.conf
-                    echo "[Service]" >> /etc/systemd/system/fstrim.service.d/override.conf
-                    echo "ProtectHome=read-only" >> /etc/systemd/system/fstrim.service.d/override.conf
+                    # OK avec util-linux 2.35-1
+                    # # FIX pour util-linux 2.34-3. GitHub: issues #824
+                    # mkdir -p /etc/systemd/system/fstrim.service.d
+                    # echo "# Reglages personnel de fstrim.service." > /etc/systemd/system/fstrim.service.d/override.conf
+                    # echo "[Service]" >> /etc/systemd/system/fstrim.service.d/override.conf
+                    # echo "ProtectHome=read-only" >> /etc/systemd/system/fstrim.service.d/override.conf
                     systemctl enable fstrim.timer
                     pause_function
                     ;;
