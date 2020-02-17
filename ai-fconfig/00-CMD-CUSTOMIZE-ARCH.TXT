@@ -748,6 +748,16 @@ SI default -> default
 # archlinux-java fix
 
 
+30) MODIFICATION DE fstrim.service
+==================================
+!!! Version de util-linux = 2.35.1-1
+# nano /usr/lib/systemd/system/fstrim.service
+==> COMMENTER LIGNES:
+ProtectSystem=strict    ==>   #ProtectSystem=strict
+ProtectHome=read-only    ==>  #ProtectHome=read-only
+
+
+
 80) KDE 5 / Plasma 5 : ENTRÉES DANS JOURNAL
 ============================================
 https://bbs.archlinux.org/viewtopic.php?id=193123
@@ -1099,6 +1109,8 @@ MAKEFLAGS="-j7" I7 8700K : 6+1
 
 PACKAGER="Name <name@fai.com>"
 
+makepkg.conf
+makepkg.conf.floop
 makepkg.conf.fast
 makepkg.conf.fast.conky
 makepkg.conf.fast.original
@@ -1108,9 +1120,6 @@ makepkg.conf.native
 
 8-2) COPIER PKG DE /0-DataLinux/00-repolocal/ DANS /home/jnd/00-repolocal/
 ==========================================================================
- profile-sync-daemon
- profile-cleaner
-
  mkpkg-tmpfs
 
  robin-map-git
@@ -1127,17 +1136,7 @@ $ cd && maj-repolocal
 # LC_ALL=C pacman -Syu --needed pacnew_scripts
 
 
-
- 8-8) MODIF QT4 CONFIG
- =====================
- $ modif-qt4-conf
-
- 8-9) MODIF QT5 CONFIG
- =====================
- $ modif-qt5-conf
-
 # LC_ALL=C pacman -Syu mkpkg-tmpfs
-
 
 
 !!! VOIR https://wiki.archlinux.org/index.php/Profile-sync-daemon
@@ -1168,21 +1167,20 @@ $ psd preview  ou  psd parse
 $ cat ~/.mozilla/firefox/profiles.ini
 
 
-!!! embree-git
 !!! alembic.git
-!!! openvdb-git
-!!! opensubdiv-git
+!!! embree-git
 !!! opencollada-git
+!!! openimagedenoise-git
 !!! openimageio-git
 !!! openshadinglanguage-git
+!!! opensubdiv-git
+!!! openvdb-git
+!!! usd-git
 # LC_ALL=C pacman -Syu blender-git
-# LC_ALL=C pacman -Syu blender-addons-yafaray-git
 !!! TEST $ blender
 
 # LC_ALL=C pacman -Syu awesomebump-git
 
-# LC_ALL=C pacman -Syu jndqaligne5-qt4 jndqrami-qt4
-OU Versions Qt5
 # LC_ALL=C pacman -Syu jndqaligne5-qt5 jndqrami-qt5
 
 # LC_ALL=C pacman -Syu jndqcbgrd-qt5
@@ -1707,6 +1705,20 @@ OU
 ====================================================================================================
 ANCIEN
 ==========================================================
+
+8-8) MODIF QT4 CONFIG
+ =====================
+ $ modif-qt4-conf
+
+ 8-9) MODIF QT5 CONFIG
+ =====================
+ $ modif-qt5-conf
+
+# LC_ALL=C pacman -Syu blender-addons-yafaray-git
+
+# LC_ALL=C pacman -Syu jndqaligne5-qt4 jndqrami-qt4
+OU Versions Qt5
+
 
 $ cat /proc/cmdline
 DANS ARCH_1 / ARCH_1_CK
