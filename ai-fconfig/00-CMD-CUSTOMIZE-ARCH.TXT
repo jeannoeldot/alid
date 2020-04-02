@@ -142,14 +142,20 @@ $ sudo sed -i "s/-march=native -O2 -pipe/-march=native -O2 -pipe -fdiagnostics-c
 $ sudo sed -i "/^#MAKEFLAGS/c\MAKEFLAGS=\"-j5\"" /etc/makepkg.conf
 
 
-!!! A FAIRE
-===========
+!!! A FAIRE !!!
+===============
 
 $ sudo sed -i "/^#PACKAGER/c\PACKAGER=\"Jean-Noel Dot <jeannoeldot@club-internet.fr>\"" /etc/makepkg.conf
 OU
 $ sudo sed -i "/^#PACKAGER/c\PACKAGER=\"Jean-Noel Dot <jean.noel.dot@sfr.fr>\"" /etc/makepkg.conf
 OU
 $ sudo sed -i "/^#PACKAGER/c\PACKAGER=\"Name <name@fai.com>\"" /etc/makepkg.conf
+
+!!! Extension zst remplace xz
+!!! Version pacman 5.2.1-4
+$ sudo sed -i "/^COMPRESSZST/c\COMPRESSZST=(zstd -c -T0 --ultra -20 -)" /etc/makepkg.conf
+
+$ sudo sed -i "/^PKGEXT/c\PKGEXT=\'.pkg.tar.zst\'" /etc/makepkg.conf
 
 
 3) PACMAN.CONF : Edition fichier /etc/pacman.conf
