@@ -65,7 +65,7 @@
         #
         # Installation de rEFInd
         printf '%s\n' "${BGreen}Installation de ${BYellow}rEFInd${BGreen}...${Reset}"
-        pacman -Syu refind-efi
+        pacman -Syu refind
         # Kernels
         messages="\n"
         messages+="Copie des fichiers du kernel dans ${Byellow_dlg}${DIR_EFI_ARCHLINUX}${Reset_dlg} :\n"

@@ -754,6 +754,7 @@ SI default -> default
 # archlinux-java fix
 
 
+!!! INUTILE AVEC Version de util-linux = 2.35.1-2 !!!
 30) MODIFICATION DE fstrim.service
 ==================================
 !!! Version de util-linux = 2.35.1-1
