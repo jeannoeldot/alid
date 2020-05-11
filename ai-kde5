@@ -485,13 +485,13 @@
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gimp${BGreen}...${Reset}"
                     package_install "gimp"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gimp-plugin${BGreen}...${Reset}"
-                    package_install "potrace gimp-dbp gimp-plugin-fblur gimp-plugin-gmic gimp-plugin-lqr gimp-plugin-wavelet-denoise gimp-refocus gimp-nufraw"
+                    package_install "gimp-plugin-gmic gimp-nufraw"
                     ;;
                 "inkscape")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}inkscape${BGreen}...${Reset}"
                     package_install "inkscape"
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}gvfs pstoedit python2-lxml python2-numpy python2-scour${BGreen}...${Reset}"
-                    package_install "gvfs pstoedit python2-lxml python2-numpy python2-scour"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gvfs pstoedit python-lxml python-numpy scour${BGreen}...${Reset}"
+                    package_install "gvfs pstoedit python-lxml python-numpy scour"
                     ;;
                 "krita")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}krita${BGreen}...${Reset}"
