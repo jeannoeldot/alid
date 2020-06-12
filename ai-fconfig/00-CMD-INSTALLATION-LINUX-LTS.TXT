@@ -67,6 +67,9 @@ vmlinuz-arch_1_lts.efi
 
 MODIFICATIONS DE refind_linux.conf
 ==================================
+!!! ATTENTION SI VERSION LINUX-LTS  >= 5.7.x
+!!! initrd=EFI/arch_1_lts/ DEVIENT initrd=EFI\arch_1_lts\
+
 # nano -w /boot/efi/EFI/arch_1_lts/refind_linux.conf
 
 ==> DEVIENT :

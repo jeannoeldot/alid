@@ -663,19 +663,27 @@ MODIFICATIONS refind_linux.conf
 ===============================
 INSTALLATION DANS ARCH_1 / ARCH_1_CK
 AJOUT DE : initrd=EFI/arch_1/intel-ucode.img
+!!! SI LINUX 5.7.2 :
+AJOUT DE : initrd=EFI\arch_1\intel-ucode.img
 --------------------------------------------
 $ sudo nano /boot/efi/EFI/arch_1/refind_linux.conf
 
 AJOUT DE : initrd=EFI/arch_1_ck/intel-ucode.img
+!!! SI LINUX 5.7.2 :
+AJOUT DE : initrd=EFI\arch_1_ck\intel-ucode.img
 -----------------------------------------------
 $ sudo nano /boot/efi/EFI/arch_1_ck/refind_linux.conf
 
 INSTALLATION DANS ARCH_2 / ARCH_2_CK
-AJOUT DE : initrd=EFI/arch_2/intel-ucode.img
+AJOUT DE : initrd=EFI\arch_2\intel-ucode.img
+!!! SI LINUX 5.7.2 :
+AJOUT DE : initrd=EFI\arch_2\intel-ucode.img
 --------------------------------------------
 $ sudo nano /boot/efi/EFI/arch_2/refind_linux.conf
 
 AJOUT DE : initrd=EFI/arch_2_ck/intel-ucode.img
+!!! SI LINUX 5.7.2 :
+AJOUT DE : initrd=EFI\arch_2_ck\intel-ucode.img
 -----------------------------------------------
 $ sudo nano /boot/efi/EFI/arch_2_ck/refind_linux.conf
 
