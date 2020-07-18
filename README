@@ -7,7 +7,7 @@ Interface graphique avec dialog
 
 LICENSE         : GPL2 (Voir COPYING pour les détails).
 
-VERSION         : 1.9.6
+VERSION         : 1.9.7
 
 LANGUE          : uniquement FR (AZERTY ou BÉPO)
 
@@ -39,4 +39,4 @@ ai-fconfig      : répertoire contenant mes fichiers de configurations.
 
 LIGNE DE COMMANDE
 
-wget https://github.com/jeannoeldot/alid/tarball/master -O - | tar xz && mv jeannoeldot-* ai
+curl -L https://github.com/jeannoeldot/alid/tarball/master -o - | tar xz && mv jeannoeldot-* ai
