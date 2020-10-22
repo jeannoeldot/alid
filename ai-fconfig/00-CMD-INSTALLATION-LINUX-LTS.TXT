@@ -1,30 +1,31 @@
 INSTALLATION DE LINUX-LTS
+AU 22/10/2020
 =========================
 
 $ pacman -Ss lts
-core/linux-lts 4.14.17-1
-    The Linux-lts kernel and modules
-core/linux-lts-docs 4.14.17-1
-    Kernel hackers manual - HTML documentation that comes with the Linux-lts kernel
-core/linux-lts-headers 4.14.17-1
-    Header files and scripts for building modules for Linux-lts kernel
+core/linux-lts 5.4.72-1
+    The LTS Linux kernel and modules
+core/linux-lts-docs 5.4.72-1
+    Documentation for the LTS Linux kernel
+core/linux-lts-headers 5.4.72-1
+    Headers and scripts for building modules for the LTS Linux kernel
 ...
-extra/nvidia-lts 1:387.34-1
+extra/nvidia-lts 1:455.28-7
     NVIDIA drivers for linux-lts
 
 $ pacman -Ss virtualbox
-community/virtualbox 5.2.6-2 [installé]
+community/virtualbox 6.1.16-1 [installé]
     Powerful x86 virtualization for enterprise as well as home use
-community/virtualbox-guest-iso 5.2.7-1 [installé]
+community/virtualbox-guest-iso 6.1.16-1 [installé]
     The official VirtualBox Guest Additions ISO image
 !!!
-community/virtualbox-host-dkms 5.2.6-2 [installé]
+community/virtualbox-host-dkms 6.1.16-1 [installé]
     VirtualBox Host kernel modules sources
-repolocal/virtualbox-extension 5.2.6-1 [installé]
+repolocal/virtualbox-extension 6.1.16-1 [installé]
     Oracle VM VirtualBox Extension Pack
 
 
-# pacman -Syu linux-lts linux-lts-headers nvidia-lts
+# LC_ALL=C pacman -Syu linux-lts linux-lts-headers nvidia-lts
 
 
 INSTALLATION DE EFISTUB
@@ -55,6 +56,7 @@ refind_linux.conf
 # cp -v /boot/initramfs-linux-lts.img /boot/efi/EFI/arch_1_lts/initramfs-arch_1_lts.img
 # cp -v /boot/vmlinuz-linux-lts /boot/efi/EFI/arch_1_lts/vmlinuz-arch_1_lts.efi
 # cp -v /boot/efi/EFI/arch_1/refind_linux.conf /boot/efi/EFI/arch_1_lts/
+!!! À VOIR
 # cp -v /boot/intel-ucode.img /boot/efi/EFI/arch_1_lts/
 
 # ls /boot/efi/EFI/arch_1_lts
@@ -70,17 +72,20 @@ MODIFICATIONS DE refind_linux.conf
 !!! ATTENTION SI VERSION LINUX-LTS  >= 5.7.x
 !!! initrd=EFI/arch_1_lts/ DEVIENT initrd=EFI\arch_1_lts\
 
+PARTUUID:
+# ls -l /dev/disk/by-partuuid
+
 # nano -w /boot/efi/EFI/arch_1_lts/refind_linux.conf
 
 ==> DEVIENT :
 ## This file should be present in the same directory as the EFISTUB kernel and initramfs files
 ## More info at http://www.rodsbooks.com/refind/linux.html , http://www.rodsbooks.com/efi-bootloaders/efistub.html
-"Boot en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=graphical.target quiet initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts.img"
-"Boot en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=multi-user.target quiet initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts.img"
-"Boot en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=rescue.target initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts.img"
-"Fallback en mode Graphique"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=graphical.target initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts-fallback.img"
-"Fallback en mode Terminal"    "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=multi-user.target initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts-fallback.img"
-"Fallback en mode Depannage"   "root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=rescue.target initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts-fallback.img"
+"Boot en mode Graphique"   "root=PARTUUID=76a6a106-9928-4a8a-a91d-92e6e2fda9f8 rootfstype=ext4 rw systemd.unit=graphical.target quiet initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts.img"
+"Boot en mode Terminal"    "root=PARTUUID=76a6a106-9928-4a8a-a91d-92e6e2fda9f8 rootfstype=ext4 rw systemd.unit=multi-user.target quiet initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts.img"
+"Boot en mode Depannage"   "root=PARTUUID=76a6a106-9928-4a8a-a91d-92e6e2fda9f8 rootfstype=ext4 rw systemd.unit=rescue.target initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts.img"
+"Fallback en mode Graphique"   "root=PARTUUID=76a6a106-9928-4a8a-a91d-92e6e2fda9f8 rootfstype=ext4 rw systemd.unit=graphical.target initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts-fallback.img"
+"Fallback en mode Terminal"    "root=PARTUUID=76a6a106-9928-4a8a-a91d-92e6e2fda9f8 rootfstype=ext4 rw systemd.unit=multi-user.target initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts-fallback.img"
+"Fallback en mode Depannage"   "root=PARTUUID=76a6a106-9928-4a8a-a91d-92e6e2fda9f8 rootfstype=ext4 rw systemd.unit=rescue.target initrd=EFI/arch_1_lts/intel-ucode.img initrd=EFI/arch_1_lts/initramfs-arch_1_lts-fallback.img"
 
 
 INSTALLATION DANS ARCH_2 / ARCH_2_LTS
