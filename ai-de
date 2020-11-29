@@ -681,8 +681,8 @@ source $(pwd)/ai-commons
             package_install "cups ghostscript gsfonts"
             printf '%s\n' "${BGreen}Installation de ${BYellow}gutenprint foomatic-db-gutenprint-ppds foomatic-db foomatic-db-engine foomatic-db-nonfree foomatic-db-ppds foomatic-db-nonfree-ppds cups-pdf${BGreen}...${Reset}"
             package_install "gutenprint foomatic-db-gutenprint-ppds foomatic-db foomatic-db-engine foomatic-db-nonfree foomatic-db-ppds foomatic-db-nonfree-ppds cups-pdf"
-            printf '%s\n' "${BGreen}Activation de ${BYellow}org.cups.cupsd.service${BGreen}...${Reset}"
-            systemctl enable org.cups.cupsd.service
+            printf '%s\n' "${BGreen}Activation de ${BYellow}cups.service${BGreen}...${Reset}"
+            systemctl enable cups.service
             local status=$(systemctl status avahi-daemon.service | awk '/Active/ {print $2}')
             if [[ "${status}" == "inactive" ]];then
                 printf '%s\n' "${BGreen}Activation de ${BYellow}avahi-daemon.service${BGreen}...${Reset}"
