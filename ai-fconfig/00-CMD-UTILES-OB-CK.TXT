@@ -131,7 +131,6 @@ MAJ FIREFOX-ADDONS
 ==================
 - firefox-extension-https-everywhere
 - firefox-adblock-plus
-- flashplugin
 
 !!! EN USER
 ============
