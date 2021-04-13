@@ -19,21 +19,21 @@
             # sgdisk --zap-all /dev/sda
             local retour=9
             local messages=""
-            local titre="PARTITIONNEMENT : MISE À ZÉRO DU DISQUE «${HDD_DEVICE}»"
+            local titre="PARTITIONNEMENT : MISE À ZÉRO DU DISQUE «${MAIN_DEVICE}»"
             messages="\n"
             messages+="${BRred_dlg}!!!${Reset_dlg} Si Multi Boot, NE PAS METTRE À ZÉRO le disque.\n"
             messages+="${BRred_dlg}!!!${Reset_dlg} TOUTES les données sur le disque sélectionné seront perdues.\n\n"
-            messages+="Confirmer la mise à zéro du disque ${Byellow_dlg}${HDD_DEVICE}${Reset_dlg}\n"
+            messages+="Confirmer la mise à zéro du disque ${Byellow_dlg}${MAIN_DEVICE}${Reset_dlg}\n"
             print_dialog_yesno_no "${titre}" "${messages}" "Mettre à zéro" "Annuler"
             retour=$?
             if (( retour == 0 )); then
                 retour=9
                 messages="\n"
-                messages+="Confirmer une 2ème fois la mise à zéro du disque ${Byellow_dlg}${HDD_DEVICE}${Reset_dlg}\n"
+                messages+="Confirmer une 2ème fois la mise à zéro du disque ${Byellow_dlg}${MAIN_DEVICE}${Reset_dlg}\n"
                 print_dialog_yesno_no "${titre}" "${messages}" "Mettre à zéro" "Annuler"
                 retour=$?
                 if (( retour == 0 )); then
-                    sgdisk --zap-all ${HDD_DEVICE}
+                    sgdisk --zap-all ${MAIN_DEVICE}
                     sync
                 fi
             fi
@@ -42,11 +42,23 @@
             local messages=""
             local titre="PARTITIONNEMENT : TYPE DE DISQUE"
             messages="\n"
-            check_is_hdd_or_ssd "${HDD_DEVICE}"
+            check_is_hdd_or_ssd "${MAIN_DEVICE}"
             if [[ ${IS_HDD_OR_SSD} == "HDD" ]]; then
-                messages+="${BRcyan_dlg}!!!${Reset_dlg} Le Disque ${Byellow_dlg}${HDD_DEVICE}${Reset_dlg} est un ${Bwhite_dlg}HDD${Reset_dlg}.\n"
+                messages+="${BRcyan_dlg}!!!${Reset_dlg} Le Disque ${Byellow_dlg}${MAIN_DEVICE}${Reset_dlg} est un ${Bwhite_dlg}HDD${Reset_dlg}.\n"
             else
-                messages+="${BRcyan_dlg}!!!${Reset_dlg} Le Disque ${Byellow_dlg}${HDD_DEVICE}${Reset_dlg} est un ${Bwhite_dlg}SSD${Reset_dlg}.\n"
+                messages+="${BRcyan_dlg}!!!${Reset_dlg} Le Disque ${Byellow_dlg}${MAIN_DEVICE}${Reset_dlg} est un ${Bwhite_dlg}SSD${Reset_dlg}.\n"
+            fi
+            print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+        }
+        appel_check_is_main_device_nvme() {
+            local messages=""
+            local titre="PARTITIONNEMENT : TYPE DE DISQUE (NVME)"
+            messages="\n"
+            check_is_main_device_nvme "${MAIN_DEVICE}"
+            if (( $IS_NVME == 1 )); then
+                messages+="${BRcyan_dlg}!!!${Reset_dlg} Le Disque ${Byellow_dlg}${MAIN_DEVICE}${Reset_dlg} est un ${Bwhite_dlg}NVME${Reset_dlg}.\n"
+            else
+                messages+="${BRcyan_dlg}!!!${Reset_dlg} Le Disque ${Byellow_dlg}${MAIN_DEVICE}${Reset_dlg} est un ${Bwhite_dlg}SSD${Reset_dlg}.\n"
             fi
             print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         }
@@ -54,9 +66,9 @@
             local messages=""
             local titre="PARTITIONNEMENT : TABLE DE PARTITIONS"
             messages="\n"
-            messages+="${Byellow_dlg}cfdisk${Reset_dlg} sera lancé afin de créer les partitions sur ${Byellow_dlg}${HDD_DEVICE}${Reset_dlg}\n\n"
+            messages+="${Byellow_dlg}cfdisk${Reset_dlg} sera lancé afin de créer les partitions sur ${Byellow_dlg}${MAIN_DEVICE}${Reset_dlg}\n\n"
             messages+="${BRcyan_dlg}!!!${Reset_dlg} Une partition EFI (ESP) de 512 Mio de type EF00\n"
-            messages+="    doit être créée en 1er sur ${Byellow_dlg}${HDD_DEVICE}${Reset_dlg}.\n\n"
+            messages+="    doit être créée en 1er sur ${Byellow_dlg}${MAIN_DEVICE}${Reset_dlg}.\n\n"
             messages+="${BRcyan_dlg}!!!${Reset_dlg} Si un Multi Boot en UEFI est prévu,\n"
             messages+="    la taille de la partition EFI (ESP) devrait être de 1024 Mio.\n"
             print_dialog_msgbox "${titre}" "${messages}" "Continuer"
@@ -66,31 +78,33 @@
             local messages=""
             local titre="PARTITIONNEMENT : SÉLECTION DU DISQUE À PARTITIONNER"
             messages="\n"
-            local liste_disque_present=$(LC_ALL=C parted -sl 2> /dev/null | grep -E 'Mod|/dev/sd[a-z]' | sed -e "s/\(^Disk.*\)/\1\n/;s/Model/\\\nModèle/;s/Disk/Disque/")
+            local liste_disque_present=$(LC_ALL=C parted -sl 2> /dev/null | grep -E 'Mod|/dev/sd[a-z]|/dev/nvme' | sed -e "s/\(^Disk.*\)/\1\n/;s/Model/\\\nModèle/;s/Disk/Disque/")
             messages+="Liste des Disques présents dans le PC :\n"
             messages+="---------------------------------------"
             messages+=${liste_disque_present}"\n\n"
             messages+="Sélectionner le Disque à partitionner :"
             local hauteur=0
-            local nb_hdd=$(LC_ALL=C parted -sl 2> /dev/null | grep "/dev/sd[a-z]" | wc -l)
+            local nb_hdd=$(LC_ALL=C parted -sl 2> /dev/null | grep -E "/dev/sd[a-z]|/dev/nvme" | wc -l)
             case "$nb_hdd" in
                 [1-2])  hauteur=25 ;;
                 3)  hauteur=30 ;;
                 4)  hauteur=35 ;;
                 *)  hauteur=40 ;;
             esac
-            local liste_hdd_devices=$(LC_ALL=C parted -sl 2> /dev/null | grep "/dev/sd[a-z]" | sed -e "s/://" | awk '{print $2   " "   $3$4}')
-            HDD_DEVICE=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" $hauteur 72 6 ${liste_hdd_devices} 3>&1 1>&2 2>&3)
+            local liste_hdd_devices=$(LC_ALL=C parted -sl 2> /dev/null | grep -E "/dev/sd[a-z]|/dev/nvme" | sed -e "s/://" | awk '{print $2   " "   $3$4}')
+            MAIN_DEVICE=$(dialog --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" $hauteur 72 6 ${liste_hdd_devices} 3>&1 1>&2 2>&3)
         }
         select_hdd_devices
         #
         appel_check_is_hdd_or_ssd
         #
+        appel_check_is_main_device_nvme
+        #
         zero_the_drive
         #
         select_storage_partitions
         #
-        cgdisk $HDD_DEVICE
+        cgdisk $MAIN_DEVICE
     }
     #}}}
     #FORMAT DEVICE {{{
@@ -112,7 +126,7 @@
             printf '%s\n' "${BGreen}Formatage de la partition ${BYellow}$1${BGreen}...${Reset}"
 #            umount_partition "$1"
             [[ -z $3 ]] && select_filesystem
-            if [[ $1 == $ROOT ]]; then
+            if [[ $1 == $ROOT_PART ]]; then
                 ROOT_FS_TYPE=$TYPE
             fi
             mkfs.$TYPE $1
@@ -163,39 +177,39 @@
         }
 
 # EN UEFI : 1ère partition = EF00 UEFI SYSTEM_PARTITION
-        partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
+        partitions=$(LC_ALL=C fdisk -l $MAIN_DEVICE | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
 # CHOIX PARTITION ROOT OBLIGATOIRE
         titre="PARTITIONNEMENT : SÉLECTION PARTITION «ROOT»"
         messages="\n"
         messages+="Sélectionner la partition ${Byellow_dlg}/root${Reset_dlg}\n\n"
         messages+="${BRred_dlg}!!!${Reset_dlg} Toutes les données sur la partition sélectionnée seront perdues.\n"
-        ROOT=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
-        ROOT_DEVICE=$(echo $ROOT | sed 's/[0-9]//')
-        format_partition "$ROOT" "${MOUNTPOINT}"
-        CHOIX_PARTITIONS+=$(echo $ROOT)" = /root.  "
+        ROOT_PART=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
+#        MAIN_DEVICE=$(echo $ROOT_PART | sed 's/[0-9]//')
+        format_partition "$ROOT_PART" "${MOUNTPOINT}"
+        CHOIX_PARTITIONS+=$(echo $ROOT_PART)" = /root.  "
 # CHOIX PARTITION ESP OBLIGATOIRE
         titre="PARTITIONNEMENT : SÉLECTION PARTITION «ESP»"
         messages="\n"
         messages+="Sélectionner la partition ${Byellow_dlg}/boot/efi${Reset_dlg}\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
-        partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
-        EFI_DEVICE=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
-        format_efi_partition "$EFI_DEVICE" "${MOUNTPOINT}/boot/efi"
-        CHOIX_PARTITIONS+=$(echo $EFI_DEVICE)" = /boot/efi.  "
+        partitions=$(LC_ALL=C fdisk -l $MAIN_DEVICE | grep -v $ROOT_PART | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
+        EFI_PART=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
+        format_efi_partition "$EFI_PART" "${MOUNTPOINT}/boot/efi"
+        CHOIX_PARTITIONS+=$(echo $EFI_PART)" = /boot/efi.  "
 # CHOIX PARTITION SWAP FACULTATIF
         titre="PARTITIONNEMENT : SÉLECTION PARTITION «SWAP»"
         messages="\n"
         messages+="Sélectionner la partition ${Byellow_dlg}/swap${Reset_dlg}\n\n"
         messages+="${BRcyan_dlg}!!!${Reset_dlg} LA PARTITION ${Byellow_dlg}SWAP${Reset_dlg} EST FACULTATIVE.\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
-        partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v $EFI_DEVICE | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
+        partitions=$(LC_ALL=C fdisk -l $MAIN_DEVICE | grep -v $ROOT_PART | grep -v $EFI_PART | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
         L_SWAP=$(dialog --colors --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --cancel-label "Annuler" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
         retour=$?
         if (( retour == 0 )); then
             format_swap_partition "$L_SWAP"
             CHOIX_PARTITIONS+=$(echo $L_SWAP)" = /swap.\n"
         else
-            L_SWAP="/dev/sda98"
+            L_SWAP="no_swap_98"
         fi
 # CHOIX PARTITION HOME FACULTATIF
         titre="PARTITIONNEMENT : SÉLECTION PARTITION «HOME»"
@@ -204,14 +218,14 @@
         messages+="${BRcyan_dlg}!!!${Reset_dlg} LA PARTITION ${Byellow_dlg}HOME${Reset_dlg} EST FACULTATIVE.\n\n"
         messages+="${BRred_dlg}!!!${Reset_dlg} Toutes les données sur la partition sélectionnée seront perdues.\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
-        partitions=$(LC_ALL=C fdisk -l $HDD_DEVICE | grep -v $ROOT | grep -v $EFI_DEVICE | grep -v $L_SWAP | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
+        partitions=$(LC_ALL=C fdisk -l $MAIN_DEVICE | grep -v $ROOT_PART | grep -v $EFI_PART | grep -v $L_SWAP | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
         L_HOME=$(dialog --colors --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --cancel-label "Annuler" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
         retour=$?
         if (( retour == 0 )); then
             format_partition "$L_HOME" "${MOUNTPOINT}/home"
             CHOIX_PARTITIONS+=$(echo $L_HOME)" = /home."
         else
-            L_HOME="/dev/sda99"
+            L_HOME="no_home_99"
         fi
     }
     #}}}

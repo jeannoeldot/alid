@@ -37,7 +37,7 @@
         package_install "leafpad epdfview imagemagick"
         #
         printf '%s\n' "${BGreen}Installation de ${BYellow}tint2, lxterminal et terminator${BGreen}...${Reset}"
-        package_install "tint2 orage lxterminal terminator perl-file-mimeinfo"
+        package_install "tint2 lxterminal terminator perl-file-mimeinfo"
         #
         printf '%s\n' "${BGreen}Installation de ${BYellow}viewnior et gmrun${BGreen}...${Reset}"
         package_install "viewnior gmrun"
@@ -52,7 +52,7 @@
         package_install "gvfs gvfs-afc gvfs-gphoto2 gvfs-mtp gvfs-nfs gvfs-smb"
         # FONTS
         printf '%s\n' "${BGreen}Installation de ${BYellow}Polices TTF${BGreen}...${Reset}"
-        package_install "ttf-bitstream-vera ttf-dejavu gnu-free-fonts ttf-liberation ttf-linux-libertine ttf-droid ttf-ubuntu-font-family"
+        package_install "ttf-bitstream-vera ttf-dejavu gnu-free-fonts ttf-liberation libertinus-font ttf-droid ttf-ubuntu-font-family"
         # LSB-RELEASE
         printf '%s\n' "${BGreen}Installation de ${BYellow}lsb-release${BGreen}...${Reset}"
         package_install "lsb-release"

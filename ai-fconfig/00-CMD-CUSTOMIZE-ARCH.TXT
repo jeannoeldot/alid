@@ -999,6 +999,9 @@ $ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.yasp.script.2013-09-28 .
 !!! ATTENTION DATE
 $ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.gitconfig.2019-01-31 .gitconfig
 
+!!! ATTENTION DATE
+$ cd && cp -v ~/09-Fichiers-Conf/home-jnd-git-pat.txt.2021-04-06 git-pat.txt
+
 
 3-4) CONFIGS TOP
 ================

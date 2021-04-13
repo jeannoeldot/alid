@@ -27,16 +27,18 @@ source $(pwd)/ai-commons
             IS_HDD_OR_SSD="${IS_HDD_OR_SSD}"
             eval $(grep '^TYPE_STORAGE_PARTITION=' "/root/variables.ali")
             TYPE_STORAGE_PARTITION="${TYPE_STORAGE_PARTITION}"
-            eval $(grep '^ROOT_DEVICE=' "/root/variables.ali")
-            ROOT_DEVICE="${ROOT_DEVICE}"
-            eval $(grep '^ROOT=' "/root/variables.ali")
-            ROOT="${ROOT}"
+            eval $(grep '^MAIN_DEVICE=' "/root/variables.ali")
+            MAIN_DEVICE="${MAIN_DEVICE}"
+            eval $(grep '^ROOT_PART=' "/root/variables.ali")
+            ROOT_PART="${ROOT_PART}"
             eval $(grep '^ROOT_FS_TYPE=' "/root/variables.ali")
             ROOT_FS_TYPE="${ROOT_FS_TYPE}"
             eval $(grep '^IS_VAR_SEPARATE=' "/root/variables.ali")
             IS_VAR_SEPARATE="${IS_VAR_SEPARATE}"
-            eval $(grep '^EFI_DEVICE=' "/root/variables.ali")
-            EFI_DEVICE="${EFI_DEVICE}"
+            eval $(grep '^EFI_PART=' "/root/variables.ali")
+            EFI_PART="${EFI_PART}"
+            eval $(grep '^IS_NVME=' "/root/variables.ali")
+            IS_NVME="${IS_NVME}"
         else
             local messages=""
             local titre="LECTURE FICHIER <<variables.ali>>"

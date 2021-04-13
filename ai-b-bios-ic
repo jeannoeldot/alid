@@ -49,7 +49,7 @@
         case $BOOTLOADER in
             "GRUB")
                 printf '%s\n' "${BGreen}Configuration de ${BYellow}grub${BGreen}...${Reset}"
-                grub-install --target=i386-pc --recheck ${ROOT_DEVICE}
+                grub-install --target=i386-pc --recheck ${MAIN_DEVICE}
                 pause_function
                 #
                 messages="\n"
@@ -89,8 +89,9 @@
                     cp -v ai-fconfig/boot-syslinux-syslinux.cfg /boot/syslinux/syslinux.cfg
                 fi
                 cp -v ai-fconfig/boot-syslinux-splash.png /boot/syslinux/splash.png
-                partroot=$(echo $ROOT | sed 's/\/dev\///')
-                partuuid=$(ls -l /dev/disk/by-uuid | awk '/'$partroot'/ {print $9}')
+#                partroot=$(echo $ROOT_PART | sed 's/\/dev\///')
+#                partuuid=$(ls -l /dev/disk/by-uuid | awk '/'$partroot'/ {print $9}')
+                partuuid=$(lsblk -dno PARTUUID $ROOT_PART)
                 sed -i "s/root=PART_ROOT/root=UUID=$partuuid/g" /boot/syslinux/syslinux.cfg
                 #
                 messages="\n"

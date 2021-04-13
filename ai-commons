@@ -11,8 +11,8 @@
 
 # CONSTANTES {{{
 # TITRE BOITES DE DIALOG dialog
-TITRE_BOX_W_DATE="11/12/2020"
-TITRE_BOX_W_VERSION="V 2.0.0"
+TITRE_BOX_W_DATE="13/04/2021"
+TITRE_BOX_W_VERSION="V 2.0.1"
 TITRE_BOX_W_TEXTE="INSTALLATION DE ARCH LINUX"
 TITRE_BOX_W="${TITRE_BOX_W_TEXTE} ${TITRE_BOX_W_VERSION} DU ${TITRE_BOX_W_DATE}"
 
@@ -46,6 +46,7 @@ IS_MULTI_BOOT_UEFI=0
 IS_Z87C=0
 IN_VIRTUAL_BOX=0
 IS_UEFI=0
+IS_NVME=0
 IS_HDD_OR_SSD=""
 TYPE_STORAGE_PARTITION=""
 IS_VAR_SEPARATE=0
@@ -156,6 +157,19 @@ read_name_type_keyboard() { #{{{
 #         IS_CPU_RDRAND=0
 #     fi
 # } #}}}
+# # TEST SI MAIN_DEVICE EST 1 NVME
+# $1 = MAIN_DEVICE
+# OUI ==> IS_NVME=1
+# NON ==> IS_NVME=0
+check_is_main_device_nvme() { #{{{
+    local nvme=$(echo $1 | grep -E "nvme")
+    echo ${nvme} | tr "[:upper:]" "[:lower:]" | grep -q nvme
+    if (( $? == 0 )); then
+        IS_NVME=1
+    else
+        IS_NVME=0
+    fi
+} #}}}
 # DANS VIRTUALBOX OU NON
 # OUI ==> IN_VIRTUAL_BOX=1
 # NON ==> IN_VIRTUAL_BOX=0
@@ -179,7 +193,7 @@ check_is_uefi_or_bios() { #{{{
     fi
 } #}}}
 # IS HDD OR SSD
-# $1 = HDD_DEVICE
+# $1 = MAIN_DEVICE
 check_is_hdd_or_ssd() { #{{{
     local name_device=$(echo $1 | sed 's/\/dev\///')
     local rotational=$(cat /sys/block/$name_device/queue/rotational)

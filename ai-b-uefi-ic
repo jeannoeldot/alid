@@ -190,8 +190,9 @@
         messages="\n"
         messages+="Configuration de ${Byellow_dlg}${DIR_EFI_ARCHLINUX}/refind_linux.conf${Reset_dlg}.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-        partroot=$(echo $ROOT | sed 's/\/dev\///')
-        partuuid=$(ls -l /dev/disk/by-partuuid | awk '/'$partroot'/ {print $9}')
+#        partroot=$(echo $ROOT_PART | sed 's/\/dev\///')
+#        partuuid=$(ls -l /dev/disk/by-partuuid | awk '/'$partroot'/ {print $9}')
+        partuuid=$(lsblk -dno PARTUUID $ROOT_PART)
         sed -i "/^\"Boot/d;/^$/d" ${DIR_EFI_ARCHLINUX}/refind_linux.conf
         # ROOT_FS_TYPE=ext4
         if (( $IN_VIRTUAL_BOX == 1 )); then
@@ -238,9 +239,14 @@
                 efibootmgr -B -b ${_num_entree}
             fi
             #
-            numpartefi=$(echo $EFI_DEVICE | sed 's/\/dev\/sd[a-z]//')
+#            numpartefi=$(echo $EFI_PART | sed 's/\/dev\/sd[a-z]//')
+            if (( $IS_NVME == 1 )); then
+                numpartefi=$(echo $EFI_PART | sed 's/\/dev\/nvme[0-9]n[0-9]p//')
+            else
+                numpartefi=$(echo $EFI_PART | sed 's/\/dev\/sd[a-z]//')
+            fi
             printf '%s\n' "${BGreen}Mise en place de ${BYellow}rEFInd${BGreen} dans ${BYellow}NVRAM${BGreen}...${Reset}"
-            efibootmgr -c -d ${ROOT_DEVICE} -p ${numpartefi} -l ${NAME_DIR_MGR_EFI} -L "rEFInd ArchLinux"
+            efibootmgr -c -d ${MAIN_DEVICE} -p ${numpartefi} -l ${NAME_DIR_MGR_EFI} -L "rEFInd ArchLinux"
             messages="\n"
             messages+="Visualiser les entrees dans ${Byellow_dlg}NVRAM${Reset_dlg} ?\n"
             print_dialog_yesno "${titre}" "${messages}" "Visualiser" "Continuer"

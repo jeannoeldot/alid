@@ -189,11 +189,12 @@ source $(pwd)/ai-commons
         echo "IN_VIRTUAL_BOX=${IN_VIRTUAL_BOX}" >> ${MOUNTPOINT}/root/variables.ali
         echo "IS_HDD_OR_SSD=${IS_HDD_OR_SSD}" >> ${MOUNTPOINT}/root/variables.ali
         echo "TYPE_STORAGE_PARTITION=${TYPE_STORAGE_PARTITION}" >> ${MOUNTPOINT}/root/variables.ali
-        echo "ROOT_DEVICE=${ROOT_DEVICE}" >> ${MOUNTPOINT}/root/variables.ali
-        echo "ROOT=${ROOT}" >> ${MOUNTPOINT}/root/variables.ali
+        echo "MAIN_DEVICE=${MAIN_DEVICE}" >> ${MOUNTPOINT}/root/variables.ali
+        echo "ROOT_PART=${ROOT_PART}" >> ${MOUNTPOINT}/root/variables.ali
         echo "ROOT_FS_TYPE=${ROOT_FS_TYPE}" >> ${MOUNTPOINT}/root/variables.ali
         echo "IS_VAR_SEPARATE=${IS_VAR_SEPARATE}" >> ${MOUNTPOINT}/root/variables.ali
-        echo "EFI_DEVICE=${EFI_DEVICE}" >> ${MOUNTPOINT}/root/variables.ali
+        echo "EFI_PART=${EFI_PART}" >> ${MOUNTPOINT}/root/variables.ali
+        echo "IS_NVME=${IS_NVME}" >> ${MOUNTPOINT}/root/variables.ali
         #
 #        echo -e "\nVérification du fichier ${MOUNTPOINT}/root/variables.ali avec $EDITOR"
 #        pause_function

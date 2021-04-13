@@ -30,7 +30,6 @@
         # KDE5 LOOK
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Look${BGreen}...${Reset}"
         package_install "oxygen-icons-svg"
-        package_install "oxygen-gtk2"
         package_install "qtcurve-gtk2 qtcurve-qt5"
         # GTK theme matching Breeze
         package_install "breeze-gtk"
@@ -50,7 +49,7 @@
         package_install "okteta kate dolphin-plugins kompare poxml"
         # FONTS TTF
         printf '%s\n' "${BGreen}Installation de ${BYellow}Polices TTF${BGreen}...${Reset}"
-        package_install "ttf-bitstream-vera ttf-dejavu gnu-free-fonts ttf-liberation ttf-linux-libertine ttf-droid ttf-ubuntu-font-family"
+        package_install "ttf-bitstream-vera ttf-dejavu gnu-free-fonts ttf-liberation libertinus-font ttf-droid ttf-ubuntu-font-family"
         # LSB-RELEASE
         printf '%s\n' "${BGreen}Installation de ${BYellow}lsb-release${BGreen}...${Reset}"
         package_install "lsb-release"
