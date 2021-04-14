@@ -406,10 +406,10 @@ source $(pwd)/ai-commons
         titre="INSTALLATION D'OUTILS BASH"
         messages="\n"
         messages+="Installation de divers outils ${Byellow_dlg}BASH${Reset_dlg} :\n"
-        messages+="bc mlocate rsync bash-completion wget net-tools ethtool tree atool mc iptraf-ng lsd\n"
+        messages+="bc mlocate rsync bash-completion wget net-tools ethtool tree atool mc iptraf-ng lsd nvme-cli\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de ${BYellow}bc mlocate rsync bash-completion wget net-tools ethtool tree atool mc iptraf-ng lsd${BGreen}...${Reset}"
-        package_install "bc mlocate rsync bash-completion wget net-tools ethtool tree atool mc iptraf-ng lsd"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}bc mlocate rsync bash-completion wget net-tools ethtool tree atool mc iptraf-ng lsd nvme-cli${BGreen}...${Reset}"
+        package_install "bc mlocate rsync bash-completion wget net-tools ethtool tree atool mc iptraf-ng lsd nvme-cli"
         pause_function
         #
         titre="INSTALLATION DE «D-BUS»"
@@ -898,7 +898,7 @@ source $(pwd)/ai-commons
     add_custom_repositories
     set_launched
     
-#    initialise_cache_pacman
+    initialise_cache_pacman
     
     system_upgrade
     language_selector
