@@ -56,7 +56,8 @@ source $(pwd)/ai-commons
         local tmpfile=$(mktemp --suffix=-mirrorlist)
         # Get latest mirror list and save to tmpfile
         printf '%s\n' "${BGreen}Récupération des ${BYellow}serveurs FR${BGreen}...${Reset}"
-        curl -so ${tmpfile} ${url}
+#        curl -so ${tmpfile} ${url}
+        curl -s -L ${url} -o ${tmpfile}
         # Backup and replace current mirrorlist file (if new file is non-zero)
         if [[ -s ${tmpfile} ]]; then
             date_Generated=$(awk '/Generated/ {print $4}' "${tmpfile}")
