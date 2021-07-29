@@ -73,12 +73,12 @@ source $(pwd)/ai-commons
             # rotational = 0 ==> SSD
             # https://wiki.archlinux.org/index.php/Solid_State_Drives#TRIM
             messages="\n"
-            messages+="${Byellow_dlg}SSD${Reset_dlg} : Activation du ${Byellow_dlg}TRIM${Reset_dlg} (option discard ou service fstrim).\n"
+            messages+="${Byellow_dlg}SSD${Reset_dlg} : Activation du ${Byellow_dlg}TRIM${Reset_dlg} (option service fstrim ou discard).\n"
             messages+="------------------------------------------------------------\n\n"
             messages+="Configurer le ${Byellow_dlg}TRIM${Reset_dlg} en se basant sur :\n"
             REPLY=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Selectionner" --menu "${messages}" 20 72 5 \
-                    "DISCARD" "TRIM par option de montage." \
                     "FSTRIM" "TRIM par service fstrim." \
+                    "DISCARD" "TRIM par option de montage." \
                     3>&1 1>&2 2>&3)
             case "$REPLY" in
 #                 "DISCARD")
@@ -168,9 +168,11 @@ source $(pwd)/ai-commons
         messages="\n"
         messages+="Activation de l'option ${Bwhite_dlg}color${Reset_dlg}.\n"
         messages+="Activation de l'option ${Bwhite_dlg}VerbosePkgLists${Reset_dlg}.\n"
+        messages+="Activation de l'option ${Bwhite_dlg}ParallelDownloads = 2${Reset_dlg}.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         sed -i "/^#Color/c\Color" /etc/pacman.conf
         sed -i "/^#VerbosePkgLists/c\VerbosePkgLists" /etc/pacman.conf
+        sed -i "/^#ParallelDownloads/c\ParallelDownloads =2" /etc/pacman.conf
     }
     #}}}
     #CONFIGURE MAKEPKG.CONF {{{
@@ -310,6 +312,7 @@ source $(pwd)/ai-commons
         #
         printf '%s\n' "${BGreen}Generation de la langue locale utilisee ${BYellow}${LOCALE}${BGreen}...${Reset}"
         sed -i "/${LOCALE}/s/^#//" /etc/locale.gen
+        sed -i "/#en_US.UTF-8/s/^#//" /etc/locale.gen
         locale-gen
         pause_function
     }

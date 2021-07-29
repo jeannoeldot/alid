@@ -78,7 +78,7 @@
             messages+="\n\n"
         fi
         messages+="Copie du fichier de configuration du kernel :\n"
-        messages+="- refind_linux.conf-sample --> refind_linux.conf\n"
+        messages+="- refind_linux.conf\n"
         print_dialog_msgbox_h "${titre}" "${messages}" "Continuer" 20
         printf '%s\n' "${BGreen}Copie des fichiers du ${BYellow}kernel (EFISTUB)${BGreen}...${Reset}"
         # CREATION arch_x
@@ -91,7 +91,7 @@
             cp -v /boot/intel-ucode.img ${DIR_EFI_ARCHLINUX}/intel-ucode.img
         fi
         printf '%s\n' "${BGreen}Copie du fichier de configuration du ${BYellow}kernel (EFISTUB)${BGreen}...${Reset}"
-        cp -v /usr/share/refind/refind_linux.conf-sample ${DIR_EFI_ARCHLINUX}/refind_linux.conf
+        cp -v ai-fconfig/refind_linux.conf-sample ${DIR_EFI_ARCHLINUX}/refind_linux.conf
         pause_function
         # rEFInd : si 1ere installation
         messages="\n"
@@ -193,22 +193,22 @@
 #        partroot=$(echo $ROOT_PART | sed 's/\/dev\///')
 #        partuuid=$(ls -l /dev/disk/by-partuuid | awk '/'$partroot'/ {print $9}')
         partuuid=$(lsblk -dno PARTUUID $ROOT_PART)
-        sed -i "/^\"Boot/d;/^$/d" ${DIR_EFI_ARCHLINUX}/refind_linux.conf
+#        sed -i "/^\"Boot/d;/^$/d" ${DIR_EFI_ARCHLINUX}/refind_linux.conf
         # ROOT_FS_TYPE=ext4
         if (( $IN_VIRTUAL_BOX == 1 )); then
-            echo -e '"Boot en mode Graphique"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=graphical.target quiet initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-            echo -e '"Boot en mode Terminal"    "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=multi-user.target quiet initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-            echo -e '"Boot en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=rescue.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-            echo -e '"Fallback en mode Graphique"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=graphical.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-            echo -e '"Fallback en mode Terminal"    "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=multi-user.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-            echo -e '"Fallback en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=rescue.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
+            printf '%s\n' '"Boot en mode Graphique"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=graphical.target quiet initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
+            printf '%s\n' '"Boot en mode Terminal"    "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=multi-user.target quiet initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
+            printf '%s\n' '"Boot en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=rescue.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
+            printf '%s\n' '"Fallback en mode Graphique"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=graphical.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
+            printf '%s\n' '"Fallback en mode Terminal"    "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=multi-user.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
+            printf '%s\n' '"Fallback en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=rescue.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
         else
-            echo -e '"Boot en mode Graphique"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=graphical.target quiet initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-            echo -e '"Boot en mode Terminal"    "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=multi-user.target quiet initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-            echo -e '"Boot en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=rescue.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-            echo -e '"Fallback en mode Graphique"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=graphical.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-            echo -e '"Fallback en mode Terminal"    "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=multi-user.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-            echo -e '"Fallback en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=rescue.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
+            printf '%s\n' '"Boot en mode Graphique"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=graphical.target quiet initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
+            printf '%s\n' '"Boot en mode Terminal"    "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=multi-user.target quiet initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
+            printf '%s\n' '"Boot en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=rescue.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
+            printf '%s\n' '"Fallback en mode Graphique"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=graphical.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
+            printf '%s\n' '"Fallback en mode Terminal"    "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=multi-user.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
+            printf '%s\n' '"Fallback en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=rescue.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
         fi
         messages="\n"
         messages+="Visualiser/Editer le fichier ${Byellow_dlg}refind_linux.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"

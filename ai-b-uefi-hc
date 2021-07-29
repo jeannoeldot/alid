@@ -40,7 +40,7 @@
         }
         appel_check_is_hdd_or_ssd() {
             local messages=""
-            local titre="PARTITIONNEMENT : TYPE DE DISQUE"
+            local titre="PARTITIONNEMENT : TYPE DE DISQUE (SSD ou HDD)"
             messages="\n"
             check_is_hdd_or_ssd "${MAIN_DEVICE}"
             if [[ ${IS_HDD_OR_SSD} == "HDD" ]]; then
