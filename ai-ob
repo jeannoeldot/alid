@@ -816,7 +816,7 @@
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gst-plugins-base${BGreen}...${Reset}"
                     package_install "gst-plugins-base gst-plugins-base-libs gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav mpg123 flac"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gstreamer${BGreen}...${Reset}"
-                    package_install "libcanberra-gstreamer"
+                    package_install "gstreamer"
             esac
         done
         if [[ $REPLY != "" ]]; then

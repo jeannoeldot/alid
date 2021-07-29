@@ -172,7 +172,7 @@ source $(pwd)/ai-commons
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         sed -i "/^#Color/c\Color" /etc/pacman.conf
         sed -i "/^#VerbosePkgLists/c\VerbosePkgLists" /etc/pacman.conf
-        sed -i "/^#ParallelDownloads/c\ParallelDownloads =2" /etc/pacman.conf
+        sed -i "/^#ParallelDownloads/c\ParallelDownloads = 2" /etc/pacman.conf
     }
     #}}}
     #CONFIGURE MAKEPKG.CONF {{{
