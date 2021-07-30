@@ -494,8 +494,8 @@ source $(pwd)/ai-commons
         messages="\n"
         messages+="Système de fichiers permettant d'organiser les données devant être conservées, ainsi que de gérer l'espace disponible sur le(s) périphérique(s) qui les contient.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de ${BYellow}ntfs-3g dosfstools exfat-utils fuse2 exfatprogs${BGreen}...${Reset}"
-        package_install "ntfs-3g dosfstools exfat-utils fuse2 exfatprogs"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}ntfs-3g dosfstools exfat-utils fuse2${BGreen}...${Reset}"
+        package_install "ntfs-3g dosfstools exfat-utils fuse2"
         pause_function
     }
     #}}}
@@ -601,8 +601,8 @@ source $(pwd)/ai-commons
                         messages+="Nom de la carte NVidia détectée : ${Byellow_dlg}${L_NAME_CG_NVIDIA}${Reset_dlg}\n\n"
                         messages+="Installation de la branche 340xx des pilotes NVidia pour les GPUs G8x, G9x et GT2xx.\n"
                         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia-340xx nvidia-340xx-utils pangox-compat libva-vdpau-driver${BGreen}...${Reset}"
-                        package_install "nvidia-340xx nvidia-340xx-utils pangox-compat libva-vdpau-driver"
+                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia-340xx nvidia-340xx-utils libva-vdpau-driver${BGreen}...${Reset}"
+                        package_install "nvidia-340xx nvidia-340xx-utils libva-vdpau-driver"
                         #CONFIGURE NVidia IN XORG
                         printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia ${BYellow}20-nvidia.conf${BGreen}...${Reset}"
                         cp -v ai-fconfig/20-nvidia-340xx.conf /etc/X11/xorg.conf.d/20-nvidia.conf
@@ -612,8 +612,8 @@ source $(pwd)/ai-commons
                         messages+="Nom de la carte Vidéo NVidia détectée : ${Byellow_dlg}${L_NAME_CG_NVIDIA}${Reset_dlg}\n\n"
                         messages+="Installation de la dernière version des pilotes NVidia.\n"
                         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia nvidia-utils nvidia-settings pangox-compat libva-vdpau-driver${BGreen}...${Reset}"
-                        package_install "nvidia nvidia-utils nvidia-settings pangox-compat libva-vdpau-driver"
+                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia nvidia-utils nvidia-settings libva-vdpau-driver${BGreen}...${Reset}"
+                        package_install "nvidia nvidia-utils nvidia-settings libva-vdpau-driver"
                         #CONFIGURE NVidia IN XORG
                         printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia ${BYellow}20-nvidia.conf${BGreen}...${Reset}"
                         cp -v ai-fconfig/20-nvidia.conf /etc/X11/xorg.conf.d/20-nvidia.conf                    
