@@ -565,6 +565,7 @@ source $(pwd)/ai-commons
             start_module "vboxguest"
             start_module "vboxsf"
             start_module "vboxvideo"
+            systemctl enable vboxservice.service
             printf '%s\n' "${BGreen}Ajout de ${BYellow}${USERNAME}${BGreen} au groupe ${BYellow}vboxsf${BGreen}...${Reset}"
             gpasswd -a ${USERNAME} vboxsf
         else

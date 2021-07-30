@@ -22,62 +22,41 @@
         messages+="KDE est un projet de logiciel comprenant actuellement un environnement de bureau appelé Plasma (ou Plasma Workspaces), une collection de bibliothèques et de cadres (KDE Frameworks) et plusieurs applications (KDE Applications).\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         # KDE5 BASE
-        titre="INSTALLATION DE «KDE 5»"
-        messages="\n"
-        messages+="Intallation de «KDE5 BASE».\n"
-        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Base${BGreen}...${Reset}"
         package_install "plasma kf5 kf5-aids"
         package_install "konsole kwrite dolphin"
         package_install "appmenu-gtk-module packagekit-qt5"
         pacman -D --asdeps appmenu-gtk-module packagekit-qt5
+        pause_function
         # KDE5 LOOK
-        titre="INSTALLATION DE «KDE 5»"
-        messages="\n"
-        messages+="Intallation de «KDE5 LOOK».\n"
-        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Look${BGreen}...${Reset}"
         package_install "oxygen-icons-svg"
         package_install "qtcurve-gtk2 qtcurve-qt5"
         # GTK theme matching Breeze
         package_install "breeze-gtk"
+        pause_function
         # KDE5 UTILS
-        titre="INSTALLATION DE «KDE 5»"
-        messages="\n"
-        messages+="Intallation de «KDE5 UTILS».\n"
-        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Utils${BGreen}...${Reset}"
         package_install "ark filelight kcalc kcharselect kdf kwalletmanager"
+        pause_function
         # KDE5 MULTIMEDIA
-        titre="INSTALLATION DE «KDE 5»"
-        messages="\n"
-        messages+="Intallation de «KDE5 MULTIMEDIA».\n"
-        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Multimedia${BGreen}...${Reset}"
         package_install "audiocd-kio kio-extras kmix ffmpegthumbs"
         package_install "libdvdcss libdvdread libdvdnav"
+        pause_function
         # KDE5 GRAPHICS
-        titre="INSTALLATION DE «KDE 5»"
-        messages="\n"
-        messages+="Intallation de «KDE5 GRAHIQUES».\n"
-        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Graphiques${BGreen}...${Reset}"
         package_install "gwenview kcolorchooser kolourpaint spectacle okular svgpart kdegraphics-thumbnailers kdegraphics-mobipocket"
         package_install "kipi-plugins"
+        pause_function
         # KDE5 SDK
-        titre="INSTALLATION DE «KDE 5»"
-        messages="\n"
-        messages+="Intallation de «KDE5 SDK».\n"
-        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 SDK${BGreen}...${Reset}"
         package_install "okteta kate dolphin-plugins kompare poxml"
+        pause_function
         # FONTS TTF
-        titre="INSTALLATION DE «KDE 5»"
-        messages="\n"
-        messages+="Intallation de «KDE5 POLICES TTF».\n"
-        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         printf '%s\n' "${BGreen}Installation de ${BYellow}Polices TTF${BGreen}...${Reset}"
         package_install "ttf-bitstream-vera ttf-dejavu gnu-free-fonts ttf-liberation libertinus-font ttf-droid ttf-ubuntu-font-family"
+        pause_function
         # LSB-RELEASE
         printf '%s\n' "${BGreen}Installation de ${BYellow}lsb-release${BGreen}...${Reset}"
         package_install "lsb-release"
