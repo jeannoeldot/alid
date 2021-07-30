@@ -121,6 +121,10 @@
         # Abstraction for enumerating power devices, listening to device events and querying history and statistics
         printf '%s\n' "${BGreen}Activation de ${BYellow}upower.service${BGreen}...${Reset}"
         systemctl enable upower.service
+        # SUPPR MAJ AUTO Discover
+        mkdir -p /home/${USERNAME}/.config/autostart
+        echo 'Hidden=true' >> /home/${USERNAME}/.config/autostart/org.kde.discover.notifier.desktop
+        chown -R ${USERNAME}:users /home/${USERNAME}/.config
         # Mise en place d'un drop-in pour sddm.service si carte nvivia et drivers nvidia installé
         # https://bbs.archlinux.org/viewtopic.php?id=173153. brain0    Developer
         if is_package_installed "nvidia" ; then
