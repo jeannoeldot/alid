@@ -145,17 +145,8 @@ $ sudo sed -i "/^#MAKEFLAGS/c\MAKEFLAGS=\"-j5\"" /etc/makepkg.conf
 !!! A FAIRE !!!
 ===============
 
-$ sudo sed -i "/^#PACKAGER/c\PACKAGER=\"Jean-Noel Dot <jeannoeldot@club-internet.fr>\"" /etc/makepkg.conf
-OU
-$ sudo sed -i "/^#PACKAGER/c\PACKAGER=\"Jean-Noel Dot <jean.noel.dot@sfr.fr>\"" /etc/makepkg.conf
-OU
 $ sudo sed -i "/^#PACKAGER/c\PACKAGER=\"Name <name@fai.com>\"" /etc/makepkg.conf
 
-!!! Extension zst remplace xz
-!!! Version pacman 5.2.1-4
-$ sudo sed -i "/^COMPRESSZST/c\COMPRESSZST=(zstd -c -T0 --ultra -20 -)" /etc/makepkg.conf
-
-$ sudo sed -i "/^PKGEXT/c\PKGEXT=\'.pkg.tar.zst\'" /etc/makepkg.conf
 
 
 3) PACMAN.CONF : Edition fichier /etc/pacman.conf
@@ -173,7 +164,7 @@ $ mkdir ~/00-repolocal
 # Si DropBox !!! Vérifier lien
 ---------------------------------
 $ cd ~/00-repolocal/
-$ wget https://dl.dropbox.com/s/u2jb3jbb7y6y07p/fapg-0.41-3-x86_64.pkg.tar.xz
+$ wget https://dl.dropbox.com/s/u2jb3jbb7y6y07p/fapg-0.41-3-x86_64.pkg.tar.zst
 
 $ cd ~/bin/
 $ wget https://www.dropbox.com/s/mn8f3azts8ebhmz/maj-repolocal
@@ -215,6 +206,13 @@ Where=/tmp
 Type=tmpfs
 Options=mode=1777,strictatime,nosuid,nodev
 
+core/systemd 249.2 :
+[Mount]
+What=tmpfs
+Where=/tmp
+Type=tmpfs
+Options=mode=1777,strictatime,nosuid,nodev,size=50%,nr_inodes=400k
+
 
 Example : Options=mode=1777,strictatime,size=768M
 Example : Options=mode=1777,strictatime,size=2G
@@ -255,8 +253,25 @@ $ sudo mkdir /etc/systemd/system/tmp.mount.d
 $ sudo sh -c "echo '[Mount]' > /etc/systemd/system/tmp.mount.d/tmp_size.conf"
 $ sudo sh -c "echo 'Options=mode=1777,strictatime,nosuid,nodev,size=8G' >> /etc/systemd/system/tmp.mount.d/tmp_size.conf"
 
-==> tmpfs = 8G  mkpkg-tmpfs = 8G ou 16G si compilation blender
-==>                          16G ou  8G RAM disponible
+NOUVELLE VERSION 249.2
+OU POUR BLENDER
+----------------
+!!! SI 32 GiO RAM
+$ sudo mkdir /etc/systemd/system/tmp.mount.d
+$ sudo sh -c "echo '[Mount]' > /etc/systemd/system/tmp.mount.d/tmp_size.conf"
+$ sudo sh -c "echo 'Options=mode=1777,strictatime,nosuid,nodev,size=8G,nr_inodes=400k' >> /etc/systemd/system/tmp.mount.d/tmp_size.conf"
+
+
+==> tmpfs = 8G  mkpkg-tmpfs = 8G ou 20G si compilation blender
+==>                          16G ou  4G RAM disponible
+
+
+!!! SI 64 GiO RAM     AU 05/08/2021
+===================================
+==> tmpfs = 8G  mkpkg-tmpfs = 8G ou 24G si compilation blender
+==>                          48G ou  32G RAM disponible
+
+
 
 FAIRE TEST SI OK ( PSD AVEC FIREFOX ... COMPILER BLENDER DANS /TMP )
 
@@ -591,7 +606,11 @@ Warning: Unit file of hddtemp.service changed on disk, 'systemctl --system daemo
 
 !!! AU REBOOT : TEST EN USER : doit donner les 2 temps
 $ nc localhost 7634
+!!! ANCIEN
 |/dev/sda|M4-CT256M4SSD2|0|C||/dev/sdb|WDC WD5002AALX-00J37A0|35|C|
+!!! NOUVEAU
+|/dev/sda|Samsung SSD 860 PRO 256G B              �@|UNK|*||/dev/sdb|WDC WD1003FZEX-00K3CA0|27|C|
+
 
 $ sudo systemctl --no-pager status hddtemp.service
 [sudo] password for jnd: 
@@ -746,6 +765,18 @@ Section "Device"
 EndSection
 
 
+!!! SI GeForce RTX 3080 TI
+--------------------------
+
+Section "Device"
+   Identifier   "GeForce RTX 3080 TI"
+   Driver       "nvidia"
+   Option       "NoLogo"        "True"
+#   Option       "CoolBits"      "31"
+   Option       "TripleBuffer"  "True"
+EndSection
+
+
 26) VERIFICATION DE /usr/lib/jvm
 ================================
 $ ls -l /usr/lib/jvm
@@ -815,6 +846,7 @@ https://github.com/falconindy/asp/blob/master/man/asp.1.txt
 $ sudo mount | grep tmpfs
 SI tmpfs = 6G : tmpfs on /tmp type tmpfs (rw,size=6291456k)
 SI tmpfs = 8G : tmpfs on /tmp type tmpfs (rw,size=8388608k)
+SI tmpfs = 8G : tmpfs on /tmp type tmpfs (rw,nosuid,nodev,size=8388608k,nr_inodes=409600,inode64)
 
 
 99) NETTOYAGE SI OK
@@ -861,51 +893,57 @@ $ cd && mkdir ~/99-temp && mkdir ~/99-temp/0-de-zipper
 # copier ces fichiers dans ~/99-temp :
 --------------------------------------
 
-00-3D-*.tar.xz
-05-Photos-*.tar.xz
+!!! A VOIR !!!
+00-3D-*.tar.zst
 
-00-Conky-*.tar.xz
-01-dev-*.tar.xz
-02-git-*.tar.xz
-05-builds-*.tar.xz
-05-Icones-Progs-*.tar.xz
-05-Images-*.tar.xz
-05-Themes-*.tar.xz
-07-Docs-Office-*.tar.xz
-08-Dwl-OK-*.tar.xz
-09-Documentation-*.tar.xz
-09-Fichiers-Conf-*.tar.xz
-Documents-*.tar.xz
+!!! A VOIR !!!
+05-Photos-*.tar.zst
 
-01-scripts-*.tar.xz
-bin-*.tar.xz
+00-Conky-*.tar.zst
+01-dev-*.tar.zst
+02-git-*.tar.zst
+05-builds-*.tar.zst
+05-Icones-Progs-*.tar.zst
+05-Images-*.tar.zst
+05-Themes-*.tar.zst
+07-Docs-Office-*.tar.zst
+08-Dwl-OK-*.tar.zst
+09-Documentation-*.tar.zst
+09-Fichiers-Conf-*.tar.zst
+Documents-*.tar.zst
 
-etc-*.tar.xz
+01-scripts-*.tar.zst
+bin-*.tar.zst
+
+etc-*.tar.zst
 
  1-2) DATALINUX EXISTE MAIS EST VIERGE OU DATALINUX N'EXISTE PAS
  ===============================================================
 # récupérer les fichiers depuis HubiC/9-Giga/DropBox ou HDD Externes dans ~/99-temp :
 -------------------------------------------------------------------------------------
-00-3D-*.tar.xz
-05-Photos-*.tar.xz
+!!! A VOIR !!!
+00-3D-*.tar.zst
 
-00-Conky-*.tar.xz
-01-dev-*.tar.xz
-02-git-*.tar.xz
-05-builds-*.tar.xz
-05-Icones-Progs-*.tar.xz
-05-Images-*.tar.xz
-05-Themes-*.tar.xz
-07-Docs-Office-*.tar.xz
-08-Dwl-OK-*.tar.xz
-09-Documentation-*.tar.xz
-09-Fichiers-Conf-*.tar.xz
-Documents-*.tar.xz
+!!! A VOIR !!!
+05-Photos-*.tar.zst
 
-etc-*.tar.xz
+00-Conky-*.tar.zst
+01-dev-*.tar.zst
+02-git-*.tar.zst
+05-builds-*.tar.zst
+05-Icones-Progs-*.tar.zst
+05-Images-*.tar.zst
+05-Themes-*.tar.zst
+07-Docs-Office-*.tar.zst
+08-Dwl-OK-*.tar.zst
+09-Documentation-*.tar.zst
+09-Fichiers-Conf-*.tar.zst
+Documents-*.tar.zst
 
-01-scripts-*.tar.xz
-bin-*.tar.xz
+etc-*.tar.zst
+
+01-scripts-*.tar.zst
+bin-*.tar.zst
 
  COMMUNS :
  ==========
@@ -913,22 +951,24 @@ $ cd ~/99-temp
 
 # pour chaque fichiers dans ~/99-temp :
 ---------------------------------------
-$ tar -xJf 00-Conky-*.tar.xz -C ~/ && mv 00-Conky-*.tar.xz 0-de-zipper/
-$ tar -xJf 01-dev-*.tar.xz -C ~/ && mv 01-dev-*.tar.xz 0-de-zipper/
-$ tar -xJf 02-git-*.tar.xz -C ~/ && mv 02-git-*.tar.xz 0-de-zipper/
-$ tar -xJf 05-builds-*.tar.xz -C ~/ && mv 05-builds-*.tar.xz 0-de-zipper/
-$ tar -xJf 05-Icones-Progs-*.tar.xz -C ~/ && mv 05-Icones-Progs-*.tar.xz 0-de-zipper/
-$ tar -xJf 05-Images-*.tar.xz -C ~/ && mv 05-Images-*.tar.xz 0-de-zipper/
-$ tar -xJf 05-Themes-*.tar.xz -C ~/ && mv 05-Themes-*.tar.xz 0-de-zipper/
-$ tar -xJf 07-Docs-Office-*.tar.xz -C ~/ && mv 07-Docs-Office-*.tar.xz 0-de-zipper/
-$ tar -xJf 08-Dwl-OK-*.tar.xz -C ~/ && mv 08-Dwl-OK-*.tar.xz 0-de-zipper/
-$ tar -xJf 09-Documentation-*.tar.xz -C ~/ && mv 09-Documentation-*.tar.xz 0-de-zipper/
-$ tar -xJf 09-Fichiers-Conf-*.tar.xz -C ~/ && mv 09-Fichiers-Conf-*.tar.xz 0-de-zipper/
-$ tar -xJf Documents-*.tar.xz -C ~/ && mv Documents-*.tar.xz 0-de-zipper/
+$ tar -x --zstd -f 00-Conky-*.tar.zst -C ~/ && mv 00-Conky-*.tar.zst 0-de-zipper/
+$ tar -x --zstd -f 01-dev-*.tar.zst -C ~/ && mv 01-dev-*.tar.zst 0-de-zipper/
+$ tar -x --zstd -f 02-git-*.tar.zst -C ~/ && mv 02-git-*.tar.zst 0-de-zipper/
+$ tar -x --zstd -f 05-builds-*.tar.zst -C ~/ && mv 05-builds-*.tar.zst 0-de-zipper/
+$ tar -x --zstd -f 05-Icones-Progs-*.tar.zst -C ~/ && mv 05-Icones-Progs-*.tar.zst 0-de-zipper/
+$ tar -x --zstd -f 05-Images-*.tar.zst -C ~/ && mv 05-Images-*.tar.zst 0-de-zipper/
+$ tar -x --zstd -f 05-Themes-*.tar.zst -C ~/ && mv 05-Themes-*.tar.zst 0-de-zipper/
+$ tar -x --zstd -f 07-Docs-Office-*.tar.zst -C ~/ && mv 07-Docs-Office-*.tar.zst 0-de-zipper/
+$ tar -x --zstd -f 08-Dwl-OK-*.tar.zst -C ~/ && mv 08-Dwl-OK-*.tar.zst 0-de-zipper/
+$ tar -x --zstd -f 09-Documentation-*.tar.zst -C ~/ && mv 09-Documentation-*.tar.zst 0-de-zipper/
+$ tar -x --zstd -f 09-Fichiers-Conf-*.tar.zst -C ~/ && mv 09-Fichiers-Conf-*.tar.zst 0-de-zipper/
+$ tar -x --zstd -f Documents-*.tar.zst -C ~/ && mv Documents-*.tar.zst 0-de-zipper/
 
-$ tar -xJf 01-scripts-*.tar.xz -C ~/ && mv 01-scripts-*.tar.xz 0-de-zipper/
-$ tar -xJf bin-*.tar.xz -C ~/ && mv bin-*.tar.xz 0-de-zipper/
+$ tar -x --zstd -f 01-scripts-*.tar.zst -C ~/ && mv 01-scripts-*.tar.zst 0-de-zipper/
+$ tar -x --zstd -f bin-*.tar.zst -C ~/ && mv bin-*.tar.zst 0-de-zipper/
 
+!!! A VOIR !!!
+$ tar -x --zstd -f 00-3D-*.tar.zst -C ~/ && mv 00-3D-*.tar.zst 0-de-zipper/
 
 $ cd && mkdir ~/90-BACKUP && mkdir ~/90-Partage && mkdir ~/99-A-IMPRIM && mkdir ~/99-dwl-temp
 
@@ -978,9 +1018,9 @@ $ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.yasp.script.2013-09-28 .
  
 3-3) CONFIGS GIT
 ================
+
+
  !!! VOIR : ~/09-Documentation/00-Cmd-CREATION-GIT-INSTALL-ALID.TXT
- !!! VOIR : ~/09-Documentation/00-Cmd-CREATION-GIT-INSTALL-ALI-2.TXT
- !!! VOIR : ~/09-Documentation/00-Cmd-CREATION-GIT-INSTALLEUR.TXT
  !!! VOIR : ~/09-Documentation/0-CMD-GIT-01SCRIPTS.TXT
  !!! VOIR : ~/09-Documentation/0-CMD-GIT-05BUILDS.TXT
  !!! VOIR : ~/09-Documentation/0-CMD-GIT-JNDQALIGNE5.TXT
@@ -988,8 +1028,6 @@ $ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.yasp.script.2013-09-28 .
  !!! VOIR : ~/09-Documentation/0-CMD-GIT-JNDQRAMI.TXT
  OU
  !!! VOIR : ~/02-git/00-Cmd-CREATION-GIT-INSTALL-ALID.TXT
- !!! VOIR : ~/02-git/00-Cmd-CREATION-GIT-INSTALL-ALI-2.TXT
- !!! VOIR : ~/02-git/00-Cmd-CREATION-GIT-INSTALLEUR.TXT
  !!! VOIR : ~/02-git/0-CMD-GIT-01SCRIPTS.TXT
  !!! VOIR : ~/02-git/0-CMD-GIT-05BUILDS.TXT
  !!! VOIR : ~/02-git/0-CMD-GIT-JNDQALIGNE5.TXT
@@ -997,10 +1035,11 @@ $ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.yasp.script.2013-09-28 .
  !!! VOIR : ~/02-git/0-CMD-GIT-JNDQRAMI.TXT
 
 !!! ATTENTION DATE
-$ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.gitconfig.2019-01-31 .gitconfig
+$ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.gitconfig.2021-08-04 .gitconfig
 
 !!! ATTENTION DATE
-$ cd && cp -v ~/09-Fichiers-Conf/home-jnd-git-pat.txt.2021-04-06 git-pat.txt
+$ cd && cp -v ~/09-Fichiers-Conf/home-jnd-git-pat.txt.2021-08-04 git-pat.txt
+
 
 
 3-4) CONFIGS TOP
@@ -1039,39 +1078,11 @@ $ sudo sed -i "/^#Server = file/a\\\n[repolocal]\nSigLevel = Optional TrustAll\n
 
 $ cat /etc/pacman.conf
 
-  !!! VOIR
-  ----------
-# Si DropBox !!! Vérifier lien
----------------------------------
-$ cd ~/00-repolocal/
-$ wget https://dl.dropbox.com/s/u2jb3jbb7y6y07p/fapg-0.41-3-x86_64.pkg.tar.xz
-
-$ cd ~/bin/
-$ wget https://www.dropbox.com/s/mn8f3azts8ebhmz/maj-repolocal
-$ chmod +x maj-repolocal
 
 $ cd && maj-repolocal
 
 $ sudo pacman -Syu
 
-
-
-!!! SEMBLE INUTILE
-------------------
-5) LIENS SCRIPTS --> BIN
-========================
- 5-1) SI 01-scripts N'EXISTE PAS
- ===============================
-$ cd && mkdir ~/01-scripts && cd ~/01-scripts
-
-  !!! VOIR
-  ----------
- COMMUNS
- =======
-$ wget https://www.dropbox.com/s/mn8f3azts8ebhmz/maj-repolocal
-$ chmod +x maj-repolocal
-$ cd
-$ ln -sfv ~/01-scripts/maj-repolocal ~/bin/maj-repolocal
 
 
 6) CRÉATION RÉPERTOIRE 0-chroot DANS 05-builds
@@ -1140,8 +1151,6 @@ makepkg.conf.native
 ==========================================================================
  mkpkg-tmpfs
 
- robin-map-git
- 
  ttf-win10-fonts
  
  virtualbox-extension
@@ -1168,8 +1177,10 @@ $ systemctl --user stop psd.service
 
 $ kwrite $HOME/.config/psd/psd.conf &
 15  #USE_OVERLAYFS="no"   ==>  A LAISSER
-51  #BROWSERS=""          ==>  BROWSERS="firefox"
-59  #USE_BACKUPS="yes"    ==>  A LAISSER
+20  #USE_SUSPSYNC="no"    ==>  USE_SUSPSYNC="yes"
+56  #BROWSERS=""          ==>  BROWSERS="firefox"
+64  #USE_BACKUPS="yes"    ==>  A LAISSER
+70  #BACKUP_LIMIT=5       ==>  A LAISSER
 
 $ rm -i $HOME/.config/psd/psd.conf~
 
@@ -1187,6 +1198,7 @@ $ cat ~/.mozilla/firefox/profiles.ini
 
 !!! alembic.git
 !!! embree-git
+!!! nanovdb-git
 !!! opencollada-git
 !!! openimagedenoise-git
 !!! openimageio-git
@@ -1195,6 +1207,13 @@ $ cat ~/.mozilla/firefox/profiles.ini
 !!! openvdb-git
 !!! usd-git
 # LC_ALL=C pacman -Syu blender-git
+
+FICHIERS CONFIG BLENDER
+========================
+!!! ATTENTION DATE
+~/09-Fichiers-Conf/Blender-config/home-jnd-.config-blender-*.tar.gz
+==> /home/jnd/.config/blender/
+
 !!! TEST $ blender
 
 # LC_ALL=C pacman -Syu awesomebump-git
@@ -1267,7 +1286,7 @@ Menu
 ----
 Affichage -> Panneau latéral -> X Marque-pages
 
-Édition -> Préférences
+Édition -> Paramètres
 ----------------------
 Général
 -------
@@ -1290,11 +1309,11 @@ Accueil
 about:config
 ------------
  Libérer la mémoire après fermeture d'un onglet :
- browser.sessionstore.max_tabs_undo 10 => 0
+ browser.sessionstore.max_tabs_undo 25 => 0
 
 
-Marque-pages -> Importation et sauvegarde -> Importer HTML
-~/09-Fichiers-Conf/bookmarks-2019-01-31.html
+Marque-pages -> Afficher tous les marque-pages -> Importation et sauvegarde -> Importer HTML
+~/09-Fichiers-Conf/bookmarks-2021-08-04.html
 OU
 --
 Se synchroniser pour récupérer les bookmarks
@@ -1303,12 +1322,12 @@ Edition -> Préférences -> Compte Firefox -> Se connecter
  11-2) INSTALLATION DE "Dictionnaires français" DANS FIREFOX
  ===========================================================
 
-Menu Outils -> Modules Complémentaires
-Onglet Catalogue
+Menu Outils -> Extensions et Thèmes
+Onglet Extensions
 En BAS : Découvrez davantage de modules
 En HAUT - A DROITE : Find add-ons : dictionnaires français
                                OU : French spelling dictionary
-==> French spelling dictionary by OR. Version 6.3
+==> Dictionnaire français par Olivier R. Version 7.0b
     + Add to Firefox
 
 https://addons.mozilla.org/firefox/downloads/file/950814/dictionnaire_francais-6.3.xpi?src=dp-btn-primary
@@ -1427,9 +1446,17 @@ $ maj-startkde
 VOIR : 00-INSTALLATION-JAVA-JRE-OPENJDK.TXT dans ~/09-Documentation/
 
 # LC_ALL=C pacman -Syu --needed jre-openjdk
+extra/java-runtime-common   3-3
+extra/jre-openjdk-headless  16.0.2.u7-1
+extra/libnet                1:1.1.6-1
+extra/jre-openjdk           16.0.2.u7-1
+
 # LC_ALL=C pacman -Syu --needed java-openjfx
+extra/java-openjfx     16.u8-1
+
+
 # archlinux-java status
-# archlinux-java set java-13-openjdk/jre
+# archlinux-java set java-16-openjdk/jre
 # archlinux-java status
 
 
@@ -1529,10 +1556,10 @@ $ sudo sed -i "/^#Server = file/a\\\n[repolocal]\nSigLevel = Optional TrustAll\n
 SUR HUBIC
 ---------
 https://hubic.com/home/browser/#default/00-SAVE-ARCH-OB-CK/PAQUETS-AUR
-- ghnomix-icon-theme-1.3-1-any.pkg.tar.xz
+- ghnomix-icon-theme-1.3-1-any.pkg.tar.zst
 
 
-$ cp -v /0-DataLinux/00-ARCH_2-OB-CK/0-Fichiers-importants/ghnomix-icon-theme-1.3-1-any.pkg.tar.xz ~/00-repolocal/
+$ cp -v /0-DataLinux/00-ARCH_2-OB-CK/0-Fichiers-importants/ghnomix-icon-theme-1.3-1-any.pkg.tar.zst ~/00-repolocal/
 
 $ cd && maj-repolocal
 
@@ -1615,9 +1642,9 @@ INSTALLATION DE CONKY
 =================================
 
 $ cd
-$ cp -v /0-DataLinux/00-ARCH_2-OB-CK/00-Conky.tar.xz ~/
-$ tar -xJf 00-Conky.tar.xz
-$ rm -f 00-Conky.tar.xz
+$ cp -v /0-DataLinux/00-ARCH_2-OB-CK/00-Conky.tar.zst ~/
+$ tar -x --zstd -f 00-Conky.tar.zst
+$ rm -f 00-Conky.tar.zst
 
 # LC_ALL=C pacman -Syu conky-lua-nv-git
 
@@ -1723,6 +1750,59 @@ OU
 ====================================================================================================
 ANCIEN
 ==========================================================
+
+$ sudo sed -i "/^#PACKAGER/c\PACKAGER=\"Jean-Noel Dot <jeannoeldot@club-internet.fr>\"" /etc/makepkg.conf
+OU
+$ sudo sed -i "/^#PACKAGER/c\PACKAGER=\"Jean-Noel Dot <jean.noel.dot@sfr.fr>\"" /etc/makepkg.conf
+OU
+!!! Extension zst remplace xz
+!!! Version pacman 5.2.1-4
+$ sudo sed -i "/^COMPRESSZST/c\COMPRESSZST=(zstd -c -T0 --ultra -20 -)" /etc/makepkg.conf
+
+$ sudo sed -i "/^PKGEXT/c\PKGEXT=\'.pkg.tar.zst\'" /etc/makepkg.conf
+
+
+
+!!! SEMBLE INUTILE
+------------------
+  !!! VOIR
+  ----------
+# Si DropBox !!! Vérifier lien
+---------------------------------
+$ cd ~/00-repolocal/
+$ wget https://dl.dropbox.com/s/u2jb3jbb7y6y07p/fapg-0.41-3-x86_64.pkg.tar.zst
+
+$ cd ~/bin/
+$ wget https://www.dropbox.com/s/mn8f3azts8ebhmz/maj-repolocal
+$ chmod +x maj-repolocal
+5) LIENS SCRIPTS --> BIN
+========================
+ 5-1) SI 01-scripts N'EXISTE PAS
+ ===============================
+$ cd && mkdir ~/01-scripts && cd ~/01-scripts
+
+  !!! VOIR
+  ----------
+ COMMUNS
+ =======
+$ wget https://www.dropbox.com/s/mn8f3azts8ebhmz/maj-repolocal
+$ chmod +x maj-repolocal
+$ cd
+$ ln -sfv ~/01-scripts/maj-repolocal ~/bin/maj-repolocal
+
+
+ robin-map-git
+
+
+ !!! VOIR : ~/09-Documentation/00-Cmd-CREATION-GIT-INSTALL-ALI-2.TXT
+ !!! VOIR : ~/09-Documentation/00-Cmd-CREATION-GIT-INSTALLEUR.TXT
+ !!! VOIR : ~/02-git/00-Cmd-CREATION-GIT-INSTALL-ALI-2.TXT
+ !!! VOIR : ~/02-git/00-Cmd-CREATION-GIT-INSTALLEUR.TXT
+
+
+
+
+
 
 8-8) MODIF QT4 CONFIG
  =====================
@@ -1926,8 +2006,8 @@ Onglet Général : Dossier par défaut des machines :
 
 # LC_ALL=C pacman -Syu konvertible
 
-- awoken-icons-2.5.2-1-any.pkg.tar.xz
-$ cp -v /0-DataLinux/00-ARCH_2-OB-CK/0-Fichiers-importants/awoken-icons-2.5.2-1-any.pkg.tar.xz /home/jnd/00-repolocal/
+- awoken-icons-2.5.2-1-any.pkg.tar.zst
+$ cp -v /0-DataLinux/00-ARCH_2-OB-CK/0-Fichiers-importants/awoken-icons-2.5.2-1-any.pkg.tar.zst /home/jnd/00-repolocal/
 
 $ sudo LC_ALL=C pacman -Syu awoken-icons
 
@@ -1957,7 +2037,7 @@ SI FLASH PLANTE :
 $ sudo sed -i "/^#EnableLinuxHWVideoDecode=1/c\EnableLinuxHWVideoDecode=0" /etc/adobe/mms.cfg
 
 
-$ sudo pacman -U /home/jnd/00-repolocal/ghnomix-icon-theme-1.3-1-any.pkg.tar.xz
+$ sudo pacman -U /home/jnd/00-repolocal/ghnomix-icon-theme-1.3-1-any.pkg.tar.zst
 
 !!! INUTILE : SUR community
 # LC_ALL=C pacman -Syu i7z-git
@@ -2087,13 +2167,13 @@ $ cat /sys/block/sda/queue/scheduler   #where X is the device in question
 !!! INUTILE DEPUIS LE 22/01/2014 # LC_ALL=C pacman -Syu lm_sensors-svn
 !!! INUTILE DEPUIS LE 22/01/2014
 1) COMPILER lm_sensors-svn
-$ cp -v /0-DataLinux/00-ARCH_2-OB-CK/lm_sensors-svn.tar.xz /home/jnd/05-builds/
-$ tar -xJf /home/jnd/05-builds/lm_sensors-svn.tar.xz -C /home/jnd/05-builds/
-$ rm -f /home/jnd/05-builds/lm_sensors-svn.tar.xz
+$ cp -v /0-DataLinux/00-ARCH_2-OB-CK/lm_sensors-svn.tar.zst /home/jnd/05-builds/
+$ tar -x --zstd -f /home/jnd/05-builds/lm_sensors-svn.tar.zst -C /home/jnd/05-builds/
+$ rm -f /home/jnd/05-builds/lm_sensors-svn.tar.zst
 
 # systemctl stop lm_sensors.service
 # systemctl disable lm_sensors.service
-# pacman -U /home/jnd/00-repolocal/lm_sensors-svn-3.34.6207-1-x86_64.pkg.tar.xz
+# pacman -U /home/jnd/00-repolocal/lm_sensors-svn-3.34.6207-1-x86_64.pkg.tar.zst
 
 !!! DEPUIS LE 22/01/2014
 
