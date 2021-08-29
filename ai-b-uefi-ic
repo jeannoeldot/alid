@@ -117,6 +117,7 @@
             cp -v ai-fconfig/refind-icones/os_arch_${NUMBER_OF_ARCH}.png ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}.png
             cp -v ai-fconfig/refind-icones/os_arch_${NUMBER_OF_ARCH}_ck.png ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}_ck.png
             cp -v ai-fconfig/refind-icones/os_arch_${NUMBER_OF_ARCH}_lts.png ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}_lts.png
+            cp -v ai-fconfig/refind-icones/os_arch_${NUMBER_OF_ARCH}_zen.png ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}_zen.png
         else
             printf '%s\n' "${BGreen}MULTI BOOT UEFI : Pas d'installation de ${BYellow}rEFInd${BGreen}...${Reset}"
             printf '%s\n' "${BGreen}Copie des icones ${BYellow}os_arch_${NUMBER_OF_ARCH}.png${BGreen}, ${BYellow}os_arch_${NUMBER_OF_ARCH}_ck.png${BGreen} et ${BYellow}os_arch_${NUMBER_OF_ARCH}_lts.png${BGreen}...${Reset}"
@@ -124,6 +125,7 @@
             cp -v ai-fconfig/refind-icones/os_arch_${NUMBER_OF_ARCH}.png ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}.png
             cp -v ai-fconfig/refind-icones/os_arch_${NUMBER_OF_ARCH}_ck.png ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}_ck.png
             cp -v ai-fconfig/refind-icones/os_arch_${NUMBER_OF_ARCH}_lts.png ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}_lts.png
+            cp -v ai-fconfig/refind-icones/os_arch_${NUMBER_OF_ARCH}_zen.png ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}_zen.png
         fi
         pause_function
     }
@@ -319,6 +321,7 @@
         # RAJOUT CREATION arch_x_ck ET arch_x_lts VIDE
         mkdir -p ${DIR_EFI_ARCHLINUX}_ck
         mkdir -p ${DIR_EFI_ARCHLINUX}_lts
+        mkdir -p ${DIR_EFI_ARCHLINUX}_zen
         pause_function
     }
     #}}}

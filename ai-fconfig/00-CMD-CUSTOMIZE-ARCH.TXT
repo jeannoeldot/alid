@@ -1475,6 +1475,10 @@ Menu Outils -> Options -> C++ -> Qt Class Generation
 Menu Outils -> Options -> TODO
   !!! Voir
 
+Menu Outils -> Options -> Kits
+  Selectionner le Kit: Ex Manual : Desktop (par défaut)
+  Environment : Change : Ajouter QT_ASSUME_STDERR_HAS_CONSOLE=1
+
 
 60) SCREEN TEARING
 ==================

@@ -406,10 +406,10 @@ source $(pwd)/ai-commons
         titre="INSTALLATION D'OUTILS BASH"
         messages="\n"
         messages+="Installation de divers outils ${Byellow_dlg}BASH${Reset_dlg} :\n"
-        messages+="bc mlocate rsync bash-completion wget net-tools ethtool tree atool mc iptraf-ng lsd nvme-cli\n"
+        messages+="bc mlocate rsync bash-completion wget net-tools ethtool tree atool mc iptraf-ng lsd nvme-cli speedtest-cli\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de ${BYellow}bc mlocate rsync bash-completion wget net-tools ethtool tree atool mc iptraf-ng lsd nvme-cli${BGreen}...${Reset}"
-        package_install "bc mlocate rsync bash-completion wget net-tools ethtool tree atool mc iptraf-ng lsd nvme-cli"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}bc mlocate rsync bash-completion wget net-tools ethtool tree atool mc iptraf-ng lsd nvme-cli speedtest-cli${BGreen}...${Reset}"
+        package_install "bc mlocate rsync bash-completion wget net-tools ethtool tree atool mc iptraf-ng lsd nvme-cli speedtest-cli"
         pause_function
         #
         titre="INSTALLATION DE «D-BUS»"
@@ -508,8 +508,8 @@ source $(pwd)/ai-commons
         messages+="Xorg est l'implémentation officielle du système graphique X Window System version 11.\n\n"
         messages+="Installion de X-Server (requis pour Environement de Bureau, Pilotes GPU, Agencement Clavier, ...).\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de ${BYellow}xorg-server xorg-xinit xorg-xkill xorg-twm xorg-xclock xterm${BGreen}...${Reset}"
-        package_install "xorg-server xorg-xinit xorg-xkill xorg-twm xorg-xclock xterm"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}xorg-server xorg-xinit xorg-xkill xorg-xrandr xorg-twm xorg-xclock xterm${BGreen}...${Reset}"
+        package_install "xorg-server xorg-xinit xorg-xkill xorg-xrandr xorg-twm xorg-xclock xterm"
 #         printf '%s\n' "${BGreen}Installation de ${BYellow}xf86-input-synaptics xf86-input-mouse xf86-input-keyboard${BGreen}...${Reset}"
 #         package_install "xf86-input-synaptics xf86-input-mouse xf86-input-keyboard"
         printf '%s\n' "${BGreen}Installation de ${BYellow}mesa${BGreen}...${Reset}"
@@ -595,25 +595,45 @@ source $(pwd)/ai-commons
                     L_XF86_DRIVERS=$(pacman -Qe | grep xf86-video | awk '{print $1}')
                     printf '%s\n' "${BGreen}Désinstallation de ${BYellow}$L_XF86_DRIVERS${BGreen}...${Reset}"
                     [[ -n $L_XF86_DRIVERS ]] && pacman -Rcsn $L_XF86_DRIVERS
-                    # Si PC Cervon
-                    if [[ "${L_NAME_CG_NVIDIA}" == "GeForce 9800 GTX+" ]]; then
+#                    # Si PC Cervon
+#                    if [[ "${L_NAME_CG_NVIDIA}" == "GeForce 9800 GTX+" ]]; then
+#                        messages="\n"
+#                        messages+="Nom de la carte NVidia détectée : ${Byellow_dlg}${L_NAME_CG_NVIDIA}${Reset_dlg}\n\n"
+#                        messages+="Installation de la branche 340xx des pilotes NVidia pour les GPUs G8x, G9x et GT2xx.\n"
+#                        print_dialog_msgbox "${titre}" "${messages}" "Installer"
+#                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia-340xx nvidia-340xx-utils libva-vdpau-driver${BGreen}...${Reset}"
+#                        package_install "nvidia-340xx nvidia-340xx-utils libva-vdpau-driver"
+#                        #CONFIGURE NVidia IN XORG
+#                        printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia ${BYellow}20-nvidia.conf${BGreen}...${Reset}"
+#                        cp -v ai-fconfig/20-nvidia-340xx.conf /etc/X11/xorg.conf.d/20-nvidia.conf
+                    if [[ "${L_NAME_CG_NVIDIA}" == "GeForce GTX 650 Ti" ]]; then
                         messages="\n"
-                        messages+="Nom de la carte NVidia détectée : ${Byellow_dlg}${L_NAME_CG_NVIDIA}${Reset_dlg}\n\n"
-                        messages+="Installation de la branche 340xx des pilotes NVidia pour les GPUs G8x, G9x et GT2xx.\n"
+                        messages+="Nom de la carte Vidéo NVidia détectée : ${Byellow_dlg}${L_NAME_CG_NVIDIA}${Reset_dlg}\n\n"
+                        messages+="Installation de la dernière version des pilotes NVidia.\n"
                         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia-340xx nvidia-340xx-utils libva-vdpau-driver${BGreen}...${Reset}"
-                        package_install "nvidia-340xx nvidia-340xx-utils libva-vdpau-driver"
+                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia-dkms linux-headers nvidia-utils nvidia-settings libva-vdpau-driver${BGreen}...${Reset}"
+                        package_install "nvidia-dkms linux-headers nvidia-utils nvidia-settings libva-vdpau-driver"
                         #CONFIGURE NVidia IN XORG
                         printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia ${BYellow}20-nvidia.conf${BGreen}...${Reset}"
-                        cp -v ai-fconfig/20-nvidia-340xx.conf /etc/X11/xorg.conf.d/20-nvidia.conf
-                    # Si PC récent
+                        cp -v ai-fconfig/20-nvidia.conf /etc/X11/xorg.conf.d/20-nvidia.conf
+                    elif [[ "${L_NAME_CG_NVIDIA}" == "GeForce GTX 980" ]]; then
+                        messages="\n"
+                        messages+="Nom de la carte Vidéo NVidia détectée : ${Byellow_dlg}${L_NAME_CG_NVIDIA}${Reset_dlg}\n\n"
+                        messages+="Installation de la dernière version des pilotes NVidia.\n"
+                        print_dialog_msgbox "${titre}" "${messages}" "Installer"
+                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia-dkms linux-headers nvidia-utils nvidia-settings libva-vdpau-driver${BGreen}...${Reset}"
+                        package_install "nvidia-dkms linux-headers nvidia-utils nvidia-settings libva-vdpau-driver"
+                        #CONFIGURE NVidia IN XORG
+                        printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia ${BYellow}20-nvidia.conf${BGreen}...${Reset}"
+                        cp -v ai-fconfig/20-nvidia.conf /etc/X11/xorg.conf.d/20-nvidia.conf
+                    # Si PC récent GeForce RTX 3080 Ti
                     else
                         messages="\n"
                         messages+="Nom de la carte Vidéo NVidia détectée : ${Byellow_dlg}${L_NAME_CG_NVIDIA}${Reset_dlg}\n\n"
                         messages+="Installation de la dernière version des pilotes NVidia.\n"
                         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia nvidia-utils nvidia-settings libva-vdpau-driver${BGreen}...${Reset}"
-                        package_install "nvidia nvidia-utils nvidia-settings libva-vdpau-driver"
+                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia-dkms linux-headers nvidia-utils nvidia-settings libva-vdpau-driver${BGreen}...${Reset}"
+                        package_install "nvidia-dkms linux-headers nvidia-utils nvidia-settings libva-vdpau-driver"
                         #CONFIGURE NVidia IN XORG
                         printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia ${BYellow}20-nvidia.conf${BGreen}...${Reset}"
                         cp -v ai-fconfig/20-nvidia.conf /etc/X11/xorg.conf.d/20-nvidia.conf                    
