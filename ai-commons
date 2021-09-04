@@ -11,8 +11,8 @@
 
 # CONSTANTES {{{
 # TITRE BOITES DE DIALOG dialog
-TITRE_BOX_W_DATE="29/08/2021"
-TITRE_BOX_W_VERSION="V 2.1.0"
+TITRE_BOX_W_DATE="04/09/2021"
+TITRE_BOX_W_VERSION="V 2.1.1"
 TITRE_BOX_W_TEXTE="INSTALLATION DE ARCH LINUX"
 TITRE_BOX_W="${TITRE_BOX_W_TEXTE} ${TITRE_BOX_W_VERSION} DU ${TITRE_BOX_W_DATE}"
 
@@ -329,10 +329,10 @@ aui_download_packages() { #{{{
 package_install() { #{{{
     #install packages using pacman
     pacman -Syu --needed ${1}
-    #check if the package wasnt installed
-    if ! is_package_installed "$1" ; then
-        read_input_text "Paquet $1 NON installé. Continuer?"
-    fi
+#    #check if the package wasnt installed
+#    if ! is_package_installed "$1" ; then
+#        read_input_text "Paquet $1 NON installé. Continuer?"
+#    fi
 } #}}}
 package_remove() { #{{{
     #remove package
