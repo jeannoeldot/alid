@@ -33,7 +33,7 @@
         package_install "oxygen-icons-svg"
         package_install "qtcurve-gtk2 qtcurve-qt5"
         # GTK theme matching Breeze
-        package_install "breeze-gtk"
+        package_install "breeze-gtk kde-gtk-config xdg-desktop-portal xdg-desktop-portal-kde"
         pause_function
         # KDE5 UTILS
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Utils${BGreen}...${Reset}"
@@ -113,6 +113,9 @@
         # Disable/Change Qt journal logging behaviour
         echo "# Completely disable Qt journal logging" >> /etc/environment
         echo "QT_LOGGING_RULES='*=false'" >> /etc/environment
+        # https://wiki.archlinux.org/title/Firefox#KDE_integration
+        echo "# KDE file selection and print dialogs in Firefox (GTK)" >> /etc/environment
+        echo "GTK_USE_PORTAL=1" >> /etc/environment
         # Installe et Enable sddm.service
         printf '%s\n' "${BGreen}Installation de ${BYellow}sddm sddm-kcm${BGreen}...${Reset}"
         package_install "sddm sddm-kcm"
