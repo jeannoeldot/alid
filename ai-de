@@ -117,7 +117,9 @@ source $(pwd)/ai-commons
         # Xyne : http://xyne.archlinux.ca/projects/
         echo -e '\n[xyne-x86_64]' >> /etc/pacman.conf
         echo -e 'SigLevel = Required' >> /etc/pacman.conf
-        echo -e 'Server = https://xyne.archlinux.ca/repos/xyne' >> /etc/pacman.conf
+        echo -e 'Server = https://xyne.mirrorrepo.com/repos/xyne' >> /etc/pacman.conf
+        echo -e '# Fin le 17/11/2021' >> /etc/pacman.conf
+        echo -e '#Server = https://xyne.archlinux.ca/repos/xyne' >> /etc/pacman.conf
         echo -e '# Workaround' >> /etc/pacman.conf
         echo -e '#Server = https://xyne.archlinux.ca/bin/repo.php?file=' >> /etc/pacman.conf
         #
