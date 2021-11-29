@@ -248,7 +248,7 @@
                     "gsmartcontrol" "(S.M.A.R.T.)" ON
                     "hdparm" "(Ajustement paramètres HDD)" ON
                     "pacnew_scripts" "(Scripts pour fichiers .pacnew)" ON
-                    "mesa-demos" "(Démos et outils Mesa)" ON
+                    "mesa-utils" "(Outils Mesa)" ON
                     "qt5ct" "(Configuration de Qt5)" ON
                     "cpupower" "(Économie d'énergie du processeur)" OFF
                     "syslog-ng" "(Gestion des logs)" OFF
@@ -314,9 +314,9 @@
                     printf '%s\n' "${BGreen}Installation de ${BYellow}pacnew_scripts${BGreen}...${Reset}"
                     package_install "pacnew_scripts"
                     ;;
-                "mesa-demos")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}mesa-demos${BGreen}...${Reset}"
-                    package_install "mesa-demos"
+                "mesa-utils")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}mesa-utils${BGreen}...${Reset}"
+                    package_install "mesa-utils"
                     ;;
                 "qt5ct")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}qt5ct${BGreen}...${Reset}"
