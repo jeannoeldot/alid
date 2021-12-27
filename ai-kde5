@@ -25,7 +25,7 @@
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Base${BGreen}...${Reset}"
         package_install "plasma kf5 kf5-aids"
         package_install "konsole kwrite dolphin"
-        package_install "appmenu-gtk-module packagekit-qt5"
+        package_install "appmenu-gtk-module packagekit-qt5 "
         pacman -D --asdeps appmenu-gtk-module packagekit-qt5
         pause_function
         # KDE5 LOOK
@@ -47,7 +47,7 @@
         # KDE5 GRAPHICS
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Graphiques${BGreen}...${Reset}"
         package_install "gwenview kcolorchooser kolourpaint spectacle okular svgpart kdegraphics-thumbnailers kdegraphics-mobipocket"
-        package_install "kipi-plugins"
+        package_install "kipi-plugins libavif libheif libjxl"
         pause_function
         # KDE5 SDK
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 SDK${BGreen}...${Reset}"
@@ -631,7 +631,7 @@
                     ;;
                 "gstreamer")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gst-plugins-base${BGreen}...${Reset}"
-                    package_install "gst-plugins-base gst-plugins-base-libs gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav mpg123 flac"
+                    package_install "gst-plugins-base gst-plugins-base-libs gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav gst-plugin-pipewire mpg123 flac"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gstreamer${BGreen}...${Reset}"
                     package_install "gstreamer"
             esac

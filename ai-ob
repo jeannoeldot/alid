@@ -43,7 +43,7 @@
         package_install "viewnior gmrun"
         #
         printf '%s\n' "${BGreen}Installation des dépendances de ${BYellow}imagemagick${BGreen}...${Reset}"
-        package_install "openexr libwmf librsvg libxml2 jasper libpng"
+        package_install "libheif libjxl libraw librsvg libwebp libwmf libxml2 openexr openjpeg2"
         #
         printf '%s\n' "${BGreen}Installation de ${BYellow}pcmanfm-gtk3${BGreen}...${Reset}"
         package_install "pcmanfm-gtk3"
@@ -814,7 +814,7 @@
                     ;;
                 "gstreamer")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gst-plugins-base${BGreen}...${Reset}"
-                    package_install "gst-plugins-base gst-plugins-base-libs gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav mpg123 flac"
+                    package_install "gst-plugins-base gst-plugins-base-libs gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav gst-plugin-pipewire mpg123 flac"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gstreamer${BGreen}...${Reset}"
                     package_install "gstreamer"
             esac
