@@ -866,8 +866,8 @@
                     package_install "handbrake"
                     ;;
                 "DVD-Libs")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}libbluray libdvdread libdvdnav libdvdcss libaacs cdrdao libquicktime${BGreen}...${Reset}"
-                    package_install "libbluray libdvdread libdvdnav libdvdcss libaacs cdrdao libquicktime"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}libbluray libdvdread libdvdnav libdvdcss libaacs cdrdao${BGreen}...${Reset}"
+                    package_install "libbluray libdvdread libdvdnav libdvdcss libaacs cdrdao"
             esac
         done
         if [[ $REPLY != "" ]]; then

@@ -116,12 +116,11 @@ source $(pwd)/ai-commons
         fi
         # Xyne : http://xyne.archlinux.ca/projects/
         echo -e '\n[xyne-x86_64]' >> /etc/pacman.conf
+        echo -e '# A repo for Xyne s own projects: https://xyne.dev/projects/' >> /etc/pacman.conf
+        echo -e '# Packages for the "x86_64" architecture.' >> /etc/pacman.conf
+        echo -e '# Note that this includes all packages in [xyne-any].' >> /etc/pacman.conf
         echo -e 'SigLevel = Required' >> /etc/pacman.conf
-        echo -e 'Server = https://xyne.mirrorrepo.com/repos/xyne' >> /etc/pacman.conf
-        echo -e '# Fin le 17/11/2021' >> /etc/pacman.conf
-        echo -e '#Server = https://xyne.archlinux.ca/repos/xyne' >> /etc/pacman.conf
-        echo -e '# Workaround' >> /etc/pacman.conf
-        echo -e '#Server = https://xyne.archlinux.ca/bin/repo.php?file=' >> /etc/pacman.conf
+        echo -e 'Server = https://xyne.dev/repos/xyne' >> /etc/pacman.conf
         #
         messages="\n"
         messages+="Visualiser/Éditer le fichier ${Byellow_dlg}/etc/pacman.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
@@ -408,10 +407,10 @@ source $(pwd)/ai-commons
         titre="INSTALLATION D'OUTILS BASH"
         messages="\n"
         messages+="Installation de divers outils ${Byellow_dlg}BASH${Reset_dlg} :\n"
-        messages+="bc mlocate rsync bash-completion wget net-tools ethtool tree atool mc iptraf-ng lsd nvme-cli speedtest-cli\n"
+        messages+="bc mlocate rsync bash-completion wget net-tools ethtool tree mc iptraf-ng lsd nvme-cli speedtest-cli\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de ${BYellow}bc mlocate rsync bash-completion wget net-tools ethtool tree atool mc iptraf-ng lsd nvme-cli speedtest-cli${BGreen}...${Reset}"
-        package_install "bc mlocate rsync bash-completion wget net-tools ethtool tree atool mc iptraf-ng lsd nvme-cli speedtest-cli"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}bc mlocate rsync bash-completion wget net-tools ethtool tree mc iptraf-ng lsd nvme-cli speedtest-cli${BGreen}...${Reset}"
+        package_install "bc mlocate rsync bash-completion wget net-tools ethtool tree mc iptraf-ng lsd nvme-cli speedtest-cli"
         pause_function
         #
         titre="INSTALLATION DE «D-BUS»"
