@@ -558,7 +558,6 @@
             options=("devtools" "(Outils pour les mainteneurs de paquets)" ON
                     "geany" "(IDE rapide et léger)" ON
                     "qtcreator" "(IDE léger et multi-plateforme - Qt5)" ON
-                    "bluegriffon" "(Éditeur Web WYSIWYG)" ON
                     "gdb" "(Débogueur GNU)" ON
                     "git" "(Système de contrôle de version - VCS)" ON
                     "cmake" "(Système de compilation multi-plateforme)" ON
@@ -586,10 +585,6 @@
                 "qtcreator")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}qtcreator qt qt5-doc libxkbcommon-x11${BGreen}...${Reset}"
                     package_install "qtcreator qt qt5-doc libxkbcommon-x11"
-                    ;;
-                "bluegriffon")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}bluegriffon${BGreen}...${Reset}"
-                    package_install "bluegriffon bluegriffon-i18n-$LANGUAGE_FF"
                     ;;
                 "gdb")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}valgrind gdb splint${BGreen}...${Reset}"
