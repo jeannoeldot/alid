@@ -798,19 +798,34 @@ source $(pwd)/ai-commons
 #        fi
 #    }
 #    #}}}
-    # 93 INSTALL OPTIONAL DEP FOR PULSEAUDIO SI INSTALLÉ {{{
-    install_optional_dep_for_pulseaudio() {
+#    # 93 INSTALL OPTIONAL DEP FOR PULSEAUDIO SI INSTALLÉ {{{
+#    install_optional_dep_for_pulseaudio() {
+#        local messages=""
+#        local titre=""
+#        if is_package_installed "pulseaudio" ; then
+#            titre="INSTALLATION DES DÉPENDANCES OPTIONNELLES POUR PULSEAUDIO"
+#            messages=" \n"
+#            messages+="Installation de ${Byellow_dlg}pulseaudio-alsa${Reset_dlg}: ALSA Configuration for PulseAudio.\n"
+#            messages+="Installation de ${Byellow_dlg}pavucontrol${Reset_dlg}: PulseAudio Volume Control.\n"
+#            print_dialog_msgbox "${titre}" "${messages}" "Installer"
+#            printf '%s\n' "${BGreen}Installation de ${BYellow}pulseaudio-alsa pavucontrol${BGreen}...${Reset}"
+#            package_install "pulseaudio-alsa pavucontrol"
+#            pacman -D --asdeps pulseaudio-alsa
+#            pause_function
+#        fi
+#    }
+#    #}}}
+    # 93 INSTALL OPTIONAL DEP FOR PIPEWIRE-PULSE SI INSTALLÉ {{{
+    install_optional_dep_for_pipewirepulse() {
         local messages=""
         local titre=""
-        if is_package_installed "pulseaudio" ; then
-            titre="INSTALLATION DES DÉPENDANCES OPTIONNELLES POUR PULSEAUDIO"
+        if is_package_installed "pipewire-pulse" ; then
+            titre="INSTALLATION DES DÉPENDANCES OPTIONNELLES POUR PIPEWIRE-PULSE"
             messages=" \n"
-            messages+="Installation de ${Byellow_dlg}pulseaudio-alsa${Reset_dlg}: ALSA Configuration for PulseAudio.\n"
-            messages+="Installation de ${Byellow_dlg}pavucontrol${Reset_dlg}: PulseAudio Volume Control.\n"
+            messages+="Installation de ${Byellow_dlg}pipewire-alsa${Reset_dlg}: ALSA Configuration.\n"
             print_dialog_msgbox "${titre}" "${messages}" "Installer"
-            printf '%s\n' "${BGreen}Installation de ${BYellow}pulseaudio-alsa pavucontrol${BGreen}...${Reset}"
-            package_install "pulseaudio-alsa pavucontrol"
-            pacman -D --asdeps pulseaudio-alsa
+            printf '%s\n' "${BGreen}Installation de ${BYellow}pipewire-alsa${BGreen}...${Reset}"
+            package_install "pipewire-alsa"
             pause_function
         fi
     }
@@ -965,7 +980,8 @@ source $(pwd)/ai-commons
     install_fonts
 #    install_optional_dep_for_gtk3      # gtk3-print-backends inclus dans GTK3
 #    install_optional_dep_for_qt4       # drop qt4
-    install_optional_dep_for_pulseaudio
+#    install_optional_dep_for_pulseaudio    #remplaçé par pipewire-pulse
+    install_optional_dep_for_pipewirepulse
 #     clean_orphan_packages             # APPEL SUPPRIMÉ
     update_mandb
     clean_cache_pacman

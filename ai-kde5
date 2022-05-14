@@ -546,8 +546,8 @@
                     package_install "chromium"
                     ;;
                 "firefox")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}firefox pulseaudio${BGreen}...${Reset}"
-                    package_install "firefox firefox-i18n-$LANGUAGE_FF pulseaudio"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}firefox pipewire-pulse${BGreen}...${Reset}"
+                    package_install "firefox firefox-i18n-$LANGUAGE_FF pipewire-pulse"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}firefox-adblock-plus${BGreen}...${Reset}"
                     package_install "firefox-adblock-plus"
                     ;;
