@@ -815,17 +815,20 @@ source $(pwd)/ai-commons
 #        fi
 #    }
 #    #}}}
-    # 93 INSTALL OPTIONAL DEP FOR PIPEWIRE-PULSE SI INSTALLÉ {{{
-    install_optional_dep_for_pipewirepulse() {
+    # 93 INSTALL OPTIONAL DEP FOR PIPEWIREE SI INSTALLÉ {{{
+    install_optional_dep_for_pipewire() {
         local messages=""
         local titre=""
-        if is_package_installed "pipewire-pulse" ; then
-            titre="INSTALLATION DES DÉPENDANCES OPTIONNELLES POUR PIPEWIRE-PULSE"
+        if is_package_installed "pipewire" ; then
+            titre="INSTALLATION DES DÉPENDANCES OPTIONNELLES POUR PIPEWIRE"
             messages=" \n"
+            messages+="Installation de ${Byellow_dlg}gst-plugin-pipewire${Reset_dlg}: GStreamer plugin.\n"
             messages+="Installation de ${Byellow_dlg}pipewire-alsa${Reset_dlg}: ALSA Configuration.\n"
+            messages+="Installation de ${Byellow_dlg}pipewire-pulse${Reset_dlg}: PulseAudio replacement.\n"
             print_dialog_msgbox "${titre}" "${messages}" "Installer"
-            printf '%s\n' "${BGreen}Installation de ${BYellow}pipewire-alsa${BGreen}...${Reset}"
-            package_install "pipewire-alsa"
+            printf '%s\n' "${BGreen}Installation de ${BYellow}gst-plugin-pipewire pipewire-alsa pipewire-pulse${BGreen}...${Reset}"
+            package_install "gst-plugin-pipewire pipewire-alsa pipewire-pulse"
+            pacman -D --asdeps gst-plugin-pipewire pipewire-alsa pipewire-pulse
             pause_function
         fi
     }
@@ -981,7 +984,7 @@ source $(pwd)/ai-commons
 #    install_optional_dep_for_gtk3      # gtk3-print-backends inclus dans GTK3
 #    install_optional_dep_for_qt4       # drop qt4
 #    install_optional_dep_for_pulseaudio    #remplaçé par pipewire-pulse
-    install_optional_dep_for_pipewirepulse
+    install_optional_dep_for_pipewire
 #     clean_orphan_packages             # APPEL SUPPRIMÉ
     update_mandb
     clean_cache_pacman
