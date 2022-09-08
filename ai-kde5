@@ -24,7 +24,7 @@
         # KDE5 BASE
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Base${BGreen}...${Reset}"
         package_install "plasma kf5 kf5-aids"
-        package_install "konsole kwrite dolphin"
+        package_install "konsole dolphin"
         package_install "appmenu-gtk-module packagekit-qt5"
         pacman -D --asdeps appmenu-gtk-module packagekit-qt5
         pause_function
