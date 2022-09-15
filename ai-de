@@ -766,6 +766,21 @@ source $(pwd)/ai-commons
         fi
     }
     #}}}
+    # 90 INSTALL SYSTEMD SERVICE Reset the mouse after waking from sleep {{{
+    install_reset_mouse_service() {
+        local messages=""
+        local titre="ACTIVER SYSTEMD SERVICE RESET MOUSE"
+        messages=" \n"
+        messages+="Activer ${Byellow_dlg}reset-mouse-device-after-sleep.service${Reset_dlg}.\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Activer"
+        printf '%s\n' "${BGreen}Activation de ${BYellow}reset-mouse-device-after-sleep.service${BGreen}...${Reset}"
+        cp -v ai-fconfig/usr-local-bin-reset-mouse-device.sh /usr/local/bin/reset-mouse-device.sh
+        cp -v ai-fconfig/etc-systemd-system-reset-mouse-device-after-sleep.service /etc/systemd/system/reset-mouse-device-after-sleep.service
+        systemctl enable reset-mouse-device-after-sleep.service
+        pause_function
+    }
+    #}}}
+    #}}}
     # 91 INSTALL OPTIONAL DEP FOR GTK3 SI INSTALLÉ {{{
     install_optional_dep_for_gtk3() {
         local messages=""
@@ -981,6 +996,7 @@ source $(pwd)/ai-commons
 #}}} FIN INSTALLATION DE OU WM
 
     install_fonts
+    install_reset_mouse_service
 #    install_optional_dep_for_gtk3      # gtk3-print-backends inclus dans GTK3
 #    install_optional_dep_for_qt4       # drop qt4
 #    install_optional_dep_for_pulseaudio    #remplaçé par pipewire-pulse

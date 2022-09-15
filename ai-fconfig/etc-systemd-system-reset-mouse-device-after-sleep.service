@@ -1,0 +1,28 @@
+## This service is used to work around an apparent bug that freezes
+## keyboard and mouse inputs after waking from sleep.
+#
+#[Unit]
+#Description=Reset the keyboard and mouse after waking from sleep
+#After=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
+#
+#[Service]
+#ExecStart=/usr/local/bin/reset-input-devices.sh
+#CPUWeight=500
+#
+#[Install]
+#WantedBy=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
+#------------------------------------------------------------------------------------------
+# This service is used to work around an apparent bug that freezes
+# mouse inputs after waking from sleep.
+
+[Unit]
+Description=Reset the mouse after waking from sleep
+After=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
+
+[Service]
+ExecStart=/usr/local/bin/reset-mouse-device.sh
+CPUWeight=500
+
+[Install]
+WantedBy=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
+
