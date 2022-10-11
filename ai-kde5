@@ -33,11 +33,13 @@
         package_install "oxygen-icons-svg"
         package_install "qtcurve-gtk2 qtcurve-qt5"
         # GTK theme matching Breeze
-        package_install "breeze-gtk kde-gtk-config xdg-desktop-portal xdg-desktop-portal-kde"
+        # coredump firefox: SUPRR xdg-desktop-portal(-kde) pour l'instant
+        # package_install "breeze-gtk kde-gtk-config xdg-desktop-portal xdg-desktop-portal-kde"
+        package_install "breeze-gtk kde-gtk-config"
         pause_function
         # KDE5 UTILS
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Utils${BGreen}...${Reset}"
-        package_install "ark filelight kcalc kcharselect kdf kwalletmanager"
+        package_install "ark filelight kcalc kcharselect kdf kwalletmanager kdialog"
         pause_function
         # KDE5 MULTIMEDIA
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Multimedia${BGreen}...${Reset}"
@@ -113,9 +115,10 @@
         # Disable/Change Qt journal logging behaviour
         echo "# Completely disable Qt journal logging" >> /etc/environment
         echo "QT_LOGGING_RULES='*=false'" >> /etc/environment
-        # https://wiki.archlinux.org/title/Firefox#KDE_integration
-        echo "# KDE file selection and print dialogs in Firefox (GTK)" >> /etc/environment
-        echo "GTK_USE_PORTAL=1" >> /etc/environment
+        # coredump firefox: SUPRR xdg-desktop-portal(-kde) pour l'instant
+        # # https://wiki.archlinux.org/title/Firefox#KDE_integration
+        # echo "# KDE file selection and print dialogs in Firefox (GTK)" >> /etc/environment
+        # echo "GTK_USE_PORTAL=1" >> /etc/environment
         # Installe et Enable sddm.service
         printf '%s\n' "${BGreen}Installation de ${BYellow}sddm sddm-kcm${BGreen}...${Reset}"
         package_install "sddm sddm-kcm"
@@ -504,8 +507,8 @@
                 "krita")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}krita${BGreen}...${Reset}"
                     package_install "krita"
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}ffmpeg krita-plugin-gmic libheif opencolorio poppler-qt5 python-pyqt5${BGreen}...${Reset}"
-                    package_install "ffmpeg krita-plugin-gmic libheif poppler-qt5 python-pyqt5"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}ffmpeg krita-plugin-gmic libheif libjxl opencolorio poppler-qt5 python-pyqt5${BGreen}...${Reset}"
+                    package_install "ffmpeg krita-plugin-gmic libheif libjxl poppler-qt5 python-pyqt5"
             esac
         done
         if [[ $REPLY != "" ]]; then
@@ -664,10 +667,6 @@
                 "vlc")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}vlc flac libbluray libdvdcss libcdio dav1d opus vcdimager${BGreen}...${Reset}"
                     package_install "vlc flac libbluray libdvdcss libcdio opus vcdimager"
-                    if is_package_installed "nvidia" ; then
-                        printf '%s\n' "${BGreen}Installation de ${BYellow}libva-vdpau-driver${BGreen}...${Reset}"
-                        package_install "libva-vdpau-driver"
-                    fi
                     ;;
                 "kdenlive")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}kdenlive cdrtools dvdauthor dvgrab ffmpeg recordmydesktop frei0r-plugins sox movit${BGreen}...${Reset}"

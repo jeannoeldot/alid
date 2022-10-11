@@ -612,8 +612,8 @@ source $(pwd)/ai-commons
                         messages+="Nom de la carte Vidéo NVidia détectée : ${Byellow_dlg}${L_NAME_CG_NVIDIA}${Reset_dlg}\n\n"
                         messages+="Installation de la dernière version des pilotes NVidia.\n"
                         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia-dkms linux-headers nvidia-utils nvidia-settings libva-vdpau-driver${BGreen}...${Reset}"
-                        package_install "nvidia-dkms linux-headers nvidia-utils nvidia-settings libva-vdpau-driver"
+                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia-dkms linux-headers nvidia-utils nvidia-settings${BGreen}...${Reset}"
+                        package_install "nvidia-dkms linux-headers nvidia-utils nvidia-settings"
                         #CONFIGURE NVidia IN XORG
                         printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia ${BYellow}20-nvidia.conf${BGreen}...${Reset}"
                         cp -v ai-fconfig/20-nvidia.conf /etc/X11/xorg.conf.d/20-nvidia.conf
@@ -622,8 +622,8 @@ source $(pwd)/ai-commons
                         messages+="Nom de la carte Vidéo NVidia détectée : ${Byellow_dlg}${L_NAME_CG_NVIDIA}${Reset_dlg}\n\n"
                         messages+="Installation de la dernière version des pilotes NVidia.\n"
                         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia-dkms linux-headers nvidia-utils nvidia-settings libva-vdpau-driver${BGreen}...${Reset}"
-                        package_install "nvidia-dkms linux-headers nvidia-utils nvidia-settings libva-vdpau-driver"
+                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia-dkms linux-headers nvidia-utils nvidia-settings${BGreen}...${Reset}"
+                        package_install "nvidia-dkms linux-headers nvidia-utils nvidia-settings"
                         #CONFIGURE NVidia IN XORG
                         printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia ${BYellow}20-nvidia.conf${BGreen}...${Reset}"
                         cp -v ai-fconfig/20-nvidia.conf /etc/X11/xorg.conf.d/20-nvidia.conf
@@ -633,8 +633,8 @@ source $(pwd)/ai-commons
                         messages+="Nom de la carte Vidéo NVidia détectée : ${Byellow_dlg}${L_NAME_CG_NVIDIA}${Reset_dlg}\n\n"
                         messages+="Installation de la dernière version des pilotes NVidia.\n"
                         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia-dkms linux-headers nvidia-utils nvidia-settings libva-vdpau-driver${BGreen}...${Reset}"
-                        package_install "nvidia-dkms linux-headers nvidia-utils nvidia-settings libva-vdpau-driver"
+                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia-dkms linux-headers nvidia-utils nvidia-settings${BGreen}...${Reset}"
+                        package_install "nvidia-dkms linux-headers nvidia-utils nvidia-settings"
                         #CONFIGURE NVidia IN XORG
                         printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia ${BYellow}20-nvidia.conf${BGreen}...${Reset}"
                         cp -v ai-fconfig/20-nvidia.conf /etc/X11/xorg.conf.d/20-nvidia.conf                    
@@ -766,6 +766,8 @@ source $(pwd)/ai-commons
         fi
     }
     #}}}
+    # VOIR: https://bbs.archlinux.org/viewtopic.php?id=273039
+    # Keyboard and mouse not working after resuming from suspend.
     # 90 INSTALL SYSTEMD SERVICE Reset the mouse after waking from sleep {{{
     install_reset_mouse_service() {
         local messages=""
