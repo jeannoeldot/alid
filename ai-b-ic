@@ -326,24 +326,25 @@ source $(pwd)/ai-commons
         local messages=""
         local titre="CONFIGURATION DU FICHIER <</etc/mkinitcpio.conf>>"
         messages="\n"
-        # Remplace udev par systemd. Rajoute keymap
-        messages+="${BRwhite_dlg}HOOKS${Reset_dlg} : Remplacement de ${Byellow_dlg}udev${Reset_dlg} par ${Byellow_dlg}systemd${Reset_dlg}.\n"
-        messages+="        Ajout de ${Byellow_dlg}keymap${Reset_dlg}.\n"
-        # lecture ligne HOOKS=
-        local contenu_hooks=$(sed -n "/^HOOKS=/p" /etc/mkinitcpio.conf)
-        # Commente la ligne HOOKS= originale
-        sed -i "/^HOOKS=/i\#${contenu_hooks}" /etc/mkinitcpio.conf
-        # Inscrit modifs
-        if (( $IS_VAR_SEPARATE == 0 )); then
-            messages+="\n"
-            sed -i "/^HOOKS=/s/base udev/base systemd/g;/^HOOKS=/s/keyboard fsck/keyboard keymap fsck/g" /etc/mkinitcpio.conf
-        else
-            messages+="${BRwhite_dlg}HOOKS${Reset_dlg} : Ajout de ${Byellow_dlg}shutdown${Reset_dlg} car partition ${Byellow_dlg}/var${Reset_dlg} separee.\n\n"
-            sed -i "/^HOOKS=/s/base udev/base systemd/g;/^HOOKS=/s/keyboard fsck/keyboard keymap fsck shutdown/g" /etc/mkinitcpio.conf
-        fi
+# SUPPRIMER SUITE MAJ mkinitcpio 33-1
+#         # Remplace udev par systemd. Rajoute keymap
+#         messages+="${BRwhite_dlg}HOOKS${Reset_dlg} : Remplacement de ${Byellow_dlg}udev${Reset_dlg} par ${Byellow_dlg}systemd${Reset_dlg}.\n"
+#         messages+="        Ajout de ${Byellow_dlg}keymap${Reset_dlg}.\n"
+#         # lecture ligne HOOKS=
+#         local contenu_hooks=$(sed -n "/^HOOKS=/p" /etc/mkinitcpio.conf)
+#         # Commente la ligne HOOKS= originale
+#         sed -i "/^HOOKS=/i\#${contenu_hooks}" /etc/mkinitcpio.conf
+#         # Inscrit modifs
+#         if (( $IS_VAR_SEPARATE == 0 )); then
+#             messages+="\n"
+#             sed -i "/^HOOKS=/s/base udev/base systemd/g;/^HOOKS=/s/keyboard fsck/keyboard keymap fsck/g" /etc/mkinitcpio.conf
+#         else
+#             messages+="${BRwhite_dlg}HOOKS${Reset_dlg} : Ajout de ${Byellow_dlg}shutdown${Reset_dlg} car partition ${Byellow_dlg}/var${Reset_dlg} separee.\n\n"
+#             sed -i "/^HOOKS=/s/base udev/base systemd/g;/^HOOKS=/s/keyboard fsck/keyboard keymap fsck shutdown/g" /etc/mkinitcpio.conf
+#         fi
         # COMPRESSION="cat" (PAS DE COMPRESSION)
         messages+="${BRwhite_dlg}COMPRESSION${Reset_dlg} : Ajout de ${Byellow_dlg}COMPRESSION=\"cat\"${Reset_dlg} (PAS de Compression)\n"
-        sed -i "/^#COMPRESSION=\"gzip\"/i\COMPRESSION=\"cat\"" /etc/mkinitcpio.conf
+        sed -i "/^#COMPRESSION=\"zstd\"/i\COMPRESSION=\"cat\"" /etc/mkinitcpio.conf
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         #
         messages="\n"
