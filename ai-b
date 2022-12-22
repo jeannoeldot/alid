@@ -131,7 +131,7 @@ source $(pwd)/ai-commons
         fi        
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         printf '%s\n' "${BGreen}Installation du ${BYellow}Système de Base${BGreen}...${Reset}"
-        pacstrap ${MOUNTPOINT} ${liste_paquets}
+        pacstrap -K ${MOUNTPOINT} ${liste_paquets}
         retour=$?
         if (( retour != 0 )); then
             messages="\n"
@@ -149,7 +149,7 @@ source $(pwd)/ai-commons
             messages+="Installe les outils nécessaires pour le WiFi\n"
             print_dialog_msgbox "${titre}" "${messages}" "Continuer"
             printf '%s\n' "${BGreen}Installation des outils pour le ${BYellow}WiFi${BGreen}...${Reset}"
-            pacstrap ${MOUNTPOINT} iw wireless_tools wpa_actiond wpa_supplicant dialog
+            pacstrap -K ${MOUNTPOINT} iw wireless_tools wpa_actiond wpa_supplicant dialog
             retour=$?
             if (( retour != 0 )); then
                 messages="\n"
