@@ -25,8 +25,8 @@
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Base${BGreen}...${Reset}"
         package_install "plasma kf5 kf5-aids"
         package_install "konsole dolphin"
-        package_install "appmenu-gtk-module packagekit-qt5"
-        pacman -D --asdeps appmenu-gtk-module packagekit-qt5
+        package_install "kio-admin appmenu-gtk-module packagekit-qt5"
+        pacman -D --asdeps kio-admin appmenu-gtk-module packagekit-qt5
         pause_function
         # KDE5 LOOK
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Look${BGreen}...${Reset}"
