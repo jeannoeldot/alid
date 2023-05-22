@@ -826,15 +826,17 @@ export QT_LOGGING_RULES
 
 --------------------
 
-90) INSTALLATION DE ASP
-========================
+!!! Git migration completed 21/05/2023 (asp ==> pkgctl)
+90) INSTALLATION DE DEVTOOLS>=1:1.0.0-1 (PKGCTL)
+================================================
 
-https://wiki.archlinux.org/index.php/VCS_PKGBUILD_Guidelines#Subversion
-https://wiki.archlinux.org/index.php/Arch_Build_System
+# pacman -Syu "devtools>=1:1.0.0-1
 
-https://github.com/falconindy/asp/blob/master/man/asp.1.txt
+Pour savoir comment utiliser pkgctl :
+https://wiki.archlinux.org/title/DeveloperWiki:HOWTO_Be_A_Packager
 
-# pacman -Syu asp
+$ man pkgctl-build
+$ man pkgctl-repo-clone
 
 
 95) REBOOT
@@ -1306,6 +1308,16 @@ Accueil
 Accueil
  v Page d’accueil de Firefox
 
+Bloquer Lecture AUTO vidéo
+==========================
+Édition -> Paramètres
+----------------------
+Vie Privée et securité
+----------------------
+Permissions : Lecture automatique : Paramètres...
+ -> Bloquer l'audio et la vidéo
+    Enregitrer les modifications
+
 about:config
 ------------
  Libérer la mémoire après fermeture d'un onglet :
@@ -1754,6 +1766,17 @@ OU
 ====================================================================================================
 ANCIEN
 ==========================================================
+
+90) INSTALLATION DE ASP
+========================
+
+https://wiki.archlinux.org/index.php/VCS_PKGBUILD_Guidelines#Subversion
+https://wiki.archlinux.org/index.php/Arch_Build_System
+
+https://github.com/falconindy/asp/blob/master/man/asp.1.txt
+
+# pacman -Syu asp
+
 
 $ sudo sed -i "/^#PACKAGER/c\PACKAGER=\"Jean-Noel Dot <jeannoeldot@club-internet.fr>\"" /etc/makepkg.conf
 OU

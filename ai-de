@@ -115,12 +115,13 @@ source $(pwd)/ai-commons
             sed -i "${multilib}s/^#//" /etc/pacman.conf
         fi
         # Xyne : http://xyne.archlinux.ca/projects/
-        echo -e '\n[xyne-x86_64]' >> /etc/pacman.conf
-        echo -e '# A repo for Xyne s own projects: https://xyne.dev/projects/' >> /etc/pacman.conf
-        echo -e '# Packages for the "x86_64" architecture.' >> /etc/pacman.conf
-        echo -e '# Note that this includes all packages in [xyne-any].' >> /etc/pacman.conf
-        echo -e 'SigLevel = Required' >> /etc/pacman.conf
-        echo -e 'Server = https://xyne.dev/repos/xyne' >> /etc/pacman.conf
+        # Disabled AU 22/05/2023
+        echo -e '\n#[xyne-x86_64]' >> /etc/pacman.conf
+        echo -e '## A repo for Xyne s own projects: https://xyne.dev/projects/' >> /etc/pacman.conf
+        echo -e '## Packages for the "x86_64" architecture.' >> /etc/pacman.conf
+        echo -e '## Note that this includes all packages in [xyne-any].' >> /etc/pacman.conf
+        echo -e '#SigLevel = Required' >> /etc/pacman.conf
+        echo -e '#Server = https://xyne.dev/repos/xyne' >> /etc/pacman.conf
         #
         messages="\n"
         messages+="Visualiser/Éditer le fichier ${Byellow_dlg}/etc/pacman.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
