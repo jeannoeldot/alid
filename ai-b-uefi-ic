@@ -172,7 +172,8 @@
                 sed -i "/^#showtools/c\showtools shell,about,hidden_tags,shutdown,reboot,firmware" ${NAME_DIR_EFI}/refind.conf
                 sed -i "/^#dont_scan_files/c\dont_scan_files BOOTX64.EFI,fallback.efi,shim.efi,shim-fedora.efi,gcdx64.efi,MokManager.efi" ${NAME_DIR_EFI}/refind.conf
                 sed -i "/^#resolution 1024 768/c\resolution 1024 768" ${NAME_DIR_EFI}/refind.conf
-                sed -i "/^#enable_mouse/c\enable_mouse" ${NAME_DIR_EFI}/refind.conf
+                # DÉSACTIVÉ AU 25/05/2023: Plus de boot auto
+                #sed -i "/^#enable_mouse/c\enable_mouse" ${NAME_DIR_EFI}/refind.conf
                 # PAS OK : RAJOUTES ENTRÉES DS NVRAM => PLUS DE BOOT !!!
                 #sed -i "/^#scanfor/c\scanfor internal,hdbios,external,optical,manual" ${NAME_DIR_EFI}/refind.conf
                 # NE SEMBLE PAS OBLIGATOIRE ( PAR DEFAUT )
