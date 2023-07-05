@@ -1323,6 +1323,19 @@ about:config
  Libérer la mémoire après fermeture d'un onglet :
  browser.sessionstore.max_tabs_undo 25 => 0
 
+KDE integration
+===============
+https://wiki.archlinux.org/title/firefox#KDE_integration
+
+.Pour utiliser les boîtes de dialogue de sélection de fichiers et d'impression de KDE dans Firefox
+ (Déjà installés par alid)
+ # pacman -Syu xdg-desktop-portal xdg-desktop-portal-kde
+
+about:config
+------------
+ widget.use-xdg-desktop-portal.mime-handler 2 ==> 1
+ widget.use-xdg-desktop-portal.file-picker 2 ==> 1
+
 
 Marque-pages -> Afficher tous les marque-pages -> Importation et sauvegarde -> Importer HTML
 ~/09-Fichiers-Conf/bookmarks-2021-08-04.html

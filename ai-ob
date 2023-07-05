@@ -774,8 +774,7 @@
         until (( retour == 0 )) || (( retour == 1 ));
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 18 72 5)
-            options=("clementine" "(Lecteur de musique)" ON
-                    "soundconverter" "(Convertisseur audio)" ON
+            options=("soundconverter" "(Convertisseur audio)" ON
                     "audacity" "(Manipulateur d'ondes audio numériques)" ON
                     "easytag" "(Éditeur de tags des fichiers audio)" ON
                     "gstreamer" "(Framework multimédia)" ON
@@ -791,10 +790,6 @@
         for choix in $REPLY
         do
             case $choix in
-                "clementine")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}clementine${BGreen}...${Reset}"
-                    package_install "clementine"
-                    ;;
                 "soundconverter")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}soundconverter${BGreen}...${Reset}"
                     package_install "soundconverter"

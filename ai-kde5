@@ -33,9 +33,7 @@
         package_install "oxygen-icons-svg"
         package_install "qtcurve-gtk2 qtcurve-qt5"
         # GTK theme matching Breeze
-        # coredump firefox: SUPRR xdg-desktop-portal(-kde) pour l'instant
-        # package_install "breeze-gtk kde-gtk-config xdg-desktop-portal xdg-desktop-portal-kde"
-        package_install "breeze-gtk kde-gtk-config"
+        package_install "breeze-gtk kde-gtk-config xdg-desktop-portal xdg-desktop-portal-kde"
         pause_function
         # KDE5 UTILS
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE5 Utils${BGreen}...${Reset}"
@@ -115,10 +113,6 @@
         # Disable/Change Qt journal logging behaviour
         echo "# Completely disable Qt journal logging" >> /etc/environment
         echo "QT_LOGGING_RULES='*=false'" >> /etc/environment
-        # coredump firefox: SUPRR xdg-desktop-portal(-kde) pour l'instant
-        # # https://wiki.archlinux.org/title/Firefox#KDE_integration
-        # echo "# KDE file selection and print dialogs in Firefox (GTK)" >> /etc/environment
-        # echo "GTK_USE_PORTAL=1" >> /etc/environment
         # Installe et Enable sddm.service
         printf '%s\n' "${BGreen}Installation de ${BYellow}sddm sddm-kcm${BGreen}...${Reset}"
         package_install "sddm sddm-kcm"
@@ -590,7 +584,6 @@
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 6)
             options=("juk" "(Jukebox, taggeur et gestionnaire de musique)" ON
-                    "clementine" "(Lecteur de musique)" ON
                     "soundkonverter" "(Convertisseur audio)" ON
                     "audacity" "(Manipulateur d'ondes audio numériques)" ON
                     "easytag" "(Éditeur de tags des fichiers audio)" ON
@@ -610,10 +603,6 @@
                 "juk")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}juk${BGreen}...${Reset}"
                     package_install "juk"
-                    ;;
-                "clementine")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}clementine${BGreen}...${Reset}"
-                    package_install "clementine"
                     ;;
                 "soundkonverter")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}soundkonverter${BGreen}...${Reset}"
