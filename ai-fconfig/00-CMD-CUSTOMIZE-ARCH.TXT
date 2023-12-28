@@ -1471,19 +1471,17 @@ $ maj-startkde
 VOIR : 00-INSTALLATION-JAVA-JRE-OPENJDK.TXT dans ~/09-Documentation/
 
 # LC_ALL=C pacman -Syu --needed jre-openjdk
-extra/java-runtime-common   3-3
-extra/jre-openjdk-headless  16.0.2.u7-1
+extra/java-runtime-common   3-5
 extra/libnet                1:1.1.6-1
-extra/jre-openjdk           16.0.2.u7-1
-
-# LC_ALL=C pacman -Syu --needed java-openjfx
-extra/java-openjfx     16.u8-1
+extra/jre-openjdk           21.u35-8
 
 
 # archlinux-java status
-# archlinux-java set java-16-openjdk/jre
-# archlinux-java status
+# archlinux-java set java-21-openjdk
 
+# archlinux-java status
+Available Java environments:
+  java-21-openjdk (default)
 
 
 50) Qt Creator
@@ -1779,6 +1777,27 @@ OU
 ====================================================================================================
 ANCIEN
 ==========================================================
+
+!!!!!!!!!!
+/!\/!\/!\ À VOIR
+40) INSTALLATION DE jre-openjdk
+================================
+VOIR : 00-INSTALLATION-JAVA-JRE-OPENJDK.TXT dans ~/09-Documentation/
+
+# LC_ALL=C pacman -Syu --needed jre-openjdk
+extra/java-runtime-common   3-3
+extra/jre-openjdk-headless  16.0.2.u7-1
+extra/libnet                1:1.1.6-1
+extra/jre-openjdk           16.0.2.u7-1
+
+# LC_ALL=C pacman -Syu --needed java-openjfx
+extra/java-openjfx     16.u8-1
+
+
+# archlinux-java status
+# archlinux-java set java-16-openjdk/jre
+# archlinux-java status
+
 
 90) INSTALLATION DE ASP
 ========================

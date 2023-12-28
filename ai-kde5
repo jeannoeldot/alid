@@ -541,6 +541,8 @@
                 "chromium")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}chromium${BGreen}...${Reset}"
                     package_install "chromium"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gtk4${BGreen}...${Reset}"
+                    package_install "gtk4"
                     ;;
                 "firefox")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}firefox pipewire-pulse${BGreen}...${Reset}"

@@ -732,6 +732,8 @@
                 "chromium")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}chromium${BGreen}...${Reset}"
                     package_install "chromium"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gtk4${BGreen}...${Reset}"
+                    package_install "gtk4"
                     printf '%s\n' "${BGreen}Configuration de ${BYellow}tint2${BGreen}...${Reset}"
                     sed -i "s/BROWSER/chromium/g" /home/${USERNAME}/.config/tint2/tint2rc
                     ;;

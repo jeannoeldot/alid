@@ -843,10 +843,11 @@ source $(pwd)/ai-commons
             messages+="Installation de ${Byellow_dlg}gst-plugin-pipewire${Reset_dlg}: GStreamer plugin.\n"
             messages+="Installation de ${Byellow_dlg}pipewire-alsa${Reset_dlg}: ALSA Configuration.\n"
             messages+="Installation de ${Byellow_dlg}pipewire-pulse${Reset_dlg}: PulseAudio replacement.\n"
+            messages+="Installation de ${Byellow_dlg}pipewire-audio${Reset_dlg}: Audio support\n"
             print_dialog_msgbox "${titre}" "${messages}" "Installer"
             printf '%s\n' "${BGreen}Installation de ${BYellow}gst-plugin-pipewire pipewire-alsa pipewire-pulse${BGreen}...${Reset}"
-            package_install "gst-plugin-pipewire pipewire-alsa pipewire-pulse"
-            pacman -D --asdeps gst-plugin-pipewire pipewire-alsa pipewire-pulse
+            package_install "gst-plugin-pipewire pipewire-alsa pipewire-pulse pipewire-audio"
+            pacman -D --asdeps gst-plugin-pipewire pipewire-alsa pipewire-pulse pipewire-audio
             pause_function
         fi
     }
