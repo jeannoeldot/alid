@@ -586,7 +586,7 @@
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 6)
             options=("juk" "(Jukebox, taggeur et gestionnaire de musique)" ON
-                    "soundkonverter" "(Convertisseur audio)" ON
+                    "soundconverter" "(Convertisseur audio)" ON
                     "audacity" "(Manipulateur d'ondes audio numériques)" ON
                     "easytag" "(Éditeur de tags des fichiers audio)" ON
                     "gstreamer" "(Framework multimédia)" ON
@@ -606,9 +606,9 @@
                     printf '%s\n' "${BGreen}Installation de ${BYellow}juk${BGreen}...${Reset}"
                     package_install "juk"
                     ;;
-                "soundkonverter")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}soundkonverter${BGreen}...${Reset}"
-                    package_install "soundkonverter"
+                "soundconverter")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}soundconverter${BGreen}...${Reset}"
+                    package_install "soundconverter"
                     ;;
                 "audacity")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}audacity${BGreen}...${Reset}"
