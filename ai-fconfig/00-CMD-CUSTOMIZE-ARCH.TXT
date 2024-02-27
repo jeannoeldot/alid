@@ -1284,6 +1284,8 @@ Onglet Général : Dossier par défaut des machines :
  
 Sur Barre Ongets -> Clic Droit -> X Barre de Menus
 
+Sur Barre Outils -> Clic Droit -> Personnaliser la barre d'outils -> Ajouter Accueil
+
 Menu
 ----
 Affichage -> Panneau latéral -> X Marque-pages
@@ -1394,16 +1396,20 @@ A vérifier en allant sur : https://www.youtube.com/html5
 SUPPRIMER Icones dans Sites les plus visités
 
 CLIC SUR ROUE DENTÉE
- v Recherche web
- v Sites les plus visités
-   Éléments-clés
-   Brèves
- 
+ Raccourcis                 OUI
 
- 11-9) INSTALLATION DE "Bookmarks Checker - check for bad links" DANS FIREFOX
+ Raccourcis sponsorisé
+
+ Recommandé par Pocket      NON
+
+ Articles sponsorisés       NON
+
+
+
+ 11-9) INSTALLATION DE "Bookmarks clean up" DANS FIREFOX
  ============================================================================
-  Extensions Bookmarks Checker - check for bad links 
-https://addons.mozilla.org/fr/firefox/addon/bookmarks-checker/?src=dp-dl-othersby
+Extensions Bookmarks clean up par itwillnotbeasy:
+Find and remove duplicated bookmarks manually and in batches, get rid of broken bookmark links and empty folders.
 
 
 12) INSTALLATION DE WINE
@@ -1777,6 +1783,20 @@ OU
 ====================================================================================================
 ANCIEN
 ==========================================================
+
+ 11-9) INSTALLATION DE "Bookmarks Checker - check for bad links" DANS FIREFOX
+ ============================================================================
+  Extensions Bookmarks Checker - check for bad links
+https://addons.mozilla.org/fr/firefox/addon/bookmarks-checker/?src=dp-dl-othersby
+
+ v Recherche web
+ v Sites les plus visités
+   Éléments-clés
+   Brèves
+
+
+
+
 
 !!!!!!!!!!
 /!\/!\/!\ À VOIR

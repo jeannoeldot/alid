@@ -591,8 +591,8 @@
                     package_install "valgrind gdb splint"
                     ;;
                 "git")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}git subversion${BGreen}...${Reset}"
-                    package_install "git subversion"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}git git-lfs subversion${BGreen}...${Reset}"
+                    package_install "git git-lfs subversion"
                     ;;
                 "cmake")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}cmake${BGreen}...${Reset}"
