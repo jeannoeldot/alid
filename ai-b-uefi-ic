@@ -72,11 +72,11 @@
         messages+="- vmlinuz-linux --> vmlinuz-${NAME_DIR_ARCHLINUX}.efi\n"
         messages+="- initramfs-linux.img --> initramfs-${NAME_DIR_ARCHLINUX}.img\n"
         messages+="- initramfs-linux-fallback.img --> initramfs-${NAME_DIR_ARCHLINUX}-fallback.img\n"
-        if (( $IN_VIRTUAL_BOX == 0 )); then
-            messages+="- intel-ucode.img --> intel-ucode.img\n\n"
-        else
-            messages+="\n\n"
-        fi
+#         if (( $IN_VIRTUAL_BOX == 0 )); then
+#             messages+="- intel-ucode.img --> intel-ucode.img\n\n"
+#         else
+             messages+="\n\n"
+#         fi
         messages+="Copie du fichier de configuration du kernel :\n"
         messages+="- refind_linux.conf\n"
         print_dialog_msgbox_h "${titre}" "${messages}" "Continuer" 20
@@ -86,10 +86,10 @@
         cp -v /boot/vmlinuz-linux ${DIR_EFI_ARCHLINUX}/vmlinuz-${NAME_DIR_ARCHLINUX}.efi
         cp -v /boot/initramfs-linux.img ${DIR_EFI_ARCHLINUX}/initramfs-${NAME_DIR_ARCHLINUX}.img
         cp -v /boot/initramfs-linux-fallback.img ${DIR_EFI_ARCHLINUX}/initramfs-${NAME_DIR_ARCHLINUX}-fallback.img
-        if (( $IN_VIRTUAL_BOX == 0 )); then
-            printf '%s\n' "${BGreen}Copie du fichier image de ${BYellow}intel-ucode${BGreen}...${Reset}"
-            cp -v /boot/intel-ucode.img ${DIR_EFI_ARCHLINUX}/intel-ucode.img
-        fi
+#         if (( $IN_VIRTUAL_BOX == 0 )); then
+#             printf '%s\n' "${BGreen}Copie du fichier image de ${BYellow}intel-ucode${BGreen}...${Reset}"
+#             cp -v /boot/intel-ucode.img ${DIR_EFI_ARCHLINUX}/intel-ucode.img
+#         fi
         printf '%s\n' "${BGreen}Copie du fichier de configuration du ${BYellow}kernel (EFISTUB)${BGreen}...${Reset}"
         cp -v ai-fconfig/refind_linux.conf-sample ${DIR_EFI_ARCHLINUX}/refind_linux.conf
         pause_function
@@ -201,21 +201,21 @@
         fi
 #        sed -i "/^\"Boot/d;/^$/d" ${DIR_EFI_ARCHLINUX}/refind_linux.conf
         # ROOT_FS_TYPE=ext4
-        if (( $IN_VIRTUAL_BOX == 1 )); then
+#        if (( $IN_VIRTUAL_BOX == 1 )); then
             printf '%s\n' '"Boot en mode Graphique"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=graphical.target quiet initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
             printf '%s\n' '"Boot en mode Terminal"    "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=multi-user.target quiet initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
             printf '%s\n' '"Boot en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=rescue.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
             printf '%s\n' '"Fallback en mode Graphique"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=graphical.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
             printf '%s\n' '"Fallback en mode Terminal"    "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=multi-user.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
             printf '%s\n' '"Fallback en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=rescue.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-        else
-            printf '%s\n' '"Boot en mode Graphique"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=graphical.target quiet initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-            printf '%s\n' '"Boot en mode Terminal"    "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=multi-user.target quiet initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-            printf '%s\n' '"Boot en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=rescue.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-            printf '%s\n' '"Fallback en mode Graphique"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=graphical.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-            printf '%s\n' '"Fallback en mode Terminal"    "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=multi-user.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-            printf '%s\n' '"Fallback en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=rescue.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-        fi
+#        else
+#             printf '%s\n' '"Boot en mode Graphique"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=graphical.target quiet initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
+#             printf '%s\n' '"Boot en mode Terminal"    "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=multi-user.target quiet initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
+#             printf '%s\n' '"Boot en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=rescue.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
+#             printf '%s\n' '"Fallback en mode Graphique"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=graphical.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
+#             printf '%s\n' '"Fallback en mode Terminal"    "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=multi-user.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
+#             printf '%s\n' '"Fallback en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=rescue.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\intel-ucode.img initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
+#        fi
         messages="\n"
         messages+="Visualiser/Editer le fichier ${Byellow_dlg}refind_linux.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
@@ -276,24 +276,24 @@
         printf '%s\n' "${BGreen}Activation de ${BYellow}efistub_update.path${BGreen} et ${BYellow}efistub_update.service${BGreen}...${Reset}"
         systemctl enable efistub_update.path
         pause_function
-        # Installation de intel_ucode_update.path et intel_ucode_update.service
-        messages="\n"
-        if (( $IN_VIRTUAL_BOX == 0 )); then
-            messages+="Installation et Activation de ${Byellow_dlg}intel_ucode_update{.path,.service}${Reset_dlg}.\n"
-            print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-            printf '%s\n' "${BGreen}Installation de ${BYellow}intel_ucode_update.path${BGreen} et ${BYellow}intel_ucode_update.service${BGreen}...${Reset}"
-            cp -v ai-fconfig/efi-services/intel_ucode_update.path /etc/systemd/system/intel_ucode_update.path
-            cp -v ai-fconfig/efi-services/intel_ucode_update.service /etc/systemd/system/intel_ucode_update.service
-            sed -i "s/NAMEDIRARCHLINUX/${NAME_DIR_ARCHLINUX}/g" /etc/systemd/system/intel_ucode_update.service
-            printf '%s\n' "${BGreen}Activation de ${BYellow}intel_ucode_update.path${BGreen} et ${BYellow}intel_ucode_update.service${BGreen}...${Reset}"
-            systemctl enable intel_ucode_update.path
-            pause_function
-        else
-            messages+="${BRcyan_dlg}!!!${Reset_dlg} Installation dans ${Bwhite_dlg}Oracle VM VirtualBox${Reset_dlg} :\n"
-            messages+="    PAS d'activion des mises a jour du microcode.\n"
-            print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-        fi
-        #
+#         # Installation de intel_ucode_update.path et intel_ucode_update.service
+#         messages="\n"
+#         if (( $IN_VIRTUAL_BOX == 0 )); then
+#             messages+="Installation et Activation de ${Byellow_dlg}intel_ucode_update{.path,.service}${Reset_dlg}.\n"
+#             print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+#             printf '%s\n' "${BGreen}Installation de ${BYellow}intel_ucode_update.path${BGreen} et ${BYellow}intel_ucode_update.service${BGreen}...${Reset}"
+#             cp -v ai-fconfig/efi-services/intel_ucode_update.path /etc/systemd/system/intel_ucode_update.path
+#             cp -v ai-fconfig/efi-services/intel_ucode_update.service /etc/systemd/system/intel_ucode_update.service
+#             sed -i "s/NAMEDIRARCHLINUX/${NAME_DIR_ARCHLINUX}/g" /etc/systemd/system/intel_ucode_update.service
+#             printf '%s\n' "${BGreen}Activation de ${BYellow}intel_ucode_update.path${BGreen} et ${BYellow}intel_ucode_update.service${BGreen}...${Reset}"
+#             systemctl enable intel_ucode_update.path
+#             pause_function
+#         else
+#             messages+="${BRcyan_dlg}!!!${Reset_dlg} Installation dans ${Bwhite_dlg}Oracle VM VirtualBox${Reset_dlg} :\n"
+#             messages+="    PAS d'activion des mises a jour du microcode.\n"
+#             print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+#         fi
+        # Installation d'un Shell UEFI
         messages="\n"
         if (( $IS_MULTI_BOOT_UEFI == 0 )); then
             messages+="- Installation d'un ${Byellow_dlg}Shell UEFI${Reset_dlg}.\n"
@@ -309,11 +309,11 @@
             # cp -v /run/archiso/bootmnt/EFI/shellx64_v2.efi /boot/efi/shellx64.efi
             cp -v Shell.efi /boot/efi/shellx64.efi
             echo "echo -on" > /boot/efi/archlinux.nsh
-            if (( $IN_VIRTUAL_BOX == 0 )); then
-                echo "\EFI\arch_1\vmlinuz-arch_1.efi root=PARTUUID=$partuuid rootfstype=$ROOT_FS_TYPE rw initrd=EFI/arch_1/intel-ucode.img initrd=EFI/arch_1/initramfs-arch_1.img" >> /boot/efi/archlinux.nsh
-            else
-                echo "\EFI\arch_1\vmlinuz-arch_1.efi root=PARTUUID=$partuuid rootfstype=$ROOT_FS_TYPE rw force_addr=0xaddr initrd=EFI/arch_1/initramfs-arch_1.img" >> /boot/efi/archlinux.nsh
-            fi
+#             if (( $IN_VIRTUAL_BOX == 0 )); then
+#                 echo "\EFI\arch_1\vmlinuz-arch_1.efi root=PARTUUID=$partuuid rootfstype=$ROOT_FS_TYPE rw initrd=EFI/arch_1/intel-ucode.img initrd=EFI/arch_1/initramfs-arch_1.img" >> /boot/efi/archlinux.nsh
+#             else
+                 echo "\EFI\arch_1\vmlinuz-arch_1.efi root=PARTUUID=$partuuid rootfstype=$ROOT_FS_TYPE rw force_addr=0xaddr initrd=EFI/arch_1/initramfs-arch_1.img" >> /boot/efi/archlinux.nsh
+#             fi
             messages="\n"
             messages+="Visualiser/Editer le script ${Byellow_dlg}archlinux.nsh${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
             print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"

@@ -10,10 +10,10 @@ $ systemctl list-units
 
 efistub_update.path     loaded active waiting   Check update EFISTUB  Linux-ARCH
 
-intel_ucode_update.path loaded active waiting   Check update Microde intel
-
 !!! SUPPRIMÉ
 refind_update.path  loaded active waiting   Check update rEFInd
+intel_ucode_update.path loaded active waiting   Check update Microde intel
+
 
 SI DANS ARCH_2 :
 ================
@@ -447,6 +447,8 @@ NOUVEAU ORIGINAL 19/03/2013
 !!! FAIT EN AUTOMATIQUE SI INSTALLATION PAR MON SCRIPT AI-B
 ===========================================================
 HOOKS="base systemd autodetect modconf block filesystems keyboard keymap fsck"
+AU 05/03/2024
+HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck)
 
 --------------------------------------------------------------------
 
@@ -1346,8 +1348,8 @@ OU
 Se synchroniser pour récupérer les bookmarks
 Edition -> Préférences -> Compte Firefox -> Se connecter
 
- 11-2) INSTALLATION DE "Dictionnaires français" DANS FIREFOX
- ===========================================================
+ 11-2-1) INSTALLATION DE "Dictionnaires français" DANS FIREFOX
+ =============================================================
 
 Menu Outils -> Extensions et Thèmes
 Onglet Extensions
@@ -1359,37 +1361,17 @@ En HAUT - A DROITE : Find add-ons : dictionnaires français
 
 https://addons.mozilla.org/firefox/downloads/file/950814/dictionnaire_francais-6.3.xpi?src=dp-btn-primary
 
-!!! INUTILE
- 11-3) Passer outre à la signature des modules complémentaires
- =============================================================
-( Adblock Plus )
-  about:config
- ------------
- xpinstall.signatures.required true ==> false
- 
-!!! INUTILE
- 11-4) OBTENIR 1080p DANS LE LECTEUR HTML5 YOUTUBE DANS FIREFOX
- ==============================================================
-VOIR : http://forum.pinguyos.com/Thread-Enable-Hardware-Acceleration-in-Firefox-Get-1080p-in-Youtube%E2%80%99s-HTML5-player
+ 11-2-2) INSTALLATION DE "Adblock Plus" DANS FIREFOX
+ ===================================================
+Onglet Extensions
+En BAS : Découvrez davantage de modules
+En HAUT - A DROITE : Find add-ons : Adblock Plus
 
-  about:config
- ------------
- media.mediasource.enabled  => true
- media.mediasource.webm.enabled  => true
-  
- Activer MSE et H.264
- --------------------
- media.mediasource.mp4.enabled = true
-  
- !!! Hardware Acceleration ==> LAISSER A FALSE !!!
- -------------------------------------------------
- layers.acceleration.force-enabled = FALSE
- layers.offmainthreadcomposition.enabled = FALSE
- layers.acceleration.disabled = FALSE
- layers.acceleration.draw-fps = FALSE
-
-
-A vérifier en allant sur : https://www.youtube.com/html5
+ 11-2-3) INSTALLATION DE "uBlock Origin" DANS FIREFOX
+ ====================================================
+Onglet Extensions
+En BAS : Découvrez davantage de modules
+En HAUT - A DROITE : Find add-ons : uBlock Origin
 
  11-5) VOIR OUVERTURE NOUVEL ONGLET
  ==================================
@@ -1783,6 +1765,39 @@ OU
 ====================================================================================================
 ANCIEN
 ==========================================================
+
+!!! INUTILE
+ 11-3) Passer outre à la signature des modules complémentaires
+ =============================================================
+( Adblock Plus )
+  about:config
+ ------------
+ xpinstall.signatures.required true ==> false
+
+!!! INUTILE
+ 11-4) OBTENIR 1080p DANS LE LECTEUR HTML5 YOUTUBE DANS FIREFOX
+ ==============================================================
+VOIR : http://forum.pinguyos.com/Thread-Enable-Hardware-Acceleration-in-Firefox-Get-1080p-in-Youtube%E2%80%99s-HTML5-player
+
+  about:config
+ ------------
+ media.mediasource.enabled  => true
+ media.mediasource.webm.enabled  => true
+
+ Activer MSE et H.264
+ --------------------
+ media.mediasource.mp4.enabled = true
+
+ !!! Hardware Acceleration ==> LAISSER A FALSE !!!
+ -------------------------------------------------
+ layers.acceleration.force-enabled = FALSE
+ layers.offmainthreadcomposition.enabled = FALSE
+ layers.acceleration.disabled = FALSE
+ layers.acceleration.draw-fps = FALSE
+
+
+A vérifier en allant sur : https://www.youtube.com/html5
+
 
  11-9) INSTALLATION DE "Bookmarks Checker - check for bad links" DANS FIREFOX
  ============================================================================
