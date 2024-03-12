@@ -1,0 +1,715 @@
+#!/usr/bin/env bash
+
+#-------------------------------------------------------------------------------
+# ai-kde6
+# Appelé par ai-de
+#
+# Ce script installe KDE6
+#
+# Ne fonctionne qu'avec la langue FR (fr_FR)
+#
+# Interface graphique avec dialog
+#-------------------------------------------------------------------------------
+
+    # 20 DESKTOP ENVIRONMENT {{{
+    install_desktop_environment() {
+        local retour=9
+        local messages=""
+        local titre=""
+        # KDE6
+        titre="INSTALLATION DE «KDE 6»"
+        messages="\n"
+        messages+="KDE est un projet de logiciel comprenant actuellement un environnement de bureau appelé Plasma (ou Plasma Workspaces), une collection de bibliothèques et de cadres (KDE Frameworks) et plusieurs applications (KDE Applications).\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+        # KDE6 BASE
+        printf '%s\n' "${BGreen}Installation de ${BYellow}KDE6 Base${BGreen}...${Reset}"
+        package_install "plasma kf5 kf5-aids"
+        package_install "konsole dolphin"
+        package_install "kio-admin appmenu-gtk-module packagekit-qt5"
+        pacman -D --asdeps kio-admin appmenu-gtk-module packagekit-qt5
+        pause_function
+        # KDE6 LOOK
+        printf '%s\n' "${BGreen}Installation de ${BYellow}KDE6 Look${BGreen}...${Reset}"
+        package_install "oxygen-icons-svg"
+        package_install "qtcurve-gtk2 qtcurve-qt5"
+        # GTK theme matching Breeze
+        package_install "breeze-gtk kde-gtk-config xdg-desktop-portal xdg-desktop-portal-kde"
+        pause_function
+        # KDE6 UTILS
+        printf '%s\n' "${BGreen}Installation de ${BYellow}KDE6 Utils${BGreen}...${Reset}"
+        package_install "ark filelight kcalc kcharselect kdf kwalletmanager kdialog"
+        pause_function
+        # KDE6 MULTIMEDIA
+        printf '%s\n' "${BGreen}Installation de ${BYellow}KDE6 Multimedia${BGreen}...${Reset}"
+        package_install "audiocd-kio kio-extras kmix ffmpegthumbs"
+        package_install "libdvdcss libdvdread libdvdnav"
+        pause_function
+        # KDE6 GRAPHICS
+        printf '%s\n' "${BGreen}Installation de ${BYellow}KDE6 Graphiques${BGreen}...${Reset}"
+        package_install "gwenview kcolorchooser kolourpaint spectacle okular svgpart kdegraphics-thumbnailers kdegraphics-mobipocket"
+        package_install "libavif libheif libjxl"
+        pause_function
+        # KDE6 SDK
+        printf '%s\n' "${BGreen}Installation de ${BYellow}KDE6 SDK${BGreen}...${Reset}"
+        package_install "okteta kate dolphin-plugins kompare poxml"
+        pause_function
+        # FONTS TTF
+        printf '%s\n' "${BGreen}Installation de ${BYellow}Polices TTF${BGreen}...${Reset}"
+        package_install "ttf-bitstream-vera ttf-dejavu gnu-free-fonts ttf-liberation libertinus-font ttf-droid ttf-ubuntu-font-family"
+        pause_function
+        # LSB-RELEASE
+        printf '%s\n' "${BGreen}Installation de ${BYellow}lsb-release${BGreen}...${Reset}"
+        package_install "lsb-release"
+        #
+        if is_package_installed "cups" ; then
+            printf '%s\n' "${BGreen}Installation de ${BYellow}print-manager xdg-user-dirs${BGreen}...${Reset}"
+            package_install "print-manager xdg-user-dirs"
+        fi
+        pause_function
+        #KDE6 CUSTOMIZATION
+        retour=9
+        messages=" \n"
+        messages+="PERSONNALISATION DE KDE6\n\n"
+        until (( retour == 0 )) || (( retour == 1 ));
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 4)
+            options=("choqok" "(Client Twitter)" OFF
+                    "digikam" "(Gestion de photos)" ON
+                    "k3b" "(Gravure)" ON
+                    "skrooge" "(Gestion de finances)" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if (( retour == 0 )); then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "choqok")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}choqok${BGreen}...${Reset}"
+                    package_install "choqok"
+                    ;;
+                "digikam")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}digikam${BGreen}...${Reset}"
+                    package_install "digikam"
+                    ;;
+                "k3b")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}k3b cdrdao dvd+rw-tools vcdimager transcode emovix cdparanoia${BGreen}...${Reset}"
+                    package_install "k3b cdrdao dvd+rw-tools vcdimager transcode emovix cdparanoia"
+                    ;;
+                "skrooge")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}skrooge${BGreen}...${Reset}"
+                    package_install "skrooge"
+            esac
+        done
+        #
+        printf '%s\n' "${BGreen}Configuration de ${BYellow}/etc/environment${BGreen}...${Reset}"
+        echo "LANG=$LANGUAGE.utf8" >> /etc/environment
+        # https://wiki.archlinux.org/index.php/qt#Disable.2FChange_Qt_journal_logging_behaviour
+        # Disable/Change Qt journal logging behaviour
+        echo "# Completely disable Qt journal logging" >> /etc/environment
+        echo "QT_LOGGING_RULES='*=false'" >> /etc/environment
+        # Installe et Enable sddm.service
+        printf '%s\n' "${BGreen}Installation de ${BYellow}sddm sddm-kcm${BGreen}...${Reset}"
+        package_install "sddm sddm-kcm"
+        printf '%s\n' "${BGreen}Activation de ${BYellow}sddm.service${BGreen}...${Reset}"
+        systemctl enable sddm.service
+        # Abstraction for enumerating power devices, listening to device events and querying history and statistics
+        printf '%s\n' "${BGreen}Activation de ${BYellow}upower.service${BGreen}...${Reset}"
+        systemctl enable upower.service
+        # SUPPR MAJ AUTO Discover
+        mkdir -p /home/${USERNAME}/.config/autostart
+        echo 'Hidden=true' >> /home/${USERNAME}/.config/autostart/org.kde.discover.notifier.desktop
+        chown -R ${USERNAME}:users /home/${USERNAME}/.config
+        # Mise en place d'un drop-in pour sddm.service si carte nvivia et drivers nvidia installé
+        # https://bbs.archlinux.org/viewtopic.php?id=173153. brain0    Developer
+        if is_package_installed "nvidia" ; then
+            retour=9
+            messages="\n"
+            messages+="Carte Vidéo ${Bwhite_dlg}Nvidia ${L_NAME_CG_NVIDIA}${Reset_dlg} :\n\n"
+            messages+="Activer un drop-in pour ${Byellow_dlg}sddm.service${Reset_dlg} ?"
+            print_dialog_yesno "${titre}" "${messages}" "Activer" "Continuer"
+            retour=$?
+            if (( retour == 0 )); then
+                printf '%s\n' "${BGreen}Activation d'un drop-in pour ${BYellow}sddm.service${BGreen}...${Reset}"
+                cp -v ai-fconfig/etc-udev-rules.d-99-systemd-dri-devices.rules /etc/udev/rules.d/99-systemd-dri-devices.rules
+                mkdir -p /etc/systemd/system/display-manager.service.d
+                cp -v ai-fconfig/etc-systemd-system-display-manager.service.d-10-wait-for-dri-devices.conf /etc/systemd/system/display-manager.service.d/10-wait-for-dri-devices.conf
+            fi
+        fi
+        #
+        KDE6=1
+        pause_function
+        # VBOX SHARED FOLDER AUTO
+        # SI INSTALLATION DANS VIRTUALBOX
+        if (( $IN_VIRTUAL_BOX == 1 )); then
+            retour=9
+            messages="\n"
+            messages+="Installation dans ${Bwhite_dlg}Oracle VM VirtualBox${Reset_dlg}.\n\n"
+            messages+="Monter automatiquement ${Byellow_dlg}VBox Shared Folder${Reset_dlg} pour ${Byellow_dlg}${USERNAME}${Reset_dlg} ?"
+            print_dialog_yesno "${titre}" "${messages}" "Monter" "Continuer"
+            retour=$?
+            if (( retour == 0 )); then
+                messages="\n"
+                messages+="Installation dans ${Bwhite_dlg}Oracle VM VirtualBox${Reset_dlg}.\n\n"
+                messages+="Choisir le PC Hôte ${Byellow_dlg}PC-John Windows${Reset_dlg} ou ${Byellow_dlg}PC-Jnd Arch Linux${Reset_dlg}"
+                REPLY=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 16 72 5 \
+                    "PC-John" "Windows" \
+                    "PC-Jnd" "Arch Linux" \
+                    3>&1 1>&2 2>&3)
+                case "$REPLY" in
+                    "PC-John")
+                        name_rep_partage="Partage-Win7-WMs"
+                        ;;
+                    "PC-Jnd")
+                        name_rep_partage="90-Partage"
+                        ;;
+                esac
+                printf '%s\n' "${BGreen}Configuration de ${BYellow}/etc/fstab${BGreen}...${Reset}"
+                mkdir -p /home/${USERNAME}/vbox-shared-folder
+                chown -R ${USERNAME}:users /home/${USERNAME}/vbox-shared-folder
+                user_uid=$(id -u ${USERNAME})
+                user_gid=$(id -g ${USERNAME})
+                echo -e '\n# Shared Folders as Arch Linux Guest' >> /etc/fstab
+                echo -e "${name_rep_partage}"'     /home/'"${USERNAME}"'/vbox-shared-folder    vboxsf  uid='"$user_uid"',gid='"$user_gid"',rw,dmode=700,fmode=600,comment=systemd.automount       0 0' >> /etc/fstab
+                pause_function
+            fi
+        fi
+    }
+    #}}}
+    # 21 ACCESSORIES {{{
+    install_accessories_apps() {
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS ACCESSOIRES"
+        messages=" \n"
+        until (( retour == 0 )) || (( retour == 1 ));
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 4)
+            options=("latte-dock" "(Dock pour Plasma)" OFF
+                    "cairo-dock" "(Cairo Dock)" OFF
+                    "conky" "(Moniteur Système pour X)" OFF
+                    "docky" "(Docky Dock)" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if (( retour == 0 )); then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "latte-dock")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}latte-dock${BGreen}...${Reset}"
+                    package_install "latte-dock"
+                    ;;
+                "cairo-dock")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}cairo-dock cairo-dock-plugins${BGreen}...${Reset}"
+                    package_install "cairo-dock cairo-dock-plugins"
+                    ;;
+                "conky")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}conky${BGreen}...${Reset}"
+                    package_install "conky"
+                    ;;
+                "docky")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}docky${BGreen}...${Reset}"
+                    package_install "docky"
+            esac
+        done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
+    }
+    #}}}
+    # 22 SYSTEM TOOLS {{{
+    install_system_apps() {
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'OUTILS SYSTÈME"
+        messages=" \n"
+        until (( retour == 0 )) || (( retour == 1 ));
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 22 72 12)
+            options=("gparted" "(Clone de Partition Magic)" ON
+                    "grsync" "(IHM Graphique GTK pour rsync)" ON
+                    "htop" "(Outils système)" ON
+                    "lm_sensors" "(Surveillance du matériel)" ON
+                    "hddtemp" "(Température HDD)" ON
+                    "gsmartcontrol" "(S.M.A.R.T.)" ON
+                    "hdparm" "(Ajustement paramètres HDD)" ON
+                    "pacnew_scripts" "(Scripts pour fichiers .pacnew)" OFF
+                    "mesa-utils" "(Outils Mesa)" ON
+                    "qt5ct" "(Configuration de Qt5)" ON
+                    "cpupower" "(Économie d'énergie du processeur)" OFF
+                    "syslog-ng" "(Gestion des logs)" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if (( retour == 0 )); then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "gparted")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gparted gptfdisk${BGreen}...${Reset}"
+                    package_install "gparted gpart mtools gptfdisk"
+                    mkdir -p /home/${USERNAME}/.local/share/applications
+                    cp -v ai-fconfig/kde-user-gparted.desktop /home/${USERNAME}/.local/share/applications/gparted.desktop
+                    chown -R ${USERNAME}:users /home/${USERNAME}/.local
+                    ;;
+                "grsync")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}grsync${BGreen}...${Reset}"
+                    package_install "grsync"
+                    ;;
+                "htop")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}htop iotop lshw hwinfo dmidecode ncdu dfc expac pkgfile pacman-contrib pacutils i7z${BGreen}...${Reset}"
+                    package_install "htop iotop lshw hwinfo dmidecode ncdu dfc expac pkgfile pacman-contrib pacutils pax-utils i7z"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}lsof strace${BGreen}...${Reset}"
+                    package_install "lsof strace"
+                    ;;
+                "lm_sensors")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}lm_sensors rrdtool${BGreen}...${Reset}"
+                    package_install "lm_sensors rrdtool"
+                    # SI PAS DANS VIRTUALBOX
+                    if (( $IN_VIRTUAL_BOX == 0 )); then
+                        printf '%s\n' "${BGreen}LM_SENSORS - ${BYellow}sensors-detect${BGreen} : ${BYellow}Détections des capteurs${BGreen}...${Reset}"
+                        pause_function
+                        sensors-detect
+                        printf '%s\n' "${BGreen}Activation de ${BYellow}lm_sensors.service${BGreen}...${Reset}"
+                        systemctl enable lm_sensors.service
+                    fi
+                    ;;
+                "hddtemp")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}hddtemp gnu-netcat${BGreen}...${Reset}"
+                    package_install "hddtemp gnu-netcat"
+                    printf '%s\n' "${BGreen}Activation de ${BYellow}hddtemp.service${BGreen}...${Reset}"
+                    systemctl enable hddtemp.service
+                    ;;
+                "gsmartcontrol")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gsmartcontrol${BGreen}...${Reset}"
+                    package_install "gsmartcontrol"
+                    mkdir -p /home/${USERNAME}/.local/share/applications
+                    cp -v ai-fconfig/kde-user-gsmartcontrol.desktop /home/${USERNAME}/.local/share/applications/gsmartcontrol.desktop
+                    chown -R ${USERNAME}:users /home/${USERNAME}/.local
+                    ;;
+                "hdparm")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}hdparm bonnie++${BGreen}...${Reset}"
+                    package_install "hdparm bonnie++"
+                    ;;
+                "pacnew_scripts")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}pacnew_scripts${BGreen}...${Reset}"
+                    package_install "pacnew_scripts"
+                    ;;
+                "mesa-utils")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}mesa-utils${BGreen}...${Reset}"
+                    package_install "mesa-utils"
+                    ;;
+                "qt5ct")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}qt5ct${BGreen}...${Reset}"
+                    package_install "qt5ct"
+                    ;;
+                "cpupower")
+                    retour=9
+                    messages="\n"
+                    messages+="Installation de Cpupower :\n"
+                    messages+="${BRcyan_dlg}!!!${Reset_dlg}Ne pas installer si Intel I7-4770K Haswell.\n\n"
+                    messages+="Installer cpupower ?"
+                    print_dialog_yesno "${titre}" "${messages}" "Installer" "Continuer"
+                    retour=$?
+                    if (( retour == 0 )); then
+                        printf '%s\n' "${BGreen}Installation de ${BYellow}cpupower${BGreen}...${Reset}"
+                        package_install "cpupower"
+                        printf '%s\n' "${BGreen}Activation de ${BYellow}cpupower.service${BGreen}...${Reset}"
+                        systemctl enable cpupower.service
+                    fi
+                    ;;
+                "syslog-ng")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}syslog-ng${BGreen}...${Reset}"
+                    package_install "syslog-ng"
+                    printf '%s\n' "${BGreen}Activation de ${BYellow}syslog-ng.service${BGreen}...${Reset}"
+                    systemctl enable syslog-ng.service
+                    printf '%s\n' "${BGreen}Ajout de ${BYellow}${USERNAME}${BGreen} au groupe ${BYellow}log${BGreen}...${Reset}"
+                    gpasswd -a ${USERNAME} log
+            esac
+        done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
+    }
+    #}}}
+    # 23 DEVELOPEMENT {{{
+    install_development_apps() {
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS DE DÉVELOPPEMENT"
+        messages=" \n"
+        until (( retour == 0 )) || (( retour == 1 ));
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 8)
+            options=("devtools" "(Outils pour les mainteneurs de paquets)" ON
+                    "kdevelop" "(IDE C/C ++ pour KDE)" OFF
+                    "qtcreator" "(IDE léger et multi-plateforme - Qt5)" ON
+                    "gdb" "(Débogueur GNU)" ON
+                    "git" "(Système de contrôle de version - VCS)" ON
+                    "cmake" "(Système de compilation multi-plateforme)" ON
+                    "clang" "(C interface pour LLVM)" ON
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if (( retour == 0 )); then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "devtools")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}base-devel devtools namcap boost doxygen${BGreen}...${Reset}"
+                    package_install "base-devel devtools namcap boost doxygen ninja"
+                    ;;
+                "kdevelop")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}kdevelop${BGreen}...${Reset}"
+                    package_install "kdevelop"
+                    ;;
+                "qtcreator")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}qtcreator qt qt5-doc libxkbcommon-x11${BGreen}...${Reset}"
+                    package_install "qtcreator qt qt5-doc libxkbcommon-x11"
+                    ;;
+                "gdb")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}valgrind gdb splint${BGreen}...${Reset}"
+                    package_install "valgrind gdb splint"
+                    ;;
+                "git")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}git git-lfs subversion${BGreen}...${Reset}"
+                    package_install "git git-lfs subversion"
+                    ;;
+                "cmake")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}cmake${BGreen}...${Reset}"
+                    package_install "cmake"
+                    ;;
+                "clang")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}clang llvm${BGreen}...${Reset}"
+                    package_install "clang llvm"
+            esac
+        done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
+    }
+    #}}}
+    # 24 OFFICE {{{
+    install_office_apps() {
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS DE BUREAUTIQUE"
+        messages=" \n"
+        until (( retour == 0 )) || (( retour == 1 ));
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 2)
+            options=("libreoffice" "(LibreOffice Still)" ON
+                    "calligra" "(Calligra Office Suite)" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if (( retour == 0 )); then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "libreoffice")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}libreoffice-still${BGreen}...${Reset}"
+                    package_install "libreoffice-still-$LANGUAGE_LO libreoffice-still libwpg unoconv"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}hyphen hunspell mythes${BGreen}...${Reset}"
+                    package_install "hyphen-fr hyphen hunspell-fr hunspell mythes-fr libmythes"
+                    ;;
+                "calligra")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}calligra${BGreen}...${Reset}"
+                    package_install "calligra calligra-l10n-fr"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}hyphen hunspell mythes${BGreen}...${Reset}"
+                    package_install "hyphen-fr hyphen hunspell-fr hunspell mythes-fr libmythes"
+            esac
+        done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
+    }
+    #}}}
+    # 25 GRAPHICS {{{
+    install_graphics_apps() {
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS GRAPHIQUES"
+        messages=" \n"
+        until (( retour == 0 )) || (( retour == 1 ));
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 4)
+            options=("blender" "(Création graphique 3D)" OFF
+                    "gimp" "(Programme de Manipulation d'Image)" ON
+                    "inkscape" "(Éditeur de graphiques vectoriels)" ON
+                    "krita" "(Modifier et peindre des images)" ON
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if (( retour == 0 )); then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "blender")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}blender${BGreen}...${Reset}"
+                    package_install "blender"
+                    if (( $IN_VIRTUAL_BOX == 0 )); then
+                        if is_package_installed "nvidia" ; then
+                            printf '%s\n' "${BGreen}Installation de ${BYellow}cuda opencl-nvidia${BGreen}...${Reset}"
+                            package_install "cuda opencl-nvidia"
+                        fi
+                    fi
+                    ;;
+                "gimp")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gimp${BGreen}...${Reset}"
+                    package_install "gimp"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gimp-plugin${BGreen}...${Reset}"
+                    package_install "gimp-plugin-gmic gimp-nufraw"
+                    ;;
+                "inkscape")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}inkscape${BGreen}...${Reset}"
+                    package_install "inkscape"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gvfs pstoedit python-lxml python-numpy scour${BGreen}...${Reset}"
+                    package_install "gvfs pstoedit python-lxml python-numpy scour"
+                    ;;
+                "krita")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}krita${BGreen}...${Reset}"
+                    package_install "krita"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}ffmpeg krita-plugin-gmic libheif libjxl opencolorio poppler-qt5 python-pyqt5${BGreen}...${Reset}"
+                    package_install "ffmpeg krita-plugin-gmic libheif libjxl poppler-qt5 python-pyqt5"
+            esac
+        done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
+    }
+    #}}}
+    # 26 INTERNET {{{
+    install_internet_apps() {
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS INTERNET"
+        messages=" \n"
+        until (( retour == 0 )) || (( retour == 1 ));
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 7)
+            options=("chromium" "(Navigateur)" OFF
+                    "firefox" "(Navigateur)" ON
+                    "transmission" "(Téléchargement Torrent)" ON
+                    "kget" "(Gestionnaire de téléchargements)" OFF
+                    "thunderbird" "(Lecteur de Mail/News)" OFF
+                    "konversation" "(Client IRC)" OFF
+                    "quassel" "(Client IRC)" OFF
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if (( retour == 0 )); then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "chromium")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}chromium${BGreen}...${Reset}"
+                    package_install "chromium"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gtk4${BGreen}...${Reset}"
+                    package_install "gtk4"
+                    ;;
+                "firefox")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}firefox pipewire-pulse${BGreen}...${Reset}"
+                    package_install "firefox firefox-i18n-$LANGUAGE_FF pipewire-pulse"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}firefox-adblock-plus${BGreen}...${Reset}"
+                    package_install "firefox-adblock-plus"
+                    ;;
+                "transmission")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}transmission-qt${BGreen}...${Reset}"
+                    package_install "transmission-qt"
+                    ;;
+                "kget")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}kget${BGreen}...${Reset}"
+                    package_install "kget"
+                    ;;
+                "thunderbird")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}thunderbird${BGreen}...${Reset}"
+                    package_install "thunderbird thunderbird-i18n-$LANGUAGE_FF"
+                    ;;
+                "konversation")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}konversation${BGreen}...${Reset}"
+                    package_install "konversation"
+                    ;;
+                "quassel")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}quassel-client${BGreen}...${Reset}"
+                    package_install "quassel-client"
+            esac
+        done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
+    }
+    #}}}
+    # 27 AUDIO {{{
+    install_audio_apps() {
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS AUDIO"
+        messages=" \n"
+        until (( retour == 0 )) || (( retour == 1 ));
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 6)
+            options=("juk" "(Jukebox, taggeur et gestionnaire de musique)" ON
+                    "soundconverter" "(Convertisseur audio)" ON
+                    "audacity" "(Manipulateur d'ondes audio numériques)" ON
+                    "easytag" "(Éditeur de tags des fichiers audio)" ON
+                    "gstreamer" "(Framework multimédia)" ON
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if (( retour == 0 )); then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "juk")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}juk${BGreen}...${Reset}"
+                    package_install "juk"
+                    ;;
+                "soundconverter")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}soundconverter${BGreen}...${Reset}"
+                    package_install "soundconverter"
+                    ;;
+                "audacity")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}audacity${BGreen}...${Reset}"
+                    package_install "audacity"
+                    ;;
+                "easytag")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}easytag${BGreen}...${Reset}"
+                    package_install "easytag"
+                    ;;
+                "gstreamer")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gst-plugins-base${BGreen}...${Reset}"
+                    package_install "gst-plugins-base gst-plugins-base-libs gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav gst-plugin-pipewire mpg123 flac"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gstreamer${BGreen}...${Reset}"
+                    package_install "gstreamer"
+            esac
+        done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
+    }
+    #}}}
+    # 28 VIDEO {{{
+    install_video_apps() {
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS VIDÉO"
+        messages=" \n"
+        until (( retour == 0 )) || (( retour == 1 ));
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 18 72 4)
+            options=("vlc" "(Lecteur vidéo MPEG, VCD/DVD et DivX)" ON
+                    "kdenlive" "(Éditeur vidéo)" ON
+                    "handbrake" "(Convertisseur vidéo)" ON
+                    "DVD-Libs" "(libbluray libdvdread libdvdnav libdvdcss libaacs)" ON
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if (( retour == 0 )); then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "vlc")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}vlc flac libbluray libdvdcss libcdio dav1d opus vcdimager${BGreen}...${Reset}"
+                    package_install "vlc flac libbluray libdvdcss libcdio opus vcdimager"
+                    ;;
+                "kdenlive")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}kdenlive cdrtools dvdauthor dvgrab ffmpeg recordmydesktop frei0r-plugins sox movit${BGreen}...${Reset}"
+                    package_install "kdenlive cdrtools dvdauthor dvgrab ffmpeg recordmydesktop frei0r-plugins sox movit"
+                    ;;
+                "handbrake")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}handbrake${BGreen}...${Reset}"
+                    package_install "handbrake"
+                    ;;
+                "DVD-Libs")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}libbluray libdvdread libdvdnav libdvdcss libaacs cdrdao${BGreen}...${Reset}"
+                    package_install "libbluray libdvdread libdvdnav libdvdcss libaacs cdrdao"
+            esac
+        done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
+    }
+    #}}}
+    # 29 GAMES {{{
+    install_games() {
+##
+# A REVOIR jndqrami sur un repo perso
+# TODO
+##
+        local retour=9
+        local messages=""
+        local titre="INSTALLATION D'APPLICATIONS JEUX"
+        messages=" \n"
+        until (( retour == 0 )) || (( retour == 1 ));
+        do
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 1)
+            options=("pokerth" "(Poker Texas Hold'em)" ON
+                    )
+            REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
+            retour=$?
+            if (( retour == 0 )); then
+                if [[ $REPLY == "" ]]; then
+                    retour=9
+                fi
+            fi
+        done
+        for choix in $REPLY
+        do
+            case $choix in
+                "pokerth")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}pokerth${BGreen}...${Reset}"
+                    package_install "pokerth"
+            esac
+        done
+        if [[ $REPLY != "" ]]; then
+            pause_function
+        fi
+    }
+    #}}}

@@ -7,7 +7,7 @@ Interface graphique avec dialog
 
 LICENSE         : GPL2 (Voir COPYING pour les détails).
 
-VERSION         : 2.3.7
+VERSION         : 2.3.8
 
 LANGUE          : uniquement FR (AZERTY ou BÉPO)
 
@@ -23,10 +23,10 @@ ai-b-ic         : script d'installation de la base dans chroot.
   ai-b-bios-ic  : script d'installation en mode BIOS.
   ai-b-uefi-ic  : script d'installation en mode UEFI.
 
-#  KDE5 ou OPENBOX
-ai-de           : script d'installation de KDE5 ou OPENBOX.
+#  KDE6 ou OPENBOX
+ai-de           : script d'installation de KDE6 ou OPENBOX.
 
-  ai-kde5       : script contenant les fonctions d'installation de KDE5.
+  ai-kde6       : script contenant les fonctions d'installation de KDE6.
 
   ai-ob         : script contenant les fonctions d'installation de OpenBox.
 

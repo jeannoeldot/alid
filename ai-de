@@ -2,7 +2,7 @@
 
 #-------------------------------------------------------------------------------
 # ai-de
-# Installation de KDE5 ou OpenBox
+# Installation de KDE6 ou OpenBox
 #
 # Ne fonctionne qu'avec la langue FR (fr_FR)
 #
@@ -15,7 +15,7 @@ source $(pwd)/ai-commons
     # 0 WELCOME {{{
     welcome() {
         local messages=""
-        local titre="INSTALLATION DE KDE 5 OU OPENBOX"
+        local titre="INSTALLATION DE KDE 6 OU OPENBOX"
         messages="\n"
         messages+="${BRcyan_dlg}!!!${Reset_dlg} Requis :\n"
         messages+="------------\n"
@@ -166,8 +166,8 @@ source $(pwd)/ai-commons
     language_selector() {
         # LANGUE PAR DÉFAUT EN FR
         LANGUAGE=fr_FR
-        #KDE5
-        LANGUAGE_KDE5=fr
+        #KDE6
+        LANGUAGE_KDE6=fr
         #FIREFOX
         LANGUAGE_FF=fr
         #HUNSPELL
@@ -971,16 +971,16 @@ source $(pwd)/ai-commons
 
 # DÉBUT INSTALLATION DE OU WM {{{
     messages=""
-    titre="SÉLECTION DU D.E. «KDE 5» OU DU W.M. «OPENBOX»"
+    titre="SÉLECTION DU D.E. «KDE 6» OU DU W.M. «OPENBOX»"
     messages="\n"
-    messages+="Sélectionner l'environnement de bureau ${Byellow_dlg}KDE 5${Reset_dlg} ou le gestionnaire de fenêtres ${Byellow_dlg}OPENBOX${Reset_dlg} :"
+    messages+="Sélectionner l'environnement de bureau ${Byellow_dlg}KDE 6${Reset_dlg} ou le gestionnaire de fenêtres ${Byellow_dlg}OPENBOX${Reset_dlg} :"
     REPLY=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 16 72 5 \
-            "KDE5" "Environnement de bureau" \
+            "KDE6" "Environnement de bureau" \
             "OPENBOX" "Gestionnaire de fenêtres" \
             3>&1 1>&2 2>&3)
     case "$REPLY" in
-        "KDE5")
-            source $(pwd)/ai-kde5
+        "KDE6")
+            source $(pwd)/ai-kde6
             ;;
         "OPENBOX")
             source $(pwd)/ai-ob
