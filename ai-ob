@@ -360,16 +360,16 @@
             if (( retour == 0 )); then
                 messages="\n"
                 messages+="Installation dans ${Bwhite_dlg}Oracle VM VirtualBox${Reset_dlg}.\n\n"
-                messages+="Choisir le PC Hôte ${Byellow_dlg}PC-John Windows${Reset_dlg} ou ${Byellow_dlg}PC-Jnd Arch Linux${Reset_dlg}"
+                messages+="Choisir le PC Hôte ${Byellow_dlg}PC Windows${Reset_dlg} ou ${Byellow_dlg}PC Arch-Linux${Reset_dlg}"
                 REPLY=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 16 72 5 \
-                    "PC-John" "Windows" \
-                    "PC-Jnd" "Arch Linux" \
+                    "PC-Win" "Windows" \
+                    "PC-Arch" "Arch Linux" \
                     3>&1 1>&2 2>&3)
                 case "$REPLY" in
-                    "PC-John")
-                        name_rep_partage="Partage-Win7-WMs"
+                    "PC-Win")
+                        name_rep_partage="Partage-Win-WMs"
                         ;;
-                    "PC-Jnd")
+                    "PC-Arch")
                         name_rep_partage="90-Partage"
                         ;;
                 esac
@@ -396,7 +396,6 @@
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 18 72 4)
             options=("cairo-dock" "(Cairo Dock)" OFF
                     "conky" "(Moniteur Système pour X)" OFF
-                    "docky" "(Docky Dock)" OFF
                     "plank" "(Plank Dock)" OFF
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
@@ -417,10 +416,6 @@
                 "conky")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}conky${BGreen}...${Reset}"
                     package_install "conky"
-                    ;;
-                "docky")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}docky${BGreen}...${Reset}"
-                    package_install "docky"
                     ;;
                 "plank")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}plank${BGreen}...${Reset}"
@@ -450,7 +445,7 @@
                     "hdparm" "(Ajustement paramètres HDD)" ON
                     "pacnew_scripts" "(Scripts pour fichiers .pacnew)" OFF
                     "mesa-utils" "(Outils Mesa)" ON
-                    "qt5ct" "(Configuration de Qt5)" ON
+                    "qtXct" "(Configuration de Qt5 et Qt6)" ON
                     "cpupower" "(Économie d'énergie du processeur)" OFF
                     "syslog-ng" "" OFF
                     )
@@ -513,15 +508,15 @@
                     printf '%s\n' "${BGreen}Installation de ${BYellow}mesa-utils${BGreen}...${Reset}"
                     package_install "mesa-utils"
                     ;;
-                "qt5ct")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}qt5ct${BGreen}...${Reset}"
-                    package_install "qt5ct"
+                "qtXct")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}qt5ct et qt6ct${BGreen}...${Reset}"
+                    package_install "qt5ct qt6ct"
                     ;;
                 "cpupower")
                     retour=9
                     messages="\n"
                     messages+="Installation de Cpupower :\n"
-                    messages+="${BRcyan_dlg}!!!${Reset_dlg}Ne pas installer si Intel I7-4770K Haswell.\n\n"
+                    messages+="${BRcyan_dlg}!!!${Reset_dlg}Ne pas installer si Intel I7-XXXXK.\n\n"
                     messages+="Installer cpupower ?"
                     print_dialog_yesno "${titre}" "${messages}" "Installer" "Continuer"
                     retour=$?
@@ -557,7 +552,7 @@
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 8)
             options=("devtools" "(Outils pour les mainteneurs de paquets)" ON
                     "geany" "(IDE rapide et léger)" ON
-                    "qtcreator" "(IDE léger et multi-plateforme - Qt5)" ON
+                    "qtcreator" "(IDE léger et multi-plateforme - Qt5/Qt6)" ON
                     "gdb" "(Débogueur GNU)" ON
                     "git" "(Système de contrôle de version - VCS)" ON
                     "cmake" "(Système de compilation multi-plateforme)" ON
@@ -583,8 +578,8 @@
                     package_install "geany geany-plugins aspell-fr"
                     ;;
                 "qtcreator")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}qtcreator qt qt5-doc libxkbcommon-x11${BGreen}...${Reset}"
-                    package_install "qtcreator qt qt5-doc libxkbcommon-x11"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}qtcreator qt5 qt6${BGreen}...${Reset}"
+                    package_install "qtcreator qt5 qt6"
                     ;;
                 "gdb")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}valgrind gdb splint${BGreen}...${Reset}"
@@ -692,8 +687,8 @@
                 "inkscape")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}inkscape${BGreen}...${Reset}"
                     package_install "inkscape"
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}gvfs pstoedit python-lxml python-numpy scour${BGreen}...${Reset}"
-                    package_install "gvfs pstoedit python-lxml python-numpy scour"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gvfs pstoedit ${BGreen}...${Reset}"
+                    package_install "gvfs pstoedit"
             esac
         done
         if [[ $REPLY != "" ]]; then

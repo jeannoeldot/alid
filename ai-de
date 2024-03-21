@@ -425,10 +425,10 @@ source $(pwd)/ai-commons
         titre="INSTALLATION DES OUTILS DE (DÉ)COMPRESSION"
         messages="\n"
         messages+="Installation de divers outils de (dé)compression :\n"
-        messages+="zip unzip unrar p7zip unarchiver unace lrzip lzop\n"
+        messages+="arj zip unzip unrar p7zip unarchiver unace lrzip lzop\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de ${BYellow}zip unzip unrar p7zip unarchiver unace lrzip lzop${BGreen}...${Reset}"
-        package_install "zip unzip unrar p7zip unarchiver unace"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}arj zip unzip unrar p7zip unarchiver unace lrzip lzop${BGreen}...${Reset}"
+        package_install "arj zip unzip unrar p7zip unarchiver unace lrzip lzop"
         pause_function
         #
         titre="INSTALLATION DE «AVAHI»"

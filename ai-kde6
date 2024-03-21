@@ -23,35 +23,61 @@
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         # KDE6 BASE
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE6 Base${BGreen}...${Reset}"
-        package_install "plasma kf5 kf5-aids"
-        package_install "konsole dolphin"
-        package_install "kio-admin appmenu-gtk-module packagekit-qt5"
-        pacman -D --asdeps kio-admin appmenu-gtk-module packagekit-qt5
+        package_install "plasma kf6 kf5"
+        # Opt déps plasma
+        package_install "packagekit-qt6 gtk3 quota-tools oxygen5 appmenu-gtk-module kwayland-integration plasma5-integration"
+        pacman -D --asdeps packagekit-qt6 gtk3 quota-tools oxygen5 appmenu-gtk-module kwayland-integration plasma5-integration
+        # Opt déps kf6
+        package_install "imath libavif libheif libjxl libraw openexr kio-extras icoutils libappimage taglib kio-fuse kwalletmanager"
+        pacman -D --asdeps imath libavif libheif libjxl libraw openexr kio-extras icoutils libappimage taglib kio-fuse kwalletmanager
+        # Opt déps kf5
+        package_install "packagekit-qt5 appstream-qt5 kio5-extras"
+        pacman -D --asdeps packagekit-qt5 appstream-qt5 kio5-extras
         pause_function
         # KDE6 LOOK
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE6 Look${BGreen}...${Reset}"
-        package_install "oxygen-icons-svg"
-        package_install "qtcurve-gtk2 qtcurve-qt5"
+        package_install "oxygen-icons oxygen-icons-svg"
         # GTK theme matching Breeze
-        package_install "breeze-gtk kde-gtk-config xdg-desktop-portal xdg-desktop-portal-kde"
+        package_install "breeze-gtk breeze5 xdg-desktop-portal-gtk"
         pause_function
-        # KDE6 UTILS
-        printf '%s\n' "${BGreen}Installation de ${BYellow}KDE6 Utils${BGreen}...${Reset}"
-        package_install "ark filelight kcalc kcharselect kdf kwalletmanager kdialog"
-        pause_function
-        # KDE6 MULTIMEDIA
-        printf '%s\n' "${BGreen}Installation de ${BYellow}KDE6 Multimedia${BGreen}...${Reset}"
-        package_install "audiocd-kio kio-extras kmix ffmpegthumbs"
-        package_install "libdvdcss libdvdread libdvdnav"
-        pause_function
-        # KDE6 GRAPHICS
+        # KDE6 Accessibility
+        # KDE6 Applications
+        # KDE6 Education
+        # KDE6 Games
+        # KDE6 Graphics
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE6 Graphiques${BGreen}...${Reset}"
-        package_install "gwenview kcolorchooser kolourpaint spectacle okular svgpart kdegraphics-thumbnailers kdegraphics-mobipocket"
-        package_install "libavif libheif libjxl"
+        package_install "gwenview kcolorchooser kdegraphics-thumbnailers kimagemapeditor kolourpaint okular spectacle svgpart "
+        # Opt déps KDE6 Graphics
+        package_install "kdegraphics-mobipocket"
+        pacman -D --asdeps kdegraphics-mobipocket
+        pause_function
+        # KDE6 Multimedia
+        printf '%s\n' "${BGreen}Installation de ${BYellow}KDE6 Multimedia${BGreen}...${Reset}"
+        package_install "audiocd-kio elisa ffmpegthumbs kio-extras kmix kwave"
+        # Opt déps KDE6 Multimedia
+        package_install "opus"
+        pacman -D --asdeps opus
+        pause_function
+        # KDE6 Network : VOIR INSTALLATION D'APPLICATIONS INTERNET
+        # KDE6 Office
+        # KDE6 Pim
+        # KDE6 System
+        printf '%s\n' "${BGreen}Installation de ${BYellow}KDE6 Système${BGreen}...${Reset}"
+        package_install "dolphin partitionmanager"
+        # Opt déps KDE6 Système
+        package_install "kio-admin"
+        pacman -D --asdeps kio-admin
+        pause_function
+        # KDE6 Utilities
+        printf '%s\n' "${BGreen}Installation de ${BYellow}KDE6 Utilitaires${BGreen}...${Reset}"
+        package_install "ark filelight kate kcalc kcharselect kdf kdialog kfind konsole"
+        # Opt déps KDE6 Utilitaires
+        package_install "opus keditbookmarks"
+        pacman -D --asdeps opus keditbookmarks
         pause_function
         # KDE6 SDK
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE6 SDK${BGreen}...${Reset}"
-        package_install "okteta kate dolphin-plugins kompare poxml"
+        package_install "okteta dolphin-plugins kompare poxml"
         pause_function
         # FONTS TTF
         printf '%s\n' "${BGreen}Installation de ${BYellow}Polices TTF${BGreen}...${Reset}"
@@ -62,8 +88,8 @@
         package_install "lsb-release"
         #
         if is_package_installed "cups" ; then
-            printf '%s\n' "${BGreen}Installation de ${BYellow}print-manager xdg-user-dirs${BGreen}...${Reset}"
-            package_install "print-manager xdg-user-dirs"
+            printf '%s\n' "${BGreen}Installation de ${BYellow}print-manager system-config-printer xdg-user-dirs${BGreen}...${Reset}"
+            package_install "print-manager system-config-printer xdg-user-dirs"
         fi
         pause_function
         #KDE6 CUSTOMIZATION
@@ -73,8 +99,7 @@
         until (( retour == 0 )) || (( retour == 1 ));
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 4)
-            options=("choqok" "(Client Twitter)" OFF
-                    "digikam" "(Gestion de photos)" ON
+            options=("digikam" "(Gestion de photos)" ON
                     "k3b" "(Gravure)" ON
                     "skrooge" "(Gestion de finances)" OFF
                     )
@@ -89,17 +114,13 @@
         for choix in $REPLY
         do
             case $choix in
-                "choqok")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}choqok${BGreen}...${Reset}"
-                    package_install "choqok"
-                    ;;
                 "digikam")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}digikam${BGreen}...${Reset}"
                     package_install "digikam"
                     ;;
                 "k3b")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}k3b cdrdao dvd+rw-tools vcdimager transcode emovix cdparanoia${BGreen}...${Reset}"
-                    package_install "k3b cdrdao dvd+rw-tools vcdimager transcode emovix cdparanoia"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}k3b cdparanoia cdrdao cdrtools dvd+rw-tools emovix vcdimager${BGreen}...${Reset}"
+                    package_install "k3b cdparanoia cdrdao cdrtools dvd+rw-tools emovix vcdimager"
                     ;;
                 "skrooge")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}skrooge${BGreen}...${Reset}"
@@ -125,9 +146,21 @@
         mkdir -p /home/${USERNAME}/.config/autostart
         echo 'Hidden=true' >> /home/${USERNAME}/.config/autostart/org.kde.discover.notifier.desktop
         chown -R ${USERNAME}:users /home/${USERNAME}/.config
-        # Mise en place d'un drop-in pour sddm.service si carte nvivia et drivers nvidia installé
-        # https://bbs.archlinux.org/viewtopic.php?id=173153. brain0    Developer
-        if is_package_installed "nvidia" ; then
+        # NVIDIA CUSTOMIZATION
+        if is_package_installed "nvidia" || is_package_installed "nvidia-dkms" ; then
+            # https://wiki.archlinux.org/title/NVIDIA/Tips_and_tricks
+            # Modifs refind_linux.conf: Ajout de nvidia_drm.modeset=1 nvidia.NVreg_PreserveVideoMemoryAllocations=1
+            printf '%s\n' "${BGreen}Configuration de ${BYellow}refind_linux.conf${BGreen}...${Reset}"
+            sed -i "s/initramfs-${NAME_DIR_ARCHLINUX}.img/initramfs-${NAME_DIR_ARCHLINUX}.img nvidia_drm.modeset=1 nvidia.NVreg_PreserveVideoMemoryAllocations=1/g" /boot/efi/EFI/${NAME_DIR_ARCHLINUX}/refind_linux.conf
+            sed -i "s/initramfs-${NAME_DIR_ARCHLINUX}-fallback.img/initramfs-${NAME_DIR_ARCHLINUX}-fallback.img nvidia_drm.modeset=1 nvidia.NVreg_PreserveVideoMemoryAllocations=1/g" /boot/efi/EFI/${NAME_DIR_ARCHLINUX}/refind_linux.conf
+            # Activation services
+            printf '%s\n' "${BGreen}Activation de ${BYellow}nvidia-XXX.service${BGreen}...${Reset}"
+            systemctl enable nvidia-suspend.service
+            systemctl enable nvidia-hibernate.service
+            systemctl enable nvidia-resume.service
+            #
+            # Mise en place d'un drop-in pour sddm.service si carte nvivia et drivers nvidia installé
+            # https://bbs.archlinux.org/viewtopic.php?id=173153. brain0    Developer
             retour=9
             messages="\n"
             messages+="Carte Vidéo ${Bwhite_dlg}Nvidia ${L_NAME_CG_NVIDIA}${Reset_dlg} :\n\n"
@@ -156,16 +189,16 @@
             if (( retour == 0 )); then
                 messages="\n"
                 messages+="Installation dans ${Bwhite_dlg}Oracle VM VirtualBox${Reset_dlg}.\n\n"
-                messages+="Choisir le PC Hôte ${Byellow_dlg}PC-John Windows${Reset_dlg} ou ${Byellow_dlg}PC-Jnd Arch Linux${Reset_dlg}"
+                messages+="Choisir le PC Hôte ${Byellow_dlg}PC Windows${Reset_dlg} ou ${Byellow_dlg}PC Arch-Linux${Reset_dlg}"
                 REPLY=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 16 72 5 \
-                    "PC-John" "Windows" \
-                    "PC-Jnd" "Arch Linux" \
+                    "PC-Win" "Windows" \
+                    "PC-Arch" "Arch Linux" \
                     3>&1 1>&2 2>&3)
                 case "$REPLY" in
-                    "PC-John")
-                        name_rep_partage="Partage-Win7-WMs"
+                    "PC-Win")
+                        name_rep_partage="Partage-Win-WMs"
                         ;;
-                    "PC-Jnd")
+                    "PC-Arch")
                         name_rep_partage="90-Partage"
                         ;;
                 esac
@@ -189,11 +222,9 @@
         messages=" \n"
         until (( retour == 0 )) || (( retour == 1 ));
         do
-            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 4)
-            options=("latte-dock" "(Dock pour Plasma)" OFF
-                    "cairo-dock" "(Cairo Dock)" OFF
+            cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 16 72 3)
+            options=("cairo-dock" "(Cairo Dock)" OFF
                     "conky" "(Moniteur Système pour X)" OFF
-                    "docky" "(Docky Dock)" OFF
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
             retour=$?
@@ -206,10 +237,6 @@
         for choix in $REPLY
         do
             case $choix in
-                "latte-dock")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}latte-dock${BGreen}...${Reset}"
-                    package_install "latte-dock"
-                    ;;
                 "cairo-dock")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}cairo-dock cairo-dock-plugins${BGreen}...${Reset}"
                     package_install "cairo-dock cairo-dock-plugins"
@@ -217,10 +244,6 @@
                 "conky")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}conky${BGreen}...${Reset}"
                     package_install "conky"
-                    ;;
-                "docky")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}docky${BGreen}...${Reset}"
-                    package_install "docky"
             esac
         done
         if [[ $REPLY != "" ]]; then
@@ -246,7 +269,7 @@
                     "hdparm" "(Ajustement paramètres HDD)" ON
                     "pacnew_scripts" "(Scripts pour fichiers .pacnew)" OFF
                     "mesa-utils" "(Outils Mesa)" ON
-                    "qt5ct" "(Configuration de Qt5)" ON
+                    "qtXct" "(Configuration de Qt5 et Qt6)" ON
                     "cpupower" "(Économie d'énergie du processeur)" OFF
                     "syslog-ng" "(Gestion des logs)" OFF
                     )
@@ -315,15 +338,15 @@
                     printf '%s\n' "${BGreen}Installation de ${BYellow}mesa-utils${BGreen}...${Reset}"
                     package_install "mesa-utils"
                     ;;
-                "qt5ct")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}qt5ct${BGreen}...${Reset}"
-                    package_install "qt5ct"
+                "qtXct")
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}qt5ct et qt6ct${BGreen}...${Reset}"
+                    package_install "qt5ct qt6ct"
                     ;;
                 "cpupower")
                     retour=9
                     messages="\n"
                     messages+="Installation de Cpupower :\n"
-                    messages+="${BRcyan_dlg}!!!${Reset_dlg}Ne pas installer si Intel I7-4770K Haswell.\n\n"
+                    messages+="${BRcyan_dlg}!!!${Reset_dlg}Ne pas installer si Intel I7-XXXXK.\n\n"
                     messages+="Installer cpupower ?"
                     print_dialog_yesno "${titre}" "${messages}" "Installer" "Continuer"
                     retour=$?
@@ -359,7 +382,7 @@
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 8)
             options=("devtools" "(Outils pour les mainteneurs de paquets)" ON
                     "kdevelop" "(IDE C/C ++ pour KDE)" OFF
-                    "qtcreator" "(IDE léger et multi-plateforme - Qt5)" ON
+                    "qtcreator" "(IDE léger et multi-plateforme - Qt5/Qt6)" ON
                     "gdb" "(Débogueur GNU)" ON
                     "git" "(Système de contrôle de version - VCS)" ON
                     "cmake" "(Système de compilation multi-plateforme)" ON
@@ -385,8 +408,8 @@
                     package_install "kdevelop"
                     ;;
                 "qtcreator")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}qtcreator qt qt5-doc libxkbcommon-x11${BGreen}...${Reset}"
-                    package_install "qtcreator qt qt5-doc libxkbcommon-x11"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}qtcreator qt5 qt6${BGreen}...${Reset}"
+                    package_install "qtcreator qt5 qt6"
                     ;;
                 "gdb")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}valgrind gdb splint${BGreen}...${Reset}"
@@ -495,14 +518,14 @@
                 "inkscape")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}inkscape${BGreen}...${Reset}"
                     package_install "inkscape"
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}gvfs pstoedit python-lxml python-numpy scour${BGreen}...${Reset}"
-                    package_install "gvfs pstoedit python-lxml python-numpy scour"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}gvfs pstoedit${BGreen}...${Reset}"
+                    package_install "gvfs pstoedit"
                     ;;
                 "krita")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}krita${BGreen}...${Reset}"
                     package_install "krita"
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}ffmpeg krita-plugin-gmic libheif libjxl opencolorio poppler-qt5 python-pyqt5${BGreen}...${Reset}"
-                    package_install "ffmpeg krita-plugin-gmic libheif libjxl poppler-qt5 python-pyqt5"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}krita-plugin-gmic libheif libjxl opencolorio poppler-qt5 python-pyqt5${BGreen}...${Reset}"
+                    package_install "krita-plugin-gmic libheif libjxl poppler-qt5 python-pyqt5"
             esac
         done
         if [[ $REPLY != "" ]]; then
