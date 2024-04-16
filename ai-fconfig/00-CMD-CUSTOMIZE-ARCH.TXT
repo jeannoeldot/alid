@@ -213,6 +213,12 @@ Where=/tmp
 Type=tmpfs
 Options=mode=1777,strictatime,nosuid,nodev,size=50%,nr_inodes=400k
 
+core/systemd 255.4 :
+[Mount]
+What=tmpfs
+Where=/tmp
+Type=tmpfs
+Options=mode=1777,strictatime,nosuid,nodev,size=50%%,nr_inodes=1m
 
 Example : Options=mode=1777,strictatime,size=768M
 Example : Options=mode=1777,strictatime,size=2G
@@ -271,6 +277,11 @@ $ sudo sh -c "echo 'Options=mode=1777,strictatime,nosuid,nodev,size=8G,nr_inodes
 ==> tmpfs = 8G  mkpkg-tmpfs = 8G ou 24G si compilation blender
 ==>                          48G ou  32G RAM disponible
 
+NOUVELLE VERSION 255.4
+
+$ sudo mkdir /etc/systemd/system/tmp.mount.d
+$ sudo sh -c "echo '[Mount]' > /etc/systemd/system/tmp.mount.d/tmp_size.conf"
+$ sudo sh -c "echo 'Options=mode=1777,strictatime,nosuid,nodev,size=8G,nr_inodes=1m' >> /etc/systemd/system/tmp.mount.d/tmp_size.conf"
 
 
 FAIRE TEST SI OK ( PSD AVEC FIREFOX ... COMPILER BLENDER DANS /TMP )
@@ -806,7 +817,7 @@ ProtectHome=read-only    ==>  #ProtectHome=read-only
 
 
 
-80) KDE 5 / Plasma 5 : ENTRÉES DANS JOURNAL
+80) KDE 6 / Plasma 6 : ENTRÉES DANS JOURNAL
 ============================================
 https://bbs.archlinux.org/viewtopic.php?id=193123
 https://git.reviewboard.kde.org/r/121903/diff/1/?file=338977#1
@@ -829,10 +840,14 @@ export QT_LOGGING_RULES
 --------------------
 
 !!! Git migration completed 21/05/2023 (asp ==> pkgctl)
-90) INSTALLATION DE DEVTOOLS>=1:1.0.0-1 (PKGCTL)
+90) INSTALLATION DE DEVTOOLS>=1:1.1.1-1 (PKGCTL)
 ================================================
 
-# pacman -Syu "devtools>=1:1.0.0-1
+$ pacman -Ss devtools
+extra/devtools 1:1.1.1-1 [installé]
+    Tools for Arch Linux package maintainers
+
+# pacman -Syu devtools>=1:1.1.1-1
 
 Pour savoir comment utiliser pkgctl :
 https://wiki.archlinux.org/title/DeveloperWiki:HOWTO_Be_A_Packager
@@ -851,6 +866,7 @@ $ sudo mount | grep tmpfs
 SI tmpfs = 6G : tmpfs on /tmp type tmpfs (rw,size=6291456k)
 SI tmpfs = 8G : tmpfs on /tmp type tmpfs (rw,size=8388608k)
 SI tmpfs = 8G : tmpfs on /tmp type tmpfs (rw,nosuid,nodev,size=8388608k,nr_inodes=409600,inode64)
+SI tmpfs = 8G : tmpfs on /tmp type tmpfs (rw,nosuid,nodev,size=8388608k,nr_inodes=1048576,inode64)
 
 
 99) NETTOYAGE SI OK
@@ -1039,10 +1055,10 @@ $ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.yasp.script.2013-09-28 .
  !!! VOIR : ~/02-git/0-CMD-GIT-JNDQRAMI.TXT
 
 !!! ATTENTION DATE
-$ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.gitconfig.2021-08-04 .gitconfig
+$ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.gitconfig.2024-04-14 .gitconfig
 
 !!! ATTENTION DATE
-$ cd && cp -v ~/09-Fichiers-Conf/home-jnd-git-pat.txt.2021-08-04 git-pat.txt
+$ cd && cp -v ~/09-Fichiers-Conf/home-jnd-git-pat.txt.2024-04-14 git-pat.txt
 
 
 
@@ -1114,7 +1130,7 @@ SI INSTALLATION DE inkscape, gimp ou firefox
 --------------------------------------------
 $ xdg-mime default kde4-okularApplication_pdf.desktop application/pdf
 
-7-3) VÉRIFICATIONS DE $HOME/.local/share/applications/mimetypes.list ( KDE 5 )
+7-3) VÉRIFICATIONS DE $HOME/.local/share/applications/mimetypes.list ( KDE 6 )
 ==============================================================================
 Replace 'kde4-kwrite.desktop' with 'org.kde.kwrite.desktop'
 Replace 'kde4-kate.desktop' with 'org.kde.kate.desktop'
@@ -1182,7 +1198,7 @@ $ systemctl --user stop psd.service
 $ kwrite $HOME/.config/psd/psd.conf &
 15  #USE_OVERLAYFS="no"   ==>  A LAISSER
 20  #USE_SUSPSYNC="no"    ==>  USE_SUSPSYNC="yes"
-56  #BROWSERS=""          ==>  BROWSERS="firefox"
+56  #BROWSERS=""          ==>  BROWSERS=(chromium firefox)
 64  #USE_BACKUPS="yes"    ==>  A LAISSER
 70  #BACKUP_LIMIT=5       ==>  A LAISSER
 
@@ -1209,7 +1225,7 @@ $ cat ~/.mozilla/firefox/profiles.ini
 !!! openshadinglanguage-git
 !!! opensubdiv-git
 !!! openvdb-git
-!!! usd-git
+!!! openusd-git
 # LC_ALL=C pacman -Syu blender-git
 
 FICHIERS CONFIG BLENDER
@@ -1220,10 +1236,12 @@ FICHIERS CONFIG BLENDER
 
 !!! TEST $ blender
 
+!!! VOIR
 # LC_ALL=C pacman -Syu awesomebump-git
 
 # LC_ALL=C pacman -Syu jndqaligne5-qt5 jndqrami-qt5
 
+!!! VOIR
 # LC_ALL=C pacman -Syu jndqcbgrd-qt5
 
 # LC_ALL=C pacman -Syu pkgbrowser
@@ -1242,7 +1260,7 @@ OU
 9) INSTALLATION DE VIRTUAL-BOX
 =================================
 
-# LC_ALL=C pacman -Syu --needed linux-headers virtualbox qt5-x11extras virtualbox-host-dkms virtualbox-guest-iso
+# LC_ALL=C pacman -Syu --needed linux-headers virtualbox virtualbox-host-dkms virtualbox-guest-iso
 
 !!! VOIR UTILITÉ
 # modprobe vboxdrv
@@ -1274,6 +1292,9 @@ Onglet Général : Dossier par défaut des machines :
 # LC_ALL=C pacman -Syu conky-lua-nv-git
 
 !!! VOIR : ~/00-Conky/0-COMMANDES TEST CONKY.TXT
+
+!!! VOIR : ~/00-Conky/Install-Conky.TXT
+
 
 !!! ATTENTION SI VERSION CONKY = 1.10 : FORMAT FICHIER RC A CHANGÉ !!!
 
@@ -1342,7 +1363,7 @@ about:config
 
 
 Marque-pages -> Afficher tous les marque-pages -> Importation et sauvegarde -> Importer HTML
-~/09-Fichiers-Conf/bookmarks-2021-08-04.html
+~/09-Fichiers-Conf/bookmarks-2024-04-14.html
 OU
 --
 Se synchroniser pour récupérer les bookmarks
@@ -1380,13 +1401,11 @@ SUPPRIMER Icones dans Sites les plus visités
 CLIC SUR ROUE DENTÉE
  Raccourcis                 OUI
 
- Raccourcis sponsorisé
+ Raccourcis sponsorisé      NON
 
- Recommandé par Pocket      NON
+ Recommandé stories         NON
 
- Articles sponsorisés       NON
-
-
+ Activité récente           OUI
 
  11-9) INSTALLATION DE "Bookmarks clean up" DANS FIREFOX
  ============================================================================
@@ -1401,7 +1420,7 @@ Find and remove duplicated bookmarks manually and in batches, get rid of broken 
 !!! VOIR : ~/09-Documentation/20-Wine-Civ4/0-INSTALL/02-Installation-Civ4-Complete.txt
 
 
-13) BALOO KDE5
+13) BALOO KDE6
 =================================
 https://wiki.archlinux.org/index.php/KDE#Desktop_search_and_semantic_desktop
 https://community.kde.org/Baloo/Configuration
@@ -1418,7 +1437,7 @@ exclude folders[$e]=$HOME/02-git/,$HOME/90-BACKUP/,/0-DataLinux/,$HOME/05-builds
 $ balooctl status
 
 
-14) DOLPHIN KDE5
+14) DOLPHIN KDE6
 =================
 Emplacements :
 Voir : ~/09-Fichiers-Conf/KDE5-Dolphin/
@@ -1426,7 +1445,7 @@ Voir : ~/.local/share/user-places.xbel.avec.mes.emplacements
    ==> ~/.local/share/user-places.xbel
 
 
-15) KWALLET KDE5
+15) KWALLET KDE6
 =================
 $ kcmshell4 kwalletconfig
   Décocher : Activer le sous-système de portefeuilles de KDE
@@ -1441,11 +1460,13 @@ Menu K -> Système -> Outils de gestion de portefeuilles (KwalletManager)
                   -> Configuration -> Configurer un portefeuille
 
 
+!!! FAIT EN AUTOMATIQUE SI PAR MON SCRIPT AI-B
+===============================================
 16) PLASMA-WORKSPACE
 ====================
 Trop d'informations de débuggage par défaut dans le journal
 -----------------------------------------------------------
-VOIR : 80) KDE 5 / Plasma 5 : ENTRÉES DANS JOURNAL (Ligne 708)
+VOIR : 80) KDE 6 / Plasma 6 : ENTRÉES DANS JOURNAL (Ligne 708)
 
 VOIR : ARCH-KDE-DEBUG-DANS-JOURNAL.TXT dans ~/09-Documentation/
 OU
@@ -1459,17 +1480,17 @@ $ maj-startkde
 VOIR : 00-INSTALLATION-JAVA-JRE-OPENJDK.TXT dans ~/09-Documentation/
 
 # LC_ALL=C pacman -Syu --needed jre-openjdk
-extra/java-runtime-common   3-5
-extra/libnet                1:1.1.6-1
-extra/jre-openjdk           21.u35-8
+extra/java-runtime-common  3-5            0.01 MiB       0.00 MiB
+extra/libnet               2:1.3-1        1.47 MiB       0.29 MiB
+extra/jre-openjdk          22.u36-1     145.37 MiB      29.77 MiB
 
 
 # archlinux-java status
-# archlinux-java set java-21-openjdk
+# archlinux-java set java-22-openjdk
 
 # archlinux-java status
 Available Java environments:
-  java-21-openjdk (default)
+  java-22-openjdk (default)
 
 
 50) Qt Creator
@@ -1478,7 +1499,7 @@ Available Java environments:
 Menu Aide -> A propos des plug-ins...
   Utilitaires : X Todo
 
-Menu Outils -> Options -> C++ -> Qt Class Generation
+Menu Éditions -> Préférences -> C++ -> Generation de classe Qt
   O
   O
   X Multiple inheritance ( Héritaqe multiple )
@@ -1486,7 +1507,7 @@ Menu Outils -> Options -> C++ -> Qt Class Generation
 Menu Outils -> Options -> TODO
   !!! Voir
 
-Menu Outils -> Options -> Kits
+Menu Éditions -> Préférences -> Kits
   Selectionner le Kit: Ex Manual : Desktop (par défaut)
   Environment : Change : Ajouter QT_ASSUME_STDERR_HAS_CONSOLE=1
 
@@ -1503,7 +1524,7 @@ $HOME/bin/nvidia-settings-assign-CurrentMetaMode
 
 # Démarrage automatique
 ------------------------
-KDE5
+KDE6
 -----
 Configuration du Système -> Démarrage et arrêt
 Démarrage automatique -> Fichier Bureau -> Ajouter un programme
@@ -1513,7 +1534,7 @@ $HOME/bin/nvidia-settings-assign-CurrentMetaMode
 XX) QUAND FINI
 ==============
 
-Document KDE5 : Customization Bureau : Vérifier :
+Document KDE6 : Customization Bureau : Vérifier :
  - Page 2 : GTK3
  - Page 3 : Recherche Baloo
  - Page 4 : Emplacements
