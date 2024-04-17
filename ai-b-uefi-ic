@@ -191,6 +191,13 @@
         fi
         #
         messages="\n"
+        messages+="Affichage de ${Byellow_dlg}PARTUUID${Reset_dlg} des partitions.\n"
+        messages+="Bien NOTER ${Byellow_dlg}PARTUUID${Reset_dlg} de la partition ${Byellow_dlg}Root${Reset_dlg}.\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+        blkid
+        pause_function
+        #
+        messages="\n"
         messages+="Configuration de ${Byellow_dlg}${DIR_EFI_ARCHLINUX}/refind_linux.conf${Reset_dlg}.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
 # PROBLÈME suite installation sur NVME le 15/04/2024

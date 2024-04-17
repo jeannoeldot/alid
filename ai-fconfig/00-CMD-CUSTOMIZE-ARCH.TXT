@@ -1180,6 +1180,7 @@ $ cd && maj-repolocal
 
 8-3) SI PAS INSTALLÉ PAR AI
 ===========================
+!!! VOIR
 # LC_ALL=C pacman -Syu --needed pacnew_scripts
 
 
@@ -1216,6 +1217,8 @@ $ psd preview  ou  psd parse
 $ cat ~/.mozilla/firefox/profiles.ini
 
 
+INSTALLATION DE BLENDER
+========================
 !!! alembic.git
 !!! embree-git
 !!! nanovdb-git
@@ -1228,6 +1231,10 @@ $ cat ~/.mozilla/firefox/profiles.ini
 !!! openusd-git
 # LC_ALL=C pacman -Syu blender-git
 
+INSTALLATION DE CUDA
+========================
+# LC_ALL=C pacman -Syu cuda
+
 FICHIERS CONFIG BLENDER
 ========================
 !!! ATTENTION DATE
@@ -1236,25 +1243,23 @@ FICHIERS CONFIG BLENDER
 
 !!! TEST $ blender
 
-!!! VOIR
-# LC_ALL=C pacman -Syu awesomebump-git
 
 # LC_ALL=C pacman -Syu jndqaligne5-qt5 jndqrami-qt5
 
-!!! VOIR
-# LC_ALL=C pacman -Syu jndqcbgrd-qt5
-
 # LC_ALL=C pacman -Syu pkgbrowser
 
+# LC_ALL=C pacman -Syu pokerth
+
+!!! VOIR
+# LC_ALL=C pacman -Syu awesomebump-git
+!!! VOIR
+# LC_ALL=C pacman -Syu jndqcbgrd-qt5
 !!! VOIR
 # LC_ALL=C pacman -Syu wimlib
-
 !!! VOIR
 # LC_ALL=C pacman -Syu ttf-win7-fonts
 OU
 # LC_ALL=C pacman -Syu ttf-win10-fonts
-
-# LC_ALL=C pacman -Syu pokerth
 
 
 9) INSTALLATION DE VIRTUAL-BOX
