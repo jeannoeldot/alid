@@ -1241,6 +1241,15 @@ FICHIERS CONFIG BLENDER
 ~/09-Fichiers-Conf/Blender-config/home-jnd-.config-blender-*.tar.gz
 ==> /home/jnd/.config/blender/
 
+!!! ATTENTION VERSION ET DATE
+$ cp -v $HOME/09-Fichiers-Conf/Blender-config/home-jnd-.config-blender-4.2.2024-04-14.tar.gz $HOME/99-temp
+$ cd ~/99-temp
+$ tar -x -z -f home-jnd-.config-blender-4.2.2024-04-14.tar.gz
+$ cp -R $HOME/99-temp/home/jnd/.config/blender $HOME/.config/blender
+$ rm -rf home
+$ mv home-jnd-.config-blender-4.2.2024-04-14.tar.gz 0-de-zipper/
+$ cd
+
 !!! TEST $ blender
 
 
