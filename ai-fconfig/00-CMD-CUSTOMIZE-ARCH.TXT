@@ -272,16 +272,27 @@ $ sudo sh -c "echo 'Options=mode=1777,strictatime,nosuid,nodev,size=8G,nr_inodes
 ==>                          16G ou  4G RAM disponible
 
 
-!!! SI 64 GiO RAM     AU 05/08/2021
-===================================
-==> tmpfs = 8G  mkpkg-tmpfs = 8G ou 24G si compilation blender
-==>                          48G ou  32G RAM disponible
+!!! SI 64 GiO RAM ET TMPFS = 8G     AU 05/08/2021
+=================================================
+==> tmpfs = 8G  mkpkg-tmpfs = 8G ou 24G ou 32G si compilation blender
+==>                          48G ou 32G ou 24G RAM disponible
 
 NOUVELLE VERSION 255.4
 
 $ sudo mkdir /etc/systemd/system/tmp.mount.d
 $ sudo sh -c "echo '[Mount]' > /etc/systemd/system/tmp.mount.d/tmp_size.conf"
 $ sudo sh -c "echo 'Options=mode=1777,strictatime,nosuid,nodev,size=8G,nr_inodes=1m' >> /etc/systemd/system/tmp.mount.d/tmp_size.conf"
+
+!!! SI 64 GiO RAM ET TMPFS = 16G    AU 01/05/2024
+==================================================
+==> tmpfs = 16G  mkpkg-tmpfs = 8G ou 24G ou 32G si compilation blender
+==>                           40G ou 24G ou 16G RAM disponible
+
+NOUVELLE VERSION 255.5
+
+$ sudo mkdir /etc/systemd/system/tmp.mount.d
+$ sudo sh -c "echo '[Mount]' > /etc/systemd/system/tmp.mount.d/tmp_size.conf"
+$ sudo sh -c "echo 'Options=mode=1777,strictatime,nosuid,nodev,size=16G,nr_inodes=1m' >> /etc/systemd/system/tmp.mount.d/tmp_size.conf"
 
 
 FAIRE TEST SI OK ( PSD AVEC FIREFOX ... COMPILER BLENDER DANS /TMP )

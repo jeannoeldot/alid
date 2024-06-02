@@ -195,6 +195,8 @@ source $(pwd)/ai-commons
         messages+="- Devient ${Byellow_dlg}MAKEFLAGS=\"-j$nb_core_mf\"${Reset_dlg}.\n"
         messages+="Option ${Bwhite_dlg}#PACKAGER${Reset_dlg} :\n"
         messages+="- Devient ${Byellow_dlg}PACKAGER=\"Name <name@fai.com>\"${Reset_dlg}.\n"
+        messages+="Option ${Bwhite_dlg}COMPRESSZST${Reset_dlg} :\n"
+        messages+="- Devient ${Byellow_dlg}COMPRESSZST=(zstd -c -T0 --ultra -18 -)${Reset_dlg}.\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         if (( $IN_VIRTUAL_BOX == 0 )); then
             sed -i "s/-march=x86-64 -mtune=generic/-march=native/g" /etc/makepkg.conf
@@ -202,6 +204,7 @@ source $(pwd)/ai-commons
         sed -i "s/-O2 -pipe/-O2 -pipe -fdiagnostics-color=always/g" /etc/makepkg.conf
         sed -i "/^#MAKEFLAGS/c\MAKEFLAGS=\"-j$nb_core_mf\"" /etc/makepkg.conf
         sed -i "/^#PACKAGER/c\PACKAGER=\"Name <name@fai.com>\"" /etc/makepkg.conf
+        sed -i "/^COMPRESSZST/c\COMPRESSZST=(zstd -c -T0 --ultra -18 -)" /etc/makepkg.conf
         #
         retour=9
         messages="\n"
