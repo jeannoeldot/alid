@@ -1000,7 +1000,7 @@ source $(pwd)/ai-commons
 #}}} FIN INSTALLATION DE OU WM
 
     install_fonts
-    install_reset_mouse_service
+#    install_reset_mouse_service        # Inutile suite tests dans nouvelle install 15/04/2024
 #    install_optional_dep_for_gtk3      # gtk3-print-backends inclus dans GTK3
 #    install_optional_dep_for_qt4       # drop qt4
 #    install_optional_dep_for_pulseaudio    #remplaçé par pipewire-pulse

@@ -201,7 +201,7 @@ source $(pwd)/ai-commons
         fi
         sed -i "s/-O2 -pipe/-O2 -pipe -fdiagnostics-color=always/g" /etc/makepkg.conf
         sed -i "/^#MAKEFLAGS/c\MAKEFLAGS=\"-j$nb_core_mf\"" /etc/makepkg.conf
-        sed -i "/^#PACKAGER/c\PACKAGER=\"Name <name@fai.com>\"" etc-makepkg.conf
+        sed -i "/^#PACKAGER/c\PACKAGER=\"Name <name@fai.com>\"" /etc/makepkg.conf
         #
         retour=9
         messages="\n"
