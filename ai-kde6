@@ -401,7 +401,7 @@
             case $choix in
                 "devtools")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}base-devel devtools etc...${BGreen}...${Reset}"
-                    package_install "base-devel devtools namcap boost doxygen ninja mold wayland-protocols"
+                    package_install "base-devel glib2-devel devtools namcap boost doxygen ninja mold wayland-protocols"
                     ;;
                 "kdevelop")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}kdevelop${BGreen}...${Reset}"

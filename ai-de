@@ -408,10 +408,10 @@ source $(pwd)/ai-commons
         titre="INSTALLATION D'OUTILS BASH"
         messages="\n"
         messages+="Installation de divers outils ${Byellow_dlg}BASH${Reset_dlg} :\n"
-        messages+="bc mlocate rsync bash-completion wget net-tools ethtool tree mc iptraf-ng lsd nvme-cli speedtest-cli\n"
+        messages+="bc mlocate rsync bash-completion wget net-tools ethtool tree mc iptraf-ng lsd nvme-cli speedtest-cli lsscsi\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de ${BYellow}bc mlocate rsync bash-completion wget net-tools ethtool tree mc iptraf-ng lsd nvme-cli speedtest-cli${BGreen}...${Reset}"
-        package_install "bc mlocate rsync bash-completion wget net-tools ethtool tree mc iptraf-ng lsd nvme-cli speedtest-cli"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}bc mlocate rsync bash-completion wget net-tools ethtool tree mc iptraf-ng lsd nvme-cli speedtest-cli lsscsi${BGreen}...${Reset}"
+        package_install "bc mlocate rsync bash-completion wget net-tools ethtool tree mc iptraf-ng lsd nvme-cli speedtest-cli lsscsi"
         pause_function
         #
         titre="INSTALLATION DE «D-BUS»"
