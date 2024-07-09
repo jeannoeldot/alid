@@ -184,7 +184,9 @@ source $(pwd)/ai-commons
     write_variables_ali() {
         touch ${MOUNTPOINT}/root/variables.ali
         echo "TYPE_KEYBOARD=${TYPE_KEYBOARD}" >> ${MOUNTPOINT}/root/variables.ali
-        local name_net_wired=$(ip link | awk '/eno|enp|ens/ {print $2}' | sed -e "s/://")
+#        local name_net_wired=$(ip link | awk '/eno|enp|ens/ {print $2}' | sed -e "s/://")
+#        Erreur : retourne eno1 enp0s31f6
+        local name_net_wired=$(ip link | awk '/eno/ {print $2}' | sed -e "s/://")
         echo "NAME_NET_WIRED=${name_net_wired}" >> ${MOUNTPOINT}/root/variables.ali
         echo "IS_UEFI=${IS_UEFI}" >> ${MOUNTPOINT}/root/variables.ali
         echo "IN_VIRTUAL_BOX=${IN_VIRTUAL_BOX}" >> ${MOUNTPOINT}/root/variables.ali

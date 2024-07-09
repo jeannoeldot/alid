@@ -390,12 +390,16 @@ source $(pwd)/ai-commons
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         #
         echo "noarp" >> /etc/dhcpcd.conf
-        printf '%s\n' "${BGreen}Creation du fichier ${BYellow}/etc/resolv.conf.head${BGreen}...${Reset}"
-        cp -v ai-fconfig/net-ip-statique/resolv.conf.head /etc/resolv.conf.head
-        # Enable toutes les interfaces reseaux par defaut
-        printf '%s\n' "${BGreen}Activation du service ${BYellow}dhcpcd.service${BGreen}...${Reset}"
-#       systemctl enable dhcpcd@${NAME_NET_WIRED}.service
-        systemctl enable dhcpcd.service
+# MODIF le 09/07/2024: Problème surf Web
+#        printf '%s\n' "${BGreen}Creation du fichier ${BYellow}/etc/resolv.conf.head${BGreen}...${Reset}"
+#        cp -v ai-fconfig/net-ip-statique/resolv.conf.head /etc/resolv.conf.head
+#        # Enable toutes les interfaces reseaux par defaut
+#        printf '%s\n' "${BGreen}Activation du service ${BYellow}dhcpcd.service${BGreen}...${Reset}"
+#        systemctl enable dhcpcd.service
+########################################
+        # Enable une interface spécifique uniquement
+        printf '%s\n' "${BGreen}Activation du service ${BYellow}dhcpcd@${NAME_NET_WIRED}.service${BGreen}...${Reset}"
+        systemctl enable dhcpcd@${NAME_NET_WIRED}.service
         pause_function
     }
     #}}}
