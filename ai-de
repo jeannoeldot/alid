@@ -597,6 +597,14 @@ source $(pwd)/ai-commons
                     L_XF86_DRIVERS=$(pacman -Qe | grep xf86-video | awk '{print $1}')
                     printf '%s\n' "${BGreen}Désinstallation de ${BYellow}$L_XF86_DRIVERS${BGreen}...${Reset}"
                     [[ -n $L_XF86_DRIVERS ]] && pacman -Rcsn $L_XF86_DRIVERS
+                    # SUPPRIME kms dans mkinitcpio.conf
+                    printf '%s\n' "${BGreen}Suppression du HOOK ${BYellow}kms${BGreen}...${Reset}"
+                    # lecture ligne HOOKS=
+                    local contenu_hooks=$(sed -n "/^HOOKS=/p" /etc/mkinitcpio.conf)
+                    # Commente la ligne HOOKS= originale
+                    sed -i "/^HOOKS=/i\#${contenu_hooks}" /etc/mkinitcpio.conf
+                    # Inscrit modifs
+                    sed -i "/^HOOKS=/s/kms //g" /etc/mkinitcpio.conf
 #                    # Si PC Cervon
 #                    if [[ "${L_NAME_CG_NVIDIA}" == "GeForce 9800 GTX+" ]]; then
 #                        messages="\n"
@@ -634,8 +642,8 @@ source $(pwd)/ai-commons
                         messages+="Nom de la carte Vidéo NVidia détectée : ${Byellow_dlg}${L_NAME_CG_NVIDIA}${Reset_dlg}\n\n"
                         messages+="Installation de la dernière version des pilotes NVidia.\n"
                         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia-dkms linux-headers nvidia-utils nvidia-settings${BGreen}...${Reset}"
-                        package_install "nvidia-dkms linux-headers nvidia-utils nvidia-settings"
+                        printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia-open-dkms linux-headers nvidia-utils nvidia-settings${BGreen}...${Reset}"
+                        package_install "nvidia-open-dkms linux-headers nvidia-utils nvidia-settings"
                         #CONFIGURE NVidia IN XORG
                         printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia ${BYellow}20-nvidia.conf${BGreen}...${Reset}"
                         cp -v ai-fconfig/20-nvidia.conf /etc/X11/xorg.conf.d/20-nvidia.conf                    

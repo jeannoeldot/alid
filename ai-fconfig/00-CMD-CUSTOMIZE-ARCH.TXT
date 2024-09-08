@@ -611,7 +611,38 @@ To show all installed unit files use 'systemctl list-unit-files'.
 ln -s '/dev/null' '/etc/systemd/system/systemd-backlight@backlight:eeepc-wmi.service'
 
 
-13) HDDTEMP : Créer ma conf ds /etc/systemd/system/hddtemp.service.d/myhddtemp.conf
+13) DRIVETEMP : Pour Conky
+===================================================================================
+https://wiki.archlinux.org/title/Lm_sensors#S.M.A.R.T._drive_temperature
+https://wiki.archlinux.org/title/Kernel_module#Automatic_module_loading
+https://ignace72.eu/connaitre-la-temperature-de-ses-disques-avec-le-module-linux-drivetemp.html
+
+$ sudo modprobe drivetemp
+
+$ sensors
+drivetemp-scsi-0-0
+Adapter: SCSI adapter
+temp1:        +29.0°C  (low  =  +0.0°C, high = +70.0°C)
+                       (crit low =  +0.0°C, crit = +70.0°C)
+                       (lowest = +27.0°C, highest = +40.0°C)
+
+...
+drivetemp-scsi-1-0
+Adapter: SCSI adapter
+temp1:        +32.0°C  (low  =  +0.0°C, high = +60.0°C)
+                       (crit low = -41.0°C, crit = +85.0°C)
+                       (lowest = +28.0°C, highest = +32.0°C)
+
+...
+
+$ sudo touch /etc/modules-load.d/drivetemp.conf
+$ sudo nano /etc/modules-load.d/drivetemp.conf
+====> Ajouter: drivetemp
+
+/!\/!\/!\/!\/!\/!\/!\/!\/!\
+INUTILE: NE Fonctionne plus
+/!\/!\/!\/!\/!\/!\/!\/!\/!\
+14) HDDTEMP : Créer ma conf ds /etc/systemd/system/hddtemp.service.d/myhddtemp.conf
 ===================================================================================
 voir : https://wiki.archlinux.org/index.php/User:Djgera#hddtemp
 voir 100)
