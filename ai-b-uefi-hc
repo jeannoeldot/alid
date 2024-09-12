@@ -190,12 +190,12 @@
 # CHOIX PARTITION ESP OBLIGATOIRE
         titre="PARTITIONNEMENT : SÉLECTION PARTITION «ESP»"
         messages="\n"
-        messages+="Sélectionner la partition ${Byellow_dlg}/boot/efi${Reset_dlg}\n\n"
+        messages+="Sélectionner la partition ${Byellow_dlg}/efi${Reset_dlg}\n\n"
         messages+=${CHOIX_PARTITIONS}"\n\n"
         partitions=$(LC_ALL=C fdisk -l $MAIN_DEVICE | grep -v $ROOT_PART | sed -e "s/*//" | awk '{print $1"  "$5}' | grep "/dev/")
         EFI_PART=$(dialog --colors --nocancel --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Sélectionner" --menu "${messages}" 20 72 8 ${partitions} 3>&1 1>&2 2>&3)
-        format_efi_partition "$EFI_PART" "${MOUNTPOINT}/boot/efi"
-        CHOIX_PARTITIONS+=$(echo $EFI_PART)" = /boot/efi.  "
+        format_efi_partition "$EFI_PART" "${MOUNTPOINT}/efi"
+        CHOIX_PARTITIONS+=$(echo $EFI_PART)" = /efi.  "
 # CHOIX PARTITION SWAP FACULTATIF
         titre="PARTITIONNEMENT : SÉLECTION PARTITION «SWAP»"
         messages="\n"

@@ -14,118 +14,49 @@
     #INSTALL BOOTLOADER {{{
     install_bootloader() {
         local messages=""
-        local titre="PROCESSUS DE BOOT : INSTALLATION DE rEFInd"
+        local titre="PROCESSUS DE BOOT : INSTALLATION DE GRUB"
         messages="\n"
-        # Achitecture du PC
-        ARCHI_REFIND="x64"
+        messages+="Installation de ${Byellow_dlg}efibootmgr${Reset_dlg}\n"
+        messages+="pour gerer entree dans ${Byellow_dlg}NVRAM${Reset_dlg}.\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}efibootmgr${BGreen}...${Reset}"
+        pacman -Syu efibootmgr
         #
-        # Determine le nom du rep d'installation de arch
-        if [[ -d /boot/efi/EFI ]]; then
-            number_of_arch_first=$(ls "/boot/efi/EFI/" | grep -E "arch" | awk 'length($0)<7' | wc -l)
-            if (( $number_of_arch_first == 0 )); then
-                NAME_DIR_ARCHLINUX=${NAME_ARCH_FIRST}
-                NUMBER_OF_ARCH=1
-                IS_MULTI_BOOT_UEFI=0
-            else
-                digit_of_arch_after=$(( $number_of_arch_first + 1 ))
-                NAME_DIR_ARCHLINUX="arch_${digit_of_arch_after}"
-                NUMBER_OF_ARCH=${digit_of_arch_after}
-                IS_MULTI_BOOT_UEFI=1
-            fi
-        else
-            NAME_DIR_ARCHLINUX=${NAME_ARCH_FIRST}
-            NUMBER_OF_ARCH=1
-            IS_MULTI_BOOT_UEFI=0
+        # https://wiki.archlinux.org/index.php/Beginners%27_Guide#For_UEFI_motherboards 12/10/2013
+        # Si /sys/firmware/efi/efivars n'est pas deja monte.
+        # Voir modifs  arch-install-scripts
+        if [[ ! -d "/sys/firmware/efi/efivars" ]]; then
+            mount -t efivarfs efivarfs /sys/firmware/efi/efivars
         fi
-        DIR_EFI_ARCHLINUX="/boot/efi/EFI/${NAME_DIR_ARCHLINUX}"
-        messages+="${BRcyan_dlg}!!!${Reset_dlg} Le repertoire d'installation de Arch Linux est :\n"
-        messages+="    ${Byellow_dlg}${DIR_EFI_ARCHLINUX}${Reset_dlg}\n\n"
-        # INSCRIT NAME_DIR_ARCHLINUX DANS name_dir_archlinux.uefi pour ai-de
-        echo "name_dir_archlinux=${NAME_DIR_ARCHLINUX}" > /root/name_dir_archlinux.uefi
+        # Supprime entree GRUB ArchLinux dans NVRAM si existe deja
+        _num_entree=$(efibootmgr -v | awk '/GRUB/ {print $1}' | sed -e "s/^Boot//;s/\*$//")
+        if [[ ${_num_entree} != "" ]]; then
+            efibootmgr -B -b ${_num_entree}
+        fi
+        # Supprime entree rEFInd ArchLinux dans NVRAM si existe deja
+        _num_entree=$(efibootmgr -v | awk '/rEFInd/ {print $1}' | sed -e "s/^Boot//;s/\*$//")
+        if [[ ${_num_entree} != "" ]]; then
+            efibootmgr -B -b ${_num_entree}
+        fi
         #
-        # Nom du Manager de Boot
+        # Installation de GRUB
+        messages="\n"
+        messages+="Installation de ${Byellow_dlg}GRUB${Reset_dlg}\n"
+        messages+="Installation de ${Byellow_dlg}fuse3 os-prober${Reset_dlg}\n"
+        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}GRUB fuse3 os-prober${BGreen}...${Reset}"
+        pacman -Syu grub fuse3 os-prober
+        #
+        messages="\n"
+        messages+="Installation de ${Byellow_dlg}GRUB${Reset_dlg}.\n"
         if (( $IN_VIRTUAL_BOX == 1 )); then
-            messages+="${BRcyan_dlg}!!!${Reset_dlg} Installation dans ${BRwhite_dlg}Oracle VM VirtualBox${Reset_dlg} :\n"
-            messages+="    Le nom du Manager de Boot est : ${Byellow_dlg}boot${ARCHI_REFIND}.efi${Reset_dlg}\n\n"
-            MGR_EFI="boot"
-            NAME_DIR_EFI="/boot/efi/EFI/BOOT"
-            NAME_DIR_MGR_EFI="/EFI/BOOT/boot${ARCHI_REFIND}.efi"
-        else
-            messages+="${BRcyan_dlg}!!!${Reset_dlg} Installation dans ${BRwhite_dlg}PC Reel${Reset_dlg} :\n"
-            messages+="    Le nom du Manager de Boot est : ${Byellow_dlg}refind_${ARCHI_REFIND}.efi${Reset_dlg}\n\n"
-            MGR_EFI="refind"
-            NAME_DIR_EFI="/boot/efi/EFI/refind"
-            NAME_DIR_MGR_EFI="/EFI/refind/refind_${ARCHI_REFIND}.efi"
-        fi
-        messages+="${BRcyan_dlg}!!!${Reset_dlg} Le repertoire d'installation du Manager de Boot est :\n"
-        messages+="    ${Byellow_dlg}${NAME_DIR_EFI}${Reset_dlg}\n"
-        # INSCRIT CHOIX NOM DANS name_dir_archlinux.uefi pour ai-de
-        echo "name_mgr_efi=${MGR_EFI}" >> /root/name_dir_archlinux.uefi
-        print_dialog_msgbox_h "${titre}" "${messages}" "Continuer" 20
-        #
-        # Installation de rEFInd
-        printf '%s\n' "${BGreen}Installation de ${BYellow}rEFInd${BGreen}...${Reset}"
-        pacman -Syu refind
-        # Kernels
-        messages="\n"
-        messages+="Copie des fichiers du kernel dans ${Byellow_dlg}${DIR_EFI_ARCHLINUX}${Reset_dlg} :\n"
-        messages+="- vmlinuz-linux --> vmlinuz-${NAME_DIR_ARCHLINUX}.efi\n"
-        messages+="- initramfs-linux.img --> initramfs-${NAME_DIR_ARCHLINUX}.img\n"
-        messages+="- initramfs-linux-fallback.img --> initramfs-${NAME_DIR_ARCHLINUX}-fallback.img\n"
-#         if (( $IN_VIRTUAL_BOX == 0 )); then
-#             messages+="- intel-ucode.img --> intel-ucode.img\n\n"
-#         else
-             messages+="\n\n"
-#         fi
-        messages+="Copie du fichier de configuration du kernel :\n"
-        messages+="- refind_linux.conf\n"
-        print_dialog_msgbox_h "${titre}" "${messages}" "Continuer" 20
-        printf '%s\n' "${BGreen}Copie des fichiers du ${BYellow}kernel (EFISTUB)${BGreen}...${Reset}"
-        # CREATION arch_x
-        mkdir -p ${DIR_EFI_ARCHLINUX}
-        cp -v /boot/vmlinuz-linux ${DIR_EFI_ARCHLINUX}/vmlinuz-${NAME_DIR_ARCHLINUX}.efi
-        cp -v /boot/initramfs-linux.img ${DIR_EFI_ARCHLINUX}/initramfs-${NAME_DIR_ARCHLINUX}.img
-        cp -v /boot/initramfs-linux-fallback.img ${DIR_EFI_ARCHLINUX}/initramfs-${NAME_DIR_ARCHLINUX}-fallback.img
-#         if (( $IN_VIRTUAL_BOX == 0 )); then
-#             printf '%s\n' "${BGreen}Copie du fichier image de ${BYellow}intel-ucode${BGreen}...${Reset}"
-#             cp -v /boot/intel-ucode.img ${DIR_EFI_ARCHLINUX}/intel-ucode.img
-#         fi
-        printf '%s\n' "${BGreen}Copie du fichier de configuration du ${BYellow}kernel (EFISTUB)${BGreen}...${Reset}"
-        cp -v ai-fconfig/refind_linux.conf-sample ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-        pause_function
-        # rEFInd : si 1ere installation
-        messages="\n"
-        if (( $IS_MULTI_BOOT_UEFI == 0 )); then
-            messages+="Copie des fichiers d'installation de ${Byellow_dlg}rEFInd${Reset_dlg} :\n"
-            messages+="- refind_${ARCHI_REFIND}.efi --> /boot/efi${NAME_DIR_MGR_EFI}\n"
-            messages+="- refind.conf-sample --> ${NAME_DIR_EFI}/refind.conf\n"
-            messages+="- icons --> ${NAME_DIR_EFI}/icons\n"
-            messages+="- os_arch_${NUMBER_OF_ARCH}.png --> ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}.png\n"
-        else
-            messages+="MULTI BOOT UEFI : Pas d'installation de rEFInd.\n\n"
-            messages+="- os_arch_${NUMBER_OF_ARCH}.png --> ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}.png\n"
+            messages+="Dans VIRTUAL BOX : Ajout option ${BRwhite_dlg}--removable${Reset_dlg}\n"
         fi
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-        if (( $IS_MULTI_BOOT_UEFI == 0 )); then
-            printf '%s\n' "${BGreen}Copie des fichiers d'installation de ${BYellow}rEFInd${BGreen}...${Reset}"
-            mkdir -p ${NAME_DIR_EFI}
-            cp -v /usr/share/refind/refind_${ARCHI_REFIND}.efi /boot/efi${NAME_DIR_MGR_EFI}
-            cp -v /usr/share/refind/refind.conf-sample ${NAME_DIR_EFI}/refind.conf
-            # Installe icones
-            cp -R /usr/share/refind/icons ${NAME_DIR_EFI}/icons
-            printf '%s\n' "${BGreen}Copie des icones ${BYellow}os_arch_${NUMBER_OF_ARCH}.png${BGreen}, ${BYellow}os_arch_${NUMBER_OF_ARCH}_ck.png${BGreen} et ${BYellow}os_arch_${NUMBER_OF_ARCH}_lts.png${BGreen}...${Reset}"
-            cp -v ai-fconfig/refind-icones/os_arch_${NUMBER_OF_ARCH}.png ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}.png
-            cp -v ai-fconfig/refind-icones/os_arch_${NUMBER_OF_ARCH}_ck.png ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}_ck.png
-            cp -v ai-fconfig/refind-icones/os_arch_${NUMBER_OF_ARCH}_lts.png ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}_lts.png
-            cp -v ai-fconfig/refind-icones/os_arch_${NUMBER_OF_ARCH}_zen.png ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}_zen.png
+        if (( $IN_VIRTUAL_BOX == 1 )); then
+            grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB_ARCH --removable
         else
-            printf '%s\n' "${BGreen}MULTI BOOT UEFI : Pas d'installation de ${BYellow}rEFInd${BGreen}...${Reset}"
-            printf '%s\n' "${BGreen}Copie des icones ${BYellow}os_arch_${NUMBER_OF_ARCH}.png${BGreen}, ${BYellow}os_arch_${NUMBER_OF_ARCH}_ck.png${BGreen} et ${BYellow}os_arch_${NUMBER_OF_ARCH}_lts.png${BGreen}...${Reset}"
-            # Installe icones
-            cp -v ai-fconfig/refind-icones/os_arch_${NUMBER_OF_ARCH}.png ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}.png
-            cp -v ai-fconfig/refind-icones/os_arch_${NUMBER_OF_ARCH}_ck.png ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}_ck.png
-            cp -v ai-fconfig/refind-icones/os_arch_${NUMBER_OF_ARCH}_lts.png ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}_lts.png
-            cp -v ai-fconfig/refind-icones/os_arch_${NUMBER_OF_ARCH}_zen.png ${NAME_DIR_EFI}/icons/os_arch_${NUMBER_OF_ARCH}_zen.png
+            grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB_ARCH
         fi
         pause_function
     }
@@ -133,210 +64,71 @@
     #CONFIGURE BOOTLOADER {{{
     configure_bootloader() {
         local messages=""
-        local titre="CONFIGURATION DE rEFInd"
+        local titre="CONFIGURATION DE GRUB"
         messages="\n"
-        #
-        if (( $IS_MULTI_BOOT_UEFI == 0 )); then
-            messages+="Configuration de ${Byellow_dlg}${NAME_DIR_EFI}/refind.conf${Reset_dlg} :\n"
-            messages+="- timeout --> timeout 2\n"
-            messages+="- #scan_all_linux_kernels --> scan_all_linux_kernels false\n"
-            messages+="- #fold_linux_kernels --> fold_linux_kernels false\n"
-            if (( $IN_VIRTUAL_BOX == 1 )); then
-                messages+="- #showtools --> showtools shell,about,hidden_tags,shutdown,reboot\n"
-                messages+="- #dont_scan_files  --> dont_scan_files ...\n"
-            else
-                messages+="- #showtools --> showtools shell,about,hidden_tags,shutdown,reboot,firmware\n"
-                messages+="- #dont_scan_files  --> dont_scan_files ...\n"
-                messages+="- #resolution --> resolution 1024 768\n"
-                messages+="- #enable_mouse --> enable_mouse\n"
-            fi
+        messages+="GRUB_TIMEOUT=${BRwhite_dlg}3${Reset_dlg}\n"
+        if (( $IN_VIRTUAL_BOX == 1 )); then
+            messages+="GRUB_CMDLINE_LINUX="rw force_addr=0xaddr systemd.unit=graphical.target quiet"\n"
         else
-            messages+="${BRcyan_dlg}!!!${Reset_dlg} MULTI BOOT UEFI :\n"
-            messages+="    Pas de configuration de ${Byellow_dlg}${NAME_DIR_EFI}/refind.conf${Reset_dlg}.\n"
+            messages+="GRUB_CMDLINE_LINUX="rw systemd.unit=graphical.target quiet"\n"
         fi
+#        GRUB_CMDLINE_LINUX_DEFAULT=""
+
+#        #GRUB_COLOR_NORMAL="light-blue/black"
+#        #GRUB_COLOR_HIGHLIGHT="light-cyan/blue"
+
+        messages+="GRUB_DEFAULT=${BRwhite_dlg}saved${Reset_dlg}\n"
+        messages+="GRUB_SAVEDEFAULT=${BRwhite_dlg}true${Reset_dlg}\n"
+
+        messages+="GRUB_DISABLE_SUBMENU=${BRwhite_dlg}y${Reset_dlg}\n"
+
+        messages+="GRUB_DISABLE_OS_PROBER=${BRwhite_dlg}false${Reset_dlg}\n"
+
+        messages+="Ajout de${BRwhite_dlg}UEFI Firmware Settings menu entry${Reset_dlg}\n"
+        messages+="Ajout de${BRwhite_dlg}Shutdown menu entry${Reset_dlg}\n"
+        messages+="Ajout de${BRwhite_dlg}Restart menu entry${Reset_dlg}\n"
+
         print_dialog_msgbox_h "${titre}" "${messages}" "Continuer" 20
-        # rEFInd 0.8.3 :
-        # A ETUDIER
-        # #scanfor internal,external,optical,manual => scanfor internal,hdbios,external,optical,manual
-        # ==> Si probleme CSM compatibility => a enlever
-        # #uefi_deep_legacy_scan => uefi_deep_legacy_scan true
-        # ==> NE PAS METTRE DANS VBOX
-        if (( $IS_MULTI_BOOT_UEFI == 0 )); then
-            sed -i "/^timeout/c\timeout 2" ${NAME_DIR_EFI}/refind.conf
-            sed -i "/^#scan_all_linux_kernels/c\scan_all_linux_kernels false" ${NAME_DIR_EFI}/refind.conf
-            sed -i "/^#fold_linux_kernels/c\fold_linux_kernels false" ${NAME_DIR_EFI}/refind.conf
-            if (( $IN_VIRTUAL_BOX == 1 )); then
-                sed -i "/^#showtools/c\showtools shell,about,hidden_tags,shutdown,reboot" ${NAME_DIR_EFI}/refind.conf
-                sed -i "/^#dont_scan_files/c\dont_scan_files fallback.efi,shim.efi,shim-fedora.efi,gcdx64.efi,MokManager.efi" ${NAME_DIR_EFI}/refind.conf
-            else
-                sed -i "/^#showtools/c\showtools shell,about,hidden_tags,shutdown,reboot,firmware" ${NAME_DIR_EFI}/refind.conf
-                sed -i "/^#dont_scan_files/c\dont_scan_files BOOTX64.EFI,fallback.efi,shim.efi,shim-fedora.efi,gcdx64.efi,MokManager.efi" ${NAME_DIR_EFI}/refind.conf
-                sed -i "/^#resolution 1024 768/c\resolution 1024 768" ${NAME_DIR_EFI}/refind.conf
-                # DÉSACTIVÉ AU 25/05/2023: Plus de boot auto
-                #sed -i "/^#enable_mouse/c\enable_mouse" ${NAME_DIR_EFI}/refind.conf
-                # PAS OK : RAJOUTES ENTRÉES DS NVRAM => PLUS DE BOOT !!!
-                #sed -i "/^#scanfor/c\scanfor internal,hdbios,external,optical,manual" ${NAME_DIR_EFI}/refind.conf
-                # NE SEMBLE PAS OBLIGATOIRE ( PAR DEFAUT )
-                #sed -i "/^#uefi_deep_legacy_scan/c\uefi_deep_legacy_scan true" ${NAME_DIR_EFI}/refind.conf
-            fi
+        # /etc/default/grub
+        sed -i "/^GRUB_DEFAULT=/c\GRUB_DEFAULT=saved" /etc/default/grub
+        sed -i "/^GRUB_TIMEOUT=/c\GRUB_TIMEOUT=3" /etc/default/grub
+        if (( $IN_VIRTUAL_BOX == 1 )); then
+            sed -i "/^GRUB_CMDLINE_LINUX=/c\GRUB_CMDLINE_LINUX=\"rw force_addr=0xaddr systemd.unit=graphical.target quiet\"" /etc/default/grub
+        else
+            sed -i "/^GRUB_CMDLINE_LINUX=/c\GRUB_CMDLINE_LINUX=\"rw systemd.unit=graphical.target quiet\"" /etc/default/grub
         fi
-        if (( $IS_MULTI_BOOT_UEFI == 0 )); then
-            messages="\n"
-            messages+="Visualiser/Editer le fichier ${Byellow_dlg}refind.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
-            print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
-            retour=$?
-            if (( retour == 0 )); then
-                ${EDITOR} ${NAME_DIR_EFI}/refind.conf
-            fi
-        fi
+        sed -i "/#GRUB_SAVEDEFAULT/s/^#//" /etc/default/grub
+        sed -i "/#GRUB_DISABLE_SUBMENU/s/^#//" /etc/default/grub
+        sed -i "/#GRUB_DISABLE_OS_PROBER/s/^#//" /etc/default/grub
+        # /etc/grub.d/40_custom
+        #"UEFI Firmware Settings" menu entry
+        printf '%s\n' 'if [ ${grub_platform} == "efi" ]; then' >> /etc/grub.d/40_custom
+        printf '%s\n' "   menuentry 'UEFI Firmware Settings' --id 'uefi-firmware' {" >> /etc/grub.d/40_custom
+        printf '%s\n' '     fwsetup' >> /etc/grub.d/40_custom
+        printf '%s\n' '   }' >> /etc/grub.d/40_custom
+        printf '%s\n' 'fi' >> /etc/grub.d/40_custom
+        #"Shutdown" menu entry
+        printf '%s\n' "menuentry 'System shutdown' {" >> /etc/grub.d/40_custom
+        printf '%s\n' "   echo 'System shutting down...'" >> /etc/grub.d/40_custom
+        printf '%s\n' '   halt' >> /etc/grub.d/40_custom
+        printf '%s\n' '}' >> /etc/grub.d/40_custom
+        #"Restart" menu entry
+        printf '%s\n' "menuentry 'System restart' {" >> /etc/grub.d/40_custom
+        printf '%s\n' "   echo 'System rebooting...'" >> /etc/grub.d/40_custom
+        printf '%s\n' '   reboot' >> /etc/grub.d/40_custom
+        printf '%s\n' '}' >> /etc/grub.d/40_custom
         #
-        messages="\n"
-        messages+="Affichage de ${Byellow_dlg}PARTUUID${Reset_dlg} des partitions.\n"
-        messages+="Bien NOTER ${Byellow_dlg}PARTUUID${Reset_dlg} de la partition ${Byellow_dlg}Root${Reset_dlg}.\n"
-        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-        blkid
+        printf '%s\n' "${BGreen}Configuration de ${BYellow}grub.cfg${BGreen}...${Reset}"
+        grub-mkconfig -o /boot/grub/grub.cfg
         pause_function
         #
         messages="\n"
-        messages+="Configuration de ${Byellow_dlg}${DIR_EFI_ARCHLINUX}/refind_linux.conf${Reset_dlg}.\n"
-        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-# PROBLÈME suite installation sur NVME le 15/04/2024
-# Retour lsblk -dno PARTUUID $ROOT_PART vide
-#         if (( $IN_VIRTUAL_BOX == 1 )); then
-#             partroot=$(echo $ROOT_PART | sed 's/\/dev\///')
-#             partuuid=$(ls -l /dev/disk/by-partuuid | awk '/'$partroot'/ {print $9}')
-#         else
-#             partuuid=$(lsblk -dno PARTUUID $ROOT_PART)
-#         fi
-        partroot=$(echo $ROOT_PART | sed 's/\/dev\///')
-        partuuid=$(ls -l /dev/disk/by-partuuid | awk '/'$partroot'/ {print $9}')
-#        sed -i "/^\"Boot/d;/^$/d" ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-        # ROOT_FS_TYPE=ext4
-        if (( $IN_VIRTUAL_BOX == 1 )); then
-            printf '%s\n' '"Boot en mode Graphique"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=graphical.target quiet initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-            printf '%s\n' '"Boot en mode Terminal"    "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=multi-user.target quiet initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-            printf '%s\n' '"Boot en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=rescue.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-            printf '%s\n' '"Fallback en mode Graphique"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=graphical.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-            printf '%s\n' '"Fallback en mode Terminal"    "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=multi-user.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-            printf '%s\n' '"Fallback en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw force_addr=0xaddr systemd.unit=rescue.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-        else
-             printf '%s\n' '"Boot en mode Graphique"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=graphical.target quiet initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-             printf '%s\n' '"Boot en mode Terminal"    "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=multi-user.target quiet initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-             printf '%s\n' '"Boot en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=rescue.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-             printf '%s\n' '"Fallback en mode Graphique"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=graphical.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-             printf '%s\n' '"Fallback en mode Terminal"    "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=multi-user.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-             printf '%s\n' '"Fallback en mode Depannage"   "root=PARTUUID='$partuuid' rootfstype='$ROOT_FS_TYPE' rw systemd.unit=rescue.target initrd=EFI\'$NAME_DIR_ARCHLINUX'\initramfs-'$NAME_DIR_ARCHLINUX'-fallback.img"' >> ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-        fi
-        messages="\n"
-        messages+="Visualiser/Editer le fichier ${Byellow_dlg}refind_linux.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
+        messages+="Visualiser/Editer le fichier ${Byellow_dlg}grub.cfg${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
         if (( retour == 0 )); then
-            ${EDITOR} ${DIR_EFI_ARCHLINUX}/refind_linux.conf
-        fi  
-        #
-        messages="\n"
-        if (( $IS_MULTI_BOOT_UEFI == 0 )); then
-            messages+="Mise en place de ${Byellow_dlg}rEFInd${Reset_dlg} dans ${Byellow_dlg}NVRAM${Reset_dlg}.\n"
-        else
-            messages+="${BRcyan_dlg}!!!${Reset_dlg} MULTI BOOT UEFI :\n"
-            messages+="    Pas de mise en place de ${Byellow_dlg}rEFInd${Reset_dlg} dans ${Byellow_dlg}NVRAM${Reset_dlg}.\n"
+            ${EDITOR} /boot/grub/grub.cfg
         fi
-        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-        if (( $IS_MULTI_BOOT_UEFI == 0 )); then
-            # https://wiki.archlinux.org/index.php/Beginners%27_Guide#For_UEFI_motherboards 12/10/2013
-            # Si /sys/firmware/efi/efivars n'est pas deja monte.
-            # Voir modifs  arch-install-scripts
-            if [[ ! -d "/sys/firmware/efi/efivars" ]]; then
-                mount -t efivarfs efivarfs /sys/firmware/efi/efivars
-            fi
-            # Supprime entree rEFInd ArchLinux dans NVRAM si existe deja
-            _num_entree=$(efibootmgr -v | awk '/rEFInd/ {print $1}' | sed -e "s/^Boot//;s/\*$//")
-            if [[ ${_num_entree} != "" ]]; then
-                efibootmgr -B -b ${_num_entree}
-            fi
-            #
-#            numpartefi=$(echo $EFI_PART | sed 's/\/dev\/sd[a-z]//')
-            if (( $IS_NVME == 1 )); then
-                numpartefi=$(echo $EFI_PART | sed 's/\/dev\/nvme[0-9]n[0-9]p//')
-            else
-                numpartefi=$(echo $EFI_PART | sed 's/\/dev\/sd[a-z]//')
-            fi
-            printf '%s\n' "${BGreen}Mise en place de ${BYellow}rEFInd${BGreen} dans ${BYellow}NVRAM${BGreen}...${Reset}"
-            efibootmgr -c -d ${MAIN_DEVICE} -p ${numpartefi} -l ${NAME_DIR_MGR_EFI} -L "rEFInd ArchLinux"
-            messages="\n"
-            messages+="Visualiser les entrees dans ${Byellow_dlg}NVRAM${Reset_dlg} ?\n"
-            print_dialog_yesno "${titre}" "${messages}" "Visualiser" "Continuer"
-            retour=$?
-            if (( retour == 0 )); then
-                efibootmgr -v > /tmp/.efibootmgr
-                printf '%s\n' "${BGreen}Visualisation des entrees dans ${BYellow}NVRAM${BGreen}...${Reset}"
-                cat /tmp/.efibootmgr
-                pause_function
-                rm -f /tmp/.efibootmgr
-            fi
-        fi
-        # Installation de efistub_update.path et efistub_update.service
-        messages="\n"
-        messages+="Installation et Activation de ${Byellow_dlg}efistub_update{.path,.service}${Reset_dlg}.\n"
-        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-        printf '%s\n' "${BGreen}Installation de ${BYellow}efistub_update.path${BGreen} et ${BYellow}efistub_update.service${BGreen}...${Reset}"
-        cp -v ai-fconfig/efi-services/efistub_update.path /etc/systemd/system/efistub_update.path
-        cp -v ai-fconfig/efi-services/efistub_update.service /etc/systemd/system/efistub_update.service
-        sed -i "s/NAMEDIRARCHLINUX/${NAME_DIR_ARCHLINUX}/g" /etc/systemd/system/efistub_update.service
-        printf '%s\n' "${BGreen}Activation de ${BYellow}efistub_update.path${BGreen} et ${BYellow}efistub_update.service${BGreen}...${Reset}"
-        systemctl enable efistub_update.path
-        pause_function
-#         # Installation de intel_ucode_update.path et intel_ucode_update.service
-#         messages="\n"
-#         if (( $IN_VIRTUAL_BOX == 0 )); then
-#             messages+="Installation et Activation de ${Byellow_dlg}intel_ucode_update{.path,.service}${Reset_dlg}.\n"
-#             print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-#             printf '%s\n' "${BGreen}Installation de ${BYellow}intel_ucode_update.path${BGreen} et ${BYellow}intel_ucode_update.service${BGreen}...${Reset}"
-#             cp -v ai-fconfig/efi-services/intel_ucode_update.path /etc/systemd/system/intel_ucode_update.path
-#             cp -v ai-fconfig/efi-services/intel_ucode_update.service /etc/systemd/system/intel_ucode_update.service
-#             sed -i "s/NAMEDIRARCHLINUX/${NAME_DIR_ARCHLINUX}/g" /etc/systemd/system/intel_ucode_update.service
-#             printf '%s\n' "${BGreen}Activation de ${BYellow}intel_ucode_update.path${BGreen} et ${BYellow}intel_ucode_update.service${BGreen}...${Reset}"
-#             systemctl enable intel_ucode_update.path
-#             pause_function
-#         else
-#             messages+="${BRcyan_dlg}!!!${Reset_dlg} Installation dans ${Bwhite_dlg}Oracle VM VirtualBox${Reset_dlg} :\n"
-#             messages+="    PAS d'activion des mises a jour du microcode.\n"
-#             print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-#         fi
-        # Installation d'un Shell UEFI
-        messages="\n"
-        if (( $IS_MULTI_BOOT_UEFI == 0 )); then
-            messages+="- Installation d'un ${Byellow_dlg}Shell UEFI${Reset_dlg}.\n"
-            messages+="- Creation du script ${Byellow_dlg}archlinux.nsh${Reset_dlg} utilise par le ${Byellow_dlg}Shell UEFI${Reset_dlg}.\n"
-        else
-            messages+="${BRcyan_dlg}!!!${Reset_dlg} MULTI BOOT UEFI : Pas d'installation d'un ${Byellow_dlg}Shell UEFI${Reset_dlg}.\n"
-        fi
-        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
-        if (( $IS_MULTI_BOOT_UEFI == 0 )); then
-            printf '%s\n' "${BGreen}Installation d'un ${BYellow}Shell UEFI${BGreen} et Creation du script ${BYellow}archlinux.nsh${BGreen} utilise par le ${BYellow}Shell UEFI${BGreen}...${Reset}"
-            wget https://edk2.svn.sourceforge.net/svnroot/edk2/trunk/edk2/ShellBinPkg/UefiShell/X64/Shell.efi
-            # OU
-            # cp -v /run/archiso/bootmnt/EFI/shellx64_v2.efi /boot/efi/shellx64.efi
-            cp -v Shell.efi /boot/efi/shellx64.efi
-            echo "echo -on" > /boot/efi/archlinux.nsh
-#             if (( $IN_VIRTUAL_BOX == 0 )); then
-#                 echo "\EFI\arch_1\vmlinuz-arch_1.efi root=PARTUUID=$partuuid rootfstype=$ROOT_FS_TYPE rw initrd=EFI/arch_1/intel-ucode.img initrd=EFI/arch_1/initramfs-arch_1.img" >> /boot/efi/archlinux.nsh
-#             else
-                 echo "\EFI\arch_1\vmlinuz-arch_1.efi root=PARTUUID=$partuuid rootfstype=$ROOT_FS_TYPE rw force_addr=0xaddr initrd=EFI/arch_1/initramfs-arch_1.img" >> /boot/efi/archlinux.nsh
-#             fi
-            messages="\n"
-            messages+="Visualiser/Editer le script ${Byellow_dlg}archlinux.nsh${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
-            print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
-            retour=$?
-            if (( retour == 0 )); then
-               ${EDITOR} /boot/efi/archlinux.nsh
-            fi  
-        fi
-        # RAJOUT CREATION arch_x_ck ET arch_x_lts VIDE
-        mkdir -p ${DIR_EFI_ARCHLINUX}_ck
-        mkdir -p ${DIR_EFI_ARCHLINUX}_lts
-        mkdir -p ${DIR_EFI_ARCHLINUX}_zen
         pause_function
     }
     #}}}

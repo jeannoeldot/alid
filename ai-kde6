@@ -149,10 +149,12 @@
         # NVIDIA CUSTOMIZATION
         if is_package_installed "nvidia" || is_package_installed "nvidia-dkms" || is_package_installed "nvidia-open" || is_package_installed "nvidia-open-dkms" ; then
             # https://wiki.archlinux.org/title/NVIDIA/Tips_and_tricks
-            # Modifs refind_linux.conf: Ajout de nvidia_drm.modeset=1 nvidia.NVreg_PreserveVideoMemoryAllocations=1
-            printf '%s\n' "${BGreen}Configuration de ${BYellow}refind_linux.conf${BGreen}...${Reset}"
-            sed -i "s/initramfs-${NAME_DIR_ARCHLINUX}.img/initramfs-${NAME_DIR_ARCHLINUX}.img nvidia_drm.modeset=1 nvidia.NVreg_PreserveVideoMemoryAllocations=1/g" /boot/efi/EFI/${NAME_DIR_ARCHLINUX}/refind_linux.conf
-            sed -i "s/initramfs-${NAME_DIR_ARCHLINUX}-fallback.img/initramfs-${NAME_DIR_ARCHLINUX}-fallback.img nvidia_drm.modeset=1 nvidia.NVreg_PreserveVideoMemoryAllocations=1/g" /boot/efi/EFI/${NAME_DIR_ARCHLINUX}/refind_linux.conf
+            # Modifs /etc/default/grub: Ajout de nvidia_drm.modeset=1 nvidia.NVreg_PreserveVideoMemoryAllocations=1
+            printf '%s\n' "${BGreen}Configuration de ${BYellow}/etc/default/grub${BGreen}...${Reset}"
+            sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=/c\GRUB_CMDLINE_LINUX_DEFAULT=\"nvidia_drm.modeset=1 nvidia.NVreg_PreserveVideoMemoryAllocations=1\"" /etc/default/grub
+            # Configure /boot/grub/grub.cfg
+            printf '%s\n' "${BGreen}Configuration de ${BYellow}grub.cfg${BGreen}...${Reset}"
+            grub-mkconfig -o /boot/grub/grub.cfg
             # Activation services
             printf '%s\n' "${BGreen}Activation de ${BYellow}nvidia-XXX.service${BGreen}...${Reset}"
             systemctl enable nvidia-suspend.service
