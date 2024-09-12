@@ -68,11 +68,11 @@
         messages="\n"
         messages+="GRUB_TIMEOUT=${BRwhite_dlg}3${Reset_dlg}\n"
         if (( $IN_VIRTUAL_BOX == 1 )); then
-            messages+="GRUB_CMDLINE_LINUX="rw force_addr=0xaddr systemd.unit=graphical.target quiet"\n"
+            messages+="GRUB_CMDLINE_LINUX=${BRwhite_dlg}\"rw force_addr=0xaddr systemd.unit=graphical.target quiet\"${Reset_dlg}\n"
         else
-            messages+="GRUB_CMDLINE_LINUX="rw systemd.unit=graphical.target quiet"\n"
+            messages+="GRUB_CMDLINE_LINUX=${BRwhite_dlg}\"rw systemd.unit=graphical.target quiet\"${Reset_dlg}\n"
         fi
-#        GRUB_CMDLINE_LINUX_DEFAULT=""
+        messages+="GRUB_CMDLINE_LINUX_DEFAULT=${BRwhite_dlg}\"\"${Reset_dlg}\n"
 
 #        #GRUB_COLOR_NORMAL="light-blue/black"
 #        #GRUB_COLOR_HIGHLIGHT="light-cyan/blue"
@@ -84,9 +84,8 @@
 
         messages+="GRUB_DISABLE_OS_PROBER=${BRwhite_dlg}false${Reset_dlg}\n"
 
-        messages+="Ajout de${BRwhite_dlg}UEFI Firmware Settings menu entry${Reset_dlg}\n"
-        messages+="Ajout de${BRwhite_dlg}Shutdown menu entry${Reset_dlg}\n"
-        messages+="Ajout de${BRwhite_dlg}Restart menu entry${Reset_dlg}\n"
+        messages+="Ajout de ${BRwhite_dlg}Shutdown menu entry${Reset_dlg}\n"
+        messages+="Ajout de ${BRwhite_dlg}Restart menu entry${Reset_dlg}\n"
 
         print_dialog_msgbox_h "${titre}" "${messages}" "Continuer" 20
         # /etc/default/grub
@@ -97,33 +96,37 @@
         else
             sed -i "/^GRUB_CMDLINE_LINUX=/c\GRUB_CMDLINE_LINUX=\"rw systemd.unit=graphical.target quiet\"" /etc/default/grub
         fi
+        sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=/c\GRUB_CMDLINE_LINUX_DEFAULT=\"\"" /etc/default/grub
         sed -i "/#GRUB_SAVEDEFAULT/s/^#//" /etc/default/grub
         sed -i "/#GRUB_DISABLE_SUBMENU/s/^#//" /etc/default/grub
         sed -i "/#GRUB_DISABLE_OS_PROBER/s/^#//" /etc/default/grub
+        messages="\n"
+        messages+="Visualiser/Editer le fichier ${Byellow_dlg}/etc/default/grub${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
+        print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
+        retour=$?
+        if (( retour == 0 )); then
+            ${EDITOR} /etc/default/grub
+        fi
+        #
+        # "UEFI Firmware Settings" menu entry dans 30_uefi-firmware
         # /etc/grub.d/40_custom
-        #"UEFI Firmware Settings" menu entry
-        printf '%s\n' 'if [ ${grub_platform} == "efi" ]; then' >> /etc/grub.d/40_custom
-        printf '%s\n' "   menuentry 'UEFI Firmware Settings' --id 'uefi-firmware' {" >> /etc/grub.d/40_custom
-        printf '%s\n' '     fwsetup' >> /etc/grub.d/40_custom
-        printf '%s\n' '   }' >> /etc/grub.d/40_custom
-        printf '%s\n' 'fi' >> /etc/grub.d/40_custom
-        #"Shutdown" menu entry
+        # "Shutdown" menu entry
         printf '%s\n' "menuentry 'System shutdown' {" >> /etc/grub.d/40_custom
         printf '%s\n' "   echo 'System shutting down...'" >> /etc/grub.d/40_custom
         printf '%s\n' '   halt' >> /etc/grub.d/40_custom
         printf '%s\n' '}' >> /etc/grub.d/40_custom
-        #"Restart" menu entry
+        # "Restart" menu entry
         printf '%s\n' "menuentry 'System restart' {" >> /etc/grub.d/40_custom
         printf '%s\n' "   echo 'System rebooting...'" >> /etc/grub.d/40_custom
         printf '%s\n' '   reboot' >> /etc/grub.d/40_custom
         printf '%s\n' '}' >> /etc/grub.d/40_custom
         #
-        printf '%s\n' "${BGreen}Configuration de ${BYellow}grub.cfg${BGreen}...${Reset}"
+        printf '%s\n' "${BGreen}Configuration de ${BYellow}/boot/grub/grub.cfg${BGreen}...${Reset}"
         grub-mkconfig -o /boot/grub/grub.cfg
         pause_function
         #
         messages="\n"
-        messages+="Visualiser/Editer le fichier ${Byellow_dlg}grub.cfg${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
+        messages+="Visualiser/Editer le fichier ${Byellow_dlg}/boot/grub/grub.cfg${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
         print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
         retour=$?
         if (( retour == 0 )); then
