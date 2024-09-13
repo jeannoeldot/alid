@@ -23,83 +23,42 @@ efistub_update.path  loaded active waiting   Check update EFISTUB  Linux-ARCH
  A)) ROOT
 ========================
 
-0) THEME GRUB SI BOOT EN MOSE BIOS
-==================================
-
-!!! ATTENTION AUX CHANGEMENTS SUITE A MAJ intel-ucode 20140913-1
-----------------------------------------------------------------
-https://wiki.archlinux.org/index.php/microcode
-
-
-$ cd && mkdir wget-tmp && cd wget-tmp
-
-# Si DropBox !!! Vérifier lien
----------------------------------
-$ wget https://dl.dropbox.com/s/da8e528xzjfh9li/jnddarkgray.tar.gz
-
-$ tar -xzf jnddarkgray.tar.gz
-
-$ sudo cp -R jnddarkgray /boot/grub/themes/
-
-# Edition fichier /etc/default/grub
-------------------------------------
-$ sudo cp /etc/default/grub /etc/default/grub.backup.moi
-
-$ sudo sed -i "/^#GRUB_THEME=\"\/path\/to\/gfxtheme\"/a\GRUB_THEME=\"\/boot\/grub\/themes\/jnddarkgray\/theme.txt\"" /etc/default/grub
-
-$ cat /etc/default/grub
-
-
-# Copie fichier dans /etc/grub.d/40_custom !!! A VOIR
------------------------------------------------------
+0) GRUB : AJOUT Arch Linux, TTY
+===============================
 $ kdesu kwrite /boot/grub/grub.cfg &
 
 $ kdesu kwrite /etc/grub.d/40_custom &
 
 $ sudo blkid
 
+
 !!! ATTENTION A UUID
 ======================
 # 
 # Arch Linux TTY 1 ( ex init 3 )
 #
-menuentry 'Arch Linux, TTY 1 ( ex init 3 )' --class arch --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-core repo kernel-true-f32e8743-2f80-409a-907c-53edbd4b8aeb' {
+menuentry 'Arch Linux, TTY' --class arch --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-linux-advanced-UUID ROOT' {
+        savedefault
         load_video
         set gfxpayload=keep
         insmod gzio
         insmod part_gpt
         insmod ext2
-        set root='hd0,gpt3'
-        if [ x$feature_platform_search_hint = xy ]; then
-          search --no-floppy --fs-uuid --set=root --hint-bios=hd0,gpt3 --hint-efi=hd0,gpt3 --hint-baremetal=ahci0,gpt3  f32e8743-2f80-409a-907c-53edbd4b8aeb
-        else
-          search --no-floppy --fs-uuid --set=root f32e8743-2f80-409a-907c-53edbd4b8aeb
-        fi
-        echo    'Chargement de Linux core repo kernel…'
-        linux   /boot/vmlinuz-linux root=UUID=f32e8743-2f80-409a-907c-53edbd4b8aeb rw quiet systemd.unit=multi-user.target
-        echo    'Chargement du disque mémoire initial…'
+        search --no-floppy --fs-uuid --set=root UUID ROOT
+        echo    'Loading Linux linux…'
+        linux   /boot/vmlinuz-linux root=UUID=UUID ROOT rw systemd.unit=multi-user.target quiet
+        echo    'Loading initial ramdisk…'
         initrd  /boot/initramfs-linux.img
-}
-#
-# Windows 7 sur HDD sdb1
-#
-menuentry 'Windows 7 (loader) (sur HDD sdb1)' --class windows {
-  insmod part_msdos
-  insmod ntfs
-  set root='hd0,msdos1'
-  if [ x$feature_platform_search_hint = xy ]; then
-    search --no-floppy --fs-uuid --set=root --hint-bios=hd0,msdos1 --hint-efi=hd0,msdos1 --hint-baremetal=ahci0,msdos1 --hint='hd0,msdos1'  D6F6DC34F6DC1719
-  else
-    search --no-floppy --fs-uuid --set=root D6F6DC34F6DC1719
-  fi
-  drivemap -s hd0 hd1
-  chainloader +1
 }
 #
 
 # Faire configuration de grub
 -----------------------------
+!!!!! En Français
 $ sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+!!!!! En Anglais
+$ sudo LC_ALL=C grub-mkconfig -o /boot/grub/grub.cfg
 
 # Vérifications
 -------------------
@@ -1842,6 +1801,71 @@ OU
 ====================================================================================================
 ANCIEN
 ==========================================================
+
+
+
+!!! ATTENTION AUX CHANGEMENTS SUITE A MAJ intel-ucode 20140913-1
+----------------------------------------------------------------
+https://wiki.archlinux.org/index.php/microcode
+
+
+$ cd && mkdir wget-tmp && cd wget-tmp
+
+# Si DropBox !!! Vérifier lien
+---------------------------------
+$ wget https://dl.dropbox.com/s/da8e528xzjfh9li/jnddarkgray.tar.gz
+
+$ tar -xzf jnddarkgray.tar.gz
+
+$ sudo cp -R jnddarkgray /boot/grub/themes/
+
+# Edition fichier /etc/default/grub
+------------------------------------
+$ sudo cp /etc/default/grub /etc/default/grub.backup.moi
+
+$ sudo sed -i "/^#GRUB_THEME=\"\/path\/to\/gfxtheme\"/a\GRUB_THEME=\"\/boot\/grub\/themes\/jnddarkgray\/theme.txt\"" /etc/default/grub
+
+$ cat /etc/default/grub
+
+
+# Copie fichier dans /etc/grub.d/40_custom !!! A VOIR
+
+menuentry 'Arch Linux, TTY 1 ( ex init 3 )' --class arch --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-core repo kernel-true-f32e8743-2f80-409a-907c-53edbd4b8aeb' {
+        load_video
+        set gfxpayload=keep
+        insmod gzio
+        insmod part_gpt
+        insmod ext2
+        set root='hd0,gpt3'
+        if [ x$feature_platform_search_hint = xy ]; then
+          search --no-floppy --fs-uuid --set=root --hint-bios=hd0,gpt3 --hint-efi=hd0,gpt3 --hint-baremetal=ahci0,gpt3  f32e8743-2f80-409a-907c-53edbd4b8aeb
+        else
+          search --no-floppy --fs-uuid --set=root f32e8743-2f80-409a-907c-53edbd4b8aeb
+        fi
+        echo    'Chargement de Linux core repo kernel…'
+        linux   /boot/vmlinuz-linux root=UUID=f32e8743-2f80-409a-907c-53edbd4b8aeb rw quiet systemd.unit=multi-user.target
+        echo    'Chargement du disque mémoire initial…'
+        initrd  /boot/initramfs-linux.img
+}
+#
+# Windows 7 sur HDD sdb1
+#
+menuentry 'Windows 7 (loader) (sur HDD sdb1)' --class windows {
+  insmod part_msdos
+  insmod ntfs
+  set root='hd0,msdos1'
+  if [ x$feature_platform_search_hint = xy ]; then
+    search --no-floppy --fs-uuid --set=root --hint-bios=hd0,msdos1 --hint-efi=hd0,msdos1 --hint-baremetal=ahci0,msdos1 --hint='hd0,msdos1'  D6F6DC34F6DC1719
+  else
+    search --no-floppy --fs-uuid --set=root D6F6DC34F6DC1719
+  fi
+  drivemap -s hd0 hd1
+  chainloader +1
+}
+
+
+
+
 
 !!! INUTILE
  11-3) Passer outre à la signature des modules complémentaires
