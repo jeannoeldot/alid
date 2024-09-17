@@ -112,27 +112,6 @@ $ sudo sed -i "/^#PACKAGER/c\PACKAGER=\"Name <name@fai.com>\"" /etc/makepkg.conf
 =================================================
   !!! VOIR SI A FAIRE ICI : VOIR 4) USER
   --------------------------------------
-  !!! SI REPOLOCAL EXISTE DANS REP USER
-  --------------------------------------
-$ sudo cp /etc/pacman.conf /etc/pacman.conf.backup.moi
-
-$ sudo sed -i "/^#Server = file/a\\\n[repolocal]\nSigLevel = Optional TrustAll\nServer = file:///home/jnd/00-repolocal" /etc/pacman.conf
-
-$ mkdir ~/00-repolocal
-
-# Si DropBox !!! Vérifier lien
----------------------------------
-$ cd ~/00-repolocal/
-$ wget https://dl.dropbox.com/s/u2jb3jbb7y6y07p/fapg-0.41-3-x86_64.pkg.tar.zst
-
-$ cd ~/bin/
-$ wget https://www.dropbox.com/s/mn8f3azts8ebhmz/maj-repolocal
-$ chmod +x maj-repolocal
-
-$ cd && maj-repolocal
-
-$ sudo pacman -Syyu
-
 
 4) FSTAB : Edition fichier /etc/fstab
 =====================================
@@ -1087,23 +1066,29 @@ $ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.toprc.2019-01-31 .toprc
 =============
  4-1) PACMAN.CONF : Edition fichier /etc/pacman.conf
  =================================================
-  !!! SI REPOLOCAL EXISTE DANS REP USER
-  --------------------------------------
-$ mkdir ~/00-repolocal
+  !!! SUITE MAJ PACMAN 7.0
+  !!! REPOLOCAL DANS /
+  ------------------------
 
-$ mkdir ~/00-repolocal/pkg-OLD
+$ sudo mkdir -p /00-repolocal
+$ sudo mkdir -p /00-repolocal/pkg-OLD
 
-$ sudo cp /etc/pacman.conf /etc/pacman.conf.backup.moi
+$ sudo chown :alpm -R /00-repolocal
 
-$ sudo sed -i "/^#Server = file/a\\\n[repolocal]\nSigLevel = Optional TrustAll\nServer = file:///home/jnd/00-repolocal" /etc/pacman.conf
+$ sudo cp /etc/pacman.conf /etc/pacman.conf.backup.moi.2024-09-16
+
+$ sudo nano /etc/pacman.conf
+  #DownloadUser = alpm  ->  DownloadUser = alpm
+  #DisableSandbox
+
+  Commenter [repolocal] dans /home/jnd/00-repolocal si existe
+
+  Créer:
+  [repolocal]
+  SigLevel = Optional TrustAll
+  Server = file:///00-repolocal
 
 $ cat /etc/pacman.conf
-
-
-$ cd && maj-repolocal
-
-$ sudo pacman -Syu
-
 
 
 6) CRÉATION RÉPERTOIRE 0-chroot DANS 05-builds
@@ -1168,13 +1153,36 @@ makepkg.conf.generic
 makepkg.conf.native
 
 
-8-2) COPIER PKG DE /0-DataLinux/00-repolocal/ DANS /home/jnd/00-repolocal/
-==========================================================================
- mkpkg-tmpfs
 
- ttf-win10-fonts
- 
- virtualbox-extension
+8-2) COPIER PKG DE /0-DataLinux/00-repolocal/ DANS /00-repolocal/
+==================================================================
+
+!!! NON !!! awesomebump-git-5.1.20190915-1-x86_64.pkg.tar.xz
+
+$ sudo cp -v /0-DataLinux/00-repolocal/\
+{\
+alembic-git-1.8.6.20230926-1-x86_64.pkg.tar.zst,\
+blender-git-4.3.0.23.20240915-1-x86_64.pkg.tar.zst,\
+conky-lua-nv-git-1.20.0.20240304-1-x86_64.pkg.tar.zst,\
+embree-git-4.3.3.20240722-1-x86_64.pkg.tar.zst,\
+jndqaligne5-qt5-0.5.0-8-x86_64.pkg.tar.zst,\
+jndqcbgrd-qt5-0.2.1-2-x86_64.pkg.tar.zst,\
+jndqrami-qt5-0.2.1-7-x86_64.pkg.tar.zst,\
+mkpkg-tmpfs-1.2.0-1-any.pkg.tar.zst,\
+opencollada-git-1:1.6.20240719-1-x86_64.pkg.tar.zst,\
+openimagedenoise-git-2.3.0.20240617-1-x86_64.pkg.tar.zst,\
+openimageio-git-2.5.15.0.20240902-2-x86_64.pkg.tar.zst,\
+openpgl-git-0.6.0.20240209-1-x86_64.pkg.tar.zst,\
+openshadinglanguage-git-1.13.11.0.20240903-2-x86_64.pkg.tar.zst,\
+opensubdiv-git-3.6.0.20230921-1-x86_64.pkg.tar.zst,\
+openusd-git-24.05.20240419-2-x86_64.pkg.tar.zst,\
+openvdb-git-11.0.0.20231102-2-x86_64.pkg.tar.zst,\
+pkgbrowser-0.28.1-1-x86_64.pkg.tar.zst,\
+pokerth-1.1.2-39-x86_64.pkg.tar.zst,\
+ttf-win10-fonts-10.0.22H2-1-any.pkg.tar.zst,\
+virtualbox-extension-7.1.0-1-any.pkg.tar.zst\
+} \
+/00-repolocal/
 
 $ cd && maj-repolocal
 
@@ -1283,9 +1291,15 @@ OU
 
 # gpasswd -a jnd vboxusers
 
+
+!!! A VOIR :
 # LC_ALL=C pacman -Syu virtualbox-extension
 
 !!! DANS VIRTUAL-BOX :
+!!! ATTENTION A Oracle VirtualBox Extension Pack
+
+Fichiers -> Outils > Extension Pack Manager
+
 !!! ATTENTION AU CHEMIN DE VirtualBox-VMs -> /0-DataLinux/VirtualBox-VMs
 
 Fichiers -> Paramètres 
@@ -1802,6 +1816,82 @@ OU
 ANCIEN
 ==========================================================
 
+
+
+!!!!! POUR TESTS !!!!!
+======================
+
+$ sudo cp -v $HOME/00-repolocal/mkpkg-tmpfs-1.2.0-1-any.pkg.tar.zst /00-repolocal
+
+$ sudo ls -la /00-repolocal
+
+$ sudo chown :alpm -R /00-repolocal
+
+$ cd /00-repolocal && sudo LC_ALL=C repo-add repolocal.db.tar.gz *.pkg.tar.* && cd
+
+$ sudo chown :alpm -R /00-repolocal
+
+$ sudo LC_ALL=C pacman -Syu
+
+$ sudo cp -v $HOME/00-repolocal/jndqcbgrd-qt5-0.2.1-2-x86_64.pkg.tar.zst /00-repolocal
+$ sudo cp -v $HOME/00-repolocal/openpgl-git-0.6.0.20240209-1-x86_64.pkg.tar.zst /00-repolocal
+$ sudo cp -v $HOME/00-repolocal/conky-lua-nv-git-1.20.0.20240304-1-x86_64.pkg.tar.zst /00-repolocal
+
+$ cd /00-repolocal && sudo LC_ALL=C repo-add repolocal.db.tar.gz *.pkg.tar.* && cd
+
+$ sudo chown :alpm -R /00-repolocal
+
+$ sudo ls -la /00-repolocal
+
+$ sudo LC_ALL=C pacman -Syu
+
+!!!!! FIN TESTS !!!!!
+======================
+
+
+
+  !!! SI REPOLOCAL EXISTE DANS REP USER
+  --------------------------------------
+$ sudo cp /etc/pacman.conf /etc/pacman.conf.backup.moi
+
+$ sudo sed -i "/^#Server = file/a\\\n[repolocal]\nSigLevel = Optional TrustAll\nServer = file:///home/jnd/00-repolocal" /etc/pacman.conf
+
+$ mkdir ~/00-repolocal
+
+# Si DropBox !!! Vérifier lien
+---------------------------------
+$ cd ~/00-repolocal/
+$ wget https://dl.dropbox.com/s/u2jb3jbb7y6y07p/fapg-0.41-3-x86_64.pkg.tar.zst
+
+$ cd ~/bin/
+$ wget https://www.dropbox.com/s/mn8f3azts8ebhmz/maj-repolocal
+$ chmod +x maj-repolocal
+
+$ cd && maj-repolocal
+
+$ sudo pacman -Syyu
+
+
+
+  !!! SI REPOLOCAL EXISTE DANS REP USER
+  --------------------------------------
+$ mkdir ~/00-repolocal
+
+$ mkdir ~/00-repolocal/pkg-OLD
+
+$ sudo cp /etc/pacman.conf /etc/pacman.conf.backup.moi
+
+$ sudo sed -i "/^#Server = file/a\\\n[repolocal]\nSigLevel = Optional TrustAll\nServer = file:///home/jnd/00-repolocal" /etc/pacman.conf
+
+$ cat /etc/pacman.conf
+
+
+$ cd && maj-repolocal
+
+$ sudo pacman -Syu
+
+ 4-2) PACMAN.CONF : Edition fichier /etc/pacman.conf
+ =================================================
 
 
 !!! ATTENTION AUX CHANGEMENTS SUITE A MAJ intel-ucode 20140913-1
