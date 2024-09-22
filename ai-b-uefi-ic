@@ -110,15 +110,15 @@
         #
         # "UEFI Firmware Settings" menu entry dans 30_uefi-firmware
         # /etc/grub.d/40_custom
-        # "Shutdown" menu entry
-        printf '%s\n' "menuentry 'System shutdown' {" >> /etc/grub.d/40_custom
-        printf '%s\n' "   echo 'System shutting down...'" >> /etc/grub.d/40_custom
-        printf '%s\n' '   halt' >> /etc/grub.d/40_custom
-        printf '%s\n' '}' >> /etc/grub.d/40_custom
         # "Restart" menu entry
-        printf '%s\n' "menuentry 'System restart' {" >> /etc/grub.d/40_custom
+        printf '%s\n' "menuentry 'System restart' --class restart {" >> /etc/grub.d/40_custom
         printf '%s\n' "   echo 'System rebooting...'" >> /etc/grub.d/40_custom
         printf '%s\n' '   reboot' >> /etc/grub.d/40_custom
+        printf '%s\n' '}' >> /etc/grub.d/40_custom
+        # "Shutdown" menu entry
+        printf '%s\n' "menuentry 'System shutdown' --class shutdown {" >> /etc/grub.d/40_custom
+        printf '%s\n' "   echo 'System shutting down...'" >> /etc/grub.d/40_custom
+        printf '%s\n' '   halt' >> /etc/grub.d/40_custom
         printf '%s\n' '}' >> /etc/grub.d/40_custom
         #
         printf '%s\n' "${BGreen}Configuration de ${BYellow}/boot/grub/grub.cfg${BGreen}...${Reset}"

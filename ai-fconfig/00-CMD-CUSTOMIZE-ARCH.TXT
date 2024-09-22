@@ -1157,30 +1157,31 @@ makepkg.conf.native
 8-2) COPIER PKG DE /0-DataLinux/00-repolocal/ DANS /00-repolocal/
 ==================================================================
 
-!!! NON !!! awesomebump-git-5.1.20190915-1-x86_64.pkg.tar.xz
+!!! NON !!! awesomebump-git-*-x86_64.pkg.tar.xz
 
 $ sudo cp -v /0-DataLinux/00-repolocal/\
 {\
-alembic-git-1.8.6.20230926-1-x86_64.pkg.tar.zst,\
-blender-git-4.3.0.23.20240915-1-x86_64.pkg.tar.zst,\
-conky-lua-nv-git-1.20.0.20240304-1-x86_64.pkg.tar.zst,\
-embree-git-4.3.3.20240722-1-x86_64.pkg.tar.zst,\
-jndqaligne5-qt5-0.5.0-8-x86_64.pkg.tar.zst,\
-jndqcbgrd-qt5-0.2.1-2-x86_64.pkg.tar.zst,\
-jndqrami-qt5-0.2.1-7-x86_64.pkg.tar.zst,\
-mkpkg-tmpfs-1.2.0-1-any.pkg.tar.zst,\
-opencollada-git-1:1.6.20240719-1-x86_64.pkg.tar.zst,\
-openimagedenoise-git-2.3.0.20240617-1-x86_64.pkg.tar.zst,\
-openimageio-git-2.5.15.0.20240902-2-x86_64.pkg.tar.zst,\
-openpgl-git-0.6.0.20240209-1-x86_64.pkg.tar.zst,\
-openshadinglanguage-git-1.13.11.0.20240903-2-x86_64.pkg.tar.zst,\
-opensubdiv-git-3.6.0.20230921-1-x86_64.pkg.tar.zst,\
-openusd-git-24.05.20240419-2-x86_64.pkg.tar.zst,\
-openvdb-git-11.0.0.20231102-2-x86_64.pkg.tar.zst,\
-pkgbrowser-0.28.1-1-x86_64.pkg.tar.zst,\
-pokerth-1.1.2-39-x86_64.pkg.tar.zst,\
-ttf-win10-fonts-10.0.22H2-1-any.pkg.tar.zst,\
-virtualbox-extension-7.1.0-1-any.pkg.tar.zst\
+alembic-git-*-x86_64.pkg.tar.zst,\
+blender-git-*-x86_64.pkg.tar.zst,\
+conky-lua-nv-git-*-x86_64.pkg.tar.zst,\
+embree-git-*-x86_64.pkg.tar.zst,\
+grub-theme-dark-gray-*-any.pkg.tar.zst,\
+jndqaligne5-qt5-*-x86_64.pkg.tar.zst,\
+jndqcbgrd-qt5-*-x86_64.pkg.tar.zst,\
+jndqrami-qt5-*-x86_64.pkg.tar.zst,\
+mkpkg-tmpfs-*-any.pkg.tar.zst,\
+opencollada-git-*-x86_64.pkg.tar.zst,\
+openimagedenoise-git-*-x86_64.pkg.tar.zst,\
+openimageio-git-*-x86_64.pkg.tar.zst,\
+openpgl-git-*-x86_64.pkg.tar.zst,\
+openshadinglanguage-git-*-x86_64.pkg.tar.zst,\
+opensubdiv-git-*-x86_64.pkg.tar.zst,\
+openusd-git-*-x86_64.pkg.tar.zst,\
+openvdb-git-*-x86_64.pkg.tar.zst,\
+pkgbrowser-*-x86_64.pkg.tar.zst,\
+pokerth-*-x86_64.pkg.tar.zst,\
+ttf-win10-fonts-*-any.pkg.tar.zst,\
+virtualbox-extension-*-any.pkg.tar.zst\
 } \
 /00-repolocal/
 
