@@ -52,7 +52,7 @@
         package_install "gvfs gvfs-afc gvfs-gphoto2 gvfs-mtp gvfs-nfs gvfs-smb"
         # FONTS
         printf '%s\n' "${BGreen}Installation de ${BYellow}Polices TTF${BGreen}...${Reset}"
-        package_install "ttf-bitstream-vera ttf-dejavu gnu-free-fonts ttf-liberation libertinus-font ttf-droid ttf-ubuntu-font-family"
+        package_install "ttf-bitstream-vera ttf-dejavu gnu-free-fonts ttf-liberation otf-libertinus ttf-droid ttf-ubuntu-font-family"
         # LSB-RELEASE
         printf '%s\n' "${BGreen}Installation de ${BYellow}lsb-release${BGreen}...${Reset}"
         package_install "lsb-release"
