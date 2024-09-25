@@ -4,22 +4,6 @@ LISTE DES COMMANDES A AFFECTUER POUR PERSONNALISER KDE OU OPENBOX
 !!! EN USER
 ============
 
-1) VÉRIFIER MES SERVICES SYSTEMD SI EN UEFI
-===========================================
-$ systemctl list-units
-
-efistub_update.path     loaded active waiting   Check update EFISTUB  Linux-ARCH
-
-!!! SUPPRIMÉ
-refind_update.path  loaded active waiting   Check update rEFInd
-intel_ucode_update.path loaded active waiting   Check update Microde intel
-
-
-SI DANS ARCH_2 :
-================
-efistub_update.path  loaded active waiting   Check update EFISTUB  Linux-ARCH
-
-
  A)) ROOT
 ========================
 
@@ -394,69 +378,19 @@ $ sudo cp /etc/mkinitcpio.conf /etc/mkinitcpio.conf.backup.moi
 # original
 -------------
 $ sed '/#/d' /etc/mkinitcpio.conf
-MODULES="reiserfs"
+MODULES=()
 
-BINARIES=""
+BINARIES=()
 
-FILES=""
+FILES=()
 
-HOOKS="base udev autodetect pata scsi sata filesystems usbinput fsck"
-NOUVEAU ORIGINAL 10/12/2012
-HOOKS="base udev autodetect modconf block filesystems usbinput fsck"
-NOUVEAU ORIGINAL 19/03/2013
 !!! FAIT EN AUTOMATIQUE SI INSTALLATION PAR MON SCRIPT AI-B
 ===========================================================
 HOOKS="base systemd autodetect modconf block filesystems keyboard keymap fsck"
 AU 05/03/2024
 HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck)
-
---------------------------------------------------------------------
-
- 8-1) INSTALLATION DS VIRTUAL BOX
- ================================
-# !!! SI PAS reiserfs
-----------------------
-$ sudo sed -i "/^MODULES=/c\MODULES=\"ata_piix ahci sd_mod ext4\"" /etc/mkinitcpio.conf
-
-$ sudo sed -i "/^BINARIES=/c\BINARIES=\"fsck fsck.ext4\"" /etc/mkinitcpio.conf
-
-# !!! SI reiserfs
---------------------
-$ sudo sed -i "/^MODULES=/c\MODULES=\"ata_piix ahci sd_mod ext4 reiserfs\"" /etc/mkinitcpio.conf
-
-$ sudo sed -i "/^BINARIES=/c\BINARIES=\"fsck fsck.ext4 fsck.reiserfs\"" /etc/mkinitcpio.conf
-
- 8-2) INSTALLATION RÉELLE
- ==========================
- # !!! SI PAS reiserfs
-----------------------
-$ sudo sed -i "/^MODULES=/c\MODULES=\"ahci sd_mod ext4\"" /etc/mkinitcpio.conf
-
-$ sudo sed -i "/^BINARIES=/c\BINARIES=\"fsck fsck.ext4\"" /etc/mkinitcpio.conf
-
-# !!! SI reiserfs
---------------------
-$ sudo sed -i "/^MODULES=/c\MODULES=\"ahci sd_mod ext4 reiserfs\"" /etc/mkinitcpio.conf
-
-$ sudo sed -i "/^BINARIES=/c\BINARIES=\"fsck fsck.ext4 fsck.reiserfs\"" /etc/mkinitcpio.conf
-
- 8-2) COMMUNS AUX 2 INSTALLATIONS
- ==================================
-$ sudo sed -i "/^HOOKS=/c\HOOKS=\"base udev modconf usbinput\"" /etc/mkinitcpio.conf
-
-# Après modifs
----------------
-$ sed '/#/d' /etc/mkinitcpio.conf
-MODULES="ata_piix ahci sd_mod ext4 reiserfs" OU MODULES="ahci sd_mod ext4"
-
-BINARIES="fsck fsck.ext4 fsck.reiserfs" OU BINARIES="fsck fsck.ext4"
-
-FILES=""
-
-HOOKS="base udev modconf usbinput"
----------------------------------
-
-$ sudo mkinitcpio -p linux
+AU 08/09/2024 : SI AVEC NVIDIA
+HOOKS=(base udev autodetect microcode modconf keyboard keymap consolefont block filesystems fsck)
 
 
 9) ETHERNET-STATIC : Edition fichier /etc/network.d/ethernet-static
@@ -577,157 +511,19 @@ $ sudo touch /etc/modules-load.d/drivetemp.conf
 $ sudo nano /etc/modules-load.d/drivetemp.conf
 ====> Ajouter: drivetemp
 
-/!\/!\/!\/!\/!\/!\/!\/!\/!\
-INUTILE: NE Fonctionne plus
-/!\/!\/!\/!\/!\/!\/!\/!\/!\
-14) HDDTEMP : Créer ma conf ds /etc/systemd/system/hddtemp.service.d/myhddtemp.conf
-===================================================================================
-voir : https://wiki.archlinux.org/index.php/User:Djgera#hddtemp
-voir 100)
-
-!!! A FAIRE SI 2 DISQUES ( SDA ET SDB )
----------------------------------------
-$ sudo mkdir -p /etc/systemd/system/hddtemp.service.d
-$ sudo sh -c "echo '[Service]' > /etc/systemd/system/hddtemp.service.d/myhddtemp.conf"
-$ sudo sh -c "echo 'ExecStart=' >> /etc/systemd/system/hddtemp.service.d/myhddtemp.conf"
-$ sudo sh -c "echo 'ExecStart=/usr/bin/hddtemp -dF /dev/sda /dev/sdb' >> /etc/systemd/system/hddtemp.service.d/myhddtemp.conf"
-
-$ sudo systemctl --system daemon-reload
-
-$ sudo systemctl restart hddtemp.service
-Warning: Unit file of hddtemp.service changed on disk, 'systemctl --system daemon-reload' recommended.
-
-!!! AU REBOOT : TEST EN USER : doit donner les 2 temps
-$ nc localhost 7634
-!!! ANCIEN
-|/dev/sda|M4-CT256M4SSD2|0|C||/dev/sdb|WDC WD5002AALX-00J37A0|35|C|
-!!! NOUVEAU
-|/dev/sda|Samsung SSD 860 PRO 256G B              �@|UNK|*||/dev/sdb|WDC WD1003FZEX-00K3CA0|27|C|
-
-
-$ sudo systemctl --no-pager status hddtemp.service
-[sudo] password for jnd: 
-hddtemp.service - Hard drive temperature monitor daemon
-   Loaded: loaded (/usr/lib/systemd/system/hddtemp.service; enabled)
-  Drop-In: /etc/systemd/system/hddtemp.service.d
-           └─myhddtemp.conf
-   Active: active (running) since ven. 2013-05-24 17:16:28 CEST; 2h 22min ago
- Main PID: 237 (hddtemp)
-   CGroup: name=systemd:/system/hddtemp.service
-           └─237 /usr/bin/hddtemp -dF /dev/sda /dev/sdb
-
-
 21) MICROCODE
 =============
 https://wiki.archlinux.org/index.php/microcode
 
 !!! FAIT EN AUTOMATIQUE SI PAR MON SCRIPT AI-B
 ===============================================
-
-!!! ATTENTION AUX CHANGEMENTS SUITE A MAJ intel-ucode 20140913-1 + linux 3.17.1
---------------------------------------------------------------------------------
-SERVICE INTEL_UCODE_UPDATE
-==========================
-
-Déja créés. Voir :
-~/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.path
-~/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.service
-
-$ sudo cp -v /home/jnd/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.path \
-/etc/systemd/system/intel_ucode_update.path
-
-$ sudo cp -v /home/jnd/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.service \
-/etc/systemd/system/intel_ucode_update.service
-
-INSTALLATION DANS ARCH_1 / ARCH_1_CK
-------------------------------------
-$ sudo sed -i "s/NAMEDIRARCHLINUX/arch_1/g" /etc/systemd/system/intel_ucode_update.service
-
-INSTALLATION DANS ARCH_2 / ARCH_2_CK
-------------------------------------
-$ sudo sed -i "s/NAMEDIRARCHLINUX/arch_2/g" /etc/systemd/system/intel_ucode_update.service
-
-VÉRIFICATIONS
---------------
-$ cat /etc/systemd/system/intel_ucode_update.service
-
-$ sudo systemctl enable intel_ucode_update.path
-
-$ sudo systemctl start intel_ucode_update.path
-
-$ systemctl --no-pager status intel_ucode_update.path
-
-!!! INUTILES SI intel_ucode_update.path ACTIF !!!
-=================================================
-COPIE DE /boot/intel-ucode.img
-==============================
-INSTALLATION DANS ARCH_1 / ARCH_1_CK
-------------------------------------
-$ sudo cp -vf /boot/intel-ucode.img /boot/efi/EFI/arch_1/intel-ucode.img
-$ sudo cp -vf /boot/intel-ucode.img /boot/efi/EFI/arch_1_ck/intel-ucode.img
-
-INSTALLATION DANS ARCH_2 / ARCH_2_CK
-------------------------------------
-$ sudo cp -vf /boot/intel-ucode.img /boot/efi/EFI/arch_2/intel-ucode.img
-$ sudo cp -vf /boot/intel-ucode.img /boot/efi/EFI/arch_2_ck/intel-ucode.img
-
-MODIFICATIONS refind_linux.conf
-===============================
-INSTALLATION DANS ARCH_1 / ARCH_1_CK
-AJOUT DE : initrd=EFI/arch_1/intel-ucode.img
-!!! SI LINUX 5.7.2 :
-AJOUT DE : initrd=EFI\arch_1\intel-ucode.img
---------------------------------------------
-$ sudo nano /boot/efi/EFI/arch_1/refind_linux.conf
-
-AJOUT DE : initrd=EFI/arch_1_ck/intel-ucode.img
-!!! SI LINUX 5.7.2 :
-AJOUT DE : initrd=EFI\arch_1_ck\intel-ucode.img
------------------------------------------------
-$ sudo nano /boot/efi/EFI/arch_1_ck/refind_linux.conf
-
-INSTALLATION DANS ARCH_2 / ARCH_2_CK
-AJOUT DE : initrd=EFI\arch_2\intel-ucode.img
-!!! SI LINUX 5.7.2 :
-AJOUT DE : initrd=EFI\arch_2\intel-ucode.img
---------------------------------------------
-$ sudo nano /boot/efi/EFI/arch_2/refind_linux.conf
-
-AJOUT DE : initrd=EFI/arch_2_ck/intel-ucode.img
-!!! SI LINUX 5.7.2 :
-AJOUT DE : initrd=EFI\arch_2_ck\intel-ucode.img
------------------------------------------------
-$ sudo nano /boot/efi/EFI/arch_2_ck/refind_linux.conf
+==> Dans /etc/mkinitcpio.conf
 
 VÉRIFICATIONS AU REBOOT
 -----------------------
 $ journalctl -b | grep microcode
-oct. 23 17:42:14 localhost kernel: CPU0 microcode updated early to revision 0x1c, date = 2014-07-03
-oct. 23 17:42:14 localhost kernel: CPU1 microcode updated early to revision 0x1c, date = 2014-07-03
-oct. 23 17:42:14 localhost kernel: CPU2 microcode updated early to revision 0x1c, date = 2014-07-03
-oct. 23 17:42:14 localhost kernel: CPU3 microcode updated early to revision 0x1c, date = 2014-07-03
-oct. 23 17:42:14 localhost kernel: microcode: CPU0 sig=0x306c3, pf=0x2, revision=0x1c
-oct. 23 17:42:14 localhost kernel: microcode: CPU1 sig=0x306c3, pf=0x2, revision=0x1c
-oct. 23 17:42:14 localhost kernel: microcode: CPU2 sig=0x306c3, pf=0x2, revision=0x1c
-oct. 23 17:42:14 localhost kernel: microcode: CPU3 sig=0x306c3, pf=0x2, revision=0x1c
-oct. 23 17:42:14 localhost kernel: microcode: CPU4 sig=0x306c3, pf=0x2, revision=0x1c
-oct. 23 17:42:14 localhost kernel: microcode: CPU5 sig=0x306c3, pf=0x2, revision=0x1c
-oct. 23 17:42:14 localhost kernel: microcode: CPU6 sig=0x306c3, pf=0x2, revision=0x1c
-oct. 23 17:42:14 localhost kernel: microcode: CPU7 sig=0x306c3, pf=0x2, revision=0x1c
-oct. 23 17:42:14 localhost kernel: microcode: Microcode Update Driver: v2.00 <tigran@aivazian.fsnet.co.uk>, Peter Oruba
-
-$ cat /proc/cmdline
-DANS ARCH_1 / ARCH_1_CK
------------------------
-\EFI\arch_1\vmlinuz-arch_1.efi root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=graphical.target quiet initrd=EFI/arch_1/intel-ucode.img initrd=EFI/arch_1/initramfs-arch_1.img
-
-\EFI\arch_1_ck\vmlinuz-arch_1_ck.efi root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=graphical.target elevator=bfq quiet initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img
-
-DANS ARCH_2 / ARCH_2_CK
------------------------
-\EFI\arch_2\vmlinuz-arch_2.efi root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=graphical.target quiet initrd=EFI/arch_2/intel-ucode.img initrd=EFI/arch_2/initramfs-arch_2.img
-
-\EFI\arch_2_ck\vmlinuz-arch_2_ck.efi root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=graphical.target elevator=bfq quiet initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img
+sept. 25 08:53:31 archkde kernel: microcode: Current revision: 0x000000f8
+sept. 25 08:53:31 archkde kernel: microcode: Updated early from: 0x000000d6
 
 
 25) MODIFICATION DE /etc/X11/xorg.conf.d/20-nvidia.conf
@@ -1023,6 +819,7 @@ $ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.yasp.script.2013-09-28 .
  !!! VOIR : ~/09-Documentation/00-Cmd-CREATION-GIT-INSTALL-ALID.TXT
  !!! VOIR : ~/09-Documentation/0-CMD-GIT-01SCRIPTS.TXT
  !!! VOIR : ~/09-Documentation/0-CMD-GIT-05BUILDS.TXT
+ !!! VOIR : ~/09-Documentation/0-CMD-GIT-05THEMES.TXT
  !!! VOIR : ~/09-Documentation/0-CMD-GIT-JNDQALIGNE5.TXT
  !!! VOIR : ~/09-Documentation/0-CMD-GIT-JNDQCBGRD.TXT
  !!! VOIR : ~/09-Documentation/0-CMD-GIT-JNDQRAMI.TXT
@@ -1030,6 +827,7 @@ $ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.yasp.script.2013-09-28 .
  !!! VOIR : ~/02-git/00-Cmd-CREATION-GIT-INSTALL-ALID.TXT
  !!! VOIR : ~/02-git/0-CMD-GIT-01SCRIPTS.TXT
  !!! VOIR : ~/02-git/0-CMD-GIT-05BUILDS.TXT
+ !!! VOIR : ~/02-git/0-CMD-GIT-05THEMES.TXT
  !!! VOIR : ~/02-git/0-CMD-GIT-JNDQALIGNE5.TXT
  !!! VOIR : ~/02-git/0-CMD-GIT-JNDQCBGRD.TXT
  !!! VOIR : ~/02-git/0-CMD-GIT-JNDQRAMI.TXT
@@ -1065,7 +863,7 @@ $ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.toprc.2019-01-31 .toprc
 4) REPOLOCAL
 =============
  4-1) PACMAN.CONF : Edition fichier /etc/pacman.conf
- =================================================
+ ===================================================
   !!! SUITE MAJ PACMAN 7.0
   !!! REPOLOCAL DANS /
   ------------------------
@@ -1270,8 +1068,6 @@ $ cd
 # LC_ALL=C pacman -Syu pokerth
 
 !!! VOIR
-# LC_ALL=C pacman -Syu awesomebump-git
-!!! VOIR
 # LC_ALL=C pacman -Syu jndqcbgrd-qt5
 !!! VOIR
 # LC_ALL=C pacman -Syu wimlib
@@ -1279,6 +1075,20 @@ $ cd
 # LC_ALL=C pacman -Syu ttf-win7-fonts
 OU
 # LC_ALL=C pacman -Syu ttf-win10-fonts
+
+
+GRUB : AJOUT THEME
+==================
+# LC_ALL=C pacman -Syu grub-theme-dark-gray
+
+# nano /etc/default/grub
+    ->  #GRUB_GFXMODE="auto"
+    ->  GRUB_GFXMODE="1280x1024"
+
+    ->  #GRUB_THEME="/path/to/gfxtheme"
+    ->  GRUB_THEME="/usr/share/grub/themes/grub-theme-dark-gray/theme.txt"
+
+# LC_ALL=C grub-mkconfig -o /boot/grub/grub.cfg
 
 
 9) INSTALLATION DE VIRTUAL-BOX
@@ -1571,6 +1381,7 @@ Document KDE6 : Customization Bureau : Vérifier :
  - Page 7 : Contenu Note
  - Page 8 : Dolphin Panneau gauche
 
+
 =============================================================================
 =============================================================================
 DANS OPEN-BOX / CK
@@ -1800,8 +1611,15 @@ Menu Extensions -> Installer -> Fichier
 
 
 
-INSTALLATION DE LINUX-CK
-=================================
+INSTALLATION DE LINUX-LTS / LINUX-ZEN /  LINUX-CK
+=================================================
+
+!!! VOIR : ~/00-Cmd-INSTALLATION-LINUX-LTS-ZEN.TXT
+OU
+!!! VOIR : ~/09-Documentation/00-Cmd-INSTALLATION-LINUX-LTS-ZEN.TXT
+OU
+!!! VOIR : /0-DataLinux/ARCH-OB-CK-INSTALLATION DE LINUX-LTS-ZEN.TXT
+
 
 !!! VOIR : ~/00-Cmd-INSTALLATION-LINUX-CK.TXT
 OU
@@ -1817,6 +1635,221 @@ OU
 ANCIEN
 ==========================================================
 
+1) VÉRIFIER MES SERVICES SYSTEMD SI EN UEFI
+===========================================
+$ systemctl list-units
+
+efistub_update.path     loaded active waiting   Check update EFISTUB  Linux-ARCH
+
+!!! SUPPRIMÉ
+refind_update.path  loaded active waiting   Check update rEFInd
+intel_ucode_update.path loaded active waiting   Check update Microde intel
+
+
+SI DANS ARCH_2 :
+================
+efistub_update.path  loaded active waiting   Check update EFISTUB  Linux-ARCH
+
+
+HOOKS="base udev autodetect pata scsi sata filesystems usbinput fsck"
+NOUVEAU ORIGINAL 10/12/2012
+HOOKS="base udev autodetect modconf block filesystems usbinput fsck"
+NOUVEAU ORIGINAL 19/03/2013
+--------------------------------------------------------------------
+
+ 8-1) INSTALLATION DS VIRTUAL BOX
+ ================================
+$ sudo sed -i "/^MODULES=/c\MODULES=\"ata_piix ahci sd_mod ext4\"" /etc/mkinitcpio.conf
+
+$ sudo sed -i "/^BINARIES=/c\BINARIES=\"fsck fsck.ext4\"" /etc/mkinitcpio.conf
+
+ 8-2) INSTALLATION RÉELLE
+ ==========================
+$ sudo sed -i "/^MODULES=/c\MODULES=\"ahci sd_mod ext4\"" /etc/mkinitcpio.conf
+
+$ sudo sed -i "/^BINARIES=/c\BINARIES=\"fsck fsck.ext4\"" /etc/mkinitcpio.conf
+
+ 8-2) COMMUNS AUX 2 INSTALLATIONS
+ ==================================
+$ sudo sed -i "/^HOOKS=/c\HOOKS=\"base udev modconf usbinput\"" /etc/mkinitcpio.conf
+
+# Après modifs
+---------------
+$ sed '/#/d' /etc/mkinitcpio.conf
+MODULES="ata_piix ahci sd_mod ext4 reiserfs" OU MODULES="ahci sd_mod ext4"
+
+BINARIES="fsck fsck.ext4 fsck.reiserfs" OU BINARIES="fsck fsck.ext4"
+
+FILES=""
+
+HOOKS="base udev modconf usbinput"
+---------------------------------
+
+$ sudo mkinitcpio -p linux
+
+
+# !!! SI PAS reiserfs
+----------------------
+# !!! SI reiserfs
+--------------------
+ # !!! SI PAS reiserfs
+----------------------
+# !!! SI reiserfs
+--------------------
+$ sudo sed -i "/^MODULES=/c\MODULES=\"ahci sd_mod ext4 reiserfs\"" /etc/mkinitcpio.conf
+
+$ sudo sed -i "/^BINARIES=/c\BINARIES=\"fsck fsck.ext4 fsck.reiserfs\"" /etc/mkinitcpio.conf
+
+$ sudo sed -i "/^MODULES=/c\MODULES=\"ata_piix ahci sd_mod ext4 reiserfs\"" /etc/mkinitcpio.conf
+
+$ sudo sed -i "/^BINARIES=/c\BINARIES=\"fsck fsck.ext4 fsck.reiserfs\"" /etc/mkinitcpio.conf
+
+/!\/!\/!\/!\/!\/!\/!\/!\/!\
+INUTILE: NE Fonctionne plus
+/!\/!\/!\/!\/!\/!\/!\/!\/!\
+14) HDDTEMP : Créer ma conf ds /etc/systemd/system/hddtemp.service.d/myhddtemp.conf
+===================================================================================
+voir : https://wiki.archlinux.org/index.php/User:Djgera#hddtemp
+voir 100)
+
+!!! A FAIRE SI 2 DISQUES ( SDA ET SDB )
+---------------------------------------
+$ sudo mkdir -p /etc/systemd/system/hddtemp.service.d
+$ sudo sh -c "echo '[Service]' > /etc/systemd/system/hddtemp.service.d/myhddtemp.conf"
+$ sudo sh -c "echo 'ExecStart=' >> /etc/systemd/system/hddtemp.service.d/myhddtemp.conf"
+$ sudo sh -c "echo 'ExecStart=/usr/bin/hddtemp -dF /dev/sda /dev/sdb' >> /etc/systemd/system/hddtemp.service.d/myhddtemp.conf"
+
+$ sudo systemctl --system daemon-reload
+
+$ sudo systemctl restart hddtemp.service
+Warning: Unit file of hddtemp.service changed on disk, 'systemctl --system daemon-reload' recommended.
+
+!!! AU REBOOT : TEST EN USER : doit donner les 2 temps
+$ nc localhost 7634
+!!! ANCIEN
+|/dev/sda|M4-CT256M4SSD2|0|C||/dev/sdb|WDC WD5002AALX-00J37A0|35|C|
+!!! NOUVEAU
+|/dev/sda|Samsung SSD 860 PRO 256G B              �@|UNK|*||/dev/sdb|WDC WD1003FZEX-00K3CA0|27|C|
+
+
+$ sudo systemctl --no-pager status hddtemp.service
+[sudo] password for jnd:
+hddtemp.service - Hard drive temperature monitor daemon
+   Loaded: loaded (/usr/lib/systemd/system/hddtemp.service; enabled)
+  Drop-In: /etc/systemd/system/hddtemp.service.d
+           └─myhddtemp.conf
+   Active: active (running) since ven. 2013-05-24 17:16:28 CEST; 2h 22min ago
+ Main PID: 237 (hddtemp)
+   CGroup: name=systemd:/system/hddtemp.service
+           └─237 /usr/bin/hddtemp -dF /dev/sda /dev/sdb
+
+
+!!! ATTENTION AUX CHANGEMENTS SUITE A MAJ intel-ucode 20140913-1 + linux 3.17.1
+--------------------------------------------------------------------------------
+SERVICE INTEL_UCODE_UPDATE
+==========================
+
+Déja créés. Voir :
+~/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.path
+~/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.service
+
+$ sudo cp -v /home/jnd/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.path \
+/etc/systemd/system/intel_ucode_update.path
+
+$ sudo cp -v /home/jnd/01-scripts/Installeur/ai-fconfig/efi-services/intel_ucode_update.service \
+/etc/systemd/system/intel_ucode_update.service
+
+INSTALLATION DANS ARCH_1 / ARCH_1_CK
+------------------------------------
+$ sudo sed -i "s/NAMEDIRARCHLINUX/arch_1/g" /etc/systemd/system/intel_ucode_update.service
+
+INSTALLATION DANS ARCH_2 / ARCH_2_CK
+------------------------------------
+$ sudo sed -i "s/NAMEDIRARCHLINUX/arch_2/g" /etc/systemd/system/intel_ucode_update.service
+
+VÉRIFICATIONS
+--------------
+$ cat /etc/systemd/system/intel_ucode_update.service
+
+$ sudo systemctl enable intel_ucode_update.path
+
+$ sudo systemctl start intel_ucode_update.path
+
+$ systemctl --no-pager status intel_ucode_update.path
+
+!!! INUTILES SI intel_ucode_update.path ACTIF !!!
+=================================================
+COPIE DE /boot/intel-ucode.img
+==============================
+INSTALLATION DANS ARCH_1 / ARCH_1_CK
+------------------------------------
+$ sudo cp -vf /boot/intel-ucode.img /boot/efi/EFI/arch_1/intel-ucode.img
+$ sudo cp -vf /boot/intel-ucode.img /boot/efi/EFI/arch_1_ck/intel-ucode.img
+
+INSTALLATION DANS ARCH_2 / ARCH_2_CK
+------------------------------------
+$ sudo cp -vf /boot/intel-ucode.img /boot/efi/EFI/arch_2/intel-ucode.img
+$ sudo cp -vf /boot/intel-ucode.img /boot/efi/EFI/arch_2_ck/intel-ucode.img
+
+MODIFICATIONS refind_linux.conf
+===============================
+INSTALLATION DANS ARCH_1 / ARCH_1_CK
+AJOUT DE : initrd=EFI/arch_1/intel-ucode.img
+!!! SI LINUX 5.7.2 :
+AJOUT DE : initrd=EFI\arch_1\intel-ucode.img
+--------------------------------------------
+$ sudo nano /boot/efi/EFI/arch_1/refind_linux.conf
+
+AJOUT DE : initrd=EFI/arch_1_ck/intel-ucode.img
+!!! SI LINUX 5.7.2 :
+AJOUT DE : initrd=EFI\arch_1_ck\intel-ucode.img
+-----------------------------------------------
+$ sudo nano /boot/efi/EFI/arch_1_ck/refind_linux.conf
+
+INSTALLATION DANS ARCH_2 / ARCH_2_CK
+AJOUT DE : initrd=EFI\arch_2\intel-ucode.img
+!!! SI LINUX 5.7.2 :
+AJOUT DE : initrd=EFI\arch_2\intel-ucode.img
+--------------------------------------------
+$ sudo nano /boot/efi/EFI/arch_2/refind_linux.conf
+
+AJOUT DE : initrd=EFI/arch_2_ck/intel-ucode.img
+!!! SI LINUX 5.7.2 :
+AJOUT DE : initrd=EFI\arch_2_ck\intel-ucode.img
+-----------------------------------------------
+$ sudo nano /boot/efi/EFI/arch_2_ck/refind_linux.conf
+
+oct. 23 17:42:14 localhost kernel: CPU0 microcode updated early to revision 0x1c, date = 2014-07-03
+oct. 23 17:42:14 localhost kernel: CPU1 microcode updated early to revision 0x1c, date = 2014-07-03
+oct. 23 17:42:14 localhost kernel: CPU2 microcode updated early to revision 0x1c, date = 2014-07-03
+oct. 23 17:42:14 localhost kernel: CPU3 microcode updated early to revision 0x1c, date = 2014-07-03
+oct. 23 17:42:14 localhost kernel: microcode: CPU0 sig=0x306c3, pf=0x2, revision=0x1c
+oct. 23 17:42:14 localhost kernel: microcode: CPU1 sig=0x306c3, pf=0x2, revision=0x1c
+oct. 23 17:42:14 localhost kernel: microcode: CPU2 sig=0x306c3, pf=0x2, revision=0x1c
+oct. 23 17:42:14 localhost kernel: microcode: CPU3 sig=0x306c3, pf=0x2, revision=0x1c
+oct. 23 17:42:14 localhost kernel: microcode: CPU4 sig=0x306c3, pf=0x2, revision=0x1c
+oct. 23 17:42:14 localhost kernel: microcode: CPU5 sig=0x306c3, pf=0x2, revision=0x1c
+oct. 23 17:42:14 localhost kernel: microcode: CPU6 sig=0x306c3, pf=0x2, revision=0x1c
+oct. 23 17:42:14 localhost kernel: microcode: CPU7 sig=0x306c3, pf=0x2, revision=0x1c
+oct. 23 17:42:14 localhost kernel: microcode: Microcode Update Driver: v2.00 <tigran@aivazian.fsnet.co.uk>, Peter Oruba
+
+$ cat /proc/cmdline
+DANS ARCH_1 / ARCH_1_CK
+-----------------------
+\EFI\arch_1\vmlinuz-arch_1.efi root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=graphical.target quiet initrd=EFI/arch_1/intel-ucode.img initrd=EFI/arch_1/initramfs-arch_1.img
+
+\EFI\arch_1_ck\vmlinuz-arch_1_ck.efi root=PARTUUID=665fca39-0246-467e-b74d-dadde7036567 rootfstype=ext4 rw systemd.unit=graphical.target elevator=bfq quiet initrd=EFI/arch_1_ck/intel-ucode.img initrd=EFI/arch_1_ck/initramfs-arch_1_ck.img
+
+DANS ARCH_2 / ARCH_2_CK
+-----------------------
+\EFI\arch_2\vmlinuz-arch_2.efi root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=graphical.target quiet initrd=EFI/arch_2/intel-ucode.img initrd=EFI/arch_2/initramfs-arch_2.img
+
+\EFI\arch_2_ck\vmlinuz-arch_2_ck.efi root=PARTUUID=871ad7aa-2350-4654-a3a8-be5d0bd7f1d3 rootfstype=ext4 rw systemd.unit=graphical.target elevator=bfq quiet initrd=EFI/arch_2_ck/intel-ucode.img initrd=EFI/arch_2_ck/initramfs-arch_2_ck.img
+
+
+
+!!! VOIR
+# LC_ALL=C pacman -Syu awesomebump-git
 
 
 !!!!! POUR TESTS !!!!!

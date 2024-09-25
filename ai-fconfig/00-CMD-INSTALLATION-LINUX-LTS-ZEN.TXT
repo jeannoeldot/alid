@@ -1,32 +1,73 @@
 INSTALLATION DE LINUX-LTS
-AU 22/10/2020
+AU 25/09/2024
 =========================
 
 $ pacman -Ss lts
-core/linux-lts 5.4.72-1
+core/linux-lts 6.6.52-1
     The LTS Linux kernel and modules
-core/linux-lts-docs 5.4.72-1
-    Documentation for the LTS Linux kernel
-core/linux-lts-headers 5.4.72-1
+...
+core/linux-lts-headers 6.6.52-1
     Headers and scripts for building modules for the LTS Linux kernel
 ...
-extra/nvidia-lts 1:455.28-7
-    NVIDIA drivers for linux-lts
-
-$ pacman -Ss virtualbox
-community/virtualbox 6.1.16-1 [installé]
-    Powerful x86 virtualization for enterprise as well as home use
-community/virtualbox-guest-iso 6.1.16-1 [installé]
-    The official VirtualBox Guest Additions ISO image
 !!!
-community/virtualbox-host-dkms 6.1.16-1 [installé]
+extra/nvidia-open-dkms 560.35.03-6 [installé]
+    NVIDIA open kernel modules
+
+extra/virtualbox-host-dkms 7.1.0-1 [installé]
     VirtualBox Host kernel modules sources
-repolocal/virtualbox-extension 6.1.16-1 [installé]
-    Oracle VM VirtualBox Extension Pack
 
 
-# LC_ALL=C pacman -Syu linux-lts linux-lts-headers nvidia-lts
+INSTALLATION
+------------
+# LC_ALL=C pacman -Syu linux-lts linux-lts-headers
 
+# ls /boot
+grub  initramfs-linux-fallback.img  initramfs-linux.img  intel-ucode.img  vmlinuz-linux
+
+# CONFIGURATION DE GRUB
+-----------------------
+# LC_ALL=C grub-mkconfig -o /boot/grub/grub.cfg
+
+REBOOTER
+=========
+
+INSTALLATION DE LINUX-ZEN
+AU 25/09/2024
+=========================
+
+$ pacman -Ss zen
+extra/linux-zen 6.10.10.zen1-1
+    The Linux ZEN kernel and modules
+extra/linux-zen-headers 6.10.10.zen1-1
+    Headers and scripts for building modules for the Linux ZEN kernel
+...
+
+!!!
+extra/nvidia-open-dkms 560.35.03-6 [installé]
+    NVIDIA open kernel modules
+
+extra/virtualbox-host-dkms 7.1.0-1 [installé]
+    VirtualBox Host kernel modules sources
+
+
+INSTALLATION
+------------
+# LC_ALL=C pacman -Syu linux-zen linux-zen-headers
+
+# ls /boot
+grub  initramfs-linux-fallback.img  initramfs-linux.img  intel-ucode.img  vmlinuz-linux
+
+# CONFIGURATION DE GRUB
+-----------------------
+# LC_ALL=C grub-mkconfig -o /boot/grub/grub.cfg
+
+REBOOTER
+=========
+
+
+====================================================================================================
+ANCIEN
+==========================================================
 
 INSTALLATION DE EFISTUB
 =========================
