@@ -28,8 +28,8 @@
         package_install "packagekit-qt6 gtk3 quota-tools oxygen5 appmenu-gtk-module kwayland-integration plasma5-integration"
         pacman -D --asdeps packagekit-qt6 gtk3 quota-tools oxygen5 appmenu-gtk-module kwayland-integration plasma5-integration
         # Opt déps kf6
-        package_install "imath libavif libheif libjxl libraw openexr kio-extras icoutils libappimage taglib kio-fuse kwalletmanager"
-        pacman -D --asdeps imath libavif libheif libjxl libraw openexr kio-extras icoutils libappimage taglib kio-fuse kwalletmanager
+        package_install "imath libavif libheif libjxl libraw openexr kio-extras icoutils libappimage taglib kio-fuse kwalletmanager pyside6"
+        pacman -D --asdeps imath libavif libheif libjxl libraw openexr kio-extras icoutils libappimage taglib kio-fuse kwalletmanager pyside6
         # Opt déps kf5
         package_install "packagekit-qt5 appstream-qt5 kio5-extras"
         pacman -D --asdeps packagekit-qt5 appstream-qt5 kio5-extras
