@@ -22,31 +22,40 @@ INSTALLATION
 # LC_ALL=C pacman -Syu linux-lts linux-lts-headers
 
 # ls /boot
-grub  initramfs-linux-fallback.img  initramfs-linux.img  intel-ucode.img  vmlinuz-linux
+grub
+initramfs-linux-fallback.img  initramfs-linux-lts-fallback.img  initramfs-linux-lts.img  initramfs-linux.img
+vmlinuz-linux  vmlinuz-linux-lts
+intel-ucode.img
 
 # CONFIGURATION DE GRUB
 -----------------------
 # LC_ALL=C grub-mkconfig -o /boot/grub/grub.cfg
 
+# cat /boot/grub/grub.cfg
+
 REBOOTER
 =========
 
 INSTALLATION DE LINUX-ZEN
-AU 25/09/2024
+AU 28/01/2025
 =========================
 
-$ pacman -Ss zen
-extra/linux-zen 6.10.10.zen1-1
+$ pacman -Ss linux-zen
+extra/linux-zen 6.12.10.zen1-1
     The Linux ZEN kernel and modules
-extra/linux-zen-headers 6.10.10.zen1-1
+extra/linux-zen-docs 6.12.10.zen1-1
+    Documentation for the Linux ZEN kernel
+extra/linux-zen-headers 6.12.10.zen1-1
     Headers and scripts for building modules for the Linux ZEN kernel
 ...
 
 !!!
-extra/nvidia-open-dkms 560.35.03-6 [installé]
-    NVIDIA open kernel modules
+# pacman -Ss nvidia-open-dkms
+extra/nvidia-open-dkms 565.77-3 [installé]
+    NVIDIA open kernel modules - module sources
 
-extra/virtualbox-host-dkms 7.1.0-1 [installé]
+# pacman -Ss virtualbox-host-dkms
+extra/virtualbox-host-dkms 7.1.6-2 [installé]
     VirtualBox Host kernel modules sources
 
 
@@ -55,11 +64,17 @@ INSTALLATION
 # LC_ALL=C pacman -Syu linux-zen linux-zen-headers
 
 # ls /boot
-grub  initramfs-linux-fallback.img  initramfs-linux.img  intel-ucode.img  vmlinuz-linux
+grub
+initramfs-linux-lts-fallback.img  initramfs-linux-zen-fallback.img  initramfs-linux.img
+initramfs-linux-fallback.img  initramfs-linux-lts.img           initramfs-linux-zen.img
+vmlinuz-linux      vmlinuz-linux-zen      vmlinuz-linux-lts
+intel-ucode.img
 
 # CONFIGURATION DE GRUB
 -----------------------
 # LC_ALL=C grub-mkconfig -o /boot/grub/grub.cfg
+
+# cat /boot/grub/grub.cfg
 
 REBOOTER
 =========

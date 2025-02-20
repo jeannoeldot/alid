@@ -956,28 +956,28 @@ makepkg.conf.native
 ==================================================================
 
 !!! NON !!! awesomebump-git-*-x86_64.pkg.tar.xz
+            pokerth-*-x86_64.pkg.tar.zst,\
 
 $ sudo cp -v /0-DataLinux/00-repolocal/\
 {\
-alembic-git-*-x86_64.pkg.tar.zst,\
-blender-git-*-x86_64.pkg.tar.zst,\
+alembic-jnd-*-x86_64.pkg.tar.zst,\
+blender-git-jnd-*-x86_64.pkg.tar.zst,\
 conky-lua-nv-git-*-x86_64.pkg.tar.zst,\
-embree-git-*-x86_64.pkg.tar.zst,\
+embree-jnd-*-x86_64.pkg.tar.zst,\
 grub-theme-dark-gray-*-any.pkg.tar.zst,\
 jndqaligne5-qt5-*-x86_64.pkg.tar.zst,\
 jndqcbgrd-qt5-*-x86_64.pkg.tar.zst,\
 jndqrami-qt5-*-x86_64.pkg.tar.zst,\
 mkpkg-tmpfs-*-any.pkg.tar.zst,\
-opencollada-git-*-x86_64.pkg.tar.zst,\
-openimagedenoise-git-*-x86_64.pkg.tar.zst,\
-openimageio-git-*-x86_64.pkg.tar.zst,\
-openpgl-git-*-x86_64.pkg.tar.zst,\
-openshadinglanguage-git-*-x86_64.pkg.tar.zst,\
-opensubdiv-git-*-x86_64.pkg.tar.zst,\
-openusd-git-*-x86_64.pkg.tar.zst,\
-openvdb-git-*-x86_64.pkg.tar.zst,\
+opencollada-git-jnd-*-x86_64.pkg.tar.zst,\
+openimagedenoise-jnd-*-x86_64.pkg.tar.zst,\
+openimageio-jnd-*-x86_64.pkg.tar.zst,\
+openpgl-jnd-*-x86_64.pkg.tar.zst,\
+openshadinglanguage-jnd-*-x86_64.pkg.tar.zst,\
+opensubdiv-jnd-*-x86_64.pkg.tar.zst,\
+openusd-jnd-*-x86_64.pkg.tar.zst,\
+openvdb-jnd-*-x86_64.pkg.tar.zst,\
 pkgbrowser-*-x86_64.pkg.tar.zst,\
-pokerth-*-x86_64.pkg.tar.zst,\
 ttf-win10-fonts-*-any.pkg.tar.zst,\
 virtualbox-extension-*-any.pkg.tar.zst\
 } \
@@ -1027,17 +1027,17 @@ $ cat ~/.mozilla/firefox/profiles.ini
 
 INSTALLATION DE BLENDER
 ========================
-!!! alembic.git
-!!! embree-git
-!!! nanovdb-git
-!!! opencollada-git
-!!! openimagedenoise-git
-!!! openimageio-git
-!!! openshadinglanguage-git
-!!! opensubdiv-git
-!!! openvdb-git
-!!! openusd-git
-# LC_ALL=C pacman -Syu blender-git
+!!! alembic-jnd
+!!! embree-jnd
+!!! nanovdb-jnd
+!!! opencollada-git-jnd
+!!! openimagedenoise-jnd
+!!! openimageio-jnd
+!!! openshadinglanguage-jnd
+!!! opensubdiv-jnd
+!!! openvdb-jnd
+!!! openusd-jnd
+# LC_ALL=C pacman -Syu blender-git-jnd
 
 INSTALLATION DE CUDA
 ========================
@@ -1482,18 +1482,18 @@ jndqaligne5-qt5 0.5.0-1
 jndqcbgrd-qt5 0.1.7-2
 jndqrami-qt5 0.2.1-1
 
-!!! VOIR Intallation de blender-git (+ dep alembic, ovdb, osd, oc, oiio et osl)
--------------------------------------------------------------------------------
-blender-git
-opencollada-git
-openimageio-git
-openshadinglanguage-git
-opensubdiv-git
-openvdb-git
-alembic.git
-embree-git
+!!! VOIR Intallation de blender-git-jnd (+ dep alembic, ovdb, osd, oc, oiio et osl)
+-----------------------------------------------------------------------------------
+blender-git-jnd
+opencollada-git-jnd
+openimageio-jnd
+openshadinglanguage-jnd
+opensubdiv-jnd
+openvdb-jnd
+alembic-jnd
+embree-jnd
 
-blender-addons-yafaray-git
+blender-addons-yafaray-jnd
 
 awesomebump-git
 
