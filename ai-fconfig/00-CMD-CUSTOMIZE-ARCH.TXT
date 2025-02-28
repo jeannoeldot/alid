@@ -957,6 +957,7 @@ makepkg.conf.native
 
 !!! NON !!! awesomebump-git-*-x86_64.pkg.tar.xz
             pokerth-*-x86_64.pkg.tar.zst,\
+            jndqcbgrd-qt5-*-x86_64.pkg.tar.zst,\
 
 $ sudo cp -v /0-DataLinux/00-repolocal/\
 {\
@@ -965,9 +966,8 @@ blender-git-jnd-*-x86_64.pkg.tar.zst,\
 conky-lua-nv-git-*-x86_64.pkg.tar.zst,\
 embree-jnd-*-x86_64.pkg.tar.zst,\
 grub-theme-dark-gray-*-any.pkg.tar.zst,\
-jndqaligne5-qt5-*-x86_64.pkg.tar.zst,\
-jndqcbgrd-qt5-*-x86_64.pkg.tar.zst,\
-jndqrami-qt5-*-x86_64.pkg.tar.zst,\
+jndqaligne5-qt6-*-x86_64.pkg.tar.zst,\
+jndqrami-qt6-*-x86_64.pkg.tar.zst,\
 mkpkg-tmpfs-*-any.pkg.tar.zst,\
 opencollada-git-jnd-*-x86_64.pkg.tar.zst,\
 openimagedenoise-jnd-*-x86_64.pkg.tar.zst,\
@@ -1061,12 +1061,12 @@ $ cd
 !!! TEST $ blender
 
 
-# LC_ALL=C pacman -Syu jndqaligne5-qt5 jndqrami-qt5
+# LC_ALL=C pacman -Syu jndqaligne5-qt6 jndqrami-qt6
 
 # LC_ALL=C pacman -Syu pkgbrowser
 
+!!! VOIR
 # LC_ALL=C pacman -Syu pokerth
-
 !!! VOIR
 # LC_ALL=C pacman -Syu jndqcbgrd-qt5
 !!! VOIR
@@ -1344,11 +1344,20 @@ Menu Éditions -> Préférences -> C++ -> Generation de classe Qt
   O
   X Multiple inheritance ( Héritaqe multiple )
 
-Menu Outils -> Options -> TODO
+Menu Éditions -> Préférences -> TODO
   !!! Voir
 
 Menu Éditions -> Préférences -> Kits
-  Selectionner le Kit: Ex Manual : Desktop (par défaut)
+  Selectionner le Kit: Ex Manual : Desktop (par défaut) : VOIR VERSION DE Qt (5/6)
+    Compilateur : C/C++ : GCC x86 64 bit dans /usr/bin/gcc
+    Versions de Qt: Manuel :
+    - Qt 5.15.16 : /usr/bin/qmake ou /usr/bin/qmake-qt5
+    OU
+    - Qt 6.8.2 : /usr/bin/qmake6
+
+Menu Éditions -> Préférences -> Éditeur de texte
+  Polices et couleurs : Taille 12
+
   Environment : Change : Ajouter QT_ASSUME_STDERR_HAS_CONSOLE=1
 
 
@@ -1478,9 +1487,10 @@ $ cat ~/.mozilla/firefox/profiles.ini
 
 !!! VOIR Intallation de mes paquets
 -----------------------------------
-jndqaligne5-qt5 0.5.0-1
-jndqcbgrd-qt5 0.1.7-2
-jndqrami-qt5 0.2.1-1
+jndqaligne5-qt6
+jndqrami-qt6
+
+!!! VOIR jndqcbgrd-qt5 0.1.7-2
 
 !!! VOIR Intallation de blender-git-jnd (+ dep alembic, ovdb, osd, oc, oiio et osl)
 -----------------------------------------------------------------------------------
