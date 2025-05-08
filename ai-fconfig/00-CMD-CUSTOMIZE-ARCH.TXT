@@ -968,6 +968,8 @@ embree-jnd-*-x86_64.pkg.tar.zst,\
 grub-theme-dark-gray-*-any.pkg.tar.zst,\
 jndqaligne5-qt6-*-x86_64.pkg.tar.zst,\
 jndqrami-qt6-*-x86_64.pkg.tar.zst,\
+manifold-jnd-*-x86_64.pkg.tar.zst,\
+materialx-jnd-*-x86_64.pkg.tar.zst,\
 mkpkg-tmpfs-*-any.pkg.tar.zst,\
 opencollada-git-jnd-*-x86_64.pkg.tar.zst,\
 openimagedenoise-jnd-*-x86_64.pkg.tar.zst,\
@@ -1029,14 +1031,16 @@ INSTALLATION DE BLENDER
 ========================
 !!! alembic-jnd
 !!! embree-jnd
-!!! nanovdb-jnd
+!!! manifold-jnd
+!!! materialx-jnd
 !!! opencollada-git-jnd
 !!! openimagedenoise-jnd
 !!! openimageio-jnd
+!!! openpgl-jnd
 !!! openshadinglanguage-jnd
 !!! opensubdiv-jnd
-!!! openvdb-jnd
 !!! openusd-jnd
+!!! openvdb-jnd
 # LC_ALL=C pacman -Syu blender-git-jnd
 
 INSTALLATION DE CUDA
@@ -1492,20 +1496,24 @@ jndqrami-qt6
 
 !!! VOIR jndqcbgrd-qt5 0.1.7-2
 
+INSTALLATION DE BLENDER
+========================
 !!! VOIR Intallation de blender-git-jnd (+ dep alembic, ovdb, osd, oc, oiio et osl)
 -----------------------------------------------------------------------------------
-blender-git-jnd
-opencollada-git-jnd
-openimageio-jnd
-openshadinglanguage-jnd
-opensubdiv-jnd
-openvdb-jnd
-alembic-jnd
-embree-jnd
+!!! alembic-jnd
+!!! embree-jnd
+!!! manifold-jnd
+!!! materialx-jnd
+!!! opencollada-git-jnd
+!!! openimagedenoise-jnd
+!!! openimageio-jnd
+!!! openpgl-jnd
+!!! openshadinglanguage-jnd
+!!! opensubdiv-jnd
+!!! openusd-jnd
+!!! openvdb-jnd
+# LC_ALL=C pacman -Syu blender-git-jnd
 
-blender-addons-yafaray-jnd
-
-awesomebump-git
 
 !!! VOIR Intallation de CONKY
 -----------------------------
