@@ -971,7 +971,6 @@ jndqrami-qt6-*-x86_64.pkg.tar.zst,\
 manifold-jnd-*-x86_64.pkg.tar.zst,\
 materialx-jnd-*-x86_64.pkg.tar.zst,\
 mkpkg-tmpfs-*-any.pkg.tar.zst,\
-opencollada-git-jnd-*-x86_64.pkg.tar.zst,\
 openimagedenoise-jnd-*-x86_64.pkg.tar.zst,\
 openimageio-jnd-*-x86_64.pkg.tar.zst,\
 openpgl-jnd-*-x86_64.pkg.tar.zst,\
@@ -1033,7 +1032,6 @@ INSTALLATION DE BLENDER
 !!! embree-jnd
 !!! manifold-jnd
 !!! materialx-jnd
-!!! opencollada-git-jnd
 !!! openimagedenoise-jnd
 !!! openimageio-jnd
 !!! openpgl-jnd
@@ -1504,7 +1502,6 @@ INSTALLATION DE BLENDER
 !!! embree-jnd
 !!! manifold-jnd
 !!! materialx-jnd
-!!! opencollada-git-jnd
 !!! openimagedenoise-jnd
 !!! openimageio-jnd
 !!! openpgl-jnd
@@ -1652,6 +1649,11 @@ OU
 ====================================================================================================
 ANCIEN
 ==========================================================
+
+opencollada-git-jnd-*-x86_64.pkg.tar.zst,\
+!!! opencollada-git-jnd
+!!! opencollada-git-jnd
+
 
 1) VÉRIFIER MES SERVICES SYSTEMD SI EN UEFI
 ===========================================

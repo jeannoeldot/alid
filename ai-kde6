@@ -146,16 +146,17 @@
         mkdir -p /home/${USERNAME}/.config/autostart
         echo 'Hidden=true' >> /home/${USERNAME}/.config/autostart/org.kde.discover.notifier.desktop
         chown -R ${USERNAME}:users /home/${USERNAME}/.config
-        # NVIDIA CUSTOMIZATION
-        if is_package_installed "nvidia" || is_package_installed "nvidia-dkms" || is_package_installed "nvidia-open" || is_package_installed "nvidia-open-dkms" ; then
-            # Suite maj 565.57.01: Réveil veille problématique
-            # Modifs /etc/default/grub: Ajout de nvidia.NVreg_PreserveVideoMemoryAllocations=0
-            printf '%s\n' "${BGreen}Configuration de ${BYellow}/etc/default/grub${BGreen}...${Reset}"
-            sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=/c\GRUB_CMDLINE_LINUX_DEFAULT=\"nvidia.NVreg_PreserveVideoMemoryAllocations=0\"" /etc/default/grub
-            # Configure /boot/grub/grub.cfg
-            printf '%s\n' "${BGreen}Configuration de ${BYellow}grub.cfg${BGreen}...${Reset}"
-            grub-mkconfig -o /boot/grub/grub.cfg
-        fi
+# INUTILES DEPUIS MAJ DRIVER 575.57.08
+#         # NVIDIA CUSTOMIZATION
+#         if is_package_installed "nvidia" || is_package_installed "nvidia-dkms" || is_package_installed "nvidia-open" || is_package_installed "nvidia-open-dkms" ; then
+#             # Suite maj 565.57.01: Réveil veille problématique
+#             # Modifs /etc/default/grub: Ajout de nvidia.NVreg_PreserveVideoMemoryAllocations=0
+#             printf '%s\n' "${BGreen}Configuration de ${BYellow}/etc/default/grub${BGreen}...${Reset}"
+#             sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=/c\GRUB_CMDLINE_LINUX_DEFAULT=\"nvidia.NVreg_PreserveVideoMemoryAllocations=0\"" /etc/default/grub
+#             # Configure /boot/grub/grub.cfg
+#             printf '%s\n' "${BGreen}Configuration de ${BYellow}grub.cfg${BGreen}...${Reset}"
+#             grub-mkconfig -o /boot/grub/grub.cfg
+#         fi
 
 #        if is_package_installed "nvidia" || is_package_installed "nvidia-dkms" || is_package_installed "nvidia-open" || is_package_installed "nvidia-open-dkms" ; then
             # https://wiki.archlinux.org/title/NVIDIA/Tips_and_tricks
