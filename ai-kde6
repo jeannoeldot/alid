@@ -698,7 +698,7 @@
             case $choix in
                 "vlc")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}vlc flac libbluray libdvdcss libcdio dav1d opus vcdimager${BGreen}...${Reset}"
-                    package_install "vlc flac libbluray libdvdcss libcdio opus vcdimager"
+                    package_install "vlc vlc-plugins-all flac libbluray libdvdcss libcdio opus vcdimager"
                     ;;
                 "kdenlive")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}kdenlive cdrtools dvdauthor dvgrab ffmpeg recordmydesktop frei0r-plugins sox movit${BGreen}...${Reset}"
