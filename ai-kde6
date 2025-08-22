@@ -314,8 +314,8 @@
                     package_install "grsync"
                     ;;
                 "htop")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}htop iotop lshw hwinfo dmidecode ncdu dfc expac pkgfile pacman-contrib pacutils i7z${BGreen}...${Reset}"
-                    package_install "htop iotop lshw hwinfo dmidecode ncdu dfc expac pkgfile pacman-contrib pacutils pax-utils i7z"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}htop iotop lshw hwinfo dmidecode ncdu dfc expac pkgfile pacman-contrib pacutils${BGreen}...${Reset}"
+                    package_install "htop iotop lshw hwinfo dmidecode ncdu dfc expac pkgfile pacman-contrib pacutils pax-utils"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}lsof strace${BGreen}...${Reset}"
                     package_install "lsof strace"
                     ;;
