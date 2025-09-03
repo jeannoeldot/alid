@@ -550,8 +550,8 @@ source $(pwd)/ai-commons
             printf '%s\n' "${BGreen}Ajout de ${BYellow}${USERNAME}${BGreen} au groupe ${BYellow}vboxsf${BGreen}...${Reset}"
             gpasswd -a ${USERNAME} vboxsf
         else
-            _vga=$(lspci | grep VGA | tr "[:upper:]" "[:lower:]")
-            _vga_length=$(lspci | grep VGA | wc -l)
+            _vga=$(lspci | grep " VGA " | tr "[:upper:]" "[:lower:]")
+            _vga_length=$(lspci | grep " VGA " | wc -l)
             # test si bumblebee
             if [[ $_vga_length -eq 2 ]] && [[ -n $(echo ${_vga} | grep "nvidia") || -f /sys/kernel/debug/dri/0/vbios.rom ]]; then
                 messages+="Installation sur Portable avec technologie ${BRwhite_dlg}NVidia Optimus${Reset_dlg}.\n\n"
@@ -567,7 +567,7 @@ source $(pwd)/ai-commons
             # test si NVidia
             elif [[ -n $(echo ${_vga} | grep "nvidia") || -f /sys/kernel/debug/dri/0/vbios.rom ]]; then
                 # NOM DE LA CARTE
-                L_NAME_CG_NVIDIA=$(lspci | grep -E "VGA" | sed -e "s/^.*\[//;s/\].*$//")
+                L_NAME_CG_NVIDIA=$(lspci | grep -E " VGA " | sed -e "s/^.*\[//;s/\].*$//")
                 messages+="Carte Vidéo ${BRwhite_dlg}NVidia ${L_NAME_CG_NVIDIA}${Reset_dlg} détectée.\n\n"
                 messages+="Installer le pilote vidéo propriétaire NVidia ?\n"
                 print_dialog_yesno "${titre}" "${messages}" "Installer" "Continuer"
@@ -615,11 +615,11 @@ source $(pwd)/ai-commons
                         #CONFIGURE NVidia IN XORG
                         printf '%s\n' "${BGreen}Mise en place des réglages pour Xorg de la carte nVidia ${BYellow}20-nvidia.conf${BGreen}...${Reset}"
                         cp -v ai-fconfig/20-nvidia.conf /etc/X11/xorg.conf.d/20-nvidia.conf
-                    # Si PC récent GeForce RTX 3080 Ti
+                    # Si PC récent GeForce RTX 3080 Ti/GeForce RTX 5070 Ti
                     else
                         messages="\n"
                         messages+="Nom de la carte Vidéo NVidia détectée : ${Byellow_dlg}${L_NAME_CG_NVIDIA}${Reset_dlg}\n\n"
-                        messages+="Installation de la dernière version des pilotes NVidia.\n"
+                        messages+="Installation de la dernière version open des pilotes NVidia.\n"
                         print_dialog_msgbox "${titre}" "${messages}" "Installer"
                         printf '%s\n' "${BGreen}Installation de ${BYellow}nvidia-open-dkms linux-headers nvidia-utils nvidia-settings${BGreen}...${Reset}"
                         package_install "nvidia-open-dkms linux-headers nvidia-utils nvidia-settings"

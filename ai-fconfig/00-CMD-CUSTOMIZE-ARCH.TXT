@@ -210,12 +210,17 @@ $ sudo sh -c "echo 'Options=mode=1777,strictatime,nosuid,nodev,size=8G,nr_inodes
 ==> tmpfs = 16G  mkpkg-tmpfs = 8G ou 24G ou 32G si compilation blender
 ==>                           40G ou 24G ou 16G RAM disponible
 
-NOUVELLE VERSION 255.5
+NOUVELLE VERSION 257.8
 
 $ sudo mkdir /etc/systemd/system/tmp.mount.d
 $ sudo sh -c "echo '[Mount]' > /etc/systemd/system/tmp.mount.d/tmp_size.conf"
 $ sudo sh -c "echo 'Options=mode=1777,strictatime,nosuid,nodev,size=16G,nr_inodes=1m' >> /etc/systemd/system/tmp.mount.d/tmp_size.conf"
 
+APRES REDEMARRAGE :
+$ findmnt
+├─/tmp                                        tmpfs          tmpfs           rw,nosuid,nodev,size=16777216k,nr_inodes=1048576,inode64
+
+16G x 1024 x 1024 = 16777216k
 
 FAIRE TEST SI OK ( PSD AVEC FIREFOX ... COMPILER BLENDER DANS /TMP )
 
@@ -224,20 +229,46 @@ POUR MODIFIER SIZE
 
 $ sudo nano /etc/systemd/system/tmp.mount.d/tmp_size.conf
 
+ 4-2) 0-DataLinux
+ ================
+ NOUVEAU NVME 2To
+$ sudo fdisk -l
+Disque /dev/nvme1n1 : 1,82 TiB, 2000398934016 octets, 3907029168 secteurs
+Modèle de disque : Samsung SSD 990 PRO with Heatsink 2TB
 
- 4-2) FSTAB : 0-DataLinux SI EXISTE
- ==================================
+$ sudo cfdisk /dev/nvme1n1
+/dev/nvme1n1p1  2048 3907028991 3907026944   1,8T Système de fichiers Linux
+
+$ sudo mkfs.ext4 -m 1 /dev/nvme1n1p1
+
+$ sudo gparted ==> Nom = DataLinux
+
+ 4-2-1) FSTAB : 0-DataLinux SI EXISTE
+ ====================================
 
 $ sudo blkid | grep "DataLinux"
+/dev/nvme1n1p1: UUID="b56da9e8-41bf-4c9c-9d29-7360957b5745" BLOCK_SIZE="4096" TYPE="ext4" PARTLABEL="DataLinux" PARTUUID="2f2584a4-a076-4df2-a0fb-4ee949d1e28f"
+
+ANCIEN HDD
+----------
 /dev/sdb1: UUID="2faacbde-ad80-451f-b27d-1e932306ea76" TYPE="ext4" PARTLABEL="DataLinux" PARTUUID="b3471266-9ae4-4005-b78d-2c1b25847914"
 
 
-# !!! Vérifier sdXY
---------------------
+# !!! Vérifier sdXY ou nvmeXnXpX
+--------------------------------
+$ sudo sh -c "echo -e '# Montage nvme1n1p1 DataLinux' >> /etc/fstab"
+
+ANCIEN HDD
+----------
 $ sudo sh -c "echo -e '# Montage sdb1 DataLinux' >> /etc/fstab"
+
 
 # !!! Vérifier UUID
 --------------------
+$ sudo sh -c "echo -e 'UUID=b56da9e8-41bf-4c9c-9d29-7360957b5745 /0-DataLinux ext4 defaults,relatime 0 2' >> /etc/fstab"
+
+ANCIEN HDD
+----------
 $ sudo sh -c "echo -e 'UUID=2faacbde-ad80-451f-b27d-1e932306ea76 /0-DataLinux ext4 rw,relatime,data=ordered 0 2' >> /etc/fstab"
 OU
 $ sudo sh -c "echo -e 'UUID=2faacbde-ad80-451f-b27d-1e932306ea76 /0-DataLinux ext4 defaults,relatime 0 2' >> /etc/fstab"
@@ -260,6 +291,10 @@ $ sudo mount -a
 # Vérifications
 ----------------
 $ findmnt
+└─/0-DataLinux                                /dev/nvme1n1p1 ext4            rw,relatime
+
+ANCIEN HDD
+----------
 ─/0-DataLinux                        /dev/sdb1  ext4       rw,relatime,data=ordered
 
 $ sudo ls -la /
@@ -483,7 +518,7 @@ To show all installed unit files use 'systemctl list-unit-files'.
 ln -s '/dev/null' '/etc/systemd/system/systemd-backlight@backlight:eeepc-wmi.service'
 
 
-13) DRIVETEMP : Pour Conky
+13) DRIVETEMP : Pour Conky : INUTILE SI PAS HDD
 ===================================================================================
 https://wiki.archlinux.org/title/Lm_sensors#S.M.A.R.T._drive_temperature
 https://wiki.archlinux.org/title/Kernel_module#Automatic_module_loading
@@ -521,7 +556,14 @@ https://wiki.archlinux.org/index.php/microcode
 
 VÉRIFICATIONS AU REBOOT
 -----------------------
+Intel(R) Core(TM) Ultra 7 265KF
 $ journalctl -b | grep microcode
+août 28 08:20:38 arch1kde kernel: x86/CPU: Model not found in latest microcode list
+août 28 08:20:38 arch1kde kernel: microcode: Current revision: 0x00000119
+août 28 08:20:38 arch1kde kernel: microcode: Updated early from: 0x00000118
+
+ANCIEN
+------
 sept. 25 08:53:31 archkde kernel: microcode: Current revision: 0x000000f8
 sept. 25 08:53:31 archkde kernel: microcode: Updated early from: 0x000000d6
 
@@ -559,6 +601,17 @@ EndSection
 
 Section "Device"
    Identifier   "GeForce RTX 3080 TI"
+   Driver       "nvidia"
+   Option       "NoLogo"        "True"
+#   Option       "CoolBits"      "31"
+   Option       "TripleBuffer"  "True"
+EndSection
+
+!!! SI GeForce RTX 3080 TI
+--------------------------
+
+Section "Device"
+   Identifier   "GeForce RTX 5070 TI"
    Driver       "nvidia"
    Option       "NoLogo"        "True"
 #   Option       "CoolBits"      "31"
@@ -620,10 +673,10 @@ export QT_LOGGING_RULES
 ================================================
 
 $ pacman -Ss devtools
-extra/devtools 1:1.1.1-1 [installé]
+extra/devtools 1:1.4.0-2 [installé]
     Tools for Arch Linux package maintainers
 
-# pacman -Syu devtools>=1:1.1.1-1
+# pacman -Syu devtools
 
 Pour savoir comment utiliser pkgctl :
 https://wiki.archlinux.org/title/DeveloperWiki:HOWTO_Be_A_Packager
@@ -643,6 +696,7 @@ SI tmpfs = 6G : tmpfs on /tmp type tmpfs (rw,size=6291456k)
 SI tmpfs = 8G : tmpfs on /tmp type tmpfs (rw,size=8388608k)
 SI tmpfs = 8G : tmpfs on /tmp type tmpfs (rw,nosuid,nodev,size=8388608k,nr_inodes=409600,inode64)
 SI tmpfs = 8G : tmpfs on /tmp type tmpfs (rw,nosuid,nodev,size=8388608k,nr_inodes=1048576,inode64)
+SI tmpfs = 16G : tmpfs on /tmp type tmpfs (rw,nosuid,nodev,size=16777216k,nr_inodes=1048576,inode64)
 
 
 99) NETTOYAGE SI OK
@@ -768,7 +822,16 @@ $ tar -x --zstd -f 00-3D-*.tar.zst -C ~/ && mv 00-3D-*.tar.zst 0-de-zipper/
 
 $ cd && mkdir ~/90-BACKUP && mkdir ~/90-Partage && mkdir ~/99-A-IMPRIM && mkdir ~/99-dwl-temp
 
+ 1-3 COPIER RÉPERTOIRES 0-DataLinux => $HOME
+ ===========================================
+$ cp -R /0-DataLinux/05-Photos .
+$ cp -R /0-DataLinux/10-Musiques .
+$ cp -R /0-DataLinux/10-Videos .
+$ cp -R /0-DataLinux/99-Isos .
+$ cp -R /0-DataLinux/VirtualBox-VMs .
 
+ ANCIEN AVEC HDD:
+ ----------------
  1-3 LIENS SYMBOLIQUES
  ======================
 
@@ -816,7 +879,7 @@ $ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.yasp.script.2013-09-28 .
 ================
 
 
- !!! VOIR : ~/09-Documentation/00-Cmd-CREATION-GIT-INSTALL-ALID.TXT
+ !!! VOIR : ~/09-Documentation/0-CMD-CREATION-GIT-INSTALL-ALID.TXT
  !!! VOIR : ~/09-Documentation/0-CMD-GIT-01SCRIPTS.TXT
  !!! VOIR : ~/09-Documentation/0-CMD-GIT-05BUILDS.TXT
  !!! VOIR : ~/09-Documentation/0-CMD-GIT-05THEMES.TXT
@@ -824,7 +887,7 @@ $ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.yasp.script.2013-09-28 .
  !!! VOIR : ~/09-Documentation/0-CMD-GIT-JNDQCBGRD.TXT
  !!! VOIR : ~/09-Documentation/0-CMD-GIT-JNDQRAMI.TXT
  OU
- !!! VOIR : ~/02-git/00-Cmd-CREATION-GIT-INSTALL-ALID.TXT
+ !!! VOIR : ~/02-git/0-CMD-CREATION-GIT-INSTALL-ALID.TXT
  !!! VOIR : ~/02-git/0-CMD-GIT-01SCRIPTS.TXT
  !!! VOIR : ~/02-git/0-CMD-GIT-05BUILDS.TXT
  !!! VOIR : ~/02-git/0-CMD-GIT-05THEMES.TXT
@@ -833,10 +896,10 @@ $ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.yasp.script.2013-09-28 .
  !!! VOIR : ~/02-git/0-CMD-GIT-JNDQRAMI.TXT
 
 !!! ATTENTION DATE
-$ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.gitconfig.2024-04-14 .gitconfig
+$ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.gitconfig.2025-08-24 .gitconfig
 
 !!! ATTENTION DATE
-$ cd && cp -v ~/09-Fichiers-Conf/home-jnd-git-pat.txt.2024-04-14 git-pat.txt
+$ cd && cp -v ~/09-Fichiers-Conf/home-jnd-git-pat.txt.2025-08-24 git-pat.txt
 
 
 
@@ -869,11 +932,11 @@ $ cd && cp -v ~/09-Fichiers-Conf/0-Save-Confs/home-jnd-.toprc.2019-01-31 .toprc
   ------------------------
 
 $ sudo mkdir -p /00-repolocal
-$ sudo mkdir -p /00-repolocal/pkg-OLD
+!!! NON !!! $ sudo mkdir -p /00-repolocal/pkg-OLD
 
 $ sudo chown :alpm -R /00-repolocal
 
-$ sudo cp /etc/pacman.conf /etc/pacman.conf.backup.moi.2024-09-16
+$ sudo cp /etc/pacman.conf /etc/pacman.conf.backup.moi.2025-08-28
 
 $ sudo nano /etc/pacman.conf
   #DownloadUser = alpm  ->  DownloadUser = alpm
@@ -933,12 +996,17 @@ OU
 /home/jnd/05-builds/0-copie-fichiers-chroot/
 makepkg.conf = /etc/makepkg.conf
 
+/!\ ANCIEN /!\
+--------------
 MAKEFLAGS="-j9" I7 4700K : 4+4+1
 /!\ /!\ /!\
 /!\ SI -j13 : CONSO RAM
 MAKEFLAGS="-j13" I7 8700K : 6+6+1
 MAKEFLAGS="-j7" I7 8700K : 6+1
 
+Intel(R) Core(TM) Ultra 7 265KF
+-------------------------------
+MAKEFLAGS="-j9" Ultra 7 265KF : 8+1  (8 + 12)
 
 PACKAGER="Name <name@fai.com>"
 
@@ -952,8 +1020,8 @@ makepkg.conf.native
 
 
 
-8-2) COPIER PKG DE /0-DataLinux/00-repolocal/ DANS /00-repolocal/
-==================================================================
+8-2-1) COPIER PKG DE /0-DataLinux/00-repolocal/ DANS /00-repolocal/
+====================================================================
 
 !!! NON !!! awesomebump-git-*-x86_64.pkg.tar.xz
             pokerth-*-x86_64.pkg.tar.zst,\
@@ -987,10 +1055,43 @@ virtualbox-extension-*-any.pkg.tar.zst\
 $ cd && maj-repolocal
 
 
+8-2-2) COPIER CERTAINS PKG DE /0-DataLinux/00-repolocal/ DANS /00-repolocal/
+============================================================================
+
+$ sudo cp -v /0-DataLinux/00-repolocal/\
+{\
+grub-theme-dark-gray-*-any.pkg.tar.zst,\
+mkpkg-tmpfs-*-any.pkg.tar.zst,\
+pkgbrowser-*-x86_64.pkg.tar.zst,\
+virtualbox-extension-*-any.pkg.tar.zst\
+} \
+/00-repolocal/
+
+$ cd && maj-repolocal
+
+
+8-2-3) COMPILER CERTAINS PKGS
+==============================
+alembic-jnd-*-x86_64.pkg.tar.zst
+embree-jnd-*-x86_64.pkg.tar.zst
+manifold-jnd-*-x86_64.pkg.tar.zst
+openimagedenoise-jnd-*-x86_64.pkg.tar.zst
+openimageio-jnd-*-x86_64.pkg.tar.zst
+openpgl-jnd-*-x86_64.pkg.tar.zst
+openshadinglanguage-jnd-*-x86_64.pkg.tar.zst
+opensubdiv-jnd-*-x86_64.pkg.tar.zst
+openvdb-jnd-*-x86_64.pkg.tar.zst
+openusd-jnd-*-x86_64.pkg.tar.zst
+blender-git-jnd-*-x86_64.pkg.tar.zst
+
+conky-lua-nv-git-*-x86_64.pkg.tar.zst
+jndqaligne5-qt6-*-x86_64.pkg.tar.zst
+jndqrami-qt6-*-x86_64.pkg.tar.zst
+
 8-3) SI PAS INSTALLÉ PAR AI
 ===========================
 !!! VOIR
-# LC_ALL=C pacman -Syu --needed pacnew_scripts
+!!! NON !!! # LC_ALL=C pacman -Syu --needed pacnew_scripts
 
 
 # LC_ALL=C pacman -Syu mkpkg-tmpfs
@@ -1052,12 +1153,12 @@ FICHIERS CONFIG BLENDER
 ==> /home/jnd/.config/blender/
 
 !!! ATTENTION VERSION ET DATE
-$ cp -v $HOME/09-Fichiers-Conf/Blender-config/home-jnd-.config-blender-4.2.2024-04-14.tar.gz $HOME/99-temp
+$ cp -v $HOME/09-Fichiers-Conf/Blender-config/home-jnd-.config-blender-4.2.2025-08-24.tar.gz $HOME/99-temp
 $ cd ~/99-temp
-$ tar -x -z -f home-jnd-.config-blender-4.2.2024-04-14.tar.gz
+$ tar -x -z -f home-jnd-.config-blender-4.2.2025-08-24.tar.gz
 $ cp -R $HOME/99-temp/home/jnd/.config/blender $HOME/.config/blender
 $ rm -rf home
-$ mv home-jnd-.config-blender-4.2.2024-04-14.tar.gz 0-de-zipper/
+$ mv home-jnd-.config-blender-4.2.2025-08-24.tar.gz 0-de-zipper/
 $ cd
 
 !!! TEST $ blender
@@ -1077,7 +1178,8 @@ $ cd
 # LC_ALL=C pacman -Syu ttf-win7-fonts
 OU
 # LC_ALL=C pacman -Syu ttf-win10-fonts
-
+OU
+# LC_ALL=C pacman -Syu ttf-win11-fonts
 
 GRUB : AJOUT THEME
 ==================
@@ -1093,33 +1195,7 @@ GRUB : AJOUT THEME
 # LC_ALL=C grub-mkconfig -o /boot/grub/grub.cfg
 
 
-9) INSTALLATION DE VIRTUAL-BOX
-=================================
-
-# LC_ALL=C pacman -Syu --needed linux-headers virtualbox virtualbox-host-dkms virtualbox-guest-iso
-
-!!! VOIR UTILITÉ
-# modprobe vboxdrv
-# modprobe vboxnetflt
-
-# gpasswd -a jnd vboxusers
-
-
-!!! A VOIR :
-# LC_ALL=C pacman -Syu virtualbox-extension
-
-!!! DANS VIRTUAL-BOX :
-!!! ATTENTION A Oracle VirtualBox Extension Pack
-
-Fichiers -> Outils > Extension Pack Manager
-
-!!! ATTENTION AU CHEMIN DE VirtualBox-VMs -> /0-DataLinux/VirtualBox-VMs
-
-Fichiers -> Paramètres 
-Onglet Général : Dossier par défaut des machines :
-  ==> ~/VirtualBox-VMs
-  
-10) INSTALLATION DE CONKY-LUA
+9) INSTALLATION DE CONKY-LUA
 =================================
 !!! VOIR : ~/00-Conky/Install-Conky.TXT
 
@@ -1140,6 +1216,40 @@ Onglet Général : Dossier par défaut des machines :
 
 !!! ATTENTION SI VERSION CONKY = 1.10 : FORMAT FICHIER RC A CHANGÉ !!!
 
+
+10) INSTALLATION DE VIRTUAL-BOX
+=================================
+
+# LC_ALL=C pacman -Syu --needed linux-headers virtualbox virtualbox-host-dkms virtualbox-guest-iso
+
+!!! VOIR UTILITÉ
+# modprobe vboxdrv
+# modprobe vboxnetflt
+
+# gpasswd -a jnd vboxusers
+
+
+!!! A VOIR :
+# LC_ALL=C pacman -Syu virtualbox-extension
+
+!!!
+$ reboot
+
+
+!!! DANS VIRTUAL-BOX :
+!!! ATTENTION A Oracle VirtualBox Extension Pack
+
+Fichiers -> Outils > Extension Pack Manager
+
+!!! ATTENTION AU CHEMIN DE VirtualBox-VMs
+-> /0-DataLinux/VirtualBox-VMs
+OU
+-> $HOME/VirtualBox-VMs
+
+Fichiers -> Paramètres 
+Onglet Général : Dossier par défaut des machines :
+  ==> ~/VirtualBox-VMs
+  
 
 11) RÉGLAGES DANS FIREFOX
 ==========================================================
@@ -1175,6 +1285,11 @@ Accueil
 Accueil
  v Page d’accueil de Firefox
 
+ O Recherche Web
+ v Raccourcis
+ O Articles recommandés
+ O Raccourcis sponsorisés
+
 Bloquer Lecture AUTO vidéo
 ==========================
 Édition -> Paramètres
@@ -1205,7 +1320,7 @@ about:config
 
 
 Marque-pages -> Afficher tous les marque-pages -> Importation et sauvegarde -> Importer HTML
-~/09-Fichiers-Conf/bookmarks-2024-04-14.html
+~/09-Fichiers-Conf/bookmarks-2025-08-24.html
 OU
 --
 Se synchroniser pour récupérer les bookmarks
@@ -1260,6 +1375,8 @@ Find and remove duplicated bookmarks manually and in batches, get rid of broken 
 !!! VOIR : ~/09-Documentation/20-Wine-Civ4/0-INSTALL/01-Installation-Wine-64.txt
 
 !!! VOIR : ~/09-Documentation/20-Wine-Civ4/0-INSTALL/02-Installation-Civ4-Complete.txt
+
+!!! VOIR : ~/09-Documentation/20-Wine-Civ4/0-INSTALL/03-Copie-Civ4-Complete.txt
 
 
 13) BALOO KDE6
@@ -1338,7 +1455,7 @@ Available Java environments:
 50) Qt Creator
 ===============
 
-Menu Aide -> A propos des plug-ins...
+!!! Voir !!! Menu Aide -> A propos des plug-ins...
   Utilitaires : X Todo
 
 Menu Éditions -> Préférences -> C++ -> Generation de classe Qt
@@ -1346,7 +1463,7 @@ Menu Éditions -> Préférences -> C++ -> Generation de classe Qt
   O
   X Multiple inheritance ( Héritaqe multiple )
 
-Menu Éditions -> Préférences -> TODO
+!!! Voir !!! Menu Éditions -> Préférences -> TODO
   !!! Voir
 
 Menu Éditions -> Préférences -> Kits

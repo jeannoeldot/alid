@@ -34,8 +34,8 @@
         package_install "imath libavif libheif libjxl libraw openexr kio-extras icoutils libappimage taglib kio-fuse kwalletmanager pyside6"
         pacman -D --asdeps imath libavif libheif libjxl libraw openexr kio-extras icoutils libappimage taglib kio-fuse kwalletmanager pyside6
         # Opt déps kf5
-        package_install "packagekit-qt5 appstream-qt5 kio5-extras"
-        pacman -D --asdeps packagekit-qt5 appstream-qt5 kio5-extras
+        package_install "kio5-extras"
+        pacman -D --asdeps kio5-extras
         pause_function
         # KDE6 LOOK
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE6 Look${BGreen}...${Reset}"
@@ -103,7 +103,7 @@
         do
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 4)
             options=("digikam" "(Gestion de photos)" ON
-                    "k3b" "(Gravure)" ON
+                    "k3b" "(Gravure)" OFF
                     "skrooge" "(Gestion de finances)" OFF
                     )
             REPLY=$("${cmd[@]}" "${options[@]}" 3>&1 1>&2 2>&3)
@@ -282,9 +282,9 @@
                     "grsync" "(IHM Graphique GTK pour rsync)" ON
                     "htop" "(Outils système)" ON
                     "lm_sensors" "(Surveillance du matériel)" ON
-                    "hddtemp" "(Température HDD)" ON
+                    "hddtemp" "(Température HDD)" OFF
                     "gsmartcontrol" "(S.M.A.R.T.)" ON
-                    "hdparm" "(Ajustement paramètres HDD)" ON
+                    "hdparm" "(Ajustement paramètres HDD)" OFF
                     "pacnew_scripts" "(Scripts pour fichiers .pacnew)" OFF
                     "mesa-utils" "(Outils Mesa)" ON
                     "qtXct" "(Configuration de Qt5 et Qt6)" ON
@@ -400,7 +400,7 @@
             cmd=(dialog --backtitle "${TITRE_BOX_W}" --title "${titre}" --ok-label "Installer" --cancel-label "Continuer" --checklist "${messages}" 20 72 8)
             options=("devtools" "(Outils pour les mainteneurs de paquets)" ON
                     "kdevelop" "(IDE C/C ++ pour KDE)" OFF
-                    "qtcreator" "(IDE léger et multi-plateforme - Qt5/Qt6)" ON
+                    "qtcreator" "(IDE léger et multi-plateforme - Qt6)" ON
                     "gdb" "(Débogueur GNU)" ON
                     "git" "(Système de contrôle de version - VCS)" ON
                     "cmake" "(Système de compilation multi-plateforme)" ON
@@ -426,8 +426,8 @@
                     package_install "kdevelop"
                     ;;
                 "qtcreator")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}qtcreator qt5 qt6${BGreen}...${Reset}"
-                    package_install "qtcreator qt5 qt6"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}qtcreator qt6${BGreen}...${Reset}"
+                    package_install "qtcreator qt6"
                     ;;
                 "gdb")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}valgrind gdb splint${BGreen}...${Reset}"
