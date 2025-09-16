@@ -1432,6 +1432,22 @@ OU
 $ maj-startkde
 
 
+20) GIMP
+========
+Activer Alpha
+Menu Édition -> Préférences
+  Import : Export d'images
+    X Ajouter un canal alpha aux images importées
+
+
+/!\/!\/!\ À VOIR
+21) KRITA
+=========
+Paramètres -> Configuration de Krita
+  Général -> Divers
+    O Activer les boites de dialogue natives de fichiers
+
+
 !!!!!!!!!!
 /!\/!\/!\ À VOIR
 40) INSTALLATION DE jre-openjdk

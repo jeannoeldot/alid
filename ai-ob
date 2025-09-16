@@ -440,9 +440,9 @@
                     "grsync" "(IHM Graphique GTK pour rsync)" ON
                     "htop" "(Outils système)" ON
                     "lm_sensors" "(Surveillance du matériel)" ON
-                    "hddtemp" "(Température HDD)" ON
+                    "hddtemp" "(Température HDD)" OFF
                     "gsmartcontrol" "(S.M.A.R.T.)" ON
-                    "hdparm" "(Ajustement paramètres HDD)" ON
+                    "hdparm" "(Ajustement paramètres HDD)" OFF
                     "pacnew_scripts" "(Scripts pour fichiers .pacnew)" OFF
                     "mesa-utils" "(Outils Mesa)" ON
                     "qtXct" "(Configuration de Qt5 et Qt6)" ON
@@ -487,8 +487,8 @@
                     fi
                     ;;
                 "hddtemp")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}hddtemp gnu-netcat${BGreen}...${Reset}"
-                    package_install "hddtemp gnu-netcat"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}hddtemp${BGreen}...${Reset}"
+                    package_install "hddtemp"
                     printf '%s\n' "${BGreen}Activation de ${BYellow}hddtemp.service${BGreen}...${Reset}"
                     systemctl enable hddtemp.service
                     ;;

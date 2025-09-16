@@ -332,8 +332,8 @@
                     fi
                     ;;
                 "hddtemp")
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}hddtemp gnu-netcat${BGreen}...${Reset}"
-                    package_install "hddtemp gnu-netcat"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}hddtemp${BGreen}...${Reset}"
+                    package_install "hddtemp"
                     printf '%s\n' "${BGreen}Activation de ${BYellow}hddtemp.service${BGreen}...${Reset}"
                     systemctl enable hddtemp.service
                     ;;
