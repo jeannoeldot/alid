@@ -682,7 +682,7 @@
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gimp${BGreen}...${Reset}"
                     package_install "gimp"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gimp-plugin${BGreen}...${Reset}"
-                    package_install "gimp-plugin-gmic gimp-nufraw"
+                    package_install "gimp-plugin-gmic"
                     ;;
                 "inkscape")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}inkscape${BGreen}...${Reset}"
