@@ -735,8 +735,9 @@
                 "firefox")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}firefox pipewire-pulse${BGreen}...${Reset}"
                     package_install "firefox firefox-i18n-$LANGUAGE_FF pipewire-pulse"
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}firefox-adblock-plus${BGreen}...${Reset}"
-                    package_install "firefox-adblock-plus"
+# AU 10/12/2025 : SUPPRIMÉ : Problème avec YOUTUBE
+#                    printf '%s\n' "${BGreen}Installation de ${BYellow}firefox-adblock-plus${BGreen}...${Reset}"
+#                    package_install "firefox-adblock-plus"
                     printf '%s\n' "${BGreen}Configuration de ${BYellow}tint2${BGreen}...${Reset}"
                     sed -i "s/BROWSER/firefox/g" /home/${USERNAME}/.config/tint2/tint2rc
                     ;;

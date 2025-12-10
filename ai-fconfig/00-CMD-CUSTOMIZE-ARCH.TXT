@@ -1290,6 +1290,12 @@ Accueil
  O Articles recommandés
  O Raccourcis sponsorisés
 
+Vie Privée et securité
+----------------------
+Moyens de paiement
+  O Enregistrer et renseigner automatiquement les informations de paiement
+
+
 Bloquer Lecture AUTO vidéo
 ==========================
 Édition -> Paramètres
@@ -1339,6 +1345,8 @@ En HAUT - A DROITE : Find add-ons : dictionnaires français
 
 https://addons.mozilla.org/firefox/downloads/file/950814/dictionnaire_francais-6.3.xpi?src=dp-btn-primary
 
+/!\/!\/!\/!\/!\/!\
+NON : Problème avec YOUTUBE
  11-2-2) INSTALLATION DE "Adblock Plus" DANS FIREFOX
  ===================================================
 Onglet Extensions
@@ -1350,6 +1358,9 @@ En HAUT - A DROITE : Find add-ons : Adblock Plus
 Onglet Extensions
 En BAS : Découvrez davantage de modules
 En HAUT - A DROITE : Find add-ons : uBlock Origin
+
+==> uBlock Origin par Raymond Hill
+
 
  11-5) VOIR OUVERTURE NOUVEL ONGLET
  ==================================

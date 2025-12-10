@@ -588,8 +588,9 @@
                 "firefox")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}firefox pipewire-pulse${BGreen}...${Reset}"
                     package_install "firefox firefox-i18n-$LANGUAGE_FF pipewire-pulse"
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}firefox-adblock-plus${BGreen}...${Reset}"
-                    package_install "firefox-adblock-plus"
+# AU 10/12/2025 : SUPPRIMÉ : Problème avec YOUTUBE
+#                    printf '%s\n' "${BGreen}Installation de ${BYellow}firefox-adblock-plus${BGreen}...${Reset}"
+#                    package_install "firefox-adblock-plus"
                     ;;
                 "transmission")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}transmission-qt${BGreen}...${Reset}"
