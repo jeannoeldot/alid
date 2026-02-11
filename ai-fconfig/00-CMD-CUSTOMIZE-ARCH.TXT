@@ -1026,18 +1026,20 @@ makepkg.conf.native
 !!! NON !!! awesomebump-git-*-x86_64.pkg.tar.xz
             pokerth-*-x86_64.pkg.tar.zst,\
             jndqcbgrd-qt5-*-x86_64.pkg.tar.zst,\
+            materialx-jnd-*-x86_64.pkg.tar.zst,\
+            pkgbrowser-*-x86_64.pkg.tar.zst,\
 
 $ sudo cp -v /0-DataLinux/00-repolocal/\
 {\
 alembic-jnd-*-x86_64.pkg.tar.zst,\
 blender-git-jnd-*-x86_64.pkg.tar.zst,\
+ceres-solver-jnd-*-x86_64.pkg.tar.zst,\
 conky-lua-nv-git-*-x86_64.pkg.tar.zst,\
 embree-jnd-*-x86_64.pkg.tar.zst,\
 grub-theme-dark-gray-*-any.pkg.tar.zst,\
 jndqaligne5-qt6-*-x86_64.pkg.tar.zst,\
 jndqrami-qt6-*-x86_64.pkg.tar.zst,\
 manifold-jnd-*-x86_64.pkg.tar.zst,\
-materialx-jnd-*-x86_64.pkg.tar.zst,\
 mkpkg-tmpfs-*-any.pkg.tar.zst,\
 openimagedenoise-jnd-*-x86_64.pkg.tar.zst,\
 openimageio-jnd-*-x86_64.pkg.tar.zst,\
@@ -1046,7 +1048,6 @@ openshadinglanguage-jnd-*-x86_64.pkg.tar.zst,\
 opensubdiv-jnd-*-x86_64.pkg.tar.zst,\
 openusd-jnd-*-x86_64.pkg.tar.zst,\
 openvdb-jnd-*-x86_64.pkg.tar.zst,\
-pkgbrowser-*-x86_64.pkg.tar.zst,\
 ttf-win10-fonts-*-any.pkg.tar.zst,\
 virtualbox-extension-*-any.pkg.tar.zst\
 } \
@@ -1062,7 +1063,6 @@ $ sudo cp -v /0-DataLinux/00-repolocal/\
 {\
 grub-theme-dark-gray-*-any.pkg.tar.zst,\
 mkpkg-tmpfs-*-any.pkg.tar.zst,\
-pkgbrowser-*-x86_64.pkg.tar.zst,\
 virtualbox-extension-*-any.pkg.tar.zst\
 } \
 /00-repolocal/
@@ -1073,6 +1073,7 @@ $ cd && maj-repolocal
 8-2-3) COMPILER CERTAINS PKGS
 ==============================
 alembic-jnd-*-x86_64.pkg.tar.zst
+ceres-solver-jnd-*-x86_64.pkg.tar.zst
 embree-jnd-*-x86_64.pkg.tar.zst
 manifold-jnd-*-x86_64.pkg.tar.zst
 openimagedenoise-jnd-*-x86_64.pkg.tar.zst
@@ -1130,6 +1131,7 @@ $ cat ~/.mozilla/firefox/profiles.ini
 INSTALLATION DE BLENDER
 ========================
 !!! alembic-jnd
+!!! ceres-solver-jnd
 !!! embree-jnd
 !!! manifold-jnd
 !!! materialx-jnd
@@ -1643,6 +1645,7 @@ INSTALLATION DE BLENDER
 !!! VOIR Intallation de blender-git-jnd (+ dep alembic, ovdb, osd, oc, oiio et osl)
 -----------------------------------------------------------------------------------
 !!! alembic-jnd
+!!! ceres-solver-jnd
 !!! embree-jnd
 !!! manifold-jnd
 !!! materialx-jnd
