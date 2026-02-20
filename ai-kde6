@@ -51,8 +51,8 @@
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE6 Graphiques${BGreen}...${Reset}"
         package_install "gwenview kcolorchooser kdegraphics-thumbnailers kimagemapeditor kolourpaint okular spectacle svgpart "
         # Opt déps KDE6 Graphics
-        package_install "kdegraphics-mobipocket"
-        pacman -D --asdeps kdegraphics-mobipocket
+        package_install "kdegraphics-mobipocket tesseract tesseract-data-fra"
+        pacman -D --asdeps kdegraphics-mobipocket tesseract tesseract-data-fra
         pause_function
         # KDE6 Multimedia
         printf '%s\n' "${BGreen}Installation de ${BYellow}KDE6 Multimedia${BGreen}...${Reset}"
@@ -137,11 +137,12 @@
         # Disable/Change Qt journal logging behaviour
         echo "# Completely disable Qt journal logging" >> /etc/environment
         echo "QT_LOGGING_RULES='*=false'" >> /etc/environment
-        # Installe et Enable sddm.service
-        printf '%s\n' "${BGreen}Installation de ${BYellow}sddm sddm-kcm${BGreen}...${Reset}"
-        package_install "sddm sddm-kcm"
-        printf '%s\n' "${BGreen}Activation de ${BYellow}sddm.service${BGreen}...${Reset}"
-        systemctl enable sddm.service
+        # Plasma 6.6.0 : Plasma Login Manager remplace sddm
+        # Installe plasma-login-manager et Enable plasmalogin.service
+        printf '%s\n' "${BGreen}Installation de ${BYellow}plasma-login-manager${BGreen}...${Reset}"
+        package_install "plasma-login-manager"
+        printf '%s\n' "${BGreen}Activation de ${BYellow}plasmalogin.service${BGreen}...${Reset}"
+        systemctl enable plasmalogin.service
         # Abstraction for enumerating power devices, listening to device events and querying history and statistics
         printf '%s\n' "${BGreen}Activation de ${BYellow}upower.service${BGreen}...${Reset}"
         systemctl enable upower.service
@@ -149,49 +150,6 @@
         mkdir -p /home/${USERNAME}/.config/autostart
         echo 'Hidden=true' >> /home/${USERNAME}/.config/autostart/org.kde.discover.notifier.desktop
         chown -R ${USERNAME}:users /home/${USERNAME}/.config
-# INUTILES DEPUIS MAJ DRIVER 575.57.08
-#         # NVIDIA CUSTOMIZATION
-#         if is_package_installed "nvidia" || is_package_installed "nvidia-dkms" || is_package_installed "nvidia-open" || is_package_installed "nvidia-open-dkms" ; then
-#             # Suite maj 565.57.01: Réveil veille problématique
-#             # Modifs /etc/default/grub: Ajout de nvidia.NVreg_PreserveVideoMemoryAllocations=0
-#             printf '%s\n' "${BGreen}Configuration de ${BYellow}/etc/default/grub${BGreen}...${Reset}"
-#             sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=/c\GRUB_CMDLINE_LINUX_DEFAULT=\"nvidia.NVreg_PreserveVideoMemoryAllocations=0\"" /etc/default/grub
-#             # Configure /boot/grub/grub.cfg
-#             printf '%s\n' "${BGreen}Configuration de ${BYellow}grub.cfg${BGreen}...${Reset}"
-#             grub-mkconfig -o /boot/grub/grub.cfg
-#         fi
-
-#        if is_package_installed "nvidia" || is_package_installed "nvidia-dkms" || is_package_installed "nvidia-open" || is_package_installed "nvidia-open-dkms" ; then
-            # https://wiki.archlinux.org/title/NVIDIA/Tips_and_tricks
-            # INUTILE depuis maj du 02/10/2024 et 12/10/2024 (Par défaut)
-#             # Modifs /etc/default/grub: Ajout de nvidia_drm.modeset=1 nvidia.NVreg_PreserveVideoMemoryAllocations=1
-#             printf '%s\n' "${BGreen}Configuration de ${BYellow}/etc/default/grub${BGreen}...${Reset}"
-#             sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=/c\GRUB_CMDLINE_LINUX_DEFAULT=\"nvidia_drm.modeset=1 nvidia.NVreg_PreserveVideoMemoryAllocations=1\"" /etc/default/grub
-#             # Configure /boot/grub/grub.cfg
-#             printf '%s\n' "${BGreen}Configuration de ${BYellow}grub.cfg${BGreen}...${Reset}"
-#             grub-mkconfig -o /boot/grub/grub.cfg
-            # INUTILE depuis maj nvidia-utils 560.35.03-16 du 16/10/2024 (Par défaut)
-#             # Activation services
-#             printf '%s\n' "${BGreen}Activation de ${BYellow}nvidia-XXX.service${BGreen}...${Reset}"
-#             systemctl enable nvidia-suspend.service
-#             systemctl enable nvidia-hibernate.service
-#             systemctl enable nvidia-resume.service
-            #
-#             # Mise en place d'un drop-in pour sddm.service si carte nvivia et drivers nvidia installé
-#             # https://bbs.archlinux.org/viewtopic.php?id=173153. brain0    Developer
-#             retour=9
-#             messages="\n"
-#             messages+="Carte Vidéo ${Bwhite_dlg}Nvidia ${L_NAME_CG_NVIDIA}${Reset_dlg} :\n\n"
-#             messages+="Activer un drop-in pour ${Byellow_dlg}sddm.service${Reset_dlg} ?"
-#             print_dialog_yesno "${titre}" "${messages}" "Activer" "Continuer"
-#             retour=$?
-#             if (( retour == 0 )); then
-#                 printf '%s\n' "${BGreen}Activation d'un drop-in pour ${BYellow}sddm.service${BGreen}...${Reset}"
-#                 cp -v ai-fconfig/etc-udev-rules.d-99-systemd-dri-devices.rules /etc/udev/rules.d/99-systemd-dri-devices.rules
-#                 mkdir -p /etc/systemd/system/display-manager.service.d
-#                 cp -v ai-fconfig/etc-systemd-system-display-manager.service.d-10-wait-for-dri-devices.conf /etc/systemd/system/display-manager.service.d/10-wait-for-dri-devices.conf
-#             fi
-#        fi
         #
         KDE6=1
         pause_function
