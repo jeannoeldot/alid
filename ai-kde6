@@ -500,8 +500,8 @@
                 "krita")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}krita${BGreen}...${Reset}"
                     package_install "krita"
-                    printf '%s\n' "${BGreen}Installation de ${BYellow}krita-plugin-gmic libheif libjxl opencolorio poppler-qt5 python-pyqt5${BGreen}...${Reset}"
-                    package_install "krita-plugin-gmic libheif libjxl poppler-qt5 python-pyqt5"
+                    printf '%s\n' "${BGreen}Installation de ${BYellow}krita-plugin-gmic libheif libjxl opencolorio poppler-qt6 python-pyqt6${BGreen}...${Reset}"
+                    package_install "krita-plugin-gmic libheif libjxl poppler-qt6 python-pyqt6"
             esac
         done
         if [[ $REPLY != "" ]]; then
