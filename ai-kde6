@@ -263,9 +263,9 @@
                 "gparted")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gparted gptfdisk${BGreen}...${Reset}"
                     package_install "gparted gpart mtools gptfdisk"
-                    mkdir -p /home/${USERNAME}/.local/share/applications
-                    cp -v ai-fconfig/kde-user-gparted.desktop /home/${USERNAME}/.local/share/applications/gparted.desktop
-                    chown -R ${USERNAME}:users /home/${USERNAME}/.local
+#                    mkdir -p /home/${USERNAME}/.local/share/applications
+#                    cp -v ai-fconfig/kde-user-gparted.desktop /home/${USERNAME}/.local/share/applications/gparted.desktop
+#                    chown -R ${USERNAME}:users /home/${USERNAME}/.local
                     ;;
                 "grsync")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}grsync${BGreen}...${Reset}"
@@ -298,9 +298,9 @@
                 "gsmartcontrol")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gsmartcontrol${BGreen}...${Reset}"
                     package_install "gsmartcontrol"
-                    mkdir -p /home/${USERNAME}/.local/share/applications
-                    cp -v ai-fconfig/kde-user-gsmartcontrol.desktop /home/${USERNAME}/.local/share/applications/gsmartcontrol.desktop
-                    chown -R ${USERNAME}:users /home/${USERNAME}/.local
+#                    mkdir -p /home/${USERNAME}/.local/share/applications
+#                    cp -v ai-fconfig/kde-user-gsmartcontrol.desktop /home/${USERNAME}/.local/share/applications/gsmartcontrol.desktop
+#                    chown -R ${USERNAME}:users /home/${USERNAME}/.local
                     ;;
                 "hdparm")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}hdparm bonnie++${BGreen}...${Reset}"
