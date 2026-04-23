@@ -496,21 +496,63 @@ source $(pwd)/ai-commons
         printf '%s\n' "${BGreen}Installation de ${BYellow}mesa${BGreen}...${Reset}"
         package_install "mesa"
         pause_function
-        #CONFIGURE AZERTY OR BEPO KEYBOARD IN XORG
-        titre="CONFIGURATION DU TYPE DE CLAVIER"
+#        #CONFIGURE AZERTY OR BEPO KEYBOARD IN XORG
+#        titre="CONFIGURATION DU TYPE DE CLAVIER"
+#        messages="\n"
+#        messages+="Le type de clavier est de type : ${BRwhite_dlg}${TYPE_KEYBOARD}${Reset_dlg}\n"
+#        print_dialog_msgbox "${titre}" "${messages}" "Continuer"
+#        printf '%s\n' "${BGreen}Mise en place de la disposition du clavier en FR ${BYellow}${TYPE_KEYBOARD}${BGreen}...${Reset}"
+#        if [[ $TYPE_KEYBOARD == "BEPO" ]]; then
+#            cp -v ai-fconfig/10-keyboard-layout-BEPO.conf /etc/X11/xorg.conf.d/10-keyboard-layout.conf
+#        else
+#            cp -v ai-fconfig/10-keyboard-layout-AZERTY.conf /etc/X11/xorg.conf.d/10-keyboard-layout.conf
+#        fi
+#        pause_function
+    }
+    #}}}
+    # 13 CONFIGURATION CLAVIER X11 ET WAYLAND {{{
+    configure_vconsole_keyboard_X11_wayland() {
+        local messages=""
+        local titre=""
+        titre="CONFIGURATION DE vconsole.conf ET 00-keyboard.conf EN FR"
         messages="\n"
         messages+="Le type de clavier est de type : ${BRwhite_dlg}${TYPE_KEYBOARD}${Reset_dlg}\n"
         print_dialog_msgbox "${titre}" "${messages}" "Continuer"
         printf '%s\n' "${BGreen}Mise en place de la disposition du clavier en FR ${BYellow}${TYPE_KEYBOARD}${BGreen}...${Reset}"
+        # MODIFS /etc/vconsole.conf
         if [[ $TYPE_KEYBOARD == "BEPO" ]]; then
-            cp -v ai-fconfig/10-keyboard-layout-BEPO.conf /etc/X11/xorg.conf.d/10-keyboard-layout.conf
+            localectl set-keymap --no-convert fr-bepo-latin9
         else
-            cp -v ai-fconfig/10-keyboard-layout-AZERTY.conf /etc/X11/xorg.conf.d/10-keyboard-layout.conf
+            localectl set-keymap --no-convert fr-latin9
+        fi
+        # MODIFS /etc/X11/xorg.conf.d/00-keyboard.conf
+        if [[ $TYPE_KEYBOARD == "BEPO" ]]; then
+            localectl set-keymap --no-convert fr pc105 bepo-latin9 terminate:ctrl_alt_bksp
+        else
+            localectl set-keymap --no-convert fr pc105 latin9 terminate:ctrl_alt_bksp
+        fi
+        retour=9
+        titre="CONFIGURATION DU TYPE DE CLAVIER"
+        messages="\n"
+        messages+="Visualiser/Éditer le fichier ${Byellow_dlg}vconsole.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
+        print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
+        retour=$?
+        if (( retour == 0 )); then
+            nano /etc/vconsole.conf
+        fi
+        retour=9
+        titre="CONFIGURATION DU TYPE DE CLAVIER"
+        messages="\n"
+        messages+="Visualiser/Éditer le fichier ${Byellow_dlg}00-keyboard.conf${Reset_dlg} avec ${BRwhite_dlg}${EDITOR}${Reset_dlg} ?\n"
+        print_dialog_yesno "${titre}" "${messages}" "Editer" "Continuer"
+        retour=$?
+        if (( retour == 0 )); then
+            nano /etc/X11/xorg.conf.d/00-keyboard.conf
         fi
         pause_function
     }
     #}}}
-    # 13 FONT CONFIGURATION PRESETS {{{
+    # 14 FONT CONFIGURATION PRESETS {{{
     configure_font_presets() {
         local messages=""
         local titre=""
@@ -523,7 +565,7 @@ source $(pwd)/ai-commons
         pause_function
     }
     #}}}
-    # 14 VIDEO CARDS {{{
+    # 15 VIDEO CARDS {{{
     install_video_cards() {
         local retour=9
         local messages=""
@@ -676,7 +718,7 @@ source $(pwd)/ai-commons
         pause_function
     }
     #}}}
-    #15 CUPS {{{
+    #16 CUPS {{{
     install_cups() {
         local retour=9
         local messages=""
@@ -952,6 +994,7 @@ source $(pwd)/ai-commons
     select_user
     install_basic_setup
     install_xorg
+    configure_vconsole_keyboard_X11_wayland
     configure_font_presets
     install_video_cards
     install_cups
