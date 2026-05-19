@@ -748,6 +748,9 @@ $ cd && mkdir ~/99-temp && mkdir ~/99-temp/0-de-zipper
 
 !!! A VOIR !!!
 05-Photos-*.tar.zst
+10-Musiques-*.tar.zst
+10-Videos-*.tar.zst
+99-Isos-*.tar.zst
 
 00-Conky-*.tar.zst
 01-dev-*.tar.zst
@@ -765,38 +768,9 @@ Documents-*.tar.zst
 01-scripts-*.tar.zst
 bin-*.tar.zst
 
+!!! A VOIR !!!
 etc-*.tar.zst
 
- 1-2) DATALINUX EXISTE MAIS EST VIERGE OU DATALINUX N'EXISTE PAS
- ===============================================================
-# récupérer les fichiers depuis HubiC/9-Giga/DropBox ou HDD Externes dans ~/99-temp :
--------------------------------------------------------------------------------------
-!!! A VOIR !!!
-00-3D-*.tar.zst
-
-!!! A VOIR !!!
-05-Photos-*.tar.zst
-
-00-Conky-*.tar.zst
-01-dev-*.tar.zst
-02-git-*.tar.zst
-05-builds-*.tar.zst
-05-Icones-Progs-*.tar.zst
-05-Images-*.tar.zst
-05-Themes-*.tar.zst
-07-Docs-Office-*.tar.zst
-08-Dwl-OK-*.tar.zst
-09-Documentation-*.tar.zst
-09-Fichiers-Conf-*.tar.zst
-Documents-*.tar.zst
-
-etc-*.tar.zst
-
-01-scripts-*.tar.zst
-bin-*.tar.zst
-
- COMMUNS :
- ==========
 $ cd ~/99-temp
 
 # pour chaque fichiers dans ~/99-temp :
@@ -963,6 +937,23 @@ $ cd && mkdir ~/05-builds/0-chroot
 $ cd && mkdir ~/05-builds && mkdir ~/05-builds/0-chroot
 
 
+7-0) AUDIO : PIPEWIRE ET WIREPLUMBER
+====================================
+!!! VOIR https://wiki.archlinux.org/title/PipeWire
+# LC_ALL=C pacman -Syu pipewire pipewire-alsa pipewire-pulse wireplumber--needed
+$ systemctl --user enable --now pipewire.service
+Created symlink '/home/jnd/.config/systemd/user/default.target.wants/pipewire.service' → '/usr/lib/systemd/user/pipewire.service'.
+Created symlink '/home/jnd/.config/systemd/user/sockets.target.wants/pipewire.socket' → '/usr/lib/systemd/user/pipewire.socket'.
+
+$ systemctl --user enable --now pipewire-pulse.service
+Created symlink '/home/jnd/.config/systemd/user/default.target.wants/pipewire.service' → '/usr/lib/systemd/user/pipewire.service'.
+Created symlink '/home/jnd/.config/systemd/user/sockets.target.wants/pipewire.socket' → '/usr/lib/systemd/user/pipewire.socket'.
+
+$ systemctl --user enable --now wireplumber.service
+Created symlink '/home/jnd/.config/systemd/user/default.target.wants/pipewire.service' → '/usr/lib/systemd/user/pipewire.service'.
+Created symlink '/home/jnd/.config/systemd/user/sockets.target.wants/pipewire.socket' → '/usr/lib/systemd/user/pipewire.socket'.
+
+
 7-1) RÉGLAGES KONSOLE, DOLPHIN, KATE, KWRITE, FAVORI FireFox
 ============================================================
 !!! ATTENTION DATE
@@ -975,6 +966,8 @@ VOIR !!! ~/09-Fichiers-Conf/config-mes-kdeplasma/KDE-CONFIG-notes.TXT
 =================================================================
 SI INSTALLATION DE inkscape, gimp ou firefox
 --------------------------------------------
+/!\ ANCIEN /!\
+--------------
 $ xdg-mime default kde4-okularApplication_pdf.desktop application/pdf
 
 7-3) VÉRIFICATIONS DE $HOME/.local/share/applications/mimetypes.list ( KDE 6 )
@@ -1040,6 +1033,7 @@ grub-theme-dark-gray-*-any.pkg.tar.zst,\
 jndqaligne5-qt6-*-x86_64.pkg.tar.zst,\
 jndqrami-qt6-*-x86_64.pkg.tar.zst,\
 manifold-jnd-*-x86_64.pkg.tar.zst,\
+meshoptimizer-jnd-*-x86_64.pkg.tar.zst,\
 mkpkg-tmpfs-*-any.pkg.tar.zst,\
 openimagedenoise-jnd-*-x86_64.pkg.tar.zst,\
 openimageio-jnd-*-x86_64.pkg.tar.zst,\
@@ -1048,6 +1042,8 @@ openshadinglanguage-jnd-*-x86_64.pkg.tar.zst,\
 opensubdiv-jnd-*-x86_64.pkg.tar.zst,\
 openusd-jnd-*-x86_64.pkg.tar.zst,\
 openvdb-jnd-*-x86_64.pkg.tar.zst,\
+thorvg-jnd-*-x86_64.pkg.tar.zst,\
+tracy-jnd-*-x86_64.pkg.tar.zst,\
 ttf-win10-fonts-*-any.pkg.tar.zst,\
 virtualbox-extension-*-any.pkg.tar.zst\
 } \
@@ -1076,6 +1072,7 @@ alembic-jnd-*-x86_64.pkg.tar.zst
 ceres-solver-jnd-*-x86_64.pkg.tar.zst
 embree-jnd-*-x86_64.pkg.tar.zst
 manifold-jnd-*-x86_64.pkg.tar.zst
+meshoptimizer-jnd-*-x86_64.pkg.tar.zst
 openimagedenoise-jnd-*-x86_64.pkg.tar.zst
 openimageio-jnd-*-x86_64.pkg.tar.zst
 openpgl-jnd-*-x86_64.pkg.tar.zst
@@ -1083,6 +1080,8 @@ openshadinglanguage-jnd-*-x86_64.pkg.tar.zst
 opensubdiv-jnd-*-x86_64.pkg.tar.zst
 openvdb-jnd-*-x86_64.pkg.tar.zst
 openusd-jnd-*-x86_64.pkg.tar.zst
+thorvg-jnd-*-x86_64.pkg.tar.zst
+tracy-jnd-*-x86_64.pkg.tar.zst
 blender-git-jnd-*-x86_64.pkg.tar.zst
 
 conky-lua-nv-git-*-x86_64.pkg.tar.zst
@@ -1134,7 +1133,7 @@ INSTALLATION DE BLENDER
 !!! ceres-solver-jnd
 !!! embree-jnd
 !!! manifold-jnd
-!!! materialx-jnd
+!!! meshoptimizer-jnd
 !!! openimagedenoise-jnd
 !!! openimageio-jnd
 !!! openpgl-jnd
@@ -1142,6 +1141,8 @@ INSTALLATION DE BLENDER
 !!! opensubdiv-jnd
 !!! openusd-jnd
 !!! openvdb-jnd
+!!! thorvg-jnd
+!!! tracy-jnd
 # LC_ALL=C pacman -Syu blender-git-jnd
 
 INSTALLATION DE CUDA
@@ -1648,7 +1649,7 @@ INSTALLATION DE BLENDER
 !!! ceres-solver-jnd
 !!! embree-jnd
 !!! manifold-jnd
-!!! materialx-jnd
+!!! meshoptimizer-jnd
 !!! openimagedenoise-jnd
 !!! openimageio-jnd
 !!! openpgl-jnd
@@ -1656,6 +1657,8 @@ INSTALLATION DE BLENDER
 !!! opensubdiv-jnd
 !!! openusd-jnd
 !!! openvdb-jnd
+!!! thorvg-jnd
+!!! tracy-jnd
 # LC_ALL=C pacman -Syu blender-git-jnd
 
 
@@ -1796,6 +1799,37 @@ OU
 ====================================================================================================
 ANCIEN
 ==========================================================
+
+ 1-2) DATALINUX EXISTE MAIS EST VIERGE OU DATALINUX N'EXISTE PAS
+ ===============================================================
+# récupérer les fichiers depuis HubiC/9-Giga/DropBox ou HDD Externes dans ~/99-temp :
+-------------------------------------------------------------------------------------
+!!! A VOIR !!!
+00-3D-*.tar.zst
+
+!!! A VOIR !!!
+05-Photos-*.tar.zst
+
+00-Conky-*.tar.zst
+01-dev-*.tar.zst
+02-git-*.tar.zst
+05-builds-*.tar.zst
+05-Icones-Progs-*.tar.zst
+05-Images-*.tar.zst
+05-Themes-*.tar.zst
+07-Docs-Office-*.tar.zst
+08-Dwl-OK-*.tar.zst
+09-Documentation-*.tar.zst
+09-Fichiers-Conf-*.tar.zst
+Documents-*.tar.zst
+
+etc-*.tar.zst
+
+01-scripts-*.tar.zst
+bin-*.tar.zst
+
+ COMMUNS :
+ ==========
 
 opencollada-git-jnd-*-x86_64.pkg.tar.zst,\
 !!! opencollada-git-jnd
