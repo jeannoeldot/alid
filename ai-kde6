@@ -436,13 +436,13 @@
                     printf '%s\n' "${BGreen}Installation de ${BYellow}libreoffice-still${BGreen}...${Reset}"
                     package_install "libreoffice-still-$LANGUAGE_LO libreoffice-still libwpg unoconv"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}hyphen hunspell mythes${BGreen}...${Reset}"
-                    package_install "hyphen-fr hyphen hunspell-fr hunspell mythes-fr libmythes"
+                    package_install "hyphen-fr hyphen hunspell-fr-classical hunspell mythes-fr libmythes"
                     ;;
                 "calligra")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}calligra${BGreen}...${Reset}"
                     package_install "calligra calligra-l10n-fr"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}hyphen hunspell mythes${BGreen}...${Reset}"
-                    package_install "hyphen-fr hyphen hunspell-fr hunspell mythes-fr libmythes"
+                    package_install "hyphen-fr hyphen hunspell-fr-classical hunspell mythes-fr libmythes"
             esac
         done
         if [[ $REPLY != "" ]]; then
