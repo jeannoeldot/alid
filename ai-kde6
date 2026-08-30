@@ -620,7 +620,7 @@
                     ;;
                 "gstreamer")
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gst-plugins-base${BGreen}...${Reset}"
-                    package_install "gst-plugins-base gst-plugins-base-libs gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav gst-plugin-pipewire mpg123 flac"
+                    package_install "gst-plugins-base gst-plugins-base-libs gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-plugin-svthevcenc gst-libav gst-plugin-pipewire mpg123 flac"
                     printf '%s\n' "${BGreen}Installation de ${BYellow}gstreamer${BGreen}...${Reset}"
                     package_install "gstreamer"
             esac
