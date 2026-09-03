@@ -387,10 +387,10 @@ source $(pwd)/ai-commons
         titre="INSTALLATION D'OUTILS BASH"
         messages="\n"
         messages+="Installation de divers outils ${Byellow_dlg}BASH${Reset_dlg} :\n"
-        messages+="bc plocate rsync bash-completion wget net-tools ethtool tree mc iptraf-ng lsd nvme-cli speedtest-cli lsscsi tar-scripts\n"
+        messages+="bc plocate rsync bash-completion wget net-tools ethtool tree mc iptraf-ng lsd nvme-cli speedtest-cli lsscsi tar-scripts tldr\n"
         print_dialog_msgbox "${titre}" "${messages}" "Installer"
-        printf '%s\n' "${BGreen}Installation de ${BYellow}bc plocate rsync bash-completion wget net-tools ethtool tree mc iptraf-ng lsd nvme-cli speedtest-cli lsscsi tar-scripts${BGreen}...${Reset}"
-        package_install "bc plocate rsync bash-completion wget net-tools ethtool tree mc iptraf-ng lsd nvme-cli speedtest-cli lsscsi tar-scripts"
+        printf '%s\n' "${BGreen}Installation de ${BYellow}bc plocate rsync bash-completion wget net-tools ethtool tree mc iptraf-ng lsd nvme-cli speedtest-cli lsscsi tar-scripts tldr${BGreen}...${Reset}"
+        package_install "bc plocate rsync bash-completion wget net-tools ethtool tree mc iptraf-ng lsd nvme-cli speedtest-cli lsscsi tar-scripts tldr"
         pause_function
         #
         titre="INSTALLATION DE «D-BUS»"
