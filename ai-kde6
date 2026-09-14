@@ -28,8 +28,8 @@
         printf '%s\n' "${BGreen}Installation de pkg pour la compatibilité avec ${BYellow}x11${BGreen}...${Reset}"
         package_install "plasma-x11-session kwin-x11"
         # Opt déps plasma
-        package_install "packagekit-qt6 gtk3 quota-tools oxygen5 appmenu-gtk-module kwayland-integration plasma5-integration plasma-keyboard"
-        pacman -D --asdeps packagekit-qt6 gtk3 quota-tools oxygen5 appmenu-gtk-module kwayland-integration plasma5-integration plasma-keyboard
+        package_install "packagekit-qt6 gtk3 quota-tools oxygen5 appmenu-gtk-module kwayland-integration plasma5-integration plasma-keyboard libcec"
+        pacman -D --asdeps packagekit-qt6 gtk3 quota-tools oxygen5 appmenu-gtk-module kwayland-integration plasma5-integration plasma-keyboard libcec
         # Opt déps kf6
         package_install "imath libavif libheif libjxl libraw openexr kio-extras libappimage taglib kio-fuse kwalletmanager pyside6"
         pacman -D --asdeps imath libavif libheif libjxl libraw openexr kio-extras libappimage taglib kio-fuse kwalletmanager pyside6
